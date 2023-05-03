@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Posts extends BaseTimeEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 매핑, id값을 null로 하면 db가 알아서 auto_increment 해준다.
     private Long id;
 
     @Column(length = 500, nullable = false)
