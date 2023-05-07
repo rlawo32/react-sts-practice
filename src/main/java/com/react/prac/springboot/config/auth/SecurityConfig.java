@@ -38,18 +38,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
-                .csrf().disable()
+                .csrf().disable() // rest api 사용시 disable
                 .headers().frameOptions().disable()
                 .and()
                 // .cors()
                 // .configurationSource(corsConfig.corsConfigurationSource())
                 // .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .authorizeHttpRequests()
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
+                // .anyRequest().permitAll()
                 //.requestMatchers("/api/v1/**").hasRole(Role.USER.name())
                 .and()
                 .logout()
