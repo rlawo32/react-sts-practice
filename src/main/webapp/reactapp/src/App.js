@@ -5,7 +5,7 @@ import './App.css';
 import Home from "./pages/Home";
 import Save from "./pages/Save";
 import About from "./pages/About";
-import Join from "./pages/Join";
+import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Git from "./callback/Git"
 import 'bootstrap/dist/css/bootstrap.css';
@@ -37,7 +37,7 @@ const App = () => {
               <Route exact path="/" element={<Home />} />
               <Route path="/save" element={<Save />} />
               <Route path="/about" element={<About />} />
-              <Route path="/join" element={<Join />} />
+              <Route path="/signUp" element={<SignUp />} />
               <Route path="/signIn" element={<SignIn />} />
               {/*<Route path="/auth/callback/google" element={<Google />} />*/}
               <Route path="/auth/callback/git" element={<Git />} />

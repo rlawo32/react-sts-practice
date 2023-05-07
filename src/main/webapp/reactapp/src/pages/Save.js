@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import axios from "axios";
 
-const handelTest = () => {
+const handleTest = () => {
 
     const accessToken = new URL(window.location.href).searchParams.get("accessToken");
     const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
@@ -52,15 +52,15 @@ const Save = () => {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
 
-    const handelChangeT = ({target: {value}}) => {
+    const handleChangeT = ({target: {value}}) => {
         setTitle(value);
     }
 
-    const handelChangeA = ({target: {value}}) => {
+    const handleChangeA = ({target: {value}}) => {
         setAuthor(value);
     }
 
-    const handelChangeC = ({target: {value}}) => {
+    const handleChangeC = ({target: {value}}) => {
         setContent(value);
     }
 
@@ -70,7 +70,7 @@ const Save = () => {
         content: `${content}`
     }
 
-    const handelSubmit = () => {
+    const handleSubmit = () => {
 
         console.log(JSON.stringify(JsonData))
         axios({
@@ -81,10 +81,9 @@ const Save = () => {
         }).then(function() {
             window.alert("등록이 완료되었습니다람쥐");
             navigate(-1);
-        })
-            .catch(function(error) {
+        }).catch(function(error) {
                 console.log("에러내용:", JSON.stringify(error));
-            })
+        })
 
     }
 
@@ -96,24 +95,24 @@ const Save = () => {
         <div>
             <div style={ {marginBottom:"55px"} }><h1>다른 페이지 게시글 등록</h1></div>
             <Container className="panel">
-                <Form onSubmit={handelSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="title">
                         <Col sm>
-                            <Form.Control type="title" placeholder="제목을 입력하세요" value={title} onChange={handelChangeT}/>
+                            <Form.Control type="title" placeholder="제목을 입력하세요" value={title} onChange={handleChangeT}/>
                             <Form.Text className="text-muted"></Form.Text>
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="author">
                         <Col sm>
-                            <Form.Control type="author" placeholder="작성자를 입력하세요" value={author} onChange={handelChangeA}/>
+                            <Form.Control type="author" placeholder="작성자를 입력하세요" value={author} onChange={handleChangeA}/>
                             <Form.Text className="text-muted"></Form.Text>
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="content">
                         <Col sm>
-                            <Form.Control as="textarea" rows={3} placeholder="내용을 입력하세요" value={content} onChange={handelChangeC}/>
+                            <Form.Control as="textarea" rows={3} placeholder="내용을 입력하세요" value={content} onChange={handleChangeC}/>
                             <Form.Text className="text-muted"></Form.Text>
                         </Col>
                     </Form.Group>
@@ -125,7 +124,7 @@ const Save = () => {
                     </div>
                 </Form>
             </Container>
-            <Button onClick={handelTest}>Test</Button>
+            <Button onClick={handleTest}>Test</Button>
         </div>
     )
 }
