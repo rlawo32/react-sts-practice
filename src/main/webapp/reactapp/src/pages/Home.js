@@ -76,6 +76,9 @@ const Home = () => {
                     <Link to="/save">
                         <button>등록</button>
                     </Link>
+                    <Link to="/signUp">
+                        <button>회원가입</button>
+                    </Link>
                 </div>
                 <div>
                     <Button onClick={loginTest}></Button>
