@@ -1,4 +1,4 @@
-package com.react.prac.springboot.config.auth;
+package com.react.prac.springboot.config.auth.dto;
 
 import com.react.prac.springboot.config.auth.dto.SessionUser;
 
@@ -12,6 +12,7 @@ public enum OAuth2Attributes {
         sessionUser.setName((String) attributes.get("name"));
         sessionUser.setEmail((String) attributes.get("email"));
         sessionUser.setPicture((String) attributes.get("picture"));
+
         return sessionUser;
     }),
 

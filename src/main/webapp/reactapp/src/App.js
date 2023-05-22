@@ -39,8 +39,6 @@ const App = () => {
               <Route path="/about" element={<About />} />
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/signIn" element={<SignIn />} />
-              {/*<Route path="/auth/callback/google" element={<Google />} />*/}
-              <Route path="/auth/callback/git" element={<Git />} />
           </Routes>
       </header>
     </div>

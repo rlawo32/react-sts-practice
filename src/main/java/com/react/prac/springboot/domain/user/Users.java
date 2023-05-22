@@ -11,15 +11,35 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Users")
 public class Users extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String name;
+    private Role role;
+
+    @Column(nullable = false)
+    private String userId;
+
+    @Column(nullable = false)
+    private String userPw;
+
+    @Column(nullable = false)
+    private String userName;
+
+    @Column(nullable = false)
+    private String userBirth;
+
+    @Column(nullable = false)
+    private String userGender;
 
     @Column(nullable = false)
     private String email;
+
+    @Column
+    private String userPhone;
 
     @Column(nullable = false)
     private String provider;
@@ -27,22 +47,24 @@ public class Users extends BaseTimeEntity {
     @Column
     private String picture;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
     @Builder
-    public Users(Long id, String name, String email, String picture, String provider, Role role) {
+    public Users(Long id, Role role, String userId, String userPw, String userName, String userBirth,
+                 String userGender, String userEmail, String userPhone, String provider, String picture) {
         this.id = id;
-        this.name = name;
-        this.email = email;
+        this.role = role;
+        this.userId = userId;
+        this.userPw = userPw;
+        this.userName = userName;
+        this.userBirth = userBirth;
+        this.userGender = userGender;
+        this.email = userEmail;
+        this.userPhone = userPhone;
         this.provider = provider;
         this.picture = picture;
-        this.role = role;
     }
 
     public Users update(String name, String picture) {
-        this.name = name;
+        this.userName = name;
         this.picture = picture;
 
         return this;

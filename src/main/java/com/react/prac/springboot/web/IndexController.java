@@ -2,8 +2,12 @@ package com.react.prac.springboot.web;
 
 import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.service.posts.PostsService;
+import com.react.prac.springboot.service.users.UsersService;
+import com.react.prac.springboot.util.EmailUtil;
 import com.react.prac.springboot.web.dto.PostsListResponseDto;
 import com.react.prac.springboot.web.dto.PostsResponseDto;
+import com.react.prac.springboot.web.dto.PostsSaveRequestDto;
+import com.react.prac.springboot.web.dto.UsersSignUpDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,7 @@ import java.util.Map;
 public class IndexController {
 
     private final PostsService postsService;
+    private final UsersService usersService;
     private final HttpSession httpSession;
 
     @GetMapping("/index")
@@ -54,5 +59,17 @@ public class IndexController {
         PostsResponseDto dto = postsService.findById(id);
         model.addAttribute("post", dto);
         return "posts-update";
+    }
+
+    @GetMapping("/users/sendAuthCode")
+    public Map<String, Object> sendAuthCode(HttpServletRequest request) {
+        System.out.println(request);
+        return EmailUtil.sendAuthCode(request.getParameter("userEmail"));
+    }
+
+    @PostMapping("/users/signUp")
+    public Long save(@RequestBody UsersSignUpDto requestDto) {
+        System.out.println("SignUp!!!!!!!!!!!");
+        return usersService.save(requestDto);
     }
 }

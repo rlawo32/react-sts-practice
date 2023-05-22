@@ -8,13 +8,13 @@ import axios from "axios";
 
 const handleTest = () => {
 
-    const accessToken = new URL(window.location.href).searchParams.get("accessToken");
-    const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
-
-    if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-    }
+    // const accessToken = new URL(window.location.href).searchParams.get("accessToken");
+    // const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
+    //
+    // if (accessToken) {
+    //     localStorage.setItem("accessToken", accessToken);
+    //     localStorage.setItem("refreshToken", refreshToken);
+    // }
 
     let sendData = JSON.stringify({
         "userId": "testID",
@@ -70,19 +70,18 @@ const Save = () => {
         content: `${content}`
     }
 
-    const handleSubmit = () => {
-
+    const handleSubmit = async() => {
         console.log(JSON.stringify(JsonData))
-        axios({
+        await axios({
             method: "POST",
             url: "/api/v1/posts",
             data: JSON.stringify(JsonData),
             headers: {'Content-type': 'application/json'}
         }).then(function() {
             window.alert("등록이 완료되었습니다람쥐");
-            navigate(-1);
+            window.location.href = "/";
         }).catch(function(error) {
-                console.log("에러내용:", JSON.stringify(error));
+            console.log("에러내용:", JSON.stringify(error));
         })
 
     }

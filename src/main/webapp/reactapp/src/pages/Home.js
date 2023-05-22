@@ -79,6 +79,9 @@ const Home = () => {
                     <Link to="/signUp">
                         <button>회원가입</button>
                     </Link>
+                    <Link to="/signIn">
+                        <button>로그인</button>
+                    </Link>
                 </div>
                 <div>
                     <Button onClick={loginTest}></Button>

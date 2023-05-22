@@ -13,20 +13,18 @@ public class SessionUser {
     private String provider;
     private String picture;
 
-//    public SessionUser(Users user) {
-//        this.name = user.getName();
-//        this.email = user.getEmail();
-//        this.provider = user.getProvider();
-//        this.picture = user.getPicture();
-//    }
-
     public Users toUsers() {
         return Users.builder()
-                .name(name)
-                .email(email)
+                .role(Role.GUEST)
+                .userId("")
+                .userPw("")
+                .userName(name)
+                .userBirth("")
+                .userGender("")
+                .userEmail(email)
+                .userPhone("")
                 .provider(provider)
                 .picture(picture)
-                .role(Role.GUEST)
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.react.prac.springboot.config.auth;
 
-import com.react.prac.springboot.config.auth.dto.OAuthAttributes;
+import com.react.prac.springboot.config.auth.dto.OAuth2Attributes;
 import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.domain.user.UserRepository;
 import com.react.prac.springboot.domain.user.Users;
@@ -24,7 +24,6 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -55,8 +54,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Map<String, Object> customAttribute = new LinkedHashMap<>();
         customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
         customAttribute.put("provider", registrationId);
-        customAttribute.put("name", sessionUser.getName());
-        customAttribute.put("email", sessionUser.getEmail());
+        customAttribute.put("userName", sessionUser.getName());
+        customAttribute.put("userEmail", sessionUser.getEmail());
         customAttribute.put("picture", sessionUser.getPicture());
         return customAttribute;
 

@@ -37,11 +37,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // oauth2-add
     implementation 'org.springframework.boot:spring-boot-starter-validation' // validation 어노테이션 사용을 위함
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2' // jwt 사용을 위함
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    // implementation 'io.jsonwebtoken:jjwt-api:0.11.2' // jwt 사용을 위함
+    // runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    // runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     testImplementation 'org.springframework.security:spring-security-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools' // 소스 변경시 자동 빌드
+    // email-auth dependency
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     /*
         spring-boot-devtools 사용을 위해 아래와 같이 추가 세팅하기
         Build, Exeution, Deployment > Compiler > Build project autiomaically 체크

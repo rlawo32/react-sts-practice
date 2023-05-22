@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {Row} from "react-bootstrap";
+import './SignUp.css';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -13,133 +15,460 @@ const SignUp = () => {
     const [userPw, setUserPw] = useState("");
     const [userPwChk, setUserPwChk] = useState("");
     const [userName, setUserName] = useState("");
-    const [userBirth, setUserBirth] = useState("");
+    const [userBirthY, setUserBirthY] = useState("");
+    const [userBirthM, setUserBirthM] = useState("");
+    const [userBirthD, setUserBirthD] = useState("");
     const [userGender, setUserGender] = useState("");
     const [userEmail, setUserEmail] = useState("");
+    const [userEmailChk, setUserEmailChk] = useState("");
+    const [userEmailCode, setUserEmailCode] = useState("");
     const [userPhone, setUserPhone] = useState("");
 
-    const signUpChangeId = ({target: {value}}) => {
-        setUserId(value);
+    //오류메시지 상태저장
+    const [userIdMessage, setUserIdMessage] = useState("");
+    const [userPwMessage, setUserPwMessage] = useState("");
+    const [userPwChkMessage, setUserPwChkMessage] = useState("");
+    const [userNameMessage, setUserNameMessage] = useState("");
+    const [userBirthMessage, setUserBirthMessage] = useState("");
+    const [userGenderMessage, setUserGenderMessage] = useState("");
+    const [userEmailMessage, setUserEmailMessage] = useState("");
+    const [userEmailChkMessage, setUserEmailChkMessage] = useState("");
+    const [userPhoneMessage, setUserPhoneMessage] = useState("");
+
+    // 유효성 검사
+    const [isUserIdEffect, setIsUserIdEffect] = useState(false);
+    const [isPasswordEffect, setIsPasswordEffect] = useState(false);
+    const [isPasswordConfirmEffect, setIsPasswordConfirmEffect] = useState(false);
+    const [isUserNameEffect, setIsUserNameEffect] = useState(false);
+    const [isUserBirthEffect, setIsUserBirthEffect] = useState(false);
+    const [isUserGenderEffect, setIsUserGenderEffect] = useState(false);
+    const [isUserEmailEffect, setIsUserEmailEffect] = useState(false);
+    const [isUserEmailHideEffect, setIsUserEmailHideEffect] = useState(false);
+    const [isUserEmailChkEffect, setIsUserEmailChkEffect] = useState(false);
+    const [isUserPhoneEffect, setIsUserPhoneEffect] = useState(false);
+
+    const signUpChangeId = useCallback((e) => {
+        const userIdRegex = /^[a-z0-9_-]{5,20}$/;
+        const userIdCurrent = e.target.value;
+        setUserId(userIdCurrent);
+
+        if (userIdCurrent < 1) {
+            setUserIdMessage('필수 정보입니다.');
+            setIsPasswordEffect(false);
+        } else {
+            if (!userIdRegex.test(userIdCurrent)) {
+                setUserIdMessage('5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다..');
+                setIsUserIdEffect(false);
+            } else {
+                setUserIdMessage('');
+                setIsUserIdEffect(true);
+            }
+        }
+    }, [])
+
+    const signUpChangePw = useCallback((e) => {
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+        const passwordCurrent = e.target.value;
+        setUserPw(passwordCurrent);
+
+        if (passwordCurrent.length < 1) {
+            setUserPwMessage('필수 정보입니다.');
+            setIsPasswordEffect(false);
+        } else {
+            if (!passwordRegex.test(passwordCurrent)) {
+                setUserPwMessage('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+                setIsPasswordEffect(false);
+            } else {
+                setUserPwMessage('');
+                setIsPasswordEffect(true);
+            }
+        }
+    }, [])
+
+    const signUpChangePc = useCallback((e) => {
+        const passwordConfirmCurrent = e.target.value;
+        setUserPwChk(passwordConfirmCurrent);
+
+        console.log(passwordConfirmCurrent);
+        console.log(userPw);
+
+        if (passwordConfirmCurrent.length < 1) {
+            setUserPwChkMessage('필수 정보입니다.');
+            setIsPasswordEffect(false);
+        } else {
+            if (userPw === passwordConfirmCurrent) {
+                setUserPwChkMessage('');
+                setIsPasswordConfirmEffect(true);
+            } else {
+                setUserPwChkMessage('비밀번호가 일치하지 않습니다.');
+                setIsPasswordConfirmEffect(false);
+            }
+        }
+    }, [userPw])
+
+    const signUpChangeNm = useCallback((e) => {
+        const userNameRegex = /^[a-zA-Z가-힣]{1,14}$/;
+        const userNameCurrent = e.target.value;
+        setUserName(userNameCurrent);
+
+        if (userNameCurrent.length < 1) {
+            setUserNameMessage('필수 정보입니다.');
+            setIsUserNameEffect(false);
+        } else {
+            if (!userNameRegex.test(userNameCurrent)) {
+                setUserNameMessage('한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)');
+                setIsUserNameEffect(false);
+            } else {
+                setUserNameMessage('');
+                setIsUserNameEffect(true);
+            }
+        }
+    }, [])
+
+    const signUpChangeBrY = useCallback((e) => {
+        const userBirthYRegex = /^(19[0-9][0-9]|20\d{2})$/;
+        const userBirthYCurrent = e.target.value;
+        setUserBirthY(userBirthYCurrent);
+
+        if (!userBirthYRegex.test(userBirthYCurrent)) {
+            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsUserBirthEffect(false);
+        } else if(userBirthM.length < 1) {
+            setUserBirthMessage('태어난 월을 선택하세요.');
+            setIsUserBirthEffect(false);
+        } else {
+            setUserBirthMessage('');
+            setIsUserBirthEffect(true);
+        }
+
+    }, [userBirthM])
+
+    const signUpChangeBrM = useCallback((e) => {
+        const userBirthMRegex = /^(0[0-9]|1[0-2])$/;
+        const userBirthMCurrent = e.target.value;
+
+        setUserBirthM(userBirthMCurrent);
+
+        if(userBirthY.length < 1) {
+            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsUserBirthEffect(false);
+        } else {
+            if (!userBirthMRegex.test(userBirthMCurrent)) {
+                setUserBirthMessage('태어난 월을 선택하세요.');
+                setIsUserBirthEffect(false);
+            } else {
+                setUserBirthMessage('');
+                setIsUserBirthEffect(true);
+            }
+        }
+
+    }, [userBirthY])
+
+    const signUpChangeBrD = useCallback((e) => {
+        const userBirthDRegex = /^([1-9]|[1-2][0-9]|3[0-1])$/;
+        const userBirthDCurrent = e.target.value;
+
+        if(userBirthDCurrent.length < 2) {
+            setUserBirthD('0' + userBirthDCurrent);
+        } else {
+            setUserBirthD(userBirthDCurrent);
+        }
+
+        if(userBirthY.length < 1) {
+            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsUserBirthEffect(false);
+        } else if(userBirthM.length < 1) {
+            setUserBirthMessage('태어난 월을 선택하세요.');
+            setIsUserBirthEffect(false);
+        } else {
+            if (!userBirthDRegex.test(userBirthDCurrent)) {
+                setUserBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+                setIsUserBirthEffect(false);
+            } else {
+                setUserBirthMessage('');
+                setIsUserBirthEffect(true);
+            }
+        }
+
+    }, [userBirthY, userBirthM])
+
+    const signUpChangeGe = useCallback((e) => {
+        const userGenderCurrent = e.target.value;
+        setUserGender(userGenderCurrent);
+
+        if (userGenderCurrent.length < 1) {
+            setUserGenderMessage('필수 정보입니다.');
+            setIsUserGenderEffect(false);
+        } else {
+            setUserGenderMessage('');
+            setIsUserGenderEffect(true);
+        }
+    }, [])
+
+    // 윤년 등 해당 월에 대한 날짜 로직 추가 (예정)
+
+    const signUpChangeEm = useCallback((e) => {
+        const userEmailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const userEmailCurrent = e.target.value;
+        setUserEmail(userEmailCurrent);
+
+        if(userEmailCurrent.length < 1) {
+            setUserEmailMessage('필수 정보입니다.');
+            setIsUserEmailEffect(false);
+        } else {
+            if (!userEmailRegex.test(userEmailCurrent)) {
+                setUserEmailMessage('이메일 주소를 다시 확인해주세요.');
+                setIsUserEmailEffect(false);
+            } else {
+                setUserEmailMessage('');
+                setIsUserEmailEffect(true);
+            }
+        }
+    }, [])
+
+    const signUpChangeEc = ({target: {value}}) => {
+        setUserEmailChk(value);
     }
 
-    const signUpChangePw = ({target: {value}}) => {
-        setUserPw(value);
-    }
+    const signUpChangePh = useCallback((e) => {
+        const userPhoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+        const userPhoneCurrent = e.target.value;
+        setUserPhone(userPhoneCurrent);
 
-    const signUpChangePc = ({target: {value}}) => {
-        setUserPwChk(value);
-    }
-
-    const signUpChangeNm = ({target: {value}}) => {
-        setUserName(value);
-    }
-
-    const signUpChangeBr = ({target: {value}}) => {
-        setUserBirth(value);
-    }
-
-    const signUpChangeGe = ({target: {value}}) => {
-        setUserGender(value);
-    }
-
-    const signUpChangeEm = ({target: {value}}) => {
-        setUserEmail(value);
-    }
-
-    const signUpChangePh = ({target: {value}}) => {
-        setUserPhone(value);
-    }
+        if(userPhoneCurrent.length < 1) {
+            setUserPhoneMessage('');
+        } else {
+            if (!userPhoneRegex.test(userPhoneCurrent)) {
+                setUserPhoneMessage('형식에 맞지 않는 번호입니다.');
+                setIsUserPhoneEffect(false);
+            } else {
+                setUserPhoneMessage('');
+                setIsUserPhoneEffect(true);
+            }
+        }
+    }, [])
 
     const userData = {
         userId: `${userId}`,
         userPw: `${userPw}`,
         userPwChk: `${userPwChk}`,
         userName: `${userName}`,
-        userBirth: `${userBirth}`,
+        userBirth: `${userBirthY}` + `${userBirthM}` + `${userBirthD}`,
         userGender: `${userGender}`,
         userEmail: `${userEmail}`,
         userPhone: `${userPhone}`
     }
-    const handleJoin = () => {
 
-        console.log(JSON.stringify(userData))
-        // axios({
-        //     method: "POST",
-        //     url: "/api/v1/posts",
-        //     data: JSON.stringify(userData),
-        //     headers: {'Content-type': 'application/json'}
-        // }).then(function() {
-        //     window.alert("회원가입이 완료되었습니다람쥐");
-        //     navigate(-1);
-        // }).catch(function(error) {
-        //         console.log("에러내용:", JSON.stringify(error));
-        // })
+    const handleEmailSend = () => {
+         setIsUserEmailHideEffect(true);
+         setUserEmailMessage('');
+         axios({
+             method: "GET",
+             url: "/users/sendAuthCode",
+             params: {userEmail: userEmail}
+         }).then(function(obj) {
+              alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
+              console.log('2' + obj.data.authCode);
+              setUserEmailCode(obj.data.authCode);
+         }).catch(function(error) {
+              alert('인증코드 발송에 실패했습니다.');
+         })
+    }
+
+    const handleEmailCheck = () => {
+        if(userEmailChk.length < 1) {
+            setUserEmailChkMessage('인증이 필요합니다.');
+            setIsUserEmailChkEffect(false);
+        } else {
+            if(userEmailChk === userEmailCode) {
+                setUserEmailChkMessage('인증되었습니다.');
+                setIsUserEmailChkEffect(true);
+            } else {
+                setUserEmailChkMessage('인증에 실패했습니다.');
+                setIsUserEmailChkEffect(false);
+            }
+        }
+    }
+
+    const handleJoin = (e) => {
+        if(isUserIdEffect === false) {
+            setUserIdMessage('필수 정보입니다.');
+            setIsPasswordEffect(false);
+            e.preventDefault();
+        }
+        if(isPasswordEffect === false) {
+            setUserPwMessage('필수 정보입니다.');
+            setIsPasswordEffect(false);
+            e.preventDefault();
+        }
+        if(isPasswordConfirmEffect === false) {
+            setUserPwChkMessage('필수 정보입니다.');
+            setIsPasswordEffect(false);
+            e.preventDefault();
+        }
+        if(isUserNameEffect === false) {
+            setUserNameMessage('필수 정보입니다.');
+            setIsUserNameEffect(false);
+            e.preventDefault();
+        }
+        if(isUserBirthEffect === false) {
+            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsUserBirthEffect(false);
+            e.preventDefault();
+        }
+        if(isUserGenderEffect === false) {
+            setUserGenderMessage('필수 정보입니다.');
+            setIsUserGenderEffect(false);
+            e.preventDefault();
+        }
+        if(isUserEmailChkEffect === false) {
+            setUserEmailMessage('필수 정보입니다.');
+            setIsUserEmailEffect(false);
+            e.preventDefault();
+        }
+
+        console.log(JSON.stringify(userData));
+        axios({
+            method: "POST",
+            url: "/users/signUp",
+            data: JSON.stringify(userData),
+            headers: {'Content-type': 'application/json'}
+        }).then(function() {
+            window.alert("회원가입이 완료되었습니다");
+            navigate(-1);
+        }).catch(function(error) {
+            console.log("에러내용:", JSON.stringify(error));
+        })
 
     }
 
     return (
         <div>
-            <div style={ {marginBottom:"55px"} }><h1>회원 가입</h1></div>
+            <div style={ {marginBottom:"55px"} }><h1>회원가입</h1></div>
             <Container className="panel">
                 <Form onSubmit={handleJoin}>
                     <Form.Group className="mb-3" controlId="userId">
                         <Col sm>
-                            <Form.Control type="userId" placeholder="아이디를 입력하세요" value={userId} onChange={signUpChangeId}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"220px", fontSize:"20px", fontWeight:"bold"} }>아이디</Form.Text>
+                            <Form.Control type="userId" placeholder="아이디를 입력하세요" value={userId} onChange={signUpChangeId} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
+                            {(
+                                <span style={ isUserIdEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userIdMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="userPw">
                         <Col sm>
-                            <Form.Control type="password" placeholder="비밀번호를 입력하세요" value={userPw} onChange={signUpChangePw}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"210px", fontSize:"20px", fontWeight:"bold"} }>비밀번호</Form.Text>
+                            <Form.Control type="password" placeholder="비밀번호를 입력하세요" value={userPw} onChange={signUpChangePw} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
+                            {(
+                                <span style={ isPasswordEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userPwMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="userPwChk">
                         <Col sm>
-                            <Form.Control type="password" placeholder="비밀번호 확인" value={userPwChk} onChange={signUpChangePc}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"177px", fontSize:"20px", fontWeight:"bold"} }>비밀번호 재확인</Form.Text>
+                            <Form.Control type="password" placeholder="비밀번호 확인" value={userPwChk} onChange={signUpChangePc} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
+                            {(
+                                <span style={ isPasswordConfirmEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userPwChkMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="userName">
                         <Col sm>
-                            <Form.Control type="userName" placeholder="이름을 입력하세요" value={userName} onChange={signUpChangeNm}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"230px", fontSize:"20px", fontWeight:"bold"} }>이름</Form.Text>
+                            <Form.Control type="userName" placeholder="이름을 입력하세요" value={userName} onChange={signUpChangeNm} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
+                            {(
+                                <span style={ isUserNameEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userNameMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="userBirth">
+                    <Form.Group className="mb-3">
                         <Col sm>
-                            <Form.Control type="userBirth" placeholder="생일을 입력하세요" value={userBirth} onChange={signUpChangeBr}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Row>
+                                <Form.Text className="text-muted" style={ {position:"relative", right:"210px", fontSize:"20px", fontWeight:"bold"} }>생년월일</Form.Text>
+                                <Form.Control type="userBirthY" itemID="userBirthY" placeholder="년(4자)" value={userBirthY} onChange={signUpChangeBrY} style={ {width:"149px", height:"50px", marginLeft:"auto", marginRight:"27px"} }/>
+                                {/*<Form.Control type="userBirthM" itemID="userBirthM" placeholder="월" value={userBirthM} onChange={signUpChangeBrM} style={ {width:"149px", height:"50px"} }/>*/}
+                                <Form.Select itemID="userBirthM" onChange={signUpChangeBrM} style={ {width:"149px", height:"50px"} }>
+                                    <option value="">월</option>
+                                    <option value="01">1</option>
+                                    <option value="02">2</option>
+                                    <option value="03">3</option>
+                                    <option value="04">4</option>
+                                    <option value="05">5</option>
+                                    <option value="06">6</option>
+                                    <option value="07">7</option>
+                                    <option value="08">8</option>
+                                    <option value="09">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </Form.Select>
+                                <Form.Control type="userBirthD" itemID="userBirthD" placeholder="일" onChange={signUpChangeBrD} style={ {width:"149px", height:"50px", marginLeft:"27px", marginRight:"auto"} }/>
+                            </Row>
+                            {(
+                                <span style={ isUserBirthEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userBirthMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="userGender">
                         <Col sm>
-                            <Form.Control type="userGender" placeholder="성별을 입력하세요" value={userGender} onChange={signUpChangeGe}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"230px", fontSize:"20px", fontWeight:"bold"} }>성별</Form.Text>
+                            {/*<Form.Control type="userGender" placeholder="성별을 입력하세요" value={userGender} onChange={signUpChangeGe} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>*/}
+                            <Form.Select onChange={signUpChangeGe} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }>
+                                <option value="">성별</option>
+                                <option value="M">남자</option>
+                                <option value="W">여자</option>
+                                <option value="X">선택 안함</option>
+                            </Form.Select>
+                            {(
+                                <span style={ isUserGenderEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userGenderMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="userEmail">
                         <Col sm>
-                            <Form.Control type="userEmail" placeholder="이메일을 입력하세요" value={userEmail} onChange={signUpChangeEm}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Row>
+                                <Form.Text className="text-muted" style={ {position:"relative", right:"173px", fontSize:"20px", fontWeight:"bold"} }>본인 확인 이메일</Form.Text>
+                                <Form.Control type="userEmail" placeholder="이메일을 입력하세요" value={userEmail} onChange={signUpChangeEm} style={ {width:"400px", height:"50px", marginLeft:"auto"} }/>
+                                <Button variant="primary" onClick={handleEmailSend} style={ {width:"100px", height:"50px", marginRight:"auto"} }>전송하기</Button>
+                            </Row>
+                            {(
+                                <span style={ isUserEmailEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userEmailMessage}</span>
+                            )}
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group controlId="userEmailChk" style={ isUserEmailHideEffect ? {display:'block'} : {display:'none'} }>
+                        <Col sm>
+                            <Row>
+                                <Form.Control type="userEmailChk" placeholder="인증번호를 입력하세요" value={userEmailChk} onChange={signUpChangeEc} style={ {width:"400px", height:"50px", marginLeft:"auto"} }/>
+                                <Button variant="primary" onClick={handleEmailCheck} style={ {width:"100px", height:"50px", marginRight:"auto"} }>인증하기</Button>
+                            </Row>
+                            {(
+                                <span style={ isUserEmailChkEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userEmailChkMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="userPhone">
                         <Col sm>
-                            <Form.Control type="userPhone" placeholder="휴대폰 번호를 입력하세요" value={userPhone} onChange={signUpChangePh}/>
-                            <Form.Text className="text-muted"></Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"182px", fontSize:"20px", fontWeight:"bold"} }>휴대전화(선택)</Form.Text>
+                            <Form.Control type="userPhone" placeholder="휴대폰 번호를 입력하세요" value={userPhone} onChange={signUpChangePh} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
+                            {(
+                                <span style={ isUserPhoneEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userPhoneMessage}</span>
+                            )}
                         </Col>
                     </Form.Group>
 
                     <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="primary" type="submit">회원가입</Button>
+                        <Button variant="primary" type="submit">가입하기</Button>
                     </div>
                     <div className="d-grid gap-1" style={ {margin:"5px"} }>
                         <Button variant="secondary" href="/">취소</Button>
