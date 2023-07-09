@@ -16,13 +16,10 @@ public class SessionUser {
     public Users toUsers() {
         return Users.builder()
                 .role(Role.GUEST)
-                .userId("")
                 .userPw("")
-                .userName(name)
+                .userNickName(name)
                 .userBirth("")
-                .userGender("")
                 .userEmail(email)
-                .userPhone("")
                 .provider(provider)
                 .picture(picture)
                 .build();

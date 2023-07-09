@@ -1,16 +1,17 @@
 package com.react.prac.springboot.web;
 
+import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.service.posts.PostsService;
-import com.react.prac.springboot.web.dto.AxiosDto;
-import com.react.prac.springboot.web.dto.PostsResponseDto;
-import com.react.prac.springboot.web.dto.PostsSaveRequestDto;
-import com.react.prac.springboot.web.dto.PostsUpdateRequestDto;
+import com.react.prac.springboot.web.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ import java.util.Map;
 public class PostsApiController {
 
     private final PostsService postsService;
+    private final HttpSession httpSession;
 
     @PostMapping("/axiosTest")
     public String SignUpFunc (HttpServletRequest request, @RequestBody AxiosDto dto) {
@@ -63,5 +65,18 @@ public class PostsApiController {
     @DeleteMapping("/api/v1/posts/{id}")
     public void delete(@PathVariable Long id) {
         postsService.delete(id);
+    }
+
+
+
+    @GetMapping("/postsList")
+    public Map<String, Object> postsList() {
+        Map<String, Object> result = new HashMap<>();
+        List<PostsListResponseDto> posts = postsService.findAllDesc();
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        System.out.println("세션유저 : " + user);
+        result.put("postsList", posts);
+        //result.put("userName", user.getName());
+        return result;
     }
 }

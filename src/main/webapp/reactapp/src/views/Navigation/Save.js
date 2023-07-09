@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -38,7 +37,6 @@ const handleTest = () => {
 }
 
 const Save = () => {
-    const navigate = useNavigate();
     const accessToken = new URL(window.location.href).searchParams.get("accessToken");
     const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
 
@@ -79,16 +77,12 @@ const Save = () => {
             headers: {'Content-type': 'application/json'}
         }).then(function() {
             window.alert("등록이 완료되었습니다람쥐");
-            window.location.href = "/";
+            window.location.href = "../../../..";
         }).catch(function(error) {
             console.log("에러내용:", JSON.stringify(error));
         })
 
     }
-
-    console.log("현재 제목2" + title);
-    console.log("현재 작성자2" + author);
-    console.log("현재 내용2" + content);
 
     return (
         <div>

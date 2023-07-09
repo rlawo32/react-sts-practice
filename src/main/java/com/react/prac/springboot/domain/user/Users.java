@@ -3,43 +3,33 @@ package com.react.prac.springboot.domain.user;
 import com.react.prac.springboot.domain.posts.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "Users")
 public class Users extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    private String email;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
     @Column(nullable = false)
-    private String userId;
-
-    @Column(nullable = false)
     private String userPw;
 
     @Column(nullable = false)
-    private String userName;
+    private String userNickName;
 
     @Column(nullable = false)
     private String userBirth;
-
-    @Column(nullable = false)
-    private String userGender;
-
-    @Column(nullable = false)
-    private String email;
-
-    @Column
-    private String userPhone;
 
     @Column(nullable = false)
     private String provider;
@@ -48,23 +38,19 @@ public class Users extends BaseTimeEntity {
     private String picture;
 
     @Builder
-    public Users(Long id, Role role, String userId, String userPw, String userName, String userBirth,
-                 String userGender, String userEmail, String userPhone, String provider, String picture) {
-        this.id = id;
+    public Users(Role role, String userEmail, String userPw, String userNickName,
+                 String userBirth, String provider, String picture) {
         this.role = role;
-        this.userId = userId;
-        this.userPw = userPw;
-        this.userName = userName;
-        this.userBirth = userBirth;
-        this.userGender = userGender;
         this.email = userEmail;
-        this.userPhone = userPhone;
+        this.userPw = userPw;
+        this.userNickName = userNickName;
+        this.userBirth = userBirth;
         this.provider = provider;
         this.picture = picture;
     }
 
     public Users update(String name, String picture) {
-        this.userName = name;
+        this.userNickName = name;
         this.picture = picture;
 
         return this;

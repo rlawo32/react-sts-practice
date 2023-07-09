@@ -31,8 +31,7 @@ public class SecurityConfig {
     // private final CustomOAuth2UserService customOAuth2UserService;
 
     private final CustomOAuth2UserService customOAuth2UserService;
-//    private final CorsConfig corsConfig;
-//    private final OAuth2SuccessHandler successHandler;
+    private final CorsConfig corsConfig;
 //    private final TokenService tokenService;
 
     @Bean
@@ -41,9 +40,9 @@ public class SecurityConfig {
                 .csrf().disable() // rest api 사용시 disable
                 .headers().frameOptions().disable()
                 .and()
-                //.cors()
-                //.configurationSource(corsConfig.corsConfigurationSource())
-                //.and()
+                .cors()
+                .configurationSource(corsConfig.corsConfigurationSource())
+                .and()
                 // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .authorizeHttpRequests()
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
@@ -55,6 +54,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .and()
                 .oauth2Login()
+                .successHandler(new MyAuthenticationSuccessHandler())
                 //.defaultSuccessUrl("/oauth/loginInfo", true)
                 .userInfoEndpoint().userService(customOAuth2UserService);
 

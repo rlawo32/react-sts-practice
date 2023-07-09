@@ -49,6 +49,9 @@ dependencies {
         Build, Exeution, Deployment > Compiler > Build project autiomaically 체크
         Advanced Settings > Allow auto-make to start even if developed application is currently running 체크
     */
+    // jwt token dependency
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.0' // java 버전에 따른 JAXV API 제거로 인한 의존성 추가 
 }
 
 // react ---

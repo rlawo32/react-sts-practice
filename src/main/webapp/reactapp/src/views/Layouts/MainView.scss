@@ -1,0 +1,228 @@
+
+html {
+  --cursor-color: green;
+}
+
+html.dark-mode {
+  --cursor-color: white;
+}
+
+.Main-body {
+  height: 6000px;
+  background-color: black;
+  background-image: url("../../images/space5.jpg");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 1000px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.Main-view {
+  position: relative;
+  margin-top: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.First-view {
+  animation: fadeout 2s forwards;
+  animation-delay: 2.5s;
+}
+
+svg text {
+  font-family: 'Leckerli One', cursive;
+  font-size: 5em;
+  fill: #000000;
+  stroke-dasharray: 326px;
+  animation: strokes 1s linear;
+  animation-fill-mode: forwards;
+}
+
+svg text:nth-child(1) {
+  animation-delay: 0s;
+}
+svg text:nth-child(2) {
+  animation-delay: 0.5s;
+}
+svg text:nth-child(3) {
+  animation-delay: 1s;
+}
+svg text:nth-child(4) {
+  animation-delay: 1.5s;
+}
+svg text:nth-child(5) {
+  animation-delay: 2s;
+}
+svg text:nth-child(6) {
+  animation-delay: 2.5s;
+}
+svg text:nth-child(7) {
+  animation-delay: 3s;
+}
+
+@keyframes strokes {
+  0%   {
+    stroke:#F1C164;
+    stroke-width: 3px;
+    stroke-dashoffset: 326px;
+  }
+  70% {
+    fill: transparent;
+  }
+  98% {
+    stroke:#F1C164;
+    stroke-width: 3px;
+  }
+  100% {
+    fill: #F1C164;
+    stroke-dashoffset: 0px;
+  }
+}
+
+.Second-view {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  opacity: 0;
+  justify-content: center;
+  align-items: center;
+  animation: fadein 2s forwards;
+  animation-delay: 4s;
+}
+
+.Sub-body {
+
+}
+
+.Sub-view {
+  margin-top: 500px;
+  font-weight: bold;
+  text-align: center;
+  width: auto;
+  opacity: 0;
+  transition: all 1s;
+}
+
+/* Img Animation */
+
+/* 무한 회전 */
+.img1 {
+  animation: rotate_image 6s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes rotate_image {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 나타나는 애니메이션 */
+.img2 {
+  animation: rotate_image 6s linear infinite, scale1 6s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes scale1 {
+  0%   { transform: scale(0) }
+  100%  { transform: scale(1) }
+}
+
+/* 사라지는 애니메이션 */
+.img3 {
+  animation: rotate_image 6s linear infinite, scale2 6s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes scale2 {
+  0%   { transform: scale(1) }
+  100%  { transform: scale(0) }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+
+/**/
+
+.Main-logo {
+
+}
+
+.Social-logo {
+  background-color: black;
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+.Social-logo .link-style {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  text-align: center;
+  transition: .6s;
+  box-shadow: 0 5px 4px rgba(0,0,0,.5);
+}
+
+.Social-logo .link-style:hover {
+  background-color: rgba(0, 0, 0, 0.829);
+  color: #fff;
+  transform: translate(0, -30%);
+}
+
+/* 그리기 */
+
+.svg-draw {
+
+  svg {
+      max-height: 45rem;
+      width: 100%;
+      height: auto;
+      fill: none;
+      stroke: white;
+      stroke-width: 200;
+
+      path {
+          stroke-dasharray: 50000;
+          stroke-dashoffset: -50000;
+
+          @for $i from 1 through 7 {
+              &:nth-of-type(#{$i}) {
+                  animation: draw 500ms #{$i * 300}ms forwards;
+              }
+          }
+      }
+  }
+}
+
+@keyframes draw {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}

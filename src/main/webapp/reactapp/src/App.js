@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react";
-import {BrowserRouter, Routes, Route, Link, Router} from "react-router-dom";
-import logo from './logo.svg';
+import {Routes, Route} from "react-router-dom";
 import './App.css';
-import Home from "./pages/Home";
-import Save from "./pages/Save";
-import About from "./pages/About";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import Git from "./callback/Git"
+import MainHome from "./views/Navigation/MainHome";
+import Save from "./views/Navigation/Save";
+import About from "./views/Navigation/About";
+import SignUp from "./views/SignUp/SignUp";
+import SignIn from "./views/SignIn/SignIn";
+import NoticeBoard from "./views/Navigation/NoticeBoard";
 import 'bootstrap/dist/css/bootstrap.css';
-import { UserContext } from "./context/LoginContext";
 
 const App = () => {
   // const [accessToken, setAccessToken] = useState(null);
-  const [loginType, setLoginType] = useState("");
-
-  const accessToken = new URL(window.location.href).searchParams.get("accessToken");
-  const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
+  // const [loginType, setLoginType] = useState("");
+  //
+  // const accessToken = new URL(window.location.href).searchParams.get("accessToken");
+  // const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
 
   // useEffect(() => {
   //
@@ -25,20 +22,21 @@ const App = () => {
   //     }
   // }, [accessToken]);
 
-  if (accessToken) {
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-  }
+  // if (accessToken) {
+  //     localStorage.setItem("accessToken", accessToken);
+  //     localStorage.setItem("refreshToken", refreshToken);
+  // }
 
   return (
     <div className="App">
       <header className="App-header">
           <Routes>
-              <Route exact path="/" element={<Home />} />
+              <Route exact path="/" element={<MainHome />} />
               <Route path="/save" element={<Save />} />
               <Route path="/about" element={<About />} />
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/signIn" element={<SignIn />} />
+              <Route path="/board" element={<NoticeBoard />} />
           </Routes>
       </header>
     </div>
