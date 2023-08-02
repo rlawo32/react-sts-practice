@@ -8,12 +8,12 @@ html.dark-mode {
 }
 
 .Main-body {
-  height: 6000px;
+  height: 3000px;
   background-color: black;
-  background-image: url("../../images/space5.jpg");
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: 1000px;
+  //background-image: url("../../images/space5.jpg");
+  //background-repeat: no-repeat;
+  //background-position: left top;
+  //background-size: 1000px;
   width: 100%;
   overflow-x: hidden;
 }
@@ -89,6 +89,7 @@ svg text:nth-child(7) {
   align-items: center;
   animation: fadein 2s forwards;
   animation-delay: 4s;
+  transform: translate(-50%, 0%); // (position: absolute) 값 가운데 처리하기
 }
 
 .Sub-body {

@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGithubSquare, faYoutubeSquare} from '@fortawesome/free-brands-svg-icons';
 import DrawWord from './DrawWord';
+import AppBarNavigation from "../Navigation/AppBarNavigation";
 
 const MainView = () => {
 
@@ -37,16 +38,17 @@ const MainView = () => {
 
     return (
         <>
-            <AnimatedCursor
-                innerSize={20}
-                outerSize={35}
-                innerScale={2}
-                outerScale={1.7}
-                outerAlpha={0}
-                innerStyle={
-                    { backgroundColor: 'var(--cursor-color)' }
-                }
-            />
+            <AppBarNavigation />
+            {/*<AnimatedCursor*/}
+            {/*    innerSize={20}*/}
+            {/*    outerSize={35}*/}
+            {/*    innerScale={2}*/}
+            {/*    outerScale={1.7}*/}
+            {/*    outerAlpha={0}*/}
+            {/*    innerStyle={*/}
+            {/*        { backgroundColor: 'var(--cursor-color)' }*/}
+            {/*    }*/}
+            {/*/>*/}
             <div className="Main-body">
                 {/*<div style={ {backgroundImage: `url(${space2})`, height: '1000px'} }>*/}
                 {/*    /!*<span style={ {lineHeight: '500px'} }>Hello</span>*!/*/}

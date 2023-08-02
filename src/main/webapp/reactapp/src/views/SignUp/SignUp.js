@@ -13,6 +13,8 @@ const SignUp = () => {
     const emailRef = useRef();
     const nickNameRef = useRef();
 
+    const text1 = "필수 정보입니다.";
+
     useEffect(() => {
         emailRef.current.focus();
     }, []);
@@ -61,7 +63,7 @@ const SignUp = () => {
         setUserId(userIdCurrent);
 
         if (userIdCurrent < 1) {
-            setUserIdMessage('필수 정보입니다.');
+            setUserIdMessage(text1);
             setIsPasswordEffect(false);
         } else {
             if (!userIdRegex.test(userIdCurrent)) {
@@ -80,7 +82,7 @@ const SignUp = () => {
         setUserPw(passwordCurrent);
 
         if (passwordCurrent.length < 1) {
-            setUserPwMessage('필수 정보입니다.');
+            setUserPwMessage(text1);
             setIsPasswordEffect(false);
         } else {
             if (!passwordRegex.test(passwordCurrent)) {
