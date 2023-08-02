@@ -30,7 +30,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     // spring-data-jpa dependency
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.h2database:h2'
+    // implementation 'com.h2database:h2'
+
+    // maria-db
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.8'
+
     // mustache dependency
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
     // spring-security dependency

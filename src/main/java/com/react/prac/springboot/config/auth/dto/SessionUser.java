@@ -1,7 +1,7 @@
 package com.react.prac.springboot.config.auth.dto;
 
-import com.react.prac.springboot.domain.user.Role;
-import com.react.prac.springboot.domain.user.Users;
+import com.react.prac.springboot.jpa.domain.user.Role;
+import com.react.prac.springboot.jpa.domain.user.Users;
 import lombok.Getter;
 import lombok.Setter;
 

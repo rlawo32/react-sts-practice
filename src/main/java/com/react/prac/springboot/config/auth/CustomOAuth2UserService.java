@@ -2,9 +2,8 @@ package com.react.prac.springboot.config.auth;
 
 import com.react.prac.springboot.config.auth.dto.OAuth2Attributes;
 import com.react.prac.springboot.config.auth.dto.SessionUser;
-import com.react.prac.springboot.domain.user.UserRepository;
-import com.react.prac.springboot.domain.user.Users;
-import jakarta.servlet.http.HttpSession;
+import com.react.prac.springboot.jpa.domain.user.UserRepository;
+import com.react.prac.springboot.jpa.domain.user.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

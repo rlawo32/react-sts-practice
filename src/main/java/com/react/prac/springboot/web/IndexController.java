@@ -1,9 +1,13 @@
 package com.react.prac.springboot.web;
 
-import com.react.prac.springboot.service.posts.PostsService;
+import com.react.prac.springboot.service.posts.BoardService;
 import com.react.prac.springboot.service.users.UsersService;
 import com.react.prac.springboot.util.EmailUtil;
 import com.react.prac.springboot.web.dto.*;
+import com.react.prac.springboot.web.dto.board.BoardResponseDto;
+import com.react.prac.springboot.web.dto.user.UsersSignInDto;
+import com.react.prac.springboot.web.dto.user.UsersSignInResponseDto;
+import com.react.prac.springboot.web.dto.user.UsersSignUpDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
@@ -16,7 +20,7 @@ import java.util.Map;
 @RestController
 public class IndexController {
 
-    private final PostsService postsService;
+    private final BoardService postsService;
     private final UsersService usersService;
 
     @GetMapping("/index")
@@ -37,7 +41,7 @@ public class IndexController {
 
     @GetMapping("/posts/update/{id}")
     public String postsUpdate(@PathVariable Long id, Model model) {
-        PostsResponseDto dto = postsService.findById(id);
+        BoardResponseDto dto = postsService.findById(id);
         model.addAttribute("post", dto);
         return "posts-update";
     }

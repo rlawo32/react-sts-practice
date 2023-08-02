@@ -1,15 +1,14 @@
 package com.react.prac.springboot.service.users;
 
 import com.react.prac.springboot.config.security.TokenProvider;
-import com.react.prac.springboot.domain.user.UserRepository;
-import com.react.prac.springboot.domain.user.Users;
+import com.react.prac.springboot.jpa.domain.user.UserRepository;
+import com.react.prac.springboot.jpa.domain.user.Users;
 import com.react.prac.springboot.web.dto.ResponseDto;
-import com.react.prac.springboot.web.dto.UsersSignInResponseDto;
-import com.react.prac.springboot.web.dto.UsersSignInDto;
-import com.react.prac.springboot.web.dto.UsersSignUpDto;
+import com.react.prac.springboot.web.dto.user.UsersSignInResponseDto;
+import com.react.prac.springboot.web.dto.user.UsersSignInDto;
+import com.react.prac.springboot.web.dto.user.UsersSignUpDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
