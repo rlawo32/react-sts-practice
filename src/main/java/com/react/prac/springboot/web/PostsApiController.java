@@ -33,9 +33,6 @@ public class PostsApiController {
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody BoardSaveRequestDto requestDto) {
         System.out.println("값 확인1");
-        System.out.println(">>>" + requestDto.getTitle());
-        System.out.println(">>>" + requestDto.getAuthor());
-        System.out.println(">>>" + requestDto.getContent());
         return boardService.save(requestDto);
     }
 

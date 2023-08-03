@@ -6,15 +6,17 @@ import lombok.Getter;
 @Getter
 public class BoardResponseDto {
 
-    private Long id;
-    private String title;
-    private String content;
-    private String author;
+    private Long boardNo;
+    private String boardTab;
+    private String boardTitle;
+    private String boardContent;
+    private String boardAuthor;
 
     public BoardResponseDto(MainBoard entity) {
-        this.id = entity.getId();
-        this.title = entity.getTitle();
-        this.content = entity.getContent();
-        this.author = entity.getAuthor();
+        this.boardNo = entity.getBoardNo();
+        this.boardTab = entity.getBoardTab();
+        this.boardTitle = entity.getBoardTitle();
+        this.boardContent = entity.getBoardContent();
+        this.boardAuthor = entity.getBoardAuthor();
     }
 }

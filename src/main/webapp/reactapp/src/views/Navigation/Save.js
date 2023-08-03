@@ -46,29 +46,31 @@ const Save = () => {
     }
 
     //const baseUrl = "http://localhost:8080/";
-    const [title, setTitle] = useState("");
-    const [author, setAuthor] = useState("");
-    const [content, setContent] = useState("");
+    const [boardTab, setBoardTab] = useState("");
+    const [boardTitle, setBoardTitle] = useState("");
+    const [boardContent, setBoardContent] = useState("");
+    const tab_menu = [''];
 
-    const handleChangeT = ({target: {value}}) => {
-        setTitle(value);
+    const boardTabChangeHandler = ({target: {value}}) => {
+        setBoardTab(value);
+        console.log(boardTab);
     }
 
-    const handleChangeA = ({target: {value}}) => {
-        setAuthor(value);
+    const boardTitleChangeHandler = ({target: {value}}) => {
+        setBoardTitle(value);
     }
 
-    const handleChangeC = ({target: {value}}) => {
-        setContent(value);
+    const boardContentChangeHandler = ({target: {value}}) => {
+        setBoardContent(value);
     }
 
     const JsonData = {
-        title: `${title}`,
-        author: `${author}`,
-        content: `${content}`
+        boardTab: `${boardTab}`,
+        boardTitle: `${boardTitle}`,
+        boardContent: `${boardContent}`
     }
 
-    const handleSubmit = async() => {
+    const submitHandler = async() => {
         console.log(JSON.stringify(JsonData))
         await axios({
             method: "POST",
@@ -77,7 +79,6 @@ const Save = () => {
             headers: {'Content-type': 'application/json'}
         }).then(function() {
             window.alert("등록이 완료되었습니다람쥐");
-            window.location.href = "../../../..";
         }).catch(function(error) {
             console.log("에러내용:", JSON.stringify(error));
         })
@@ -88,27 +89,32 @@ const Save = () => {
         <div>
             <div style={ {marginBottom:"55px"} }><h1>다른 페이지 게시글 등록</h1></div>
             <Container className="panel">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="title">
+                <Form onSubmit={submitHandler}>
+                    <Form.Group className="mb-3" controlId="boardTab">
                         <Col sm>
-                            <Form.Control type="title" placeholder="제목을 입력하세요" value={title} onChange={handleChangeT}/>
+                            <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </Form.Select>
+                        </Col>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="boardTitle">
+                        <Col sm>
+                            <Form.Control type="title" placeholder="제목을 입력하세요" value={boardTitle} onChange={boardTitleChangeHandler}/>
                             <Form.Text className="text-muted"></Form.Text>
                         </Col>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="author">
+                    <Form.Group className="mb-3" controlId="boardContent">
                         <Col sm>
-                            <Form.Control type="author" placeholder="작성자를 입력하세요" value={author} onChange={handleChangeA}/>
+                            <Form.Control as="textarea" rows={3} placeholder="내용을 입력하세요" value={boardContent} onChange={boardContentChangeHandler}/>
                             <Form.Text className="text-muted"></Form.Text>
                         </Col>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="content">
-                        <Col sm>
-                            <Form.Control as="textarea" rows={3} placeholder="내용을 입력하세요" value={content} onChange={handleChangeC}/>
-                            <Form.Text className="text-muted"></Form.Text>
-                        </Col>
-                    </Form.Group>
                     <div className="d-grid gap-1" style={ {margin:"5px"} }>
                         <Button variant="primary" type="submit">등록</Button>
                     </div>
@@ -117,7 +123,6 @@ const Save = () => {
                     </div>
                 </Form>
             </Container>
-            <Button onClick={handleTest}>Test</Button>
         </div>
     )
 }

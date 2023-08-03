@@ -9,22 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoardSaveRequestDto {
 
-    private String title;
-    private String content;
-    private String author;
+    private String boardTab;
+    private String boardTitle;
+    private String boardContent;
+    private String boardAuthor;
 
     @Builder
-    public BoardSaveRequestDto(String title, String content, String author) {
-        this.title = title;
-        this.content = content;
-        this.author = author;
+    public BoardSaveRequestDto(String boardTab, String boardTitle, String boardContent, String boardAuthor) {
+        this.boardTab = boardTab;
+        this.boardTitle = boardTitle;
+        this.boardContent = boardContent;
+        this.boardAuthor = "rlawo32";
     }
 
     public MainBoard toEntity() {
         return MainBoard.builder()
-                .title(title)
-                .content(content)
-                .author(author)
+                .boardTab(boardTab)
+                .boardTitle(boardTitle)
+                .boardContent(boardContent)
+                .boardAuthor(boardAuthor)
                 .build();
     }
 }

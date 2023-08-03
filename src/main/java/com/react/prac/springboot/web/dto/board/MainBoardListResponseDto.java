@@ -8,17 +8,19 @@ import java.time.LocalDateTime;
 @Getter
 public class MainBoardListResponseDto {
 
-    private Long id;
-    private String title;
-    private String author;
-    private String content;
+    private Long boardNo;
+    private String boardTab;
+    private String boardTitle;
+    private String boardContent;
+    private String boardAuthor;
     private LocalDateTime modifiedDate;
 
     public MainBoardListResponseDto(MainBoard entity) {
-        this.id = entity.getId();
-        this.title = entity.getTitle();
-        this.author = entity.getAuthor();
-        this.content = entity.getContent();
+        this.boardNo = entity.getBoardNo();
+        this.boardTab = entity.getBoardTab();
+        this.boardTitle = entity.getBoardTitle();
+        this.boardContent = entity.getBoardContent();
+        this.boardAuthor = entity.getBoardAuthor();
         this.modifiedDate = entity.getModifiedDate();
     }
 }
