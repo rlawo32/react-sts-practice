@@ -2,7 +2,7 @@ package com.react.prac.springboot.web;
 
 import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.service.posts.BoardService;
-import com.react.prac.springboot.web.dto.board.MainBoardListResponseDto;
+import com.react.prac.springboot.web.dto.board.BoardListResponseDto;
 import com.react.prac.springboot.web.dto.board.BoardResponseDto;
 import com.react.prac.springboot.web.dto.board.BoardSaveRequestDto;
 import com.react.prac.springboot.web.dto.board.BoardUpdateRequestDto;
@@ -53,14 +53,13 @@ public class PostsApiController {
         boardService.delete(id);
     }
 
-    @GetMapping("/postsList")
-    public Map<String, Object> postsList() {
+    @GetMapping("/game1BoardList")
+    public Map<String, Object> game1BoardList() {
         Map<String, Object> result = new HashMap<>();
-        List<MainBoardListResponseDto> posts = boardService.findAllDesc();
+        List<BoardListResponseDto> boards = boardService.findAllDesc();
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         System.out.println("세션유저 : " + user);
-        result.put("postsList", posts);
-        //result.put("userName", user.getName());
+        result.put("game1BoardList", boards);
         return result;
     }
 }

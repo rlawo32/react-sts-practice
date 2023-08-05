@@ -26,20 +26,21 @@ const Game1Board = () => {
     //     localStorage.setItem("refreshToken", refreshToken);
     // }
 
-    const [postsList, setPostsList] = useState([{
-        id: '',
-        title: '',
-        author: '',
-        content: '',
-        modifiedDat: ''
+    const [game1BoardList, setGame1BoardList] = useState([{
+        boardNo: '',
+        boardTab: '',
+        boardTitle: '',
+        boardContent: '',
+        boardAuthor: '',
+        modifiedDate: ''
     }]);
 
     useEffect(() => {
         axios({
             method: "GET",
-            url: '/postsList'
+            url: '/game1BoardList'
         }).then(res=>{
-            setPostsList(res.data.postsList);
+            setGame1BoardList(res.data.game1BoardList);
         }).catch(error=>{
             console.log(error);
         });
@@ -101,26 +102,28 @@ const Game1Board = () => {
                 ))}
             </ul>
             <div>
-                ---------------------------
+                리그 오브 레전드
                 <table className="table table-bordered table-sm">
                     <thead className="table-header">
-                    <tr>
-                        <td>게시글번호</td>
-                        <td>제목</td>
-                        <td>작성자</td>
-                        <td>내용</td>
-                        <td>최종수정일</td>
+                    <tr style={{color: "white"}}>
+                        <td style={{width: "100px"}}>탭</td>
+                        <td style={{width: "450px"}}>제목</td>
+                        <td style={{width: "150px"}}>작성자</td>
+                        <td style={{width: "120px"}}>날짜</td>
+                        <td style={{width: "120px"}}>조회</td>
+                        <td style={{width: "100px"}}>추천</td>
                     </tr>
                     </thead>
                     <tbody id="tbody">
-                    {postsList.map((posts, idx) => {
+                    {game1BoardList.map((boards, idx) => {
                         return (
-                            <tr key={posts.id}>
-                                <td>{posts.id}</td>
-                                <td>{posts.title}</td>
-                                <td>{posts.author}</td>
-                                <td>{posts.content}</td>
-                                <td>{posts.modifiedDate}</td>
+                            <tr key={boards.id}>
+                                <td>{boards.boardTab}</td>
+                                <td>{boards.boardTitle}</td>
+                                <td>{boards.author}</td>
+                                <td>{boards.content}</td>
+                                <td>{boards.modifiedDate}</td>
+                                <td>{boards.id}</td>
                             </tr>
                         )
                     })}

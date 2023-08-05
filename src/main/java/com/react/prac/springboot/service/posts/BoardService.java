@@ -2,7 +2,7 @@ package com.react.prac.springboot.service.posts;
 
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import com.react.prac.springboot.jpa.domain.board.MainBoardRepository;
-import com.react.prac.springboot.web.dto.board.MainBoardListResponseDto;
+import com.react.prac.springboot.web.dto.board.BoardListResponseDto;
 import com.react.prac.springboot.web.dto.board.BoardResponseDto;
 import com.react.prac.springboot.web.dto.board.BoardSaveRequestDto;
 import com.react.prac.springboot.web.dto.board.BoardUpdateRequestDto;
@@ -41,9 +41,9 @@ public class BoardService {
     }
 
     @Transactional
-    public List<MainBoardListResponseDto> findAllDesc() {
+    public List<BoardListResponseDto> findAllDesc() {
         return mainBoardRepository.findAllDesc().stream()
-                .map(MainBoardListResponseDto::new)
+                .map(BoardListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
