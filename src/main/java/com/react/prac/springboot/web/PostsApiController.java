@@ -30,7 +30,7 @@ public class PostsApiController {
         return attributes.toString();
     }
 
-    @PostMapping("/api/v1/posts")
+    @PostMapping("/api/v1/boardInsert")
     public Long save(@RequestBody BoardSaveRequestDto requestDto) {
         System.out.println("값 확인1");
         return boardService.save(requestDto);

@@ -5,37 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import axios from "axios";
 
-const handleTest = () => {
-
-    // const accessToken = new URL(window.location.href).searchParams.get("accessToken");
-    // const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
-    //
-    // if (accessToken) {
-    //     localStorage.setItem("accessToken", accessToken);
-    //     localStorage.setItem("refreshToken", refreshToken);
-    // }
-
-    let sendData = JSON.stringify({
-        "userId": "testID",
-        "userPw": "1234"
-    });
-
-    axios({
-        method: "POST",
-        url: '/axiosTest',
-        data: sendData,
-        // header에서 JSON 타입의 데이터라는 것을 명시
-        headers: {'Content-type': 'application/json;charset=utf-8'}
-    }).then((res)=>{
-        alert("성공!!");
-        // API로 부터 받은 데이터 출력
-        console.log(res.data);
-    }).catch(error=>{
-        console.log("실패");
-        console.log(error);
-    });
-}
-
 const Save = () => {
     const accessToken = new URL(window.location.href).searchParams.get("accessToken");
     const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
@@ -74,7 +43,7 @@ const Save = () => {
         console.log(JSON.stringify(JsonData))
         await axios({
             method: "POST",
-            url: "/api/v1/posts",
+            url: "/api/v1/boardInsert",
             data: JSON.stringify(JsonData),
             headers: {'Content-type': 'application/json'}
         }).then(function() {
@@ -93,10 +62,11 @@ const Save = () => {
                     <Form.Group className="mb-3" controlId="boardTab">
                         <Col sm>
                             <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                                <option>화제</option>
+                                <option>정보</option>
+                                <option>오류</option>
+                                <option>사진/동영상</option>
+                                <option>팁과 노하우</option>
                             </Form.Select>
                         </Col>
                     </Form.Group>
