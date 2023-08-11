@@ -12,6 +12,7 @@ import Game3Board from "./views/NoticeBoard/Game3Board";
 import Game4Board from "./views/NoticeBoard/Game4Board";
 import Game5Board from "./views/NoticeBoard/Game5Board";
 import Game6Board from "./views/NoticeBoard/Game6Board";
+import DetailBoard from "./views/NoticeBoard/DetailBoard";
 import 'bootstrap/dist/css/bootstrap.css';
 
 const App = () => {
@@ -50,6 +51,8 @@ const App = () => {
               <Route path="/game4board" element={<Game4Board />} />
               <Route path="/game5board" element={<Game5Board />} />
               <Route path="/game6board" element={<Game6Board />} />
+
+              <Route path="/detailBoard/:boardNo" element={<DetailBoard />} />
           </Routes>
       </header>
     </div>

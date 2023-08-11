@@ -28,14 +28,14 @@ const SignIn = () => {
         setLoginUserPw(e.target.value);
     }
 
-    const onLoginHandler = (e) => {
+    const onLoginHandler = async (e) => {
         e.preventDefault();
         let loginBody = {
             userEmail: loginUserEmail,
             userPw: loginUserPw
         }
 
-        axios({
+        await axios({
             method: "POST",
             url: "/users/signIn",
             data: JSON.stringify(loginBody),

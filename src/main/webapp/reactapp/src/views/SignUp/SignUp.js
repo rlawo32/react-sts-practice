@@ -259,11 +259,11 @@ const SignUp = () => {
     }, [])
 
     // 이메일 중복 확인
-    const EmailDuplicationChk = () => {
+    const EmailDuplicationChk = async () => {
         const emailDuplicationRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if(emailDuplicationRegex.test(userEmail)) {
             console.log(userEmail);
-            axios({
+            await axios({
                 method: "GET",
                 url: "/users/signUpDuplicationChk",
                 params: {userEmail: userEmail}
@@ -288,11 +288,11 @@ const SignUp = () => {
     }
 
     // 닉네임 중복 확인
-    const nickNameDuplicationChk = () => {
+    const nickNameDuplicationChk = async () => {
         const nickNameDuplicationRegex = /^[a-zA-Z가-힣]{3,20}$/;
         if(isUserNameEffect === true) {
             console.log(userNickName);
-            axios({
+            await axios({
                 method: "GET",
                 url: "/users/signUpDuplicationChk",
                 params: {userNickName: userNickName}
@@ -343,11 +343,11 @@ const SignUp = () => {
         userBirth: `${userBirthY}` + `${userBirthM}` + `${userBirthD}`,
     }
 
-    const HandleEmailChkSend = () => {
+    const HandleEmailChkSend = async () => {
         if(isUserEmailDuplicationEffect === true) {
             setIsUserEmailHideEffect(true);
             setUserEmailMessage('');
-            axios({
+            await axios({
                 method: "GET",
                 url: "/users/sendAuthCode",
                 params: {userEmail: userEmail}

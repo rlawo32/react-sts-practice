@@ -39,12 +39,12 @@ public class IndexController {
         return "posts-save";
     }
 
-    @GetMapping("/posts/update/{id}")
-    public String postsUpdate(@PathVariable Long id, Model model) {
-        BoardResponseDto dto = postsService.findById(id);
-        model.addAttribute("post", dto);
-        return "posts-update";
-    }
+//    @GetMapping("/posts/update/{id}")
+//    public String postsUpdate(@PathVariable Long id, Model model) {
+//        BoardResponseDto dto = postsService.findById(id);
+//        model.addAttribute("post", dto);
+//        return "posts-update";
+//    }
 
     @GetMapping("/users/sendAuthCode")
     public Map<String, Object> sendAuthCode(HttpServletRequest request) {

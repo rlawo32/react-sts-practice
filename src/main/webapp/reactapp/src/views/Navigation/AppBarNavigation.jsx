@@ -18,10 +18,12 @@ export default function ButtonAppBar() {
                     aria-label="menu"
                     sx={{ mr: 2, color: "white" }}
                 >
-                    <MenuIcon />
+                    <Link to="/">
+                        <MenuIcon />
+                    </Link>
                 </IconButton>
                 <Typography position="relative" variant="h6" component="div" sx={{ flexGrow: 1, color: "white" }}>
-                    News
+
                 </Typography>
 
                 <Link to="/signIn">

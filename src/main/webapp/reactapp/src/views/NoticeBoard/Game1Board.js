@@ -8,6 +8,7 @@ import Game3Board from "./Game3Board";
 import Game4Board from "./Game4Board";
 import Game5Board from "./Game5Board";
 import Game6Board from "./Game6Board";
+import './MainBoard.scss';
 
 const Game1Board = () => {
 
@@ -36,17 +37,15 @@ const Game1Board = () => {
     }]);
 
     useEffect(() => {
-        axios({
-            method: "GET",
-            url: '/game1BoardList'
-        }).then(res=>{
-            setGame1BoardList(res.data.game1BoardList);
-        }).catch(error=>{
-            console.log(error);
-        });
-        /*axios.get("/postsList")
-            .then(res => setPostsList(res.data.postsList))
-            .catch(error => console.log(error))*/
+        const getBoards = async () => {
+            const game1Board = await axios({
+                method: "GET",
+                url: '/game1BoardList'
+            });
+            setGame1BoardList(game1Board.data.game1BoardList);
+        };
+
+        getBoards();
     }, []);
 
     const [currentTab, clickTab] = useState(0);
@@ -96,16 +95,20 @@ const Game1Board = () => {
             {/*        <li key={elo.id} onClick={() => selectSubTabHandler(elo.id)}>{elo.name[elo.id]}</li>*/}
             {/*    ))}*/}
             {/*</ul>*/}
-            <ul className="sub_tab">
-                {subTab_data.map((el) => (
-                    <li key={el.id} onClick={() => selectSubTabHandler(el.id)}>{el.name[el.id]}</li>
-                ))}
-            </ul>
-            <div>
+            <div className="sub_tab">
+                <ul>
+                    {subTab_data.map((rl) => (
+                        <li key={rl.id} onClick={() => selectSubTabHandler(rl.id)}>{rl.name[rl.id]}</li>
+                    ))}
+                </ul>
+            </div>
+            <div className="table_name">
                 리그 오브 레전드
-                <table className="table table-bordered table-sm">
+            </div>
+            <div className="table">
+                <table>
                     <thead className="table-header">
-                    <tr style={{color: "white"}}>
+                    <tr>
                         <td style={{width: "100px"}}>탭</td>
                         <td style={{width: "450px"}}>제목</td>
                         <td style={{width: "150px"}}>작성자</td>
@@ -117,11 +120,15 @@ const Game1Board = () => {
                     <tbody id="tbody">
                     {game1BoardList.map((boards, idx) => {
                         return (
-                            <tr key={boards.id}>
+                            <tr key={boards.boardNo}>
                                 <td>{boards.boardTab}</td>
-                                <td>{boards.boardTitle}</td>
-                                <td>{boards.author}</td>
-                                <td>{boards.content}</td>
+                                <td>
+                                    <Link to={{ pathname: `/detailBoard/${boards.boardNo}`}} style={{textDecoration: 'none', color: 'white'}}>
+                                        {boards.boardTitle}
+                                    </Link>
+                                </td>
+                                <td>{boards.boardAuthor}</td>
+                                <td>{boards.modifiedDate}</td>
                                 <td>{boards.modifiedDate}</td>
                                 <td>{boards.id}</td>
                             </tr>
@@ -129,8 +136,7 @@ const Game1Board = () => {
                     })}
                     </tbody>
                 </table>
-            </div>
-            <div style={ {paddingTop:"15px"} }>
+
                 <Link to="/save">
                     <button>등록</button>
                 </Link>

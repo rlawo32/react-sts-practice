@@ -40,10 +40,11 @@ const Save = () => {
     }
 
     //const baseUrl = "http://localhost:8080/";
-    const [boardTab, setBoardTab] = useState("");
+    const [boardTab, setBoardTab] = useState("화제");
     const [boardTitle, setBoardTitle] = useState("");
     const [boardContent, setBoardContent] = useState("");
-    const tab_menu = [''];
+    const tab_menu = ['화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
+    const [selectTabMenu, setSelectTabMenu] = useState(0);
 
     const boardTabChangeHandler = ({target: {value}}) => {
         setBoardTab(value);
@@ -54,8 +55,8 @@ const Save = () => {
         setBoardTitle(value);
     }
 
-    const boardContentChangeHandler = ({target: {value}}) => {
-        setBoardContent(value);
+    const boardContentChangeHandler = () => {
+        setBoardContent(editorRef.current.getInstance().getMarkdown());
     }
 
     const JsonData = {
@@ -68,10 +69,11 @@ const Save = () => {
         console.log(JSON.stringify(JsonData))
         await axios({
             method: "POST",
-            url: "/api/v1/boardInsert",
+            url: "/boardInsert",
             data: JSON.stringify(JsonData),
             headers: {'Content-type': 'application/json'}
         }).then(function() {
+            console.log(JsonData);
             window.alert("등록이 완료되었습니다람쥐");
         }).catch(function(error) {
             console.log("에러내용:", JSON.stringify(error));
@@ -124,6 +126,7 @@ const Save = () => {
                                     theme="dark" // dark 모드
                                     usageStatistics={false} // 구글 통계 수집 거부
                                     plugins={[[colorSyntax, colorSyntaxOptions]]} // 플러그인
+                                    onChange={boardContentChangeHandler}
                                 />
                             </Box>
                         </Col>

@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-public class PostsApiController {
+public class BoardController {
 
     private final BoardService boardService;
     private final HttpSession httpSession;
@@ -30,7 +30,7 @@ public class PostsApiController {
         return attributes.toString();
     }
 
-    @PostMapping("/api/v1/boardInsert")
+    @PostMapping("/boardInsert")
     public Long save(@RequestBody BoardSaveRequestDto requestDto) {
         System.out.println("값 확인1");
         return boardService.save(requestDto);
@@ -43,9 +43,9 @@ public class PostsApiController {
         return boardService.update(id, requestDto);
     }
 
-    @GetMapping("/api/v1/posts/{id}")
-    public BoardResponseDto findById (@PathVariable Long id) {
-        return boardService.findById(id);
+    @GetMapping("/detailBoard/{boardNo}")
+    public BoardResponseDto findByBoardNo (@PathVariable Long boardNo) {
+        return boardService.findByBoardNo(boardNo);
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
@@ -62,4 +62,5 @@ public class PostsApiController {
         result.put("game1BoardList", boards);
         return result;
     }
+
 }

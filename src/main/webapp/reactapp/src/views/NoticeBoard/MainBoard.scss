@@ -1,13 +1,14 @@
 
+.main_board {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+
 .main_tab {
   list-style: none;
 
-  position: absolute;
-  width: 800px;
-  left : 50%;
-  top: -100%;
-  transform: translate(-50%, 100%);
-
+  margin-top: 100px;
   text-align: center;
   font-size: 17px;
   border: none ;
@@ -16,16 +17,14 @@
 .sub_tab {
   list-style: none;
 
-
-  position: absolute;
-  width: 800px;
-  left : 50%;
-  top: -20%;
-  transform: translate(-50%, 20%);
-
+  margin-top: 80px;
   text-align: center;
   font-size: 17px;
-  border: none ;
+
+  ul {
+    border: none ;
+
+  }
 }
 
 li {
@@ -33,4 +32,25 @@ li {
   cursor: pointer;
 
   margin-right: 20px;
+}
+
+.table_name {
+  margin-top: 40px;
+  font-size: 60px;
+  font-style: oblique;
+  color: #0a53be;
+}
+
+.table table{
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1500px;
+
+  color: white;
+
+  tr:hover {
+    background-color: rgba(80, 80, 80, 0.8);
+    color: #fff;
+  }
 }

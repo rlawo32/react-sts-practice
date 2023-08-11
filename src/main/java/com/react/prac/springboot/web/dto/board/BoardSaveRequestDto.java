@@ -19,7 +19,7 @@ public class BoardSaveRequestDto {
         this.boardTab = boardTab;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
-        this.boardAuthor = "rlawo32";
+        this.boardAuthor = boardAuthor;
     }
 
     public MainBoard toEntity() {
@@ -27,7 +27,7 @@ public class BoardSaveRequestDto {
                 .boardTab(boardTab)
                 .boardTitle(boardTitle)
                 .boardContent(boardContent)
-                .boardAuthor(boardAuthor)
+                .boardAuthor("rlawo32")
                 .build();
     }
 }

@@ -33,9 +33,9 @@ public class BoardService {
         return id;
     }
 
-    public BoardResponseDto findById (Long id) {
-        MainBoard entity = mainBoardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+    public BoardResponseDto findByBoardNo (Long boardNo) {
+        MainBoard entity = mainBoardRepository.findByBoardNo(boardNo)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardNo=" + boardNo));
 
         return new BoardResponseDto(entity);
     }
