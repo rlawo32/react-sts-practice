@@ -3,14 +3,9 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import AppBarNavigation from "../Navigation/AppBarNavigation";
 import BoardTagBarNavigation from "./BoardTagBarNavigation";
-import Game2Board from "./Game2Board";
-import Game3Board from "./Game3Board";
-import Game4Board from "./Game4Board";
-import Game5Board from "./Game5Board";
-import Game6Board from "./Game6Board";
 import './MainBoard.scss';
 
-const Game1Board = () => {
+const Game1Board = (props) => {
 
     const subTab_name = ['전체', '화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
     const [currentSubTab, clickSubTab] = useState(0);
@@ -48,38 +43,43 @@ const Game1Board = () => {
         getBoards();
     }, []);
 
+    const changeDetailBoard = (itemID) => {
+        const detailBoardNo = itemID;
+        props.boardNo(detailBoardNo);
+    }
+
     const [currentTab, clickTab] = useState(0);
 
     const subTab_data = [
         {
             id: 0,
             name: subTab_name,
-            view: <Game1Board />
+            view: ""
         },
         {
             id: 1,
             name: subTab_name,
-            view: <Game2Board />
+            view: ""
         },
         {
             id: 2,
             name: subTab_name,
-            view: <Game3Board />
+            view: ""
         },
         {
             id: 3,
             name: subTab_name,
-            view: <Game4Board />
+            view: ""
         },
         {
             id: 4,
             name: subTab_name,
-            view: <Game5Board />
+            view: ""
         },
         {
             id: 5,
             name: subTab_name,
-            view: <Game6Board />
+            view: ""
         },
     ]
 
@@ -103,7 +103,7 @@ const Game1Board = () => {
                 </ul>
             </div>
             <div className="table_name">
-                리그 오브 레전드
+                {props.name}
             </div>
             <div className="table">
                 <table>
@@ -122,8 +122,13 @@ const Game1Board = () => {
                         return (
                             <tr key={boards.boardNo}>
                                 <td>{boards.boardTab}</td>
+                                {/*<td>*/}
+                                {/*    <Link to={{ pathname: `/detailBoard/${boards.boardNo}` }} style={{textDecoration: 'none', color: 'white'}}>*/}
+                                {/*        {boards.boardTitle}*/}
+                                {/*    </Link>*/}
+                                {/*</td>*/}
                                 <td>
-                                    <Link to={{ pathname: `/detailBoard/${boards.boardNo}`}} style={{textDecoration: 'none', color: 'white'}}>
+                                    <Link onClick={() => changeDetailBoard(boards.boardNo)} style={{textDecoration: 'none', color: 'white'}}>
                                         {boards.boardTitle}
                                     </Link>
                                 </td>

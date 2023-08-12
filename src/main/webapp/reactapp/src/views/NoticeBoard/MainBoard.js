@@ -3,70 +3,59 @@ import './MainBoard.scss';
 import '../Layouts/MainView.scss'
 import BoardTagBarNavigation from "./BoardTagBarNavigation";
 import Game1Board from "./Game1Board";
-import Game2Board from "./Game2Board";
-import Game3Board from "./Game3Board";
-import Game4Board from "./Game4Board";
-import Game5Board from "./Game5Board";
-import Game6Board from "./Game6Board";
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGithubSquare, faYoutubeSquare} from "@fortawesome/free-brands-svg-icons";
+import DetailBoard from "./DetailBoard";
+import axios from "axios";
 
 const MainBoard = () => {
+    const location = useLocation();
+    const mainReset = location.state?.mainReset;
 
     const tab_name = ['리그오브레전드', '오버워치', '배틀그라운드', '메이플스토리', '마인크래프트', '스팀'];
     const [currentTab, clickTab] = useState(0);
 
-    const tab_data = [
-        {
-            id: 0,
-            name: tab_name,
-            view: <Game1Board />
-        },
-        {
-            id: 1,
-            name: tab_name,
-            view: <Game2Board />
-        },
-        {
-            id: 2,
-            name: tab_name,
-            view: <Game3Board />
-        },
-        {
-            id: 3,
-            name: tab_name,
-            view: <Game4Board />
-        },
-        {
-            id: 4,
-            name: tab_name,
-            view: <Game5Board />
-        },
-        {
-            id: 5,
-            name: tab_name,
-            view: <Game6Board />
-        },
-    ]
+    const [detailBoardNo, setDetailBoardNo] = useState(null);
+    const changeDetailBoardNo = (newNo) => {
+        setDetailBoardNo(newNo);
+    }
+
+    const changeTabHandler = () => {
+        let tab_data = [];
+        for(let i=0; i<tab_name.length; i++) {
+            tab_data.push({id: i, name: tab_name[i], view:<Game1Board id={i} name={tab_name[i]} boardNo={changeDetailBoardNo}/>});
+        }
+        return tab_data;
+    }
 
     const selectTabHandler = (idx) => {
         clickTab(idx);
+        setDetailBoardNo(null);
     }
+
+    useEffect(() => {
+        setDetailBoardNo(mainReset);
+    }, [mainReset]);
 
     return (
         <div className="main_board">
+
             <AppBarNavigation />
-            <ul className="main_tab">
-                {tab_data.map((el) => (
-                    <li key={el.id} onClick={() => selectTabHandler(el.id)}>{el.name[el.id]}</li>
-                ))}
-            </ul>
+            <div className="main_tab">
+                <ul>
+                    {changeTabHandler().map((el) => (
+                        <li key={el.id} onClick={() => selectTabHandler(el.id)}>{el.name}</li>
+                    ))}
+                </ul>
+            </div>
 
-            {tab_data[currentTab].view}
+            {
+                detailBoardNo === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardNo}/>
+            }
 
-            {/*<Game1Board />*/}
+            {/*{changeTabHandler()[currentTab].view}*/}
 
             <div className="Social-logo">
                 <div style={ {borderBottom: "1px inset white", marginBottom: "50px", width: "60%", marginLeft: "auto", marginRight: "auto"} } />

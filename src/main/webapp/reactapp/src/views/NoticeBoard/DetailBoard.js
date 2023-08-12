@@ -2,12 +2,12 @@ import AppBarNavigation from "../Navigation/AppBarNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useLocation} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGithubSquare, faYoutubeSquare} from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
-const DetailBoard = () => {
-
+const DetailBoard = (props) => {
+    const location = useLocation();
     const params = useParams();
 
     const [game1BoardDetail, setGame1BoardDetail] = useState("");
@@ -16,13 +16,12 @@ const DetailBoard = () => {
         const getBoards = async () => {
             const detail = await axios({
                 method: "GET",
-                url: '/detailBoard/' + params.boardNo
+                url: '/detailBoard/' + props.id
             });
             setGame1BoardDetail(detail.data);
         };
 
         getBoards();
-        console.log(game1BoardDetail);
     }, []);
 
 

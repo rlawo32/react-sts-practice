@@ -32,7 +32,7 @@ export default function ButtonAppBar() {
                 <Link to="/signUp">
                     <Button sx={{color: "white"}}>회원가입</Button>
                 </Link>
-                <Link to="/board">
+                <Link to="/board" state={{ mainReset: null }}>
                     <Button sx={{color: "white"}}>게시판</Button>
                 </Link>
             </Toolbar>

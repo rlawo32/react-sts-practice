@@ -81,16 +81,16 @@ const MainView = () => {
                     <img src={space1} alt="space1" />
                 </div>
 
-            </div>
 
-            <div className="Social-logo">
-                <div style={ {borderBottom: "1px inset white", marginBottom: "50px", width: "60%", marginLeft: "auto", marginRight: "auto"} } />
-                <Link to="https://github.com/" style={ {color: "white" ,marginRight: "200px"} }>
-                    <FontAwesomeIcon className="link-style" icon={faGithubSquare} />
-                </Link>
-                <Link to="https://www.youtube.com/" style={ {color: "white"} }>
-                    <FontAwesomeIcon className="link-style" icon={faYoutubeSquare} />
-                </Link>
+                <div className="Social-logo">
+                    <div style={ {borderBottom: "1px inset white", marginBottom: "50px", width: "60%", marginLeft: "auto", marginRight: "auto"} } />
+                    <Link to="https://github.com/" style={ {color: "white" ,marginRight: "200px"} }>
+                        <FontAwesomeIcon className="link-style" icon={faGithubSquare} />
+                    </Link>
+                    <Link to="https://www.youtube.com/" style={ {color: "white"} }>
+                        <FontAwesomeIcon className="link-style" icon={faYoutubeSquare} />
+                    </Link>
+                </div>
             </div>
         </>
     )

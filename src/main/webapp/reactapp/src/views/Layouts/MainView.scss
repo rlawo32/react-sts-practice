@@ -8,6 +8,8 @@ html.dark-mode {
 }
 
 .Main-body {
+  position: relative;
+  min-height: 100%;
   height: 3000px;
   background-color: black;
   //background-image: url("../../images/space5.jpg");
@@ -177,6 +179,9 @@ svg text:nth-child(7) {
 }
 
 .Social-logo {
+  position: absolute;
+  bottom: 0;
+
   background-color: black;
   width: 100%;
   padding-bottom: 60px;

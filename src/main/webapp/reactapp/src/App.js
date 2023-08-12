@@ -7,11 +7,6 @@ import SignUp from "./views/SignUp/SignUp";
 import SignIn from "./views/SignIn/SignIn";
 import MainBoard from "./views/NoticeBoard/MainBoard";
 import Game1Board from "./views/NoticeBoard/Game1Board";
-import Game2Board from "./views/NoticeBoard/Game2Board";
-import Game3Board from "./views/NoticeBoard/Game3Board";
-import Game4Board from "./views/NoticeBoard/Game4Board";
-import Game5Board from "./views/NoticeBoard/Game5Board";
-import Game6Board from "./views/NoticeBoard/Game6Board";
 import DetailBoard from "./views/NoticeBoard/DetailBoard";
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -46,13 +41,9 @@ const App = () => {
               <Route path="/board" element={<MainBoard />} />
 
               <Route path="/game1board" element={<Game1Board />} />
-              <Route path="/game2board" element={<Game2Board />} />
-              <Route path="/game3board" element={<Game3Board />} />
-              <Route path="/game4board" element={<Game4Board />} />
-              <Route path="/game5board" element={<Game5Board />} />
-              <Route path="/game6board" element={<Game6Board />} />
 
-              <Route path="/detailBoard/:boardNo" element={<DetailBoard />} />
+              {/*<Route path="/detailBoard/:boardNo" element={<DetailBoard />} />*/}
+              <Route path="/detailBoard" element={<DetailBoard />} />
           </Routes>
       </header>
     </div>

@@ -1,35 +1,41 @@
 
 .main_board {
-  height: 100%;
+  position: relative;
+  min-height: 100%;
+  height: 1500px;
   width: 100%;
   background-color: black;
 }
 
 .main_tab {
-  list-style: none;
+  width: 100%;
 
   margin-top: 100px;
-  text-align: center;
   font-size: 17px;
-  border: none ;
+  ul {
+    margin: 0 auto;
+    border: none ;
+    list-style: none;
+  }
 }
 
 .sub_tab {
-  list-style: none;
+  width: 100%;
 
-  margin-top: 80px;
-  text-align: center;
+  margin-top: 90px;
   font-size: 17px;
 
   ul {
+    margin: 0 auto;
     border: none ;
-
+    list-style: none;
   }
 }
 
 li {
   display: inline-block;
   cursor: pointer;
+  text-align: center;
 
   margin-right: 20px;
 }
@@ -45,11 +51,11 @@ li {
   margin-top: 40px;
   margin-left: auto;
   margin-right: auto;
-  width: 1500px;
+  width: 100%;
 
   color: white;
 
-  tr:hover {
+  tbody tr:hover {
     background-color: rgba(80, 80, 80, 0.8);
     color: #fff;
   }
