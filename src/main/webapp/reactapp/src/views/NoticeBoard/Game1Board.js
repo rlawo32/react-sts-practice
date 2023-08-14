@@ -128,7 +128,7 @@ const Game1Board = (props) => {
                                 {/*    </Link>*/}
                                 {/*</td>*/}
                                 <td>
-                                    <Link onClick={() => changeDetailBoard(boards.boardNo)} style={{textDecoration: 'none', color: 'white'}}>
+                                    <Link to={{ pathname: `/board/${boards.boardNo}` }} state={{ boardNo: `${boards.boardNo}` }} onClick={() => changeDetailBoard(boards.boardNo)} style={{textDecoration: 'none', color: 'white'}}>
                                         {boards.boardTitle}
                                     </Link>
                                 </td>

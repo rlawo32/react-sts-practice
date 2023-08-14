@@ -125,7 +125,7 @@ const Save = () => {
                                     ]}
                                     theme="dark" // dark 모드
                                     usageStatistics={false} // 구글 통계 수집 거부
-                                    plugins={[[colorSyntax, colorSyntaxOptions]]} // 플러그인
+                                    plugins={[colorSyntax]} // 플러그인
                                     onChange={boardContentChangeHandler}
                                 />
                             </Box>

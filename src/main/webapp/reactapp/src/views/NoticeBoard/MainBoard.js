@@ -36,8 +36,11 @@ const MainBoard = () => {
     }
 
     useEffect(() => {
-        setDetailBoardNo(mainReset);
-    }, [mainReset]);
+        const locationParameter = window.location.pathname;
+        if(locationParameter.length > 6) {
+            setDetailBoardNo(locationParameter.substring(7));
+        }
+    }, []);
 
     return (
         <div className="main_board">
@@ -46,7 +49,9 @@ const MainBoard = () => {
             <div className="main_tab">
                 <ul>
                     {changeTabHandler().map((el) => (
-                        <li key={el.id} onClick={() => selectTabHandler(el.id)}>{el.name}</li>
+                        <li key={el.id} onClick={() => selectTabHandler(el.id)}>
+                            <Link to="/board" state={{ mainReset: null }} style={{ color: "white", textDecoration: "none"}}>{el.name}</Link>
+                        </li>
                     ))}
                 </ul>
             </div>

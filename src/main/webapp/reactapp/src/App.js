@@ -44,6 +44,8 @@ const App = () => {
 
               {/*<Route path="/detailBoard/:boardNo" element={<DetailBoard />} />*/}
               <Route path="/detailBoard" element={<DetailBoard />} />
+              <Route path="/board/:mainReset" element={<MainBoard />} />
+              <Route path="/board/:boardNo" element={<DetailBoard />} />
           </Routes>
       </header>
     </div>

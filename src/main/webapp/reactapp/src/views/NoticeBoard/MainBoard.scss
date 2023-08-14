@@ -8,9 +8,16 @@
 }
 
 .main_tab {
-  width: 100%;
+  @media (min-width: 1000px) { // 1000px 이상일 경우
+    
+  }
+
+  @media (max-width: 1000px) { // 1000px 이하일 경우
+
+  }
 
   margin-top: 100px;
+  margin-bottom: 100px;
   font-size: 17px;
   ul {
     margin: 0 auto;
@@ -22,7 +29,6 @@
 .sub_tab {
   width: 100%;
 
-  margin-top: 90px;
   font-size: 17px;
 
   ul {
@@ -59,4 +65,85 @@ li {
     background-color: rgba(80, 80, 80, 0.8);
     color: #fff;
   }
+}
+
+.detail-main {
+  @media (min-width: 1000px) {
+    margin: auto;
+    width: 1000px;
+
+    .detail-header1 {
+      display: flex;
+      justify-content: space-between;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid #4d5154 ;
+
+      .detail-title {
+        margin-left: 40px;
+      }
+
+      .detail-date {
+        margin-right: 40px;
+      }
+    }
+
+    .detail-header2 {
+      display: flex;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid #4d5154 ;
+
+      .detail-author {
+        margin-left: 40px;
+      }
+
+      .detail-views {
+
+      }
+
+      .detail-recommend {
+
+      }
+
+      .detail-comment {
+
+      }
+    }
+
+    .detail-body {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid #4d5154 ;
+      padding: 10px 40px 10px;
+
+      .detail-url {
+        text-align: right;
+      }
+
+      .detail-content {
+
+      }
+    }
+
+    .detail-footer1 {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid #4d5154 ;
+    }
+
+    .detail-footer2 {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid #4d5154 ;
+    }
+  }
+
+  @media (max-width: 1000px) {
+
+  }
+
+}
+
+.detail-sub {
+  margin-top: 30px;
+  margin-right: 280px;
+  margin-left: 280px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-top: 2px solid #4d5154 ;
 }
