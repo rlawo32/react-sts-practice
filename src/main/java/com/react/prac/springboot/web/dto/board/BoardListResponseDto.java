@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 public class BoardListResponseDto {
 
-    private Long boardNo;
+    private Long boardId;
     private String boardTab;
     private String boardTitle;
     private String boardContent;
@@ -16,7 +16,7 @@ public class BoardListResponseDto {
     private LocalDateTime modifiedDate;
 
     public BoardListResponseDto(MainBoard entity) {
-        this.boardNo = entity.getBoardNo();
+        this.boardId = entity.getId();
         this.boardTab = entity.getBoardTab();
         this.boardTitle = entity.getBoardTitle();
         this.boardContent = entity.getBoardContent();

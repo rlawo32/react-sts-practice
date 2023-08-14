@@ -59,21 +59,21 @@ const Save = () => {
         setBoardContent(editorRef.current.getInstance().getMarkdown());
     }
 
-    const JsonData = {
+    const BoardData = {
         boardTab: `${boardTab}`,
         boardTitle: `${boardTitle}`,
         boardContent: `${boardContent}`
     }
 
     const submitHandler = async() => {
-        console.log(JSON.stringify(JsonData))
+        console.log(JSON.stringify(BoardData))
         await axios({
             method: "POST",
             url: "/boardInsert",
-            data: JSON.stringify(JsonData),
+            data: JSON.stringify(BoardData),
             headers: {'Content-type': 'application/json'}
         }).then(function() {
-            console.log(JsonData);
+            console.log(BoardData);
             window.alert("등록이 완료되었습니다람쥐");
         }).catch(function(error) {
             console.log("에러내용:", JSON.stringify(error));

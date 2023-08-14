@@ -23,7 +23,7 @@ const Game1Board = (props) => {
     // }
 
     const [game1BoardList, setGame1BoardList] = useState([{
-        boardNo: '',
+        boardId: '',
         boardTab: '',
         boardTitle: '',
         boardContent: '',
@@ -44,8 +44,8 @@ const Game1Board = (props) => {
     }, []);
 
     const changeDetailBoard = (itemID) => {
-        const detailBoardNo = itemID;
-        props.boardNo(detailBoardNo);
+        const detailBoardId = itemID;
+        props.boardId(detailBoardId);
     }
 
     const [currentTab, clickTab] = useState(0);
@@ -120,7 +120,7 @@ const Game1Board = (props) => {
                     <tbody id="tbody">
                     {game1BoardList.map((boards, idx) => {
                         return (
-                            <tr key={boards.boardNo}>
+                            <tr key={boards.boardId}>
                                 <td>{boards.boardTab}</td>
                                 {/*<td>*/}
                                 {/*    <Link to={{ pathname: `/detailBoard/${boards.boardNo}` }} style={{textDecoration: 'none', color: 'white'}}>*/}
@@ -128,14 +128,14 @@ const Game1Board = (props) => {
                                 {/*    </Link>*/}
                                 {/*</td>*/}
                                 <td>
-                                    <Link to={{ pathname: `/board/${boards.boardNo}` }} state={{ boardNo: `${boards.boardNo}` }} onClick={() => changeDetailBoard(boards.boardNo)} style={{textDecoration: 'none', color: 'white'}}>
+                                    <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} onClick={() => changeDetailBoard(boards.boardId)} style={{textDecoration: 'none', color: 'white'}}>
                                         {boards.boardTitle}
                                     </Link>
                                 </td>
                                 <td>{boards.boardAuthor}</td>
                                 <td>{boards.modifiedDate}</td>
                                 <td>{boards.modifiedDate}</td>
-                                <td>{boards.id}</td>
+                                <td>{boards.boardId}</td>
                             </tr>
                         )
                     })}

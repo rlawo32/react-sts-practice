@@ -2,6 +2,7 @@ package com.react.prac.springboot.service.posts;
 
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import com.react.prac.springboot.jpa.domain.board.MainBoardRepository;
+import com.react.prac.springboot.util.BoardUtil;
 import com.react.prac.springboot.web.dto.board.BoardListResponseDto;
 import com.react.prac.springboot.web.dto.board.BoardResponseDto;
 import com.react.prac.springboot.web.dto.board.BoardSaveRequestDto;
@@ -20,8 +21,8 @@ public class BoardService {
     private final MainBoardRepository mainBoardRepository;
 
     @Transactional
-    public Long save(BoardSaveRequestDto requestDto) {
-        return mainBoardRepository.save(requestDto.toEntity()).getBoardNo();
+    public Long boardInsert(BoardSaveRequestDto requestDto) {
+        return mainBoardRepository.save(requestDto.toEntity()).getId();
     }
 
     @Transactional
@@ -33,9 +34,9 @@ public class BoardService {
         return id;
     }
 
-    public BoardResponseDto findByBoardNo (Long boardNo) {
-        MainBoard entity = mainBoardRepository.findByBoardNo(boardNo)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardNo=" + boardNo));
+    public BoardResponseDto findByBoardId (Long boardId) {
+        MainBoard entity = mainBoardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId=" + boardId));
 
         return new BoardResponseDto(entity);
     }

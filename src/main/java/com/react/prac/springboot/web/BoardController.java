@@ -33,7 +33,7 @@ public class BoardController {
     @PostMapping("/boardInsert")
     public Long save(@RequestBody BoardSaveRequestDto requestDto) {
         System.out.println("값 확인1");
-        return boardService.save(requestDto);
+        return boardService.boardInsert(requestDto);
     }
 
     @PutMapping("/api/v1/posts/{id}")
@@ -43,9 +43,9 @@ public class BoardController {
         return boardService.update(id, requestDto);
     }
 
-    @GetMapping("/detailBoard/{boardNo}")
-    public BoardResponseDto findByBoardNo (@PathVariable Long boardNo) {
-        return boardService.findByBoardNo(boardNo);
+    @GetMapping("/detailBoard/{boardId}")
+    public BoardResponseDto findByBoardId (@PathVariable Long boardId) {
+        return boardService.findByBoardId(boardId);
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
@@ -57,6 +57,7 @@ public class BoardController {
     public Map<String, Object> game1BoardList() {
         Map<String, Object> result = new HashMap<>();
         List<BoardListResponseDto> boards = boardService.findAllDesc();
+        boards.remove(boards.size() - 1);
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         System.out.println("세션유저 : " + user);
         result.put("game1BoardList", boards);

@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
-    @Query("SELECT p FROM MainBoard p ORDER BY p.boardNo DESC")
+    @Query("SELECT p FROM MainBoard p ORDER BY p.id DESC")
     List<MainBoard> findAllDesc();
 
-    @Query("SELECT m FROM MainBoard m WHERE m.boardNo = :boardNo")
-    Optional<MainBoard> findByBoardNo(@Param("boardNo") Long boardNo);
+//    @Query("SELECT m FROM MainBoard m WHERE m.boardNo = :boardNo")
+//    Optional<MainBoard> findByBoardNo(@Param("") Long boardNo);
 }

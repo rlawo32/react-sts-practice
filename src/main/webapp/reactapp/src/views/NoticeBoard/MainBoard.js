@@ -17,29 +17,31 @@ const MainBoard = () => {
     const tab_name = ['리그오브레전드', '오버워치', '배틀그라운드', '메이플스토리', '마인크래프트', '스팀'];
     const [currentTab, clickTab] = useState(0);
 
-    const [detailBoardNo, setDetailBoardNo] = useState(null);
-    const changeDetailBoardNo = (newNo) => {
-        setDetailBoardNo(newNo);
+    const [detailBoardId, setDetailBoardId] = useState(null);
+    const changeDetailBoardId = (newNo) => {
+        setDetailBoardId(newNo);
     }
 
     const changeTabHandler = () => {
         let tab_data = [];
         for(let i=0; i<tab_name.length; i++) {
-            tab_data.push({id: i, name: tab_name[i], view:<Game1Board id={i} name={tab_name[i]} boardNo={changeDetailBoardNo}/>});
+            tab_data.push({id: i, name: tab_name[i], view:<Game1Board id={i} name={tab_name[i]} boardId={changeDetailBoardId}/>});
         }
         return tab_data;
     }
 
     const selectTabHandler = (idx) => {
         clickTab(idx);
-        setDetailBoardNo(null);
+        setDetailBoardId(null);
     }
 
     useEffect(() => {
         const locationParameter = window.location.pathname;
         if(locationParameter.length > 6) {
-            setDetailBoardNo(locationParameter.substring(7));
+            setDetailBoardId(locationParameter.substring(7));
         }
+
+        console.log(mainReset);
     }, []);
 
     return (
@@ -57,7 +59,7 @@ const MainBoard = () => {
             </div>
 
             {
-                detailBoardNo === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardNo}/>
+                detailBoardId === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardId}/>
             }
 
             {/*{changeTabHandler()[currentTab].view}*/}

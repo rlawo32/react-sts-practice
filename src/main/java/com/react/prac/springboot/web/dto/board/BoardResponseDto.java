@@ -6,14 +6,14 @@ import lombok.Getter;
 @Getter
 public class BoardResponseDto {
 
-    private Long boardNo;
+    private Long boardId;
     private String boardTab;
     private String boardTitle;
     private String boardContent;
     private String boardAuthor;
 
     public BoardResponseDto(MainBoard entity) {
-        this.boardNo = entity.getBoardNo();
+        this.boardId = entity.getId();
         this.boardTab = entity.getBoardTab();
         this.boardTitle = entity.getBoardTitle();
         this.boardContent = entity.getBoardContent();

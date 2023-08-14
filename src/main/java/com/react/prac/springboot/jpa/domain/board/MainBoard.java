@@ -13,13 +13,11 @@ public class MainBoard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 매핑, id값을 null로 하면 db가 알아서 auto_increment 해준다.
-    private Long boardNo;
-
-//    @Column(nullable = false)
-//    private String boardId;
+    @Column(name = "board_id", nullable = false)
+    private Long id;
 
     @Column(nullable = false)
-    private String boardTab;
+    private String boardTab; // 게시물 탭
 
     @Column(length = 500, nullable = false)
     private String boardTitle;
@@ -27,6 +25,7 @@ public class MainBoard extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String boardContent;
 
+    @Column(nullable = false)
     private String boardAuthor;
 
     @Builder

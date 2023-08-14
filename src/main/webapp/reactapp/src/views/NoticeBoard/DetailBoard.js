@@ -14,11 +14,11 @@ const DetailBoard = (props) => {
     const params = useParams();
     const editorRef = useRef(null);
 
-    const [game1BoardDetail, setGame1BoardDetail] = useState("");
+    const [boardDetail, setBoardDetail] = useState("");
 
     useEffect(() => {
 
-        const boardId = location.state?.boardNo;
+        const boardId = location.state?.boardId;
 
         if(boardId != null) {
             const getBoards = async () => {
@@ -26,7 +26,7 @@ const DetailBoard = (props) => {
                     method: "GET",
                     url: '/detailBoard/' + boardId
                 });
-                setGame1BoardDetail(detail.data);
+                setBoardDetail(detail.data);
                 editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
             };
 
@@ -39,7 +39,7 @@ const DetailBoard = (props) => {
                     method: "GET",
                     url: '/detailBoard/' + locationParameter.substring(7)
                 });
-                setGame1BoardDetail(detail.data);
+                setBoardDetail(detail.data);
                 editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
             };
 
@@ -56,11 +56,11 @@ const DetailBoard = (props) => {
             <AppBarNavigation />
             <div className="detail-main">
                 <div className="detail-header1">
-                    <span className="detail-title">{game1BoardDetail.boardTitle}</span>
-                    <span className="detail-date">{game1BoardDetail.boardTab}</span>
+                    <span className="detail-title">{boardDetail.boardTitle}</span>
+                    <span className="detail-date">{boardDetail.boardTab}</span>
                 </div>
                 <div className="detail-header2">
-                    <span className="detail-author">{game1BoardDetail.boardAuthor}</span>
+                    <span className="detail-author">{boardDetail.boardAuthor}</span>
                     <span className="detail-views"></span>
                     <span className="detail-recommend"></span>
                     <span className="detail-comment"></span>
@@ -71,7 +71,7 @@ const DetailBoard = (props) => {
                         <Viewer
                             ref={editorRef}
                             theme="dark"
-                            initialValue={game1BoardDetail.boardContent}
+                            initialValue={boardDetail.boardContent}
                         />
                     </div>
                 </div>
