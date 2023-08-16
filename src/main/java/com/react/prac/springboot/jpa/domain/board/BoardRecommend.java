@@ -1,10 +1,13 @@
 package com.react.prac.springboot.jpa.domain.board;
 
+import com.react.prac.springboot.jpa.domain.user.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 
 @Data
@@ -18,12 +21,17 @@ public class BoardRecommend extends BaseTimeEntity {
     @Column(name = "recommend_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String boardTab;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "board_id")
+    private MainBoard mainBoard;
 
     @Builder
-    public BoardRecommend(String boardTab) {
-        this.boardTab = boardTab;
+    public BoardRecommend(MainBoard mainBoard, Member member) {
+        this.mainBoard = mainBoard;
+        this.member = member;
     }
 }

@@ -2,10 +2,8 @@ package com.react.prac.springboot.web;
 
 import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.service.posts.BoardService;
-import com.react.prac.springboot.web.dto.board.BoardListResponseDto;
-import com.react.prac.springboot.web.dto.board.BoardResponseDto;
-import com.react.prac.springboot.web.dto.board.BoardSaveRequestDto;
-import com.react.prac.springboot.web.dto.board.BoardUpdateRequestDto;
+import com.react.prac.springboot.web.dto.ResponseDto;
+import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -62,6 +60,21 @@ public class BoardController {
         System.out.println("세션유저 : " + user);
         result.put("game1BoardList", boards);
         return result;
+    }
+
+    // 추천 기능
+    @PostMapping("/recommendUp")
+    public ResponseDto<?> recommendUp(@RequestBody RecommendRequestDto requestDto) {
+
+
+        return null;
+    }
+
+    @DeleteMapping("/recommendDown")
+    public ResponseDto<?> recommendDown(@RequestBody RecommendRequestDto requestDto) {
+
+
+        return null;
     }
 
 }

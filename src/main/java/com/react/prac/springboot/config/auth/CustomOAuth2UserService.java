@@ -2,8 +2,8 @@ package com.react.prac.springboot.config.auth;
 
 import com.react.prac.springboot.config.auth.dto.OAuth2Attributes;
 import com.react.prac.springboot.config.auth.dto.SessionUser;
-import com.react.prac.springboot.jpa.domain.user.UserRepository;
-import com.react.prac.springboot.jpa.domain.user.Users;
+import com.react.prac.springboot.jpa.domain.user.MemberRepository;
+import com.react.prac.springboot.jpa.domain.user.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -22,7 +22,7 @@ import java.util.Map;
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final UserRepository userRepository;
+    private final MemberRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -37,7 +37,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         SessionUser sessionUser = OAuth2Attributes.extract(registrationId, attributes);
         sessionUser.setProvider(registrationId);
 
-        Users user = saveOrUpdate(sessionUser);
+        Member user = saveOrUpdate(sessionUser);
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, sessionUser, registrationId);
 
@@ -60,10 +60,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     }
 
-    private Users saveOrUpdate(SessionUser sessionUser) {
-        Users user = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider())
+    private Member saveOrUpdate(SessionUser sessionUser) {
+        Member user = userRepository.findByMemberEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider())
                 .map(entity -> entity.update(sessionUser.getName(), sessionUser.getPicture()))
-                .orElse(sessionUser.toUsers());
+                .orElse(sessionUser.toMemeber());
 
         return userRepository.save(user);
     }

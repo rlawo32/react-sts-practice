@@ -266,7 +266,7 @@ const SignUp = () => {
             await axios({
                 method: "GET",
                 url: "/users/signUpDuplicationChk",
-                params: {userEmail: userEmail}
+                params: {memberEmail: userEmail}
             }).then((result) => {
                     console.log(result.data);
                     if(result.data) {
@@ -295,7 +295,7 @@ const SignUp = () => {
             await axios({
                 method: "GET",
                 url: "/users/signUpDuplicationChk",
-                params: {userNickName: userNickName}
+                params: {memberNickname: userNickName}
             }).then((result) => {
                 console.log(result.data);
                 if(result.data) {
@@ -337,10 +337,10 @@ const SignUp = () => {
     }, [])
 
     const userData = {
-        userEmail: `${userEmail}`,
-        userPw: `${userPw}`,
-        userNickName: `${userNickName}`,
-        userBirth: `${userBirthY}` + `${userBirthM}` + `${userBirthD}`,
+        memberEmail: `${userEmail}`,
+        memberPw: `${userPw}`,
+        memberNickname: `${userNickName}`,
+        memberBirth: `${userBirthY}` + `${userBirthM}` + `${userBirthD}`,
     }
 
     const HandleEmailChkSend = async () => {
@@ -350,7 +350,7 @@ const SignUp = () => {
             await axios({
                 method: "GET",
                 url: "/users/sendAuthCode",
-                params: {userEmail: userEmail}
+                params: {memberEmail: userEmail}
             }).then(function(obj) {
                 alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
                 setIsUserEmailEffect(true);

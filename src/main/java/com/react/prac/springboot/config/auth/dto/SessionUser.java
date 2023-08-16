@@ -1,7 +1,7 @@
 package com.react.prac.springboot.config.auth.dto;
 
 import com.react.prac.springboot.jpa.domain.user.Role;
-import com.react.prac.springboot.jpa.domain.user.Users;
+import com.react.prac.springboot.jpa.domain.user.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,13 +13,13 @@ public class SessionUser {
     private String provider;
     private String picture;
 
-    public Users toUsers() {
-        return Users.builder()
+    public Member toMemeber() {
+        return Member.builder()
                 .role(Role.GUEST)
-                .userPw("")
-                .userNickName(name)
-                .userBirth("")
-                .userEmail(email)
+                .memberPw("")
+                .memberNickname(name)
+                .memberBirth("")
+                .memberEmail(email)
                 .provider(provider)
                 .picture(picture)
                 .build();

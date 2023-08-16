@@ -1,13 +1,12 @@
 package com.react.prac.springboot.web;
 
 import com.react.prac.springboot.service.posts.BoardService;
-import com.react.prac.springboot.service.users.UsersService;
+import com.react.prac.springboot.service.users.MemberService;
 import com.react.prac.springboot.util.EmailUtil;
 import com.react.prac.springboot.web.dto.*;
-import com.react.prac.springboot.web.dto.board.BoardResponseDto;
-import com.react.prac.springboot.web.dto.user.UsersSignInDto;
-import com.react.prac.springboot.web.dto.user.UsersSignInResponseDto;
-import com.react.prac.springboot.web.dto.user.UsersSignUpDto;
+import com.react.prac.springboot.web.dto.user.MemberSignInDto;
+import com.react.prac.springboot.web.dto.user.MemberSignInResponseDto;
+import com.react.prac.springboot.web.dto.user.MemberSignUpDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
@@ -20,12 +19,12 @@ import java.util.Map;
 @RestController
 public class IndexController {
 
-    private final BoardService postsService;
-    private final UsersService usersService;
+    private final BoardService boardService;
+    private final MemberService memberService;
 
     @GetMapping("/index")
     public String index(Model model) {
-        model.addAttribute("posts", postsService.findAllDesc());
+        model.addAttribute("posts", boardService.findAllDesc());
         return "index";
     }
 
@@ -53,10 +52,10 @@ public class IndexController {
     }
 
     @PostMapping("/users/signUp")
-    public ResponseDto<?> signUp(@RequestBody UsersSignUpDto requestDto) {
+    public ResponseDto<?> signUp(@RequestBody MemberSignUpDto requestDto) {
         System.out.println("SignUp!!!!!!!!!!!" + requestDto.toString());
 
-        ResponseDto<?> result = usersService.signUp(requestDto);
+        ResponseDto<?> result = memberService.signUp(requestDto);
 
         System.out.println(result);
 
@@ -72,10 +71,10 @@ public class IndexController {
 
         if(userEmail != null) {
             System.out.println("이메일 확인 : " + userEmail);
-            result = usersService.emailDuplicationChk(userEmail);
+            result = memberService.emailDuplicationChk(userEmail);
         } else {
             System.out.println("닉네임 확인 : " + userNickName);
-            result = usersService.nickNameDuplicationChk(userNickName);
+            result = memberService.nickNameDuplicationChk(userNickName);
         }
         System.out.println("중복체크 : " + result);
 
@@ -92,10 +91,10 @@ public class IndexController {
 //    }
 
     @PostMapping("/users/signIn")
-    public ResponseDto<UsersSignInResponseDto> signIn(@RequestBody UsersSignInDto requestDto) {
+    public ResponseDto<MemberSignInResponseDto> signIn(@RequestBody MemberSignInDto requestDto) {
         System.out.println("SignIn!!!!!!!!!!!");
 
-        ResponseDto<UsersSignInResponseDto> result = usersService.signIn(requestDto);
+        ResponseDto<MemberSignInResponseDto> result = memberService.signIn(requestDto);
 
         return result;
     }

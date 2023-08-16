@@ -15,24 +15,24 @@ const SignIn = () => {
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
     const [isLoginConfirmEffect, setIsLoginConfirmEffect] = useState(false);
 
-    const [loginUserEmail, setLoginUserEmail] = useState("");
-    const [loginUserPw, setLoginUserPw] = useState("");
+    const [loginMemberEmail, setLoginMemberEmail] = useState("");
+    const [loginMemberPw, setLoginMemberPw] = useState("");
 
     const [cookies, setCookies] = useCookies();
 
-    const onUserIdHandler = (e) => {
-        setLoginUserEmail(e.target.value);
+    const onMemberEmailHandler = (e) => {
+        setLoginMemberEmail(e.target.value);
     }
 
-    const onUserPwHandler = (e) => {
-        setLoginUserPw(e.target.value);
+    const onMemberPwHandler = (e) => {
+        setLoginMemberPw(e.target.value);
     }
 
     const onLoginHandler = async (e) => {
         e.preventDefault();
         let loginBody = {
-            userEmail: loginUserEmail,
-            userPw: loginUserPw
+            memberEmail: loginMemberEmail,
+            memberPw: loginMemberPw
         }
 
         await axios({
@@ -84,13 +84,13 @@ const SignIn = () => {
                 <Form onSubmit={onLoginHandler}>
                     <Form.Group className="mb-3" controlId="title">
                         <Col sm>
-                            <Form.Control type="title" placeholder="아이디" value={loginUserEmail} onChange={onUserIdHandler}/>
+                            <Form.Control type="title" placeholder="아이디" value={loginMemberEmail} onChange={onMemberEmailHandler}/>
                         </Col>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="author">
                         <Col sm>
-                            <Form.Control type="author" placeholder="비밀번호" value={loginUserPw} onChange={onUserPwHandler}/>
+                            <Form.Control type="author" placeholder="비밀번호" value={loginMemberPw} onChange={onMemberPwHandler}/>
                         </Col>
                         {(
                             <span style={ isLoginConfirmEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{loginErrorMessage}</span>

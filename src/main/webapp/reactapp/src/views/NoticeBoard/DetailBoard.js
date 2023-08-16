@@ -4,10 +4,11 @@ import '../Layouts/MainView.scss';
 import React, {useEffect, useRef, useState} from "react";
 import {Link, useParams, useLocation} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGithubSquare, faYoutubeSquare} from "@fortawesome/free-brands-svg-icons";
+import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {Viewer} from "@toast-ui/react-editor";
+import Button from "@mui/material/Button";
 
 const DetailBoard = (props) => {
     const location = useLocation();
@@ -15,9 +16,27 @@ const DetailBoard = (props) => {
     const editorRef = useRef(null);
 
     const [boardDetail, setBoardDetail] = useState("");
+    const [boardId, setBoardId] = useState(0);
+    const [memberId, setMemberId] = useState(9999);
+
+    const recommendData = {
+        memberId: `${memberId}`,
+        boardId: `${boardId}`
+    }
+    const onClickRecommend = () => {
+        const postRecommend = async () => {
+            const recommendUp = await axios({
+                method: "POST",
+                url: '/recommendUp',
+                data: JSON.stringify(recommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+        };
+
+        postRecommend();
+    }
 
     useEffect(() => {
-
         const boardId = location.state?.boardId;
 
         if(boardId != null) {
@@ -27,6 +46,7 @@ const DetailBoard = (props) => {
                     url: '/detailBoard/' + boardId
                 });
                 setBoardDetail(detail.data);
+                setBoardId(detail.data.boardId);
                 editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
             };
 
@@ -40,15 +60,13 @@ const DetailBoard = (props) => {
                     url: '/detailBoard/' + locationParameter.substring(7)
                 });
                 setBoardDetail(detail.data);
+                setBoardId(detail.data.boardId);
                 editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
             };
 
             console.log(locationParameter.substring(7));
             getBoards();
         }
-
-
-        console.log(location.state);
     }, []);
 
     return (
@@ -76,7 +94,9 @@ const DetailBoard = (props) => {
                     </div>
                 </div>
                 <div className="detail-footer1">
-                    추천
+                    <Button onClick={onClickRecommend}>
+                        <FontAwesomeIcon icon={faThumbsUp} />
+                    </Button>
                 </div>
                 <div className="detail-footer2">
                     이전글 -- 목록으로 -- 다음글

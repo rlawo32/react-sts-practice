@@ -1,12 +1,12 @@
 package com.react.prac.springboot.web.dto.user;
 
-import com.react.prac.springboot.jpa.domain.user.Users;
+import com.react.prac.springboot.jpa.domain.user.Member;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsersSignInResponseDto {
+public class MemberSignInResponseDto {
 
 //    private String userPw;
 //    private String userNickName;
@@ -23,6 +23,6 @@ public class UsersSignInResponseDto {
 
     private String token;
     private int exprTime;
-    private Users users;
+    private Member member;
 
 }

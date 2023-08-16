@@ -1,7 +1,7 @@
 package com.react.prac.springboot.web.dto.user;
 
 import com.react.prac.springboot.jpa.domain.user.Role;
-import com.react.prac.springboot.jpa.domain.user.Users;
+import com.react.prac.springboot.jpa.domain.user.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,15 +9,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UsersSignUpDto {
+public class MemberSignUpDto {
 
 //    private String userId;
-    private String userEmail;
-    private String userPw;
+    private String memberEmail;
+    private String memberPw;
 //    private String userName;
-    private String userBirth;
+    private String memberBirth;
 //    private String userGender;
-    private String userNickName;
+    private String memberNickname;
 //    private String userPhone;
 
 //    @Builder
@@ -32,13 +32,13 @@ public class UsersSignUpDto {
 //        this.userPhone = userPhone;
 //    }gg
 
-    public Users toUsers() {
-        return Users.builder()
+    public Member toMember() {
+        return Member.builder()
                 .role(Role.USER)
-                .userEmail(userEmail)
-                .userPw(userPw)
-                .userNickName(userNickName)
-                .userBirth(userBirth)
+                .memberEmail(memberEmail)
+                .memberPw(memberPw)
+                .memberNickname(memberNickname)
+                .memberBirth(memberBirth)
                 .provider("")
                 .picture("")
                 .build();
