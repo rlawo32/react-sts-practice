@@ -28,6 +28,7 @@ const Game1Board = (props) => {
         boardTitle: '',
         boardContent: '',
         boardAuthor: '',
+        boardRecommendCnt: '',
         modifiedDate: ''
     }]);
 
@@ -135,7 +136,7 @@ const Game1Board = (props) => {
                                 <td>{boards.boardAuthor}</td>
                                 <td>{boards.modifiedDate}</td>
                                 <td>{boards.modifiedDate}</td>
-                                <td>{boards.boardId}</td>
+                                <td>{boards.boardRecommendCnt}</td>
                             </tr>
                         )
                     })}

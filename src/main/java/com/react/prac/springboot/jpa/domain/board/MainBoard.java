@@ -28,12 +28,16 @@ public class MainBoard extends BaseTimeEntity {
     @Column(nullable = false)
     private String boardAuthor;
 
+    @Column(nullable = false)
+    private int boardRecommendCnt;
+
     @Builder
-    public MainBoard(String boardTab, String boardTitle, String boardContent, String boardAuthor) {
+    public MainBoard(String boardTab, String boardTitle, String boardContent, String boardAuthor, int boardRecommendCnt) {
         this.boardTab = boardTab;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
         this.boardAuthor = boardAuthor;
+        this.boardRecommendCnt = boardRecommendCnt;
     }
 
     public void update(String boardTitle, String boardContent) {

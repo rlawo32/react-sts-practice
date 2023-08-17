@@ -4,6 +4,7 @@ import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.service.posts.BoardService;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -63,18 +64,25 @@ public class BoardController {
     }
 
     // 추천 기능
+
+    @GetMapping("/recommendCheck")
+    public boolean recommendCheck(HttpServletRequest request) {
+        Long boardId = Long.valueOf(request.getParameter("boardId"));
+        Long memberId = Long.valueOf(request.getParameter("memberId"));
+
+        return boardService.recommendCheck(boardId, memberId);
+    }
+
     @PostMapping("/recommendUp")
     public ResponseDto<?> recommendUp(@RequestBody RecommendRequestDto requestDto) {
 
-
-        return null;
+        return boardService.recommendUp(requestDto);
     }
 
     @DeleteMapping("/recommendDown")
     public ResponseDto<?> recommendDown(@RequestBody RecommendRequestDto requestDto) {
 
-
-        return null;
+        return boardService.recommendDown(requestDto);
     }
 
 }

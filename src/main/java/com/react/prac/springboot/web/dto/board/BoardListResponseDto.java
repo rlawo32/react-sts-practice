@@ -13,6 +13,7 @@ public class BoardListResponseDto {
     private String boardTitle;
     private String boardContent;
     private String boardAuthor;
+    private int boardRecommendCnt;
     private LocalDateTime modifiedDate;
 
     public BoardListResponseDto(MainBoard entity) {
@@ -21,6 +22,7 @@ public class BoardListResponseDto {
         this.boardTitle = entity.getBoardTitle();
         this.boardContent = entity.getBoardContent();
         this.boardAuthor = entity.getBoardAuthor();
+        this.boardRecommendCnt = entity.getBoardRecommendCnt();
         this.modifiedDate = entity.getModifiedDate();
     }
 }

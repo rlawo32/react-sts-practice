@@ -3,15 +3,12 @@ package com.react.prac.springboot.service.posts;
 import com.react.prac.springboot.jpa.domain.board.BoardRecommend;
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import com.react.prac.springboot.jpa.domain.board.MainBoardRepository;
-import com.react.prac.springboot.jpa.domain.board.RecommendRepository;
+import com.react.prac.springboot.jpa.domain.board.BoardRecommendRepository;
 import com.react.prac.springboot.jpa.domain.user.Member;
 import com.react.prac.springboot.jpa.domain.user.MemberRepository;
-import com.react.prac.springboot.util.BoardUtil;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
-import com.react.prac.springboot.web.dto.user.MemberSignUpDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +21,7 @@ public class BoardService {
 
     private final MainBoardRepository mainBoardRepository;
     private final MemberRepository memberRepository;
-    private final RecommendRepository recommendRepository;
+    private final BoardRecommendRepository boardRecommendRepository;
 
     @Transactional
     public Long boardInsert(BoardSaveRequestDto requestDto) {
@@ -62,8 +59,23 @@ public class BoardService {
     }
 
     // 추천 기능
+
+    public boolean recommendCheck(Long boardId, Long memberId) {
+        MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + boardId));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+        if(boardRecommendRepository.findByMainBoardAndMember(mainBoard, member).isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Transactional
     public ResponseDto<?> recommendUp(RecommendRequestDto requestDto) {
-        Long test = requestDto.getBoardId();
 
         MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
@@ -73,16 +85,17 @@ public class BoardService {
 
 
         try {
-            if(recommendRepository.findByBoardAndMember(mainBoard, member).isPresent()) {
+            if(boardRecommendRepository.findByMainBoardAndMember(mainBoard, member).isPresent()) {
                 return ResponseDto.setFailed("Data Already Exists");
+            } else {
+                BoardRecommend boardRecommend = BoardRecommend.builder()
+                        .mainBoard(mainBoard)
+                        .member(member)
+                        .build();
+
+                boardRecommendRepository.save(boardRecommend);
+                recommendCountUpdate(requestDto.getBoardId(), true);
             }
-
-            BoardRecommend boardRecommend = BoardRecommend.builder()
-                            .mainBoard(mainBoard)
-                            .member(member)
-                            .build();
-
-            recommendRepository.save(boardRecommend);
         } catch (Exception e) {
             return ResponseDto.setFailed("Data Base Error! (email)");
         }
@@ -90,4 +103,33 @@ public class BoardService {
         return ResponseDto.setSuccess("Success", null);
     }
 
+    @Transactional
+    public ResponseDto<?> recommendDown(RecommendRequestDto requestDto) {
+
+        MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
+
+        Member member = memberRepository.findById(requestDto.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
+
+        BoardRecommend boardRecommend = boardRecommendRepository.findByMainBoardAndMember(mainBoard, member)
+                .orElseThrow(() -> new IllegalArgumentException("관련 ID가 없습니다."));
+
+        try {
+            boardRecommendRepository.delete(boardRecommend);
+            recommendCountUpdate(requestDto.getBoardId(), false);
+        } catch (Exception e) {
+            return ResponseDto.setFailed("Data Base Error! (email)");
+        }
+
+        return ResponseDto.setSuccess("Success", null);
+    }
+
+    public void recommendCountUpdate(Long boardId, boolean x) {
+        if(x) {
+            mainBoardRepository.updateByBoardRecommendCount(boardId, 1);
+        } else {
+            mainBoardRepository.updateByBoardRecommendCount(boardId, -1);
+        }
+    }
 }

@@ -89,6 +89,7 @@ li {
 
     .detail-header2 {
       display: flex;
+      justify-content: space-between;
       background-color: rgba(0, 0, 0, 0.5);
       border-top: 2px solid #4d5154 ;
 
@@ -101,7 +102,7 @@ li {
       }
 
       .detail-recommend {
-
+        margin-right: 40px;
       }
 
       .detail-comment {
