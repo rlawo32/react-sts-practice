@@ -11,21 +11,18 @@ import DetailBoard from "./DetailBoard";
 import axios from "axios";
 
 const MainBoard = () => {
-    const location = useLocation();
-    const mainReset = location.state?.mainReset;
-
     const tab_name = ['리그오브레전드', '오버워치', '배틀그라운드', '메이플스토리', '마인크래프트', '스팀'];
     const [currentTab, clickTab] = useState(0);
 
     const [detailBoardId, setDetailBoardId] = useState(null);
-    const changeDetailBoardId = (newNo) => {
-        setDetailBoardId(newNo);
+    const changeDetailBoardId = (changeBoardId) => {
+        setDetailBoardId(changeBoardId);
     }
 
     const changeTabHandler = () => {
         let tab_data = [];
         for(let i=0; i<tab_name.length; i++) {
-            tab_data.push({id: i, name: tab_name[i], view:<Game1Board id={i} name={tab_name[i]} boardId={changeDetailBoardId}/>});
+            tab_data.push({id: i, name: tab_name[i], view:<Game1Board id={i} name={tab_name[i]} changeBoardId={changeDetailBoardId}/>});
         }
         return tab_data;
     }
@@ -41,7 +38,7 @@ const MainBoard = () => {
             setDetailBoardId(locationParameter.substring(7));
         }
 
-        console.log(mainReset);
+        console.log("부모 props 확인 : " + detailBoardId);
     }, []);
 
     return (
@@ -59,10 +56,8 @@ const MainBoard = () => {
             </div>
 
             {
-                detailBoardId === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardId}/>
+                detailBoardId === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardId} changeBoardId={changeDetailBoardId}/>
             }
-
-            {/*{changeTabHandler()[currentTab].view}*/}
 
             <div className="Social-logo">
                 <div style={ {borderBottom: "1px inset white", marginBottom: "50px", width: "60%", marginLeft: "auto", marginRight: "auto"} } />

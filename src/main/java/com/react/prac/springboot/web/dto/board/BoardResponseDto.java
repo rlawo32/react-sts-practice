@@ -12,6 +12,7 @@ public class BoardResponseDto {
     private String boardContent;
     private String boardAuthor;
     private int boardRecommendCnt;
+    private int boardViewsCnt;
 
     public BoardResponseDto(MainBoard entity) {
         this.boardId = entity.getId();
@@ -20,5 +21,6 @@ public class BoardResponseDto {
         this.boardContent = entity.getBoardContent();
         this.boardAuthor = entity.getBoardAuthor();
         this.boardRecommendCnt = entity.getBoardRecommendCnt();
+        this.boardViewsCnt = entity.getBoardViewsCnt();
     }
 }

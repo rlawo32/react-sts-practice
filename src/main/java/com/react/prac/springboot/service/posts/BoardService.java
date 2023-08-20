@@ -6,13 +6,22 @@ import com.react.prac.springboot.jpa.domain.board.MainBoardRepository;
 import com.react.prac.springboot.jpa.domain.board.BoardRecommendRepository;
 import com.react.prac.springboot.jpa.domain.user.Member;
 import com.react.prac.springboot.jpa.domain.user.MemberRepository;
+import com.react.prac.springboot.util.BoardUtil;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -45,10 +54,36 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardListResponseDto> findAllDesc() {
-        return mainBoardRepository.findAllDesc().stream()
+    public Map<String, Object> findAllDesc(HttpServletRequest request) {
+        List<BoardListResponseDto> boardList = mainBoardRepository.findAllDesc().stream()
                 .map(BoardListResponseDto::new)
                 .collect(Collectors.toList());
+
+        int totalRecord = mainBoardRepository.findAllByCount();
+        int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage"));
+        int page = Integer.parseInt(request.getParameter("page"));
+        int pagePerBlock = Integer.parseInt(request.getParameter("pagePerBlock"));
+
+        BoardUtil boardUtil = new BoardUtil();
+        Map<String, Integer> pageList = boardUtil.paging(totalRecord, recordPerPage, page, pagePerBlock);
+
+        int beginRecord = pageList.get("beginRecord");
+
+        List<BoardListResponseDto> pagingList = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage)).stream()
+                .map(BoardListResponseDto::new)
+                .collect(Collectors.toList());;
+
+        System.out.println("전체 페이징 확인 : " + pageList.get("totalPage"));
+        System.out.println("시작 페이징 확인 : " + pageList.get("beginRecord"));
+        System.out.println("마지막 페이징 확인 : " + pageList.get("endRecord"));
+        System.out.println("블럭 시작 확인 : " + pageList.get("beginPage"));
+        System.out.println("블럭 마지막 확인 : " + pageList.get("endPage"));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("boardList", pagingList);
+        result.put("totalPage", pageList.get("totalPage"));
+
+        return result;
     }
 
     @Transactional
@@ -97,7 +132,7 @@ public class BoardService {
                 recommendCountUpdate(requestDto.getBoardId(), true);
             }
         } catch (Exception e) {
-            return ResponseDto.setFailed("Data Base Error! (email)");
+            return ResponseDto.setFailed("Data Base Error!");
         }
 
         return ResponseDto.setSuccess("Success", null);
@@ -119,7 +154,7 @@ public class BoardService {
             boardRecommendRepository.delete(boardRecommend);
             recommendCountUpdate(requestDto.getBoardId(), false);
         } catch (Exception e) {
-            return ResponseDto.setFailed("Data Base Error! (email)");
+            return ResponseDto.setFailed("Data Base Error!");
         }
 
         return ResponseDto.setSuccess("Success", null);
@@ -131,5 +166,43 @@ public class BoardService {
         } else {
             mainBoardRepository.updateByBoardRecommendCount(boardId, -1);
         }
+    }
+
+    // 조회 기능
+    @Transactional
+    public ResponseDto<?> viewsUp(RecommendRequestDto requestDto) {
+        // 중복 방지 추가
+
+        try {
+            mainBoardRepository.updateByBoardViewsCount(requestDto.getBoardId());
+        } catch (Exception e) {
+            return ResponseDto.setFailed("Data Base Error!");
+        }
+
+        return ResponseDto.setSuccess("Success", null);
+    }
+
+    // 이전글 , 다음글
+    @Transactional
+    public Long findBoardPrevAndNext(Long boardId, String orderId) {
+
+        if(orderId.equals("prev")) {
+            return mainBoardRepository.findByPrev(boardId);
+        } else {
+            return mainBoardRepository.findByNext(boardId);
+        }
+    }
+
+    @Transactional
+    public Map<String, Object> boardPrevAndNextSelect(Long boardId) {
+
+        Long boardIdPrev = mainBoardRepository.findByPrev(boardId);
+        Long boardIdNext = mainBoardRepository.findByNext(boardId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("boardIdPrev", boardIdPrev);
+        result.put("boardIdNext", boardIdNext);
+
+        return result;
     }
 }

@@ -14,7 +14,8 @@ public class BoardListResponseDto {
     private String boardContent;
     private String boardAuthor;
     private int boardRecommendCnt;
-    private LocalDateTime modifiedDate;
+    private int boardViewsCnt;
+    private String modifiedDate;
 
     public BoardListResponseDto(MainBoard entity) {
         this.boardId = entity.getId();
@@ -23,6 +24,7 @@ public class BoardListResponseDto {
         this.boardContent = entity.getBoardContent();
         this.boardAuthor = entity.getBoardAuthor();
         this.boardRecommendCnt = entity.getBoardRecommendCnt();
+        this.boardViewsCnt = entity.getBoardViewsCnt();
         this.modifiedDate = entity.getModifiedDate();
     }
 }

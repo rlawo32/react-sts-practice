@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,14 +54,9 @@ public class BoardController {
     }
 
     @GetMapping("/game1BoardList")
-    public Map<String, Object> game1BoardList() {
-        Map<String, Object> result = new HashMap<>();
-        List<BoardListResponseDto> boards = boardService.findAllDesc();
-        boards.remove(boards.size() - 1);
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        System.out.println("세션유저 : " + user);
-        result.put("game1BoardList", boards);
-        return result;
+    public Map<String, Object> game1BoardList(HttpServletRequest request) {
+
+        return boardService.findAllDesc(request);
     }
 
     // 추천 기능
@@ -85,4 +81,28 @@ public class BoardController {
         return boardService.recommendDown(requestDto);
     }
 
+    // 조회 기능
+    @PostMapping("/viewsUp")
+    public ResponseDto<?> viewsUp(@RequestBody RecommendRequestDto requestDto) {
+
+        return boardService.viewsUp(requestDto);
+    }
+
+    // 이전글 , 다음글
+    @GetMapping("/boardPrevAndNext")
+    public Long findBoardPrevAndNext(HttpServletRequest request) {
+        Long boardId = Long.valueOf(request.getParameter("boardId"));
+        String orderId = request.getParameter("orderId");
+
+        return boardService.findBoardPrevAndNext(boardId, orderId);
+    }
+
+    @GetMapping("/boardPrevAndNextSelect")
+    public Map<String, Object> boardPrevAndNextSelect(HttpServletRequest request) {
+        Long boardId = Long.valueOf(request.getParameter("boardId"));
+
+        Map<String, Object> result = boardService.boardPrevAndNextSelect(boardId);
+
+        return result;
+    }
 }

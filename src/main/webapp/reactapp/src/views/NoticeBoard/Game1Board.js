@@ -9,18 +9,9 @@ const Game1Board = (props) => {
 
     const subTab_name = ['전체', '화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
     const [currentSubTab, clickSubTab] = useState(0);
-
-    const selectSubTabHandler = (index) => {
-        clickSubTab(index);
-    }
-
-    // const accessToken = new URL(window.location.href).searchParams.get("accessToken");
-    // const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
-    //
-    // if (accessToken) {
-    //     localStorage.setItem("accessToken", accessToken);
-    //     localStorage.setItem("refreshToken", refreshToken);
-    // }
+    const [currentTab, clickTab] = useState(0);
+    const [pageNo, setPageNo] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
 
     const [game1BoardList, setGame1BoardList] = useState([{
         boardId: '',
@@ -29,27 +20,55 @@ const Game1Board = (props) => {
         boardContent: '',
         boardAuthor: '',
         boardRecommendCnt: '',
+        boardViewsCnt: '',
         modifiedDate: ''
     }]);
+
+    const paging = {
+        recordPerPage: 5,
+        page: pageNo,
+        pagePerBlock: 10
+    }
+
+    const pagination = () => {
+        let result = [];
+        for (let i=0; i<totalPage; i++) {
+            result.push(<li key={i} onClick={() => setPageNo(i)}>{i+1}</li>);
+        }
+        return result;
+    }
 
     useEffect(() => {
         const getBoards = async () => {
             const game1Board = await axios({
                 method: "GET",
-                url: '/game1BoardList'
+                url: '/game1BoardList',
+                params: paging
             });
-            setGame1BoardList(game1Board.data.game1BoardList);
+            setGame1BoardList(game1Board.data.boardList);
+            setTotalPage(game1Board.data.totalPage);
         };
 
         getBoards();
-    }, []);
+    }, [pageNo]);
 
-    const changeDetailBoard = (itemID) => {
+    const changeDetailBoard = async (itemID) => {
         const detailBoardId = itemID;
-        props.boardId(detailBoardId);
-    }
+        props.changeBoardId(detailBoardId);
 
-    const [currentTab, clickTab] = useState(0);
+        let viewsBody =  {
+            boardId: detailBoardId,
+            memberId: 9999
+        }
+
+        await axios({
+            method: "POST",
+            url: '/viewsUp',
+            data: JSON.stringify(viewsBody),
+            headers: {'Content-type': 'application/json'}
+        })
+
+    }
 
     const subTab_data = [
         {
@@ -99,7 +118,7 @@ const Game1Board = (props) => {
             <div className="sub_tab">
                 <ul>
                     {subTab_data.map((rl) => (
-                        <li key={rl.id} onClick={() => selectSubTabHandler(rl.id)}>{rl.name[rl.id]}</li>
+                        <li key={rl.id} onClick={() => clickSubTab(rl.id)}>{rl.name[rl.id]}</li>
                     ))}
                 </ul>
             </div>
@@ -111,9 +130,9 @@ const Game1Board = (props) => {
                     <thead className="table-header">
                     <tr>
                         <td style={{width: "100px"}}>탭</td>
-                        <td style={{width: "450px"}}>제목</td>
+                        <td style={{width: "400px"}}>제목</td>
                         <td style={{width: "150px"}}>작성자</td>
-                        <td style={{width: "120px"}}>날짜</td>
+                        <td style={{width: "170px"}}>날짜</td>
                         <td style={{width: "120px"}}>조회</td>
                         <td style={{width: "100px"}}>추천</td>
                     </tr>
@@ -135,14 +154,18 @@ const Game1Board = (props) => {
                                 </td>
                                 <td>{boards.boardAuthor}</td>
                                 <td>{boards.modifiedDate}</td>
-                                <td>{boards.modifiedDate}</td>
+                                <td>{boards.boardViewsCnt}</td>
                                 <td>{boards.boardRecommendCnt}</td>
                             </tr>
                         )
                     })}
                     </tbody>
                 </table>
-
+                <div>
+                    <ul>
+                        {pagination()}
+                    </ul>
+                </div>
                 <Link to="/save">
                     <button>등록</button>
                 </Link>

@@ -22,12 +22,6 @@ public class IndexController {
     private final BoardService boardService;
     private final MemberService memberService;
 
-    @GetMapping("/index")
-    public String index(Model model) {
-        model.addAttribute("posts", boardService.findAllDesc());
-        return "index";
-    }
-
     @GetMapping("/posts/save")
     public String postsSave() {
         return "posts-save";

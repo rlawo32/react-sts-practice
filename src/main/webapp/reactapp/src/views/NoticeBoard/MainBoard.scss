@@ -61,6 +61,10 @@ li {
 
   color: white;
 
+  tbody tr {
+    font-size: 30px;
+  }
+
   tbody tr:hover {
     background-color: rgba(80, 80, 80, 0.8);
     color: #fff;
@@ -98,7 +102,7 @@ li {
       }
 
       .detail-views {
-
+        margin-right: -280px;
       }
 
       .detail-recommend {
@@ -147,4 +151,10 @@ li {
   margin-left: 280px;
   background-color: rgba(0, 0, 0, 0.5);
   border-top: 2px solid #4d5154 ;
+}
+
+.MuiPagination-ul {
+  li {
+    color: white;
+  }
 }
