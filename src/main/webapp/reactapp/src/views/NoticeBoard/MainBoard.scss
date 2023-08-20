@@ -46,28 +46,43 @@ li {
   margin-right: 20px;
 }
 
-.table_name {
-  margin-top: 40px;
-  font-size: 60px;
-  font-style: oblique;
-  color: #0a53be;
-}
+.board-table {
 
-.table table{
-  margin-top: 40px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  table {
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 
-  color: white;
+    color: white;
 
-  tbody tr {
-    font-size: 30px;
+    tbody tr {
+      font-size: 30px;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(80, 80, 80, 0.8);
+      color: #fff;
+    }
   }
 
-  tbody tr:hover {
-    background-color: rgba(80, 80, 80, 0.8);
-    color: #fff;
+  .board-tableName {
+    margin-top: 40px;
+    font-size: 60px;
+    font-style: oblique;
+    color: #0a53be;
+  }
+
+  .board-search {
+
+  }
+
+  .board-paging {
+
+  }
+
+  .board-write {
+
   }
 }
 

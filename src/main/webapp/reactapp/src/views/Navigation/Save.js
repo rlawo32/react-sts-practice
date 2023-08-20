@@ -11,9 +11,12 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Box from '@mui/material/Box';
 import axios from "axios";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const Save = () => {
     const editorRef = useRef(null);
+    const navigate = useNavigate();
+    const props = useLocation().state;
 
     const editorSaveHandler = () => {
         let markDownContent = editorRef.current.getInstance().getMarkdown();
@@ -31,24 +34,13 @@ const Save = () => {
         ],
     };
 
-    const accessToken = new URL(window.location.href).searchParams.get("accessToken");
-    const refreshToken = new URL(window.location.href).searchParams.get("refreshToken");
-
-    if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-    }
-
-    //const baseUrl = "http://localhost:8080/";
     const [boardTab, setBoardTab] = useState("화제");
     const [boardTitle, setBoardTitle] = useState("");
     const [boardContent, setBoardContent] = useState("");
-    const tab_menu = ['화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
-    const [selectTabMenu, setSelectTabMenu] = useState(0);
+    const tabMenu = props.subTab_name;
 
     const boardTabChangeHandler = ({target: {value}}) => {
         setBoardTab(value);
-        console.log(boardTab);
     }
 
     const boardTitleChangeHandler = ({target: {value}}) => {
@@ -65,18 +57,16 @@ const Save = () => {
         boardContent: `${boardContent}`
     }
 
-    const submitHandler = async() => {
+    const saveBoard = async() => {
         console.log(JSON.stringify(BoardData))
         await axios({
             method: "POST",
             url: "/boardInsert",
             data: JSON.stringify(BoardData),
             headers: {'Content-type': 'application/json'}
-        }).then(function() {
-            console.log(BoardData);
+        }).then((result) => {
             window.alert("등록이 완료되었습니다람쥐");
-        }).catch(function(error) {
-            console.log("에러내용:", JSON.stringify(error));
+            navigate('/board');
         })
 
     }
@@ -85,15 +75,23 @@ const Save = () => {
         <div>
             <div style={ {marginBottom:"55px"} }><h1>다른 페이지 게시글 등록</h1></div>
             <Container className="panel">
-                <Form onSubmit={submitHandler}>
+                <Form>
+                    <Form.Group className="mb-3" controlId="boardSubject">
+                        <Col sm>
+                            <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
+                                {tabMenu.map((tl) => (
+                                    <option key={tl}>{tl}</option>
+                                ))}
+                            </Form.Select>
+                        </Col>
+                    </Form.Group>
+
                     <Form.Group className="mb-3" controlId="boardTab">
                         <Col sm>
                             <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
-                                <option>화제</option>
-                                <option>정보</option>
-                                <option>오류</option>
-                                <option>사진/동영상</option>
-                                <option>팁과 노하우</option>
+                                {tabMenu.map((tl) => (
+                                    <option key={tl}>{tl}</option>
+                                ))}
                             </Form.Select>
                         </Col>
                     </Form.Group>
@@ -133,10 +131,10 @@ const Save = () => {
                     </Form.Group>
 
                     <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="primary" type="submit">등록</Button>
+                        <Button variant="primary" onClick={saveBoard}>등록</Button>
                     </div>
                     <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="secondary" href="/">취소</Button>
+                        <Button variant="secondary" href="/board">취소</Button>
                     </div>
                     <div className="d-grid gap-1" style={ {margin:"5px"} }>
                         <Button variant="secondary" onClick={editorSaveHandler}>테스트</Button>

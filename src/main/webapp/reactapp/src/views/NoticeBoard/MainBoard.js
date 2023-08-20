@@ -11,6 +11,9 @@ import DetailBoard from "./DetailBoard";
 import axios from "axios";
 
 const MainBoard = () => {
+    const props = useLocation().state?.mainReset;
+    const locationParameter = window.location.pathname;
+
     const tab_name = ['리그오브레전드', '오버워치', '배틀그라운드', '메이플스토리', '마인크래프트', '스팀'];
     const [currentTab, clickTab] = useState(0);
 
@@ -33,13 +36,20 @@ const MainBoard = () => {
     }
 
     useEffect(() => {
-        const locationParameter = window.location.pathname;
         if(locationParameter.length > 6) {
             setDetailBoardId(locationParameter.substring(7));
+        } else {
+            setDetailBoardId(null);
+        }
+
+        if(props === null) {
+            setDetailBoardId(props)
         }
 
         console.log("부모 props 확인 : " + detailBoardId);
-    }, []);
+        console.log(changeTabHandler());
+        console.log(props);
+    }, [props, locationParameter]);
 
     return (
         <div className="main_board">
@@ -49,7 +59,7 @@ const MainBoard = () => {
                 <ul>
                     {changeTabHandler().map((el) => (
                         <li key={el.id} onClick={() => selectTabHandler(el.id)}>
-                            <Link to="/board" state={{ mainReset: null }} style={{ color: "white", textDecoration: "none"}}>{el.name}</Link>
+                            <Link to="/board" style={{ color: "white", textDecoration: "none"}}>{el.name}</Link>
                         </li>
                     ))}
                 </ul>

@@ -11,10 +11,7 @@ import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,33 +52,37 @@ public class BoardService {
 
     @Transactional
     public Map<String, Object> findAllDesc(HttpServletRequest request) {
-        List<BoardListResponseDto> boardList = mainBoardRepository.findAllDesc().stream()
-                .map(BoardListResponseDto::new)
-                .collect(Collectors.toList());
 
-        int totalRecord = mainBoardRepository.findAllByCount();
+        int totalPage = 0;
         int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage"));
         int page = Integer.parseInt(request.getParameter("page"));
         int pagePerBlock = Integer.parseInt(request.getParameter("pagePerBlock"));
+        String pageSort = request.getParameter("pageSort");
 
-        BoardUtil boardUtil = new BoardUtil();
-        Map<String, Integer> pageList = boardUtil.paging(totalRecord, recordPerPage, page, pagePerBlock);
+        List<BoardListResponseDto> pagingList = new ArrayList<>();
 
-        int beginRecord = pageList.get("beginRecord");
+        if(pageSort.equals("")) {
+            Page<MainBoard> pageable = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage));
+            pagingList = pageable.stream()
+                    .map(BoardListResponseDto::new)
+                    .collect(Collectors.toList());
 
-        List<BoardListResponseDto> pagingList = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage)).stream()
-                .map(BoardListResponseDto::new)
-                .collect(Collectors.toList());;
+            totalPage = pageable.getTotalPages();
+            System.out.println("전체 페이징 카운트 : " + pageable.getTotalPages());
+        } else {
+            // Sort sort = Sort.by(pageSort).descending();
+            Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTab(pageSort ,PageRequest.of(page, recordPerPage));
+            pagingList = pageable.stream()
+                    .map(BoardListResponseDto::new)
+                    .collect(Collectors.toList());
 
-        System.out.println("전체 페이징 확인 : " + pageList.get("totalPage"));
-        System.out.println("시작 페이징 확인 : " + pageList.get("beginRecord"));
-        System.out.println("마지막 페이징 확인 : " + pageList.get("endRecord"));
-        System.out.println("블럭 시작 확인 : " + pageList.get("beginPage"));
-        System.out.println("블럭 마지막 확인 : " + pageList.get("endPage"));
+            totalPage = pageable.getTotalPages();
+            System.out.println("정렬 페이징 카운트 : " + pageable.getTotalPages());
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("boardList", pagingList);
-        result.put("totalPage", pageList.get("totalPage"));
+        result.put("totalPage", totalPage);
 
         return result;
     }

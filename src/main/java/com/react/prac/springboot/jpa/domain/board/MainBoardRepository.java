@@ -22,6 +22,8 @@ public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
 
     Page<MainBoard> findAll(Pageable pageable);
 
+    Page<MainBoard> findAllByBoardTab(String boardTab, Pageable pageable);
+
 //    @Query("SELECT b FROM MainBoard b ORDERS LIMIT 10 OFFSET 1")
 //    List<MainBoard> findALLByPaging(@Param("recordPerPage") int recordPerPage, @Param("beginPage") int beginPage);
 

@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import AppBarNavigation from "../Navigation/AppBarNavigation";
 import BoardTagBarNavigation from "./BoardTagBarNavigation";
@@ -8,8 +8,7 @@ import './MainBoard.scss';
 const Game1Board = (props) => {
 
     const subTab_name = ['전체', '화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
-    const [currentSubTab, clickSubTab] = useState(0);
-    const [currentTab, clickTab] = useState(0);
+    const [currentSubTab, clickSubTab] = useState("");
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
 
@@ -27,7 +26,8 @@ const Game1Board = (props) => {
     const paging = {
         recordPerPage: 5,
         page: pageNo,
-        pagePerBlock: 10
+        pagePerBlock: 10,
+        pageSort: currentSubTab
     }
 
     const pagination = () => {
@@ -50,7 +50,7 @@ const Game1Board = (props) => {
         };
 
         getBoards();
-    }, [pageNo]);
+    }, [pageNo, currentSubTab]);
 
     const changeDetailBoard = async (itemID) => {
         const detailBoardId = itemID;
@@ -70,41 +70,20 @@ const Game1Board = (props) => {
 
     }
 
-    const subTab_data = [
-        {
-            id: 0,
-            name: subTab_name,
-            view: ""
-        },
-        {
-            id: 1,
-            name: subTab_name,
-            view: ""
-        },
-        {
-            id: 2,
-            name: subTab_name,
-            view: ""
-        },
-        {
-            id: 3,
-            name: subTab_name,
-            view: ""
-        },
-        {
-            id: 4,
-            name: subTab_name,
-            view: ""
-        },
-        {
-            id: 5,
-            name: subTab_name,
-            view: ""
-        },
-    ]
+    const changeSubTabHandler = () => {
+        let subTab_data = [];
+        for(let i=0; i<subTab_name.length; i++) {
+            subTab_data.push({id: i, name: subTab_name[i]});
+        }
+        return subTab_data;
+    }
 
-    const selectTabHandler = (idx) => {
-        clickTab(idx);
+    const selectSubTabHandler = (subTabName) => {
+        if(subTabName == '전체') {
+            clickSubTab("");
+        } else {
+            clickSubTab(subTabName);
+        }
     }
 
     return (
@@ -115,17 +94,20 @@ const Game1Board = (props) => {
             {/*        <li key={elo.id} onClick={() => selectSubTabHandler(elo.id)}>{elo.name[elo.id]}</li>*/}
             {/*    ))}*/}
             {/*</ul>*/}
-            <div className="sub_tab">
-                <ul>
-                    {subTab_data.map((rl) => (
-                        <li key={rl.id} onClick={() => clickSubTab(rl.id)}>{rl.name[rl.id]}</li>
-                    ))}
-                </ul>
-            </div>
-            <div className="table_name">
-                {props.name}
-            </div>
-            <div className="table">
+            <div className="board-table">
+                <div className="sub_tab">
+                    <ul>
+                        {changeSubTabHandler().map((rl) => (
+                            <li key={rl.id} onClick={() => selectSubTabHandler(rl.name)}>{rl.name}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="board-tableName">
+                    {props.name}
+                </div>
+                <div className="board-search">
+                    <input type="text"/>
+                </div>
                 <table>
                     <thead className="table-header">
                     <tr>
@@ -161,14 +143,16 @@ const Game1Board = (props) => {
                     })}
                     </tbody>
                 </table>
-                <div>
+                <div className="board-paging">
                     <ul>
                         {pagination()}
                     </ul>
                 </div>
-                <Link to="/save">
-                    <button>등록</button>
-                </Link>
+                <div className="board-write">
+                    <Link to="/save" state={{subTab_name}}>
+                        <button>등록</button>
+                    </Link>
+                </div>
             </div>
         </>
 
