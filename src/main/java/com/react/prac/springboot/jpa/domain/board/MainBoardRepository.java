@@ -24,15 +24,27 @@ public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
 
     Page<MainBoard> findAllByBoardTab(String boardTab, Pageable pageable);
 
+    Page<MainBoard> findAllByBoardTitleContaining(String boardTitle, Pageable pageable);
+
+    Page<MainBoard> findAllByBoardContentContaining(String boardContent, Pageable pageable);
+
+    Page<MainBoard> findAllByBoardAuthorContaining(String boardAuthor, Pageable pageable);
+
+    Page<MainBoard> findAllByBoardTabAndBoardTitleContaining(String boardTab, String boardTitle, Pageable pageable);
+
+    Page<MainBoard> findAllByBoardTabAndBoardContentContaining(String boardTab, String boardContent, Pageable pageable);
+
+    Page<MainBoard> findAllByBoardTabAndBoardAuthorContaining(String boardTab, String boardAuthor, Pageable pageable);
+
 //    @Query("SELECT b FROM MainBoard b ORDERS LIMIT 10 OFFSET 1")
 //    List<MainBoard> findALLByPaging(@Param("recordPerPage") int recordPerPage, @Param("beginPage") int beginPage);
 
     // 이전
-    @Query("SELECT b.id FROM MainBoard b WHERE b.id > :boardId ORDER BY b.id ASC LIMIT 1")
+    @Query("SELECT b.id FROM MainBoard b WHERE b.id < :boardId ORDER BY b.id DESC LIMIT 1")
     Long findByPrev(@Param("boardId") Long boardId);
 
     // 다음
-    @Query("SELECT b.id FROM MainBoard b WHERE b.id < :boardId ORDER BY b.id DESC LIMIT 1")
+    @Query("SELECT b.id FROM MainBoard b WHERE b.id > :boardId ORDER BY b.id ASC LIMIT 1")
     Long findByNext(@Param("boardId") Long boardId);
 
     // 모두

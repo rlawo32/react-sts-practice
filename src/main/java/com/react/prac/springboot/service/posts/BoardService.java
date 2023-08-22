@@ -59,26 +59,95 @@ public class BoardService {
         int pagePerBlock = Integer.parseInt(request.getParameter("pagePerBlock"));
         String pageSort = request.getParameter("pageSort");
 
+        String searchText = request.getParameter("searchText");
+        String searchSelect = request.getParameter("searchSelect");
+
+        System.out.println("검색 텍스트 확인 : " + searchText);
+        System.out.println("검색 셀렉트 확인 : " + searchSelect);
+
         List<BoardListResponseDto> pagingList = new ArrayList<>();
 
-        if(pageSort.equals("")) {
-            Page<MainBoard> pageable = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage));
-            pagingList = pageable.stream()
-                    .map(BoardListResponseDto::new)
-                    .collect(Collectors.toList());
+        if(searchText.equals("")) {
+            if(pageSort.equals("")) {
+                Page<MainBoard> pageable = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage));
+                pagingList = pageable.stream()
+                        .map(BoardListResponseDto::new)
+                        .collect(Collectors.toList());
 
-            totalPage = pageable.getTotalPages();
-            System.out.println("전체 페이징 카운트 : " + pageable.getTotalPages());
+                totalPage = pageable.getTotalPages();
+                System.out.println("111 전체 페이징 카운트 : " + pageable.getTotalPages());
+            } else {
+                // Sort sort = Sort.by(pageSort).descending();
+                Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTab(pageSort ,PageRequest.of(page, recordPerPage));
+                pagingList = pageable.stream()
+                        .map(BoardListResponseDto::new)
+                        .collect(Collectors.toList());
+
+                totalPage = pageable.getTotalPages();
+                System.out.println("111 정렬 페이징 카운트 : " + pageable.getTotalPages());
+            }
         } else {
-            // Sort sort = Sort.by(pageSort).descending();
-            Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTab(pageSort ,PageRequest.of(page, recordPerPage));
-            pagingList = pageable.stream()
-                    .map(BoardListResponseDto::new)
-                    .collect(Collectors.toList());
+            if(searchSelect.equals("title")) {
+                if(pageSort.equals("")) {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTitleContaining(searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
 
-            totalPage = pageable.getTotalPages();
-            System.out.println("정렬 페이징 카운트 : " + pageable.getTotalPages());
+                    totalPage = pageable.getTotalPages();
+                    System.out.println("222 전체 페이징 카운트 : " + pageable.getTotalPages());
+                } else {
+                    // Sort sort = Sort.by(pageSort).descending();
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardTitleContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                    System.out.println("222 정렬 페이징 카운트 : " + pageable.getTotalPages());
+                }
+            } else if(searchSelect.equals("content")) {
+                if(pageSort.equals("")) {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardContentContaining(searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                    System.out.println("333 전체 페이징 카운트 : " + pageable.getTotalPages());
+                } else {
+                    // Sort sort = Sort.by(pageSort).descending();
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardContentContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                    System.out.println("333 정렬 페이징 카운트 : " + pageable.getTotalPages());
+                }
+            } else if(searchSelect.equals("nickname")) {
+                if(pageSort.equals("")) {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardAuthorContaining(searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                    System.out.println("444 전체 페이징 카운트 : " + pageable.getTotalPages());
+                } else {
+                    // Sort sort = Sort.by(pageSort).descending();
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardAuthorContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                    System.out.println("444 정렬 페이징 카운트 : " + pageable.getTotalPages());
+                }
+            }
         }
+
+
 
         Map<String, Object> result = new HashMap<>();
         result.put("boardList", pagingList);
