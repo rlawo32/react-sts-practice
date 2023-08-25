@@ -2,13 +2,11 @@ import {Link, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import AppBarNavigation from "../Navigation/AppBarNavigation";
-import BoardTagBarNavigation from "./BoardTagBarNavigation";
 import './MainBoard.scss';
-import Button from "@mui/material/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
 
-const Game1Board = (props) => {
+const TableBoard = (props) => {
     const navigate = useNavigate();
 
     const subTab_name = ['전체', '화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
@@ -49,13 +47,14 @@ const Game1Board = (props) => {
 
     useEffect(() => {
         const getBoards = async () => {
-            const game1Board = await axios({
+            const tableBoardList = await axios({
                 method: "GET",
-                url: '/game1BoardList',
+                url: '/tableBoardList',
                 params: paging
             });
-            setGame1BoardList(game1Board.data.boardList);
-            setTotalPage(game1Board.data.totalPage);
+            setGame1BoardList(tableBoardList.data.boardList);
+            setTotalPage(tableBoardList.data.totalPage);
+            console.log(tableBoardList.data);
         };
 
         getBoards();
@@ -82,7 +81,7 @@ const Game1Board = (props) => {
     const changeSearchBoard = async () => {
         const search = await axios({
             method: "GET",
-            url: '/game1BoardList',
+            url: '/tableBoardList',
             params: paging
         });
         setGame1BoardList(search.data.boardList);
@@ -203,4 +202,4 @@ const Game1Board = (props) => {
     )
 }
 
-export default Game1Board;
+export default TableBoard;

@@ -1,11 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import space1 from "../../images/space1.jpg";
-import space3 from "../../images/space3.jpg";
-import space4 from "../../images/space4.jpg";
-import space5 from "../../images/space5.jpg";
-import space6 from "../../images/space6.jpg";
 import './MainView.scss';
-import AnimatedCursor from "react-animated-cursor";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGithubSquare, faYoutubeSquare} from '@fortawesome/free-brands-svg-icons';
@@ -82,15 +77,7 @@ const MainView = () => {
                 </div>
 
 
-                <div className="Social-logo">
-                    <div style={ {borderBottom: "1px inset white", marginBottom: "50px", width: "60%", marginLeft: "auto", marginRight: "auto"} } />
-                    <Link to="https://github.com/" style={ {color: "white" ,marginRight: "200px"} }>
-                        <FontAwesomeIcon className="link-style" icon={faGithubSquare} />
-                    </Link>
-                    <Link to="https://www.youtube.com/" style={ {color: "white"} }>
-                        <FontAwesomeIcon className="link-style" icon={faYoutubeSquare} />
-                    </Link>
-                </div>
+
             </div>
         </>
     )

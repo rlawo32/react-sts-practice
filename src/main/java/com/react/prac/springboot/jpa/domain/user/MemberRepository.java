@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -12,6 +13,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT m FROM Member m WHERE m.memberEmail = :memberEmail AND m.memberPw = :memberPw")
     boolean findByIdPw(@Param("memberEmail") String memberEmail, @Param("memberPw") String memberPw);
+
+    @Query("SELECT m.memberNickname FROM Member m WHERE m.id = :memberId")
+    String findByMemberNickname(@Param("memberId") Long memberId);
+
+//    @Query("SELECT m.id, m.memberNickname FROM Member m WHERE m.id = :memberId")
+//    List<Member> findByIdAndMemberNickname(@Param("memberId") Long memberId);
 
     Optional<Member> findByMemberEmail(String memberEmail);
 

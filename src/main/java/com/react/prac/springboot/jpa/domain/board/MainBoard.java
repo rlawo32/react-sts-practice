@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Getter // LOMBOK Annotation
 @NoArgsConstructor // LOMBOK Annotation
@@ -34,6 +36,10 @@ public class MainBoard extends BaseTimeEntity {
     // @Column(columnDefinition = "integer default 0", nullable = false)	// 조회수의 기본 값을 0으로 지정, null 불가 처리
     @Column(nullable = false)
     private int boardViewsCnt;
+
+//    @OneToMany(mappedBy = "mainBoard", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+//    @OrderBy("id asc") // 댓글 정렬
+//    private List<BoardComment> boardComments;
 
     @Builder
     public MainBoard(String boardTab, String boardTitle, String boardContent, String boardAuthor, int boardRecommendCnt, int boardViewsCnt) {

@@ -1,12 +1,8 @@
 package com.react.prac.springboot.service.posts;
 
-import com.react.prac.springboot.jpa.domain.board.BoardRecommend;
-import com.react.prac.springboot.jpa.domain.board.MainBoard;
-import com.react.prac.springboot.jpa.domain.board.MainBoardRepository;
-import com.react.prac.springboot.jpa.domain.board.BoardRecommendRepository;
+import com.react.prac.springboot.jpa.domain.board.*;
 import com.react.prac.springboot.jpa.domain.user.Member;
 import com.react.prac.springboot.jpa.domain.user.MemberRepository;
-import com.react.prac.springboot.util.BoardUtil;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,10 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,6 +21,7 @@ public class BoardService {
     private final MainBoardRepository mainBoardRepository;
     private final MemberRepository memberRepository;
     private final BoardRecommendRepository boardRecommendRepository;
+    private final BoardCommentRepository boardCommentRepository;
 
     @Transactional
     public Long boardInsert(BoardSaveRequestDto requestDto) {
@@ -43,27 +37,24 @@ public class BoardService {
         return id;
     }
 
-    public BoardResponseDto findByBoardId (Long boardId) {
+    public BoardDetailResponseDto findByBoardId (Long boardId) {
         MainBoard entity = mainBoardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId=" + boardId));
 
-        return new BoardResponseDto(entity);
+        return new BoardDetailResponseDto(entity);
     }
 
     @Transactional
     public Map<String, Object> findAllDesc(HttpServletRequest request) {
 
-        int totalPage = 0;
-        int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage"));
-        int page = Integer.parseInt(request.getParameter("page"));
-        int pagePerBlock = Integer.parseInt(request.getParameter("pagePerBlock"));
-        String pageSort = request.getParameter("pageSort");
+        int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
+        int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
+        int pagePerBlock = Integer.parseInt(request.getParameter("pagePerBlock")); // 하단 페이지 블럭
+        String pageSort = request.getParameter("pageSort"); // 탭 정렬 조건
+        int totalPage = 0; // pageable에서 출력한 전체 페이지
 
-        String searchText = request.getParameter("searchText");
-        String searchSelect = request.getParameter("searchSelect");
-
-        System.out.println("검색 텍스트 확인 : " + searchText);
-        System.out.println("검색 셀렉트 확인 : " + searchSelect);
+        String searchText = request.getParameter("searchText");  // 검색어
+        String searchSelect = request.getParameter("searchSelect"); // 검색 조건
 
         List<BoardListResponseDto> pagingList = new ArrayList<>();
 
@@ -147,8 +138,6 @@ public class BoardService {
             }
         }
 
-
-
         Map<String, Object> result = new HashMap<>();
         result.put("boardList", pagingList);
         result.put("totalPage", totalPage);
@@ -187,7 +176,6 @@ public class BoardService {
 
         Member member = memberRepository.findById(requestDto.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
-
 
         try {
             if(boardRecommendRepository.findByMainBoardAndMember(mainBoard, member).isPresent()) {
@@ -272,6 +260,67 @@ public class BoardService {
         Map<String, Object> result = new HashMap<>();
         result.put("boardIdPrev", boardIdPrev);
         result.put("boardIdNext", boardIdNext);
+
+        return result;
+    }
+
+    // 댓글 기능
+    @Transactional
+    public ResponseDto<?> commentSave(CommentRequestDto requestDto) {
+
+        MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
+
+        Member member = memberRepository.findById(requestDto.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
+
+        String commentNickname = memberRepository.findByMemberNickname(requestDto.getMemberId());
+
+        String commentContent = requestDto.getCommentContent();
+        String createdDate = requestDto.getCreatedDate();
+        String modifiedDate = requestDto.getModifiedDate();
+
+        try {
+            BoardComment boardComment = BoardComment.builder()
+                    .commentContent(commentContent)
+                    .commentNickname(commentNickname)
+                    .mainBoard(mainBoard)
+                    .member(member)
+                    .createdDate(createdDate)
+                    .modifiedDate(modifiedDate)
+                    .commentIsDeleted(true)
+                    .build();
+
+            boardCommentRepository.save(boardComment);
+        } catch (Exception e) {
+            return ResponseDto.setFailed("Data Base Error!");
+        }
+
+        return ResponseDto.setSuccess("Success", null);
+    }
+
+    public Map<String, Object> commentList(HttpServletRequest request) {
+
+        Long boardId = Long.valueOf(request.getParameter("boardId"));
+        int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
+        int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
+
+        Page<BoardComment> pageable = boardCommentRepository.findByBoardComment(boardId, PageRequest.of(page, recordPerPage));
+        int totalPage = pageable.getTotalPages();
+        Long totalComments = pageable.getTotalElements();
+
+        List<CommentResponseDto> commentList = pageable.stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
+
+        System.out.println("전달된 데이터 확인" + boardId);
+        System.out.println("전체 페이지 확인" + pageable.getTotalPages());
+
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("commentList", commentList);
+        result.put("totalPage", totalPage);
+        result.put("totalComments", totalComments);
 
         return result;
     }

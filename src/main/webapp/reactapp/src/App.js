@@ -6,7 +6,7 @@ import About from "./views/Navigation/About";
 import SignUp from "./views/SignUp/SignUp";
 import SignIn from "./views/SignIn/SignIn";
 import MainBoard from "./views/NoticeBoard/MainBoard";
-import Game1Board from "./views/NoticeBoard/Game1Board";
+import TableBoard from "./views/NoticeBoard/TableBoard";
 import DetailBoard from "./views/NoticeBoard/DetailBoard";
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -40,7 +40,7 @@ const App = () => {
               <Route path="/signIn" element={<SignIn />} />
               <Route path="/board" element={<MainBoard />} />
 
-              <Route path="/game1board" element={<Game1Board />} />
+              <Route path="/game1board" element={<TableBoard />} />
 
               {/*<Route path="/detailBoard/:boardNo" element={<DetailBoard />} />*/}
               <Route path="/detailBoard" element={<DetailBoard />} />

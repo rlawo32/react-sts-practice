@@ -4,7 +4,7 @@ import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import lombok.Getter;
 
 @Getter
-public class BoardResponseDto {
+public class BoardDetailResponseDto {
 
     private Long boardId;
     private String boardTab;
@@ -13,8 +13,9 @@ public class BoardResponseDto {
     private String boardAuthor;
     private int boardRecommendCnt;
     private int boardViewsCnt;
+    // private List<CommentResponseDto> boardComments;
 
-    public BoardResponseDto(MainBoard entity) {
+    public BoardDetailResponseDto(MainBoard entity) {
         this.boardId = entity.getId();
         this.boardTab = entity.getBoardTab();
         this.boardTitle = entity.getBoardTitle();
@@ -22,5 +23,6 @@ public class BoardResponseDto {
         this.boardAuthor = entity.getBoardAuthor();
         this.boardRecommendCnt = entity.getBoardRecommendCnt();
         this.boardViewsCnt = entity.getBoardViewsCnt();
+        // this.boardComments = entity.getBoardComments().stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 }

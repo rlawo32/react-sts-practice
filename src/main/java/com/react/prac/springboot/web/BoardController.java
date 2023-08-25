@@ -1,6 +1,5 @@
 package com.react.prac.springboot.web;
 
-import com.react.prac.springboot.config.auth.dto.SessionUser;
 import com.react.prac.springboot.service.posts.BoardService;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
@@ -11,9 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -30,9 +26,9 @@ public class BoardController {
         return attributes.toString();
     }
 
-    @PostMapping("/boardInsert")
-    public Long save(@RequestBody BoardSaveRequestDto requestDto) {
-        System.out.println("값 확인1");
+    @PostMapping("/boardSave")
+    public Long boardSave(@RequestBody BoardSaveRequestDto requestDto) {
+
         return boardService.boardInsert(requestDto);
     }
 
@@ -44,7 +40,8 @@ public class BoardController {
     }
 
     @GetMapping("/detailBoard/{boardId}")
-    public BoardResponseDto findByBoardId (@PathVariable Long boardId) {
+    public BoardDetailResponseDto findByBoardId (@PathVariable Long boardId) {
+
         return boardService.findByBoardId(boardId);
     }
 
@@ -53,8 +50,8 @@ public class BoardController {
         boardService.delete(id);
     }
 
-    @GetMapping("/game1BoardList")
-    public Map<String, Object> game1BoardList(HttpServletRequest request) {
+    @GetMapping("/tableBoardList")
+    public Map<String, Object> tableBoardList(HttpServletRequest request) {
 
         return boardService.findAllDesc(request);
     }
@@ -105,4 +102,18 @@ public class BoardController {
 
         return result;
     }
+
+    // 댓글 기능
+    @PostMapping("/commentSave")
+    public ResponseDto<?> commentSave(@RequestBody CommentRequestDto requestDto) {
+
+        return boardService.commentSave(requestDto);
+    }
+
+    @GetMapping("/commentList")
+    public Map<String, Object> commentList(HttpServletRequest request) {
+
+        return boardService.commentList(request);
+    }
+
 }

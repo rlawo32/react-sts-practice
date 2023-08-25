@@ -1,8 +1,9 @@
 import AppBarNavigation from "../Navigation/AppBarNavigation";
+import FooterNavigation from "../Navigation/FooterNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss'
 import BoardTagBarNavigation from "./BoardTagBarNavigation";
-import Game1Board from "./Game1Board";
+import TableBoard from "./TableBoard";
 import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -25,7 +26,7 @@ const MainBoard = () => {
     const changeTabHandler = () => {
         let tab_data = [];
         for(let i=0; i<tab_name.length; i++) {
-            tab_data.push({id: i, name: tab_name[i], view:<Game1Board id={i} name={tab_name[i]} changeBoardId={changeDetailBoardId}/>});
+            tab_data.push({id: i, name: tab_name[i], view:<TableBoard id={i} name={tab_name[i]} changeBoardId={changeDetailBoardId}/>});
         }
         return tab_data;
     }
@@ -69,15 +70,7 @@ const MainBoard = () => {
                 detailBoardId === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardId} changeBoardId={changeDetailBoardId}/>
             }
 
-            <div className="Social-logo">
-                <div style={ {borderBottom: "1px inset white", marginBottom: "50px", width: "60%", marginLeft: "auto", marginRight: "auto"} } />
-                <Link to="https://github.com/" style={ {color: "white" ,marginRight: "200px"} }>
-                    <FontAwesomeIcon className="link-style" icon={faGithubSquare} />
-                </Link>
-                <Link to="https://www.youtube.com/" style={ {color: "white"} }>
-                    <FontAwesomeIcon className="link-style" icon={faYoutubeSquare} />
-                </Link>
-            </div>
+            <FooterNavigation />
         </div>
     )
 }
