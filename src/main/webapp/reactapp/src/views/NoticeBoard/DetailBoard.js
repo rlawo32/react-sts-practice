@@ -2,26 +2,32 @@ import AppBarNavigation from "../Navigation/AppBarNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useRef, useState} from "react";
-import {Link, useParams, useLocation} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faThumbsUp as recommendUp} from "@fortawesome/free-solid-svg-icons";
-import {faThumbsUp as recommendDown} from "@fortawesome/free-regular-svg-icons";
+import {faThumbsUp as recommendUp, faThumbsDown as recommendDown} from "@fortawesome/free-solid-svg-icons";
+import {faThumbsUp as recommendUpCancel, faThumbsDown as recommendDownCancel} from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {Viewer} from "@toast-ui/react-editor";
 import Button from "@mui/material/Button";
 
 const DetailBoard = (props) => {
-    const location = useLocation();
     const locationURL = window.location.href;
-    const params = useParams();
     const editorRef = useRef(null);
 
     const [boardDetail, setBoardDetail] = useState("");
     const [prevId, setPrevId] = useState(0);
     const [nextId, setNextId] = useState(0);
     const [memberId, setMemberId] = useState(9999);
-    const [recommendCheck, setRecommendCheck] = useState(false);
+    const [mainRecommendUpCheck, setMainRecommendUpCheck] = useState(false);
+    const [mainRecommendDownCheck, setMainRecommendDownCheck] = useState(false);
+
+    const [commentRecommendUpCheck, setCommentRecommendUpCheck] = useState(false);
+    const [commentRecommendDownCheck, setCommentRecommendDownCheck] = useState(false);
+
+    const [nestedId, setNestedId] = useState("");
+    const [nestedBox, setNestedBox] = useState(false);
+    const [nestedText, setNestedText] = useState("");
 
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
@@ -62,15 +68,15 @@ const DetailBoard = (props) => {
         alert('복사 성공 \n' + text);
     }
 
-    const onClickRecommend = async () => {
-        if(recommendCheck) {
+    const onClickMainRecommend = async () => {
+        if(mainRecommendUpCheck) {
             await axios({
                 method: "DELETE",
                 url: '/recommendDown',
                 data: JSON.stringify(recommendData),
                 headers: {'Content-type': 'application/json'}
             });
-            setRecommendCheck(false);
+            setMainRecommendUpCheck(false);
         } else {
             await axios({
                 method: "POST",
@@ -78,7 +84,15 @@ const DetailBoard = (props) => {
                 data: JSON.stringify(recommendData),
                 headers: {'Content-type': 'application/json'}
             });
-            setRecommendCheck(true);
+            setMainRecommendUpCheck(true);
+        }
+    }
+
+    const onClickCommentRecommend = async () => {
+        if(commentRecommendUpCheck) {
+            setCommentRecommendUpCheck(false);
+        } else {
+            setCommentRecommendUpCheck(true);
         }
     }
 
@@ -122,7 +136,7 @@ const DetailBoard = (props) => {
                     params: paging
                 })
 
-                setRecommendCheck(recommends.data);
+                setMainRecommendUpCheck(recommends.data);
                 setPrevId(selectBoard.data.boardIdPrev);
                 setNextId(selectBoard.data.boardIdNext);
                 setCommentList(comments.data.commentList);
@@ -154,7 +168,7 @@ const DetailBoard = (props) => {
                     params: paging
                 })
 
-                setRecommendCheck(recommends.data);
+                setMainRecommendUpCheck(recommends.data);
                 setPrevId(selectBoard.data.boardIdPrev);
                 setNextId(selectBoard.data.boardIdNext);
                 setCommentList(comments.data.commentList);
@@ -164,7 +178,7 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [prevId, nextId, recommendCheck, props.id, pageNo])
+    }, [prevId, nextId, mainRecommendUpCheck, props.id, pageNo, nestedId])
     // prevId:이전글, nextId:다음글, recommendCheck:추천체크, props.id:게시판에서 선택한 게시글 id
 
     useEffect(() => {
@@ -217,12 +231,52 @@ const DetailBoard = (props) => {
                 url: '/commentSave',
                 data: JSON.stringify(commentData),
                 headers: {'Content-type': 'application/json'}
-            }).then((result) => {
+            }).then(() => {
                 setCommentText("");
                 document.getElementById("textarea").value='';
                 // window.location.reload();
             })
         }
+    }
+
+    const nestedSaveHandler = (box, e) => {
+        const selectNestedId = e.target.value;
+
+
+        setNestedId(selectNestedId);
+
+        console.log("값 확인 1 : " + selectNestedId);
+        console.log("값 확인 2 : " + nestedId);
+
+        if(nestedId != selectNestedId) {
+            const parentDiv = document.getElementById(nestedId);
+            const childDiv = document.createElement("div");
+
+            if(box) {
+                const removeDiv = document.querySelector(".nested-write");
+                parentDiv.removeChild(removeDiv);
+                setNestedBox(false);
+            } else {
+                childDiv.innerHTML = "(current)";
+                childDiv.classList.add("nested-write");
+                parentDiv.appendChild(childDiv);
+                setNestedBox(true);
+            }
+        } else {
+
+        }
+
+        console.log("댓글 키 값 확인 1 : " + e.target.value);
+        console.log("댓글 키 값 확인 2 : " + box);
+
+
+
+
+
+
+        // setNestedBox(true);
+
+
     }
 
     return (
@@ -253,9 +307,9 @@ const DetailBoard = (props) => {
                     </div>
                 </div>
                 <div className="detail-footer1">
-                    <Button onClick={onClickRecommend}>
+                    <Button onClick={onClickMainRecommend}>
                         {
-                            recommendCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendDown} />
+                            mainRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />
                         }
                     </Button>
                 </div>
@@ -289,9 +343,36 @@ const DetailBoard = (props) => {
                             댓글 {totalComments} 개
                         </div>
                         {commentList.map((comments) => (
-                            <div className="comment-list" key={comments.commentId}>
-                                <span className="comment-nickname">{comments.memberNickname}</span>
-                                <span className="comment-date">{comments.createdDate}</span>
+                            <div className="comment-list" key={comments.commentId} id={comments.commentId}>
+                                <div className="comment-header">
+                                    <div className="comment-header1">
+                                        <span className="comment-nickname">{comments.memberNickname}</span>
+                                        <span className="comment-date">{comments.createdDate}</span>
+                                    </div>
+                                    <div className="comment-header2">
+                                        <span className="comment-recommendUp">
+                                            <button onClick={onClickCommentRecommend} className="recommendUp-btn">
+                                                {
+                                                    commentRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />
+                                                }
+                                            </button>
+                                            <span className="comment-upCount">1</span>
+                                        </span>
+                                            <span className="comment-recommendDown">
+                                            <button onClick={onClickCommentRecommend} className="recommendDown-btn">
+                                                {
+                                                    commentRecommendDownCheck ? <FontAwesomeIcon icon={recommendDown} /> : <FontAwesomeIcon icon={recommendDownCancel} />
+                                                }
+                                            </button>
+                                            <span className="comment-downCount">1</span>
+                                        </span>
+                                            <span className="comment-nested">
+                                            <button className="nested-btn" onClick={(e) => nestedSaveHandler(nestedBox, e)} value={comments.commentId}>
+                                                댓글
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
                                 <div className="comment-content">{comments.commentContent}</div>
                             </div>
                         ))}

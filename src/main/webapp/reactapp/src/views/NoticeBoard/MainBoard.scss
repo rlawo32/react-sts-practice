@@ -326,7 +326,7 @@
 
   .detail-sub {
     margin: auto;
-    width: 1000px;
+    width: 900px;
 
     .comment-view {
 
@@ -342,27 +342,91 @@
       }
 
       .comment-list {
-        border-bottom: 1px solid #5c636a;
         text-align: left;
+        border-bottom: 1px solid #5c636a;
         padding: 5px 20px 5px 20px;
 
-        .comment-nickname {
-          font-weight: bold;
-          font-size: 26px;
-          color: #e2e3e5;
-          margin-right: 10px;
-        }
+        .comment-header {
+          display: flex;
+          justify-content: space-between;
 
-        .comment-date {
-          font-weight: lighter;
-          font-size: 12px;
-          color: #6c757d;
+          .comment-header1 {
+            position: relative;
+            top: -6px;
+
+            .comment-nickname {
+              font-weight: bold;
+              font-size: 26px;
+              color: #e2e3e5;
+              margin-right: 10px;
+            }
+
+            .comment-date {
+              font-weight: lighter;
+              font-size: 12px;
+              color: #6c757d;
+            }
+          }
+
+          .comment-header2 {
+            position: relative;
+            top: -9px;
+
+            .comment-recommendUp {
+
+              .recommendUp-btn {
+                color: #6c757d;
+                background: none;
+                border: none;
+
+                font-size: 14px;
+              }
+
+              .comment-upCount {
+                font-weight: bolder;
+                font-size: 12px;
+              }
+            }
+
+            .comment-recommendDown {
+              margin-left: 10px;
+
+              .recommendDown-btn {
+                color: #6c757d;
+                background: none;
+                border: none;
+
+                font-size: 14px;
+              }
+
+              .comment-downCount {
+                font-weight: bolder;
+                font-size: 12px;
+              }
+            }
+
+            .comment-nested {
+              margin-left: 10px;
+
+              .nested-btn {
+                color: #6c757d;
+                background: none;
+                border: none;
+
+                font-size: 14px;
+              }
+            }
+          }
         }
 
         .comment-content {
           font-weight: lighter;
           font-size: 20px;
           color: #dde0e3;
+        }
+
+        .nested-write {
+
         }
       }
 
@@ -423,7 +487,7 @@
           color: #e2e3e5;
           font-size: 16px;
           padding: 5px 5px 5px 5px;
-          width: 840px;
+          width: 740px;
           height: 80px;
           background-color: #495057;
           border: 2px solid #565e64;
