@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 const DetailBoard = (props) => {
     const locationURL = window.location.href;
     const editorRef = useRef(null);
+    const nestedRef = useRef(null);
 
     const [boardDetail, setBoardDetail] = useState("");
     const [prevId, setPrevId] = useState(0);
@@ -178,8 +179,9 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [prevId, nextId, mainRecommendUpCheck, props.id, pageNo, nestedId])
-    // prevId:이전글, nextId:다음글, recommendCheck:추천체크, props.id:게시판에서 선택한 게시글 id
+    }, [prevId, nextId, mainRecommendUpCheck, props.id, pageNo, commentText, nestedId])
+    // prevId:이전글, nextId:다음글, mainRecommendCheck:추천체크, props.id:게시판에서 선택한 게시글 id,
+    // pageNo:댓글 페이지 이동, commentText: 댓글 작성 후 바로 추가, nestedId:대댓글을 작성할 댓글 id
 
     useEffect(() => {
         if(props.id != null) {
@@ -210,7 +212,8 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [props.id, commentText]);
+    }, [props.id]);
+    // props.id:url 직접 입력 시를 위함 (세부적인 기능 체크 필요)
 
     const changeCommentHandler = ({target: {value}}) => {
         setCommentText(value);
@@ -242,41 +245,32 @@ const DetailBoard = (props) => {
     const nestedSaveHandler = (box, e) => {
         const selectNestedId = e.target.value;
 
+        const parentDiv1 = document.getElementById(selectNestedId);
+        const childDiv = document.createElement("div");
+        childDiv.classList.add("nested-write");
 
-        setNestedId(selectNestedId);
-
-        console.log("값 확인 1 : " + selectNestedId);
-        console.log("값 확인 2 : " + nestedId);
+        const removeDiv = document.querySelector(".nested-write");
 
         if(nestedId != selectNestedId) {
-            const parentDiv = document.getElementById(nestedId);
-            const childDiv = document.createElement("div");
-
-            if(box) {
-                const removeDiv = document.querySelector(".nested-write");
-                parentDiv.removeChild(removeDiv);
-                setNestedBox(false);
-            } else {
-                childDiv.innerHTML = "(current)";
-                childDiv.classList.add("nested-write");
-                parentDiv.appendChild(childDiv);
-                setNestedBox(true);
+            box = false;
+            const parentDiv2 = document.getElementById(nestedId);
+            if(parentDiv2) { // 초기 state 대응
+                if(parentDiv2.hasChildNodes()) {
+                    parentDiv2.removeChild(removeDiv);
+                }
             }
+        }
+        
+        if(box) {
+            parentDiv1.removeChild(removeDiv);
+            setNestedBox(false);
         } else {
-
+            childDiv.innerHTML = "Hello";
+            parentDiv1.appendChild(childDiv);
+            setNestedBox(true);
         }
 
-        console.log("댓글 키 값 확인 1 : " + e.target.value);
-        console.log("댓글 키 값 확인 2 : " + box);
-
-
-
-
-
-
-        // setNestedBox(true);
-
-
+        setNestedId(selectNestedId);
     }
 
     return (
@@ -343,7 +337,7 @@ const DetailBoard = (props) => {
                             댓글 {totalComments} 개
                         </div>
                         {commentList.map((comments) => (
-                            <div className="comment-list" key={comments.commentId} id={comments.commentId}>
+                            <div className="comment-list" key={comments.commentId}>
                                 <div className="comment-header">
                                     <div className="comment-header1">
                                         <span className="comment-nickname">{comments.memberNickname}</span>
@@ -358,7 +352,7 @@ const DetailBoard = (props) => {
                                             </button>
                                             <span className="comment-upCount">1</span>
                                         </span>
-                                            <span className="comment-recommendDown">
+                                        <span className="comment-recommendDown">
                                             <button onClick={onClickCommentRecommend} className="recommendDown-btn">
                                                 {
                                                     commentRecommendDownCheck ? <FontAwesomeIcon icon={recommendDown} /> : <FontAwesomeIcon icon={recommendDownCancel} />
@@ -366,14 +360,16 @@ const DetailBoard = (props) => {
                                             </button>
                                             <span className="comment-downCount">1</span>
                                         </span>
-                                            <span className="comment-nested">
-                                            <button className="nested-btn" onClick={(e) => nestedSaveHandler(nestedBox, e)} value={comments.commentId}>
+                                        <span className="comment-nested">
+                                            <button className="nested-btn" onClick={(e) => nestedSaveHandler(nestedBox, e)} value={comments.commentId} ref={nestedRef}>
                                                 댓글
                                             </button>
                                         </span>
                                     </div>
                                 </div>
                                 <div className="comment-content">{comments.commentContent}</div>
+                                <div className="nested-content"></div>
+                                <div className="nested-box" id={comments.commentId}></div>
                             </div>
                         ))}
                         <div className="comment-paging">
