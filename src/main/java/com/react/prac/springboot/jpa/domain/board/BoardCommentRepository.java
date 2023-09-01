@@ -14,4 +14,7 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
     @Query("SELECT c FROM BoardComment c WHERE c.mainBoard.id = :boardId")
     Page<BoardComment> findByBoardComment(@Param("boardId") Long boardId, Pageable pageable);
 
+    // 부모 댓글 설정
+    @Query("SELECT NVL(MAX(c.commentParentId), 0) FROM BoardComment c WHERE c.mainBoard.id = :boardId")
+    Long findByNvlCommentId(@Param("boardId") Long boardId);
 }

@@ -13,6 +13,10 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 public class CommentRequestDto {
 
+    private Long commentParentId;
+    private Long commentTargetId;
+    private Long commentNestedId;
+    private Long commentNestedLevel;
     private Long memberId;
     private Long boardId;
     private String commentContent;
@@ -20,7 +24,13 @@ public class CommentRequestDto {
     private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
     @Builder
-    public CommentRequestDto(Long memberId, Long boardId, String commentContent, String createdDate, String modifiedDate) {
+    public CommentRequestDto(Long commentParentId, Long commentTargetId, Long commentNestedId,
+                             Long commentNestedLevel, Long memberId, Long boardId, String commentContent,
+                             String createdDate, String modifiedDate) {
+        this.commentParentId = commentParentId;
+        this.commentTargetId = commentTargetId;
+        this.commentNestedId = commentNestedId;
+        this.commentNestedLevel = commentNestedLevel;
         this.memberId = memberId;
         this.boardId = boardId;
         this.commentContent = commentContent;

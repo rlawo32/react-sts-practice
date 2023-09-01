@@ -11,6 +11,10 @@ import java.time.format.DateTimeFormatter;
 public class CommentResponseDto {
 
     private Long commentId;
+    private Long commentParentId;
+    private Long commentTargetId;
+    private Long commentNestedId;
+    private Long commentNestedLevel;
     private String commentContent;
     private Long boardId;
     private Long memberId;
@@ -20,6 +24,10 @@ public class CommentResponseDto {
 
     public CommentResponseDto(BoardComment entity) {
         this.commentId = entity.getId();
+        this.commentParentId = entity.getCommentParentId();
+        this.commentTargetId = entity.getCommentTargetId();
+        this.commentNestedId = entity.getCommentNestedId();
+        this.commentNestedLevel = entity.getCommentNestedLevel();
         this.commentContent = entity.getCommentContent();
         this.boardId = entity.getMainBoard().getId();
         this.memberId = entity.getMember().getId();

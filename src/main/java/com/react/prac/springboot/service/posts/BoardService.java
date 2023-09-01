@@ -276,12 +276,42 @@ public class BoardService {
 
         String commentNickname = memberRepository.findByMemberNickname(requestDto.getMemberId());
 
+        Long commentParentId = requestDto.getCommentParentId();
+        if(commentParentId == null) {
+            commentParentId = boardCommentRepository.findByNvlCommentId(requestDto.getBoardId()) + 1;
+        }
+
+        Long commentTargetId = requestDto.getCommentTargetId();
+        if(commentTargetId == null) {
+            commentTargetId = 0L;
+        }
+
+        Long commentNestedId = requestDto.getCommentNestedId();
+        if(commentNestedId == null) {
+            commentNestedId = 0L;
+        }
+
+        Long commentNestedLevel = requestDto.getCommentNestedLevel();
+        if(commentNestedLevel == null) {
+            commentNestedLevel = 0L;
+        } else {
+            commentNestedLevel += 1;
+        }
+
         String commentContent = requestDto.getCommentContent();
         String createdDate = requestDto.getCreatedDate();
         String modifiedDate = requestDto.getModifiedDate();
 
+        System.out.println("comment target id 값 확인 : " + commentTargetId);
+        System.out.println("comment nested id 값 확인 : " + commentNestedId);
+        System.out.println("comment nested level 값 확인 : " + commentNestedLevel);
+
         try {
             BoardComment boardComment = BoardComment.builder()
+                    .commentParentId(commentParentId)
+                    .commentTargetId(commentTargetId)
+                    .commentNestedId(commentNestedId)
+                    .commentNestedLevel(commentNestedLevel)
                     .commentContent(commentContent)
                     .commentNickname(commentNickname)
                     .mainBoard(mainBoard)

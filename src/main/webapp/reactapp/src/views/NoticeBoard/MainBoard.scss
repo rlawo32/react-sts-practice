@@ -408,7 +408,7 @@
             .comment-nested {
               margin-left: 10px;
 
-              .nested-btn {
+              .comment-nested-btn {
                 color: #6c757d;
                 background: none;
                 border: none;
@@ -425,9 +425,90 @@
           color: #dde0e3;
         }
 
-        .nested-write {
+        .nested-content {
 
         }
+
+        .nested-div {
+          display: none;
+
+          .nested-write {
+            display: flex;
+            flex-wrap: wrap;
+            text-align: left;
+            border-top: 1px solid #5c636a;
+            margin-top: 15px;
+
+            .nested-tag {
+              display: inherit;
+              justify-content: space-between;
+              align-items: center;
+              width: 920px;
+              height: 30px;
+              margin-top: 5px;
+              margin-bottom: 7px;
+
+              .nested-header1 {
+                font-weight: bold;
+                font-size: 16px;
+                color: #6c757d;
+              }
+
+              .nested-header2 {
+                display: inherit;
+                align-items: center;
+
+                .nested-close {
+                  background: none;
+                  border: none;
+
+                  font-size: 14px;
+                  color: #6c757d;
+                }
+
+              }
+            }
+
+            .nested-box {
+              margin-right: 10px;
+
+              textarea {
+                color: #e2e3e5;
+                font-size: 16px;
+                padding: 5px 5px 5px 5px;
+                width: 760px;
+                height: 80px;
+                background-color: #495057;
+                border: 2px solid #565e64;
+              }
+            }
+
+            .nested-btn {
+              padding-left: 20px;
+
+              .btn-design {
+                font-size: 15px;
+                color: #fff;
+                background-color: #2c3034;
+
+                width: 70px;
+                height: 70px;
+                line-height: 42px;
+                padding: 0;
+
+                border-color: #565e64;
+                border-radius: 8px;
+                box-shadow: 0 0 40px 40px #565e64 inset, 0 0 0 0 #e2e3e5;
+                transition: all 150ms ease-in-out;
+
+                &:hover {
+                  box-shadow: 0 0 10px 0 #565e64 inset, 0 0 5px 2px #e2e3e5;
+                }
+              }
+            }
+          }
+        }
+
       }
 
       .comment-paging {

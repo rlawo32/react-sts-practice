@@ -23,6 +23,21 @@ public class BoardComment {
     @Column(name = "comment_id")
     private Long id; // 댓글 pk
 
+    @Column(nullable = false)
+    private Long commentParentId; // 대댓글들의 댓글 id
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int commentChildCnt; // 해당 댓글에 달린 대댓글 갯수
+
+    @Column(nullable = false)
+    private Long commentTargetId; // 댓글, 대댓글이 달릴 target id
+
+    @Column(nullable = false)
+    private Long commentNestedId; // 해당 댓글의 대댓글 id
+
+    @Column(nullable = false)
+    private Long commentNestedLevel; // 해당 댓글의 대댓글 level
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String commentContent; // 댓글 내용
 
@@ -37,9 +52,6 @@ public class BoardComment {
     @JoinColumn(name = "member_id")
     private Member member; // 댓글 작성자 id
 
-//    @Column(nullable = false)
-//    private Long commentGroupId; // 댓글 id (대댓글의 그룹번호)
-
     @Column(nullable = false)
     @CreatedDate
     private String createdDate; // 댓글 생성 일자
@@ -53,12 +65,17 @@ public class BoardComment {
     private Boolean commentIsDeleted; // 삭제 여부
 
     @Builder
-    public BoardComment(String commentContent, String commentNickname, MainBoard mainBoard, Member member, String createdDate, String modifiedDate, Boolean commentIsDeleted) {
+    public BoardComment(Long commentParentId, Long commentTargetId, Long commentNestedId, Long commentNestedLevel,
+                        String commentContent, String commentNickname, MainBoard mainBoard, Member member,
+                        String createdDate, String modifiedDate, Boolean commentIsDeleted) {
+        this.commentParentId = commentParentId;
+        this.commentTargetId = commentTargetId;
+        this.commentNestedId = commentNestedId;
+        this.commentNestedLevel = commentNestedLevel;
         this.commentContent = commentContent;
         this.commentNickname = commentNickname;
         this.mainBoard = mainBoard;
         this.member = member;
-//        this.commentGroupId = commentGroupId;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.commentIsDeleted = commentIsDeleted;
