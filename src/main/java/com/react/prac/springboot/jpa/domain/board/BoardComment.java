@@ -6,8 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -63,6 +67,13 @@ public class BoardComment {
     @ColumnDefault("FALSE")
     @Column(nullable = false)
     private Boolean commentIsDeleted; // 삭제 여부
+
+    @PostPersist
+    public void postPersist() {
+        if(this.commentParentId == 0) {
+            this.commentParentId = this.id;
+        }
+    }
 
     @Builder
     public BoardComment(Long commentParentId, Long commentTargetId, Long commentNestedId, Long commentNestedLevel,

@@ -277,21 +277,18 @@ public class BoardService {
         String commentNickname = memberRepository.findByMemberNickname(requestDto.getMemberId());
 
         Long commentParentId = requestDto.getCommentParentId();
-        if(commentParentId == null) {
-            commentParentId = boardCommentRepository.findByNvlCommentId(requestDto.getBoardId()) + 1;
-        }
-
         Long commentTargetId = requestDto.getCommentTargetId();
-        if(commentTargetId == null) {
-            commentTargetId = 0L;
-        }
-
         Long commentNestedId = requestDto.getCommentNestedId();
-        if(commentNestedId == null) {
+        Long commentNestedLevel = requestDto.getCommentNestedLevel();
+
+
+        if(commentParentId == null) {
+//            commentParentId = boardCommentRepository.findByNvlCommentId(requestDto.getBoardId()) + 1;
+            commentParentId = 0L;
+            commentTargetId = 0L;
             commentNestedId = 0L;
         }
 
-        Long commentNestedLevel = requestDto.getCommentNestedLevel();
         if(commentNestedLevel == null) {
             commentNestedLevel = 0L;
         } else {
@@ -301,10 +298,6 @@ public class BoardService {
         String commentContent = requestDto.getCommentContent();
         String createdDate = requestDto.getCreatedDate();
         String modifiedDate = requestDto.getModifiedDate();
-
-        System.out.println("comment target id 값 확인 : " + commentTargetId);
-        System.out.println("comment nested id 값 확인 : " + commentNestedId);
-        System.out.println("comment nested level 값 확인 : " + commentNestedLevel);
 
         try {
             BoardComment boardComment = BoardComment.builder()
@@ -322,6 +315,8 @@ public class BoardService {
                     .build();
 
             boardCommentRepository.save(boardComment);
+
+
         } catch (Exception e) {
             return ResponseDto.setFailed("Data Base Error!");
         }
@@ -335,17 +330,13 @@ public class BoardService {
         int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
         int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
 
-        Page<BoardComment> pageable = boardCommentRepository.findByBoardComment(boardId, PageRequest.of(page, recordPerPage));
+        Page<BoardComment> pageable = boardCommentRepository.findByBoardComment(boardId, PageRequest.of(page, recordPerPage, Sort.by("commentParentId").and(Sort.by("id"))));
         int totalPage = pageable.getTotalPages();
         Long totalComments = pageable.getTotalElements();
 
         List<CommentResponseDto> commentList = pageable.stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
-
-        System.out.println("전달된 데이터 확인" + boardId);
-        System.out.println("전체 페이지 확인" + pageable.getTotalPages());
-
 
         Map<String, Object> result = new HashMap<>();
         result.put("commentList", commentList);

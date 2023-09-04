@@ -6,7 +6,7 @@ import {render, unmountComponentAtNode} from "react-dom";
 import {createRoot} from "react-dom/client";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faThumbsUp as recommendUp, faThumbsDown as recommendDown, faReply as nestedArrow} from "@fortawesome/free-solid-svg-icons";
+import {faThumbsUp as recommendUp, faThumbsDown as recommendDown, faReply as nestedArrow, faAnglesLeft as leftArrow, faAnglesRight as rightArrow, faHouse as buttonHouse} from "@fortawesome/free-solid-svg-icons";
 import {faThumbsUp as recommendUpCancel, faThumbsDown as recommendDownCancel} from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
@@ -27,6 +27,7 @@ const DetailBoard = (props) => {
     const [commentRecommendUpCheck, setCommentRecommendUpCheck] = useState(false);
     const [commentRecommendDownCheck, setCommentRecommendDownCheck] = useState(false);
 
+    const [commentState, setCommentState] = useState(false);
     const [commentId, setCommentId] = useState(""); // 댓글 id,
     const [commentParentId, setCommentParentId] = useState(""); // 대댓들을 달 부모 댓글
     const [commentTargetId, setCommentTargetId] = useState(""); // 대댓을 달 댓글 id target
@@ -207,7 +208,7 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [prevId, nextId, mainRecommendUpCheck, props.id, pageNo, commentText])
+    }, [prevId, nextId, mainRecommendUpCheck, props.id, pageNo, commentState])
     // prevId:이전글, nextId:다음글, mainRecommendCheck:추천체크, props.id:게시판에서 선택한 게시글 id,
     // pageNo:댓글 페이지 이동, commentText: 댓글 작성 후 바로 추가, nestedId:대댓글을 작성할 댓글 id
 
@@ -252,6 +253,7 @@ const DetailBoard = (props) => {
     }
 
     const commentSaveHandler = async () => {
+        setCommentState(false);
         if(commentText == "") {
             alert("내용을 입력해주세요");
         } else {
@@ -261,6 +263,7 @@ const DetailBoard = (props) => {
                 data: JSON.stringify(commentData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
+                setCommentState(true);
                 setCommentText("");
                 document.getElementById("comment-text").value='';
                 // window.location.reload();
@@ -268,7 +271,9 @@ const DetailBoard = (props) => {
         }
     }
 
-    const nestedSaveHandler = async () => {
+    const nestedSaveHandler = async (e) => {
+        const selectCommentId = e.target.value;
+        setCommentState(false);
         if(nestedText == "") {
             alert("내용을 입력해주세요");
         } else {
@@ -278,6 +283,11 @@ const DetailBoard = (props) => {
                 data: JSON.stringify(nestedData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
+                setCommentState(true);
+                const targetDiv_2 = document.getElementById(selectCommentId);
+                if(targetDiv_2) {
+                    targetDiv_2.style.display = "none";
+                }
                 setNestedText("");
                 document.getElementById("nested-text").value='';
                 // window.location.reload();
@@ -286,7 +296,7 @@ const DetailBoard = (props) => {
         }
     }
 
-    const nestedTestHandler = (box, e, parent_id, nested_id, nested_level) => {
+    const nestedActionHandler = (box, e, parent_id, nested_id, nested_level) => {
         const selectCommentId = e.target.value;
 
         setCommentParentId(parent_id);
@@ -295,21 +305,6 @@ const DetailBoard = (props) => {
         setNestedLevel(nested_level);
 
         const targetDiv_1 = document.getElementById(selectCommentId);
-        //
-        // const removeDiv = document.querySelector(".nested-write");
-        //
-        // const targetDiv_1 = createRoot(targetDiv_Id);
-        //
-        // const parentDiv = React.createElement("div", {className: "nested-write"});
-        // const childDiv_1 = React.createElement("div", {className: "nested-tag"});
-        //
-        // if(box) {
-        //     targetDiv_1.unmount();
-        //     setNestedBox(false);
-        // } else {
-        //     targetDiv_1.render(parentDiv);
-        //     setNestedBox(true);
-        // }
 
         if(commentId != selectCommentId) {
             box = false;
@@ -444,27 +439,46 @@ const DetailBoard = (props) => {
                     </Button>
                 </div>
                 <div className="detail-footer2">
-                    {
-                        prevId != null ?
-                            <span>
-                                <Link to={{ pathname: `/board/${prevId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.id, 'prev')}>이전 글 -- </Link>
-                            </span> :
-                            <span>
-
-                            </span>
-                    }
-                    <span>
-                        <Link to="/board" style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(null, null)}>목록으로</Link>
+                    <span className="detail-prev">
+                        {
+                            <button style={ prevId != null ? {} : {visibility: "hidden"} }>
+                                <Link to={{ pathname: `/board/${prevId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.id, 'prev')}>
+                                    <div className="front">
+                                        이전 글
+                                    </div>
+                                    <div className="back">
+                                        <FontAwesomeIcon icon={leftArrow} style={{color: "white"}}/>
+                                    </div>
+                                </Link>
+                            </button>
+                        }
                     </span>
-                    {
-                        nextId != null ?
-                            <span>
-                                <Link to={{ pathname: `/board/${nextId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.id, 'next')}> -- 다음 글</Link>
-                            </span> :
-                            <span>
-
-                            </span>
-                    }
+                    <span className="detail-home">
+                        <button>
+                            <Link to="/board" style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(null, null)}>
+                                <div className="front">
+                                    목록으로
+                                </div>
+                                <div className="back">
+                                    <FontAwesomeIcon icon={buttonHouse} style={{color: "white"}}/>
+                                </div>
+                            </Link>
+                        </button>
+                    </span>
+                    <span className="detail-next">
+                        {
+                            <button style={ nextId != null ? {} : {visibility: "hidden"} }>
+                                <Link to={{ pathname: `/board/${nextId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.id, 'next')}>
+                                    <div className="front">
+                                        다음 글
+                                    </div>
+                                    <div className="back">
+                                        <FontAwesomeIcon icon={rightArrow} style={{color: "white"}}/>
+                                    </div>
+                                </Link>
+                            </button>
+                        }
+                    </span>
                 </div>
 
                 <div className="detail-sub">
@@ -473,13 +487,26 @@ const DetailBoard = (props) => {
                             댓글 {totalComments} 개
                         </div>
                         {commentList.map((comments) => (
-                            <div className="comment-list" key={comments.commentId}>
+                            <div className="comment-list" key={comments.commentId} style={`${comments.commentNestedLevel}` == 1 ? {marginLeft: "40px"} : null }>
                                 <div className="comment-header">
                                     <div className="comment-header1">
+                                        {
+                                            `${comments.commentNestedLevel}` == 1 ? <FontAwesomeIcon icon={nestedArrow} style={{transform: "rotate(180deg)", marginRight: "8px", fontSize: "24px", color: "#6c757d"}}/> : null
+                                        }
                                         <span className="comment-nickname">{comments.memberNickname}</span>
                                         <span className="comment-date">{comments.createdDate}</span>
                                     </div>
                                     <div className="comment-header2">
+                                        <span className="comment-nested">
+                                            <input type="hidden" value={comments.commentNestedId} />
+                                            <input type="hidden" value={comments.commentNestedLevel} />
+                                            {
+                                                `${comments.commentNestedLevel}` == 1 ? null :
+                                                    <button className="comment-nested-btn" onClick={(e) => nestedActionHandler(nestedBox, e, `${comments.commentParentId}`, `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
+                                                        댓글
+                                                    </button>
+                                            }
+                                        </span>
                                         <span className="comment-recommendUp">
                                             <button onClick={onClickCommentRecommend} className="recommendUp-btn">
                                                 {
@@ -496,13 +523,6 @@ const DetailBoard = (props) => {
                                             </button>
                                             <span className="comment-downCount"></span>
                                         </span>
-                                        <span className="comment-nested">
-                                            <input type="hidden" value={comments.commentNestedId} />
-                                            <input type="hidden" value={comments.commentNestedLevel} />
-                                            <button className="comment-nested-btn" onClick={(e) => nestedTestHandler(nestedBox, e, `${comments.commentParentId}`, `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
-                                                댓글
-                                            </button>
-                                        </span>
                                     </div>
                                 </div>
                                 <div className="comment-content">{comments.commentContent}</div>
@@ -515,14 +535,14 @@ const DetailBoard = (props) => {
                                                 <span style={{marginLeft: "4px"}}>댓글 달기</span>
                                             </div>
                                             <div className="nested-header2">
-                                                <button className="nested-close" onClick={(e) => nestedTestHandler(true, e)} value={comments.commentId}>닫기</button>
+                                                <button className="nested-close" onClick={(e) => nestedActionHandler(true, e)} value={comments.commentId}>닫기</button>
                                             </div>
                                         </div>
                                         <div className="nested-box">
                                             <textarea id="nested-text" placeholder="댓글을 입력하세요" onChange={changeNestedHandler}/>
                                         </div>
                                         <div className="nested-btn">
-                                            <button className="btn-design" onClick={nestedSaveHandler}>등록</button>
+                                            <button className="btn-design" onClick={(e) => nestedSaveHandler(e)} value={comments.commentId}>등록</button>
                                         </div>
                                     </div>
                                 </div>
