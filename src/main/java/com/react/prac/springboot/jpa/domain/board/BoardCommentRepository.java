@@ -16,9 +16,16 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
     @Query("SELECT c FROM BoardComment c WHERE c.mainBoard.id = :boardId")
     Page<BoardComment> findByBoardComment(@Param("boardId") Long boardId, Pageable pageable);
 
-    @Modifying
     @Query("UPDATE BoardComment c SET c.commentParentId = :commentParentId WHERE c.id = :commentParentId")
     void updateByCommentParentId(@Param("commentParentId") Long commentParentId);
+
+    @Modifying
+    @Query("UPDATE BoardComment c SET c.commentChildCnt = c.commentChildCnt + :cnt WHERE c.id = :commentParentId")
+    void updateByCommentChildCnt(@Param("commentParentId") Long commentParentId, @Param("cnt") int cnt);
+
+    @Modifying
+    @Query("UPDATE BoardComment c SET c.commentRecommendCnt = c.commentRecommendCnt + :cnt WHERE c.id = :commentId")
+    void updateByCommentRecommendCount(@Param("commentId") Long commentId, @Param("cnt") int cnt);
 
     // 부모 댓글 설정 (의도한 것과 다름으로 보류)
     @Query("SELECT NVL(MAX(c.commentParentId), 0) FROM BoardComment c WHERE c.mainBoard.id = :boardId")

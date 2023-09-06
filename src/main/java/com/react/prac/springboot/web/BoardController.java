@@ -72,10 +72,22 @@ public class BoardController {
         return boardService.recommendUp(requestDto);
     }
 
-    @DeleteMapping("/recommendDown")
+    @DeleteMapping("/recommendUpCancel")
+    public ResponseDto<?> recommendUpCancel(@RequestBody RecommendRequestDto requestDto) {
+
+        return boardService.recommendUpCancel(requestDto);
+    }
+
+    @PostMapping("/recommendDown")
     public ResponseDto<?> recommendDown(@RequestBody RecommendRequestDto requestDto) {
 
         return boardService.recommendDown(requestDto);
+    }
+
+    @DeleteMapping("/recommendDownCancel")
+    public ResponseDto<?> recommendDownCancel(@RequestBody RecommendRequestDto requestDto) {
+
+        return boardService.recommendDownCancel(requestDto);
     }
 
     // 조회 기능

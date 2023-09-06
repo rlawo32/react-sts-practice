@@ -11,10 +11,12 @@ public class RecommendRequestDto {
 
     private Long memberId;
     private Long boardId;
+    private Long commentId;
 
     @Builder
-    public RecommendRequestDto(Long memberId, Long boardId) {
+    public RecommendRequestDto(Long memberId, Long boardId, Long commentId) {
         this.memberId = memberId;
         this.boardId = boardId;
+        this.commentId = commentId;
     }
 }

@@ -68,6 +68,9 @@ public class BoardComment {
     @Column(nullable = false)
     private Boolean commentIsDeleted; // 삭제 여부
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int commentRecommendCnt; // 해당 댓글 추천 수
+
     @PostPersist
     public void postPersist() {
         if(this.commentParentId == 0) {
@@ -78,7 +81,7 @@ public class BoardComment {
     @Builder
     public BoardComment(Long commentParentId, Long commentTargetId, Long commentNestedId, Long commentNestedLevel,
                         String commentContent, String commentNickname, MainBoard mainBoard, Member member,
-                        String createdDate, String modifiedDate, Boolean commentIsDeleted) {
+                        String createdDate, String modifiedDate, Boolean commentIsDeleted, Integer commentRecommendCnt) {
         this.commentParentId = commentParentId;
         this.commentTargetId = commentTargetId;
         this.commentNestedId = commentNestedId;
@@ -90,5 +93,6 @@ public class BoardComment {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.commentIsDeleted = commentIsDeleted;
+        this.commentRecommendCnt = commentRecommendCnt;
     }
 }

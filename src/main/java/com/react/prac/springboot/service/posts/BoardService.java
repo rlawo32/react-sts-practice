@@ -161,7 +161,8 @@ public class BoardService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
-        if(boardRecommendRepository.findByMainBoardAndMember(mainBoard, member).isPresent()) {
+
+        if(boardRecommendRepository.findByRecommendTypeAndMainBoardAndMember("BOARD", mainBoard, member).isPresent()) {
             return true;
         } else {
             return false;
@@ -177,17 +178,81 @@ public class BoardService {
         Member member = memberRepository.findById(requestDto.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
 
-        try {
-            if(boardRecommendRepository.findByMainBoardAndMember(mainBoard, member).isPresent()) {
-                return ResponseDto.setFailed("Data Already Exists");
-            } else {
-                BoardRecommend boardRecommend = BoardRecommend.builder()
-                        .mainBoard(mainBoard)
-                        .member(member)
-                        .build();
+        Long commentId = requestDto.getCommentId();
 
-                boardRecommendRepository.save(boardRecommend);
-                recommendCountUpdate(requestDto.getBoardId(), true);
+        System.out.println("데이터 확인 1 : " + requestDto.getBoardId());
+        System.out.println("데이터 확인 2 : " + requestDto.getMemberId());
+        System.out.println("데이터 확인 3 : " + requestDto.getCommentId());
+
+        try {
+            if(commentId == null) {
+                if(boardRecommendRepository.findByRecommendTypeAndMainBoardAndMember("BOARD", mainBoard, member).isPresent()) {
+                    return ResponseDto.setFailed("Data Already Exists");
+                } else {
+                    BoardRecommend boardRecommend = BoardRecommend.builder()
+                            .recommendType("BOARD")
+                            .member(member)
+                            .mainBoard(mainBoard)
+                            .boardComment(null)
+                            .build();
+
+                    boardRecommendRepository.save(boardRecommend);
+                    mainRecommendCountUpdate(requestDto.getBoardId(), true);
+                }
+            } else {
+                BoardComment boardComment = boardCommentRepository.findById(commentId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 댓글 ID가 없습니다. id : " + commentId));
+
+                if(boardRecommendRepository.findByRecommendTypeAndMainBoardAndMemberAndBoardComment("COMMENT", mainBoard, member, boardComment).isPresent()) {
+                    return ResponseDto.setFailed("Data Already Exists");
+                } else {
+                    BoardRecommend boardRecommend = BoardRecommend.builder()
+                            .recommendType("COMMENT")
+                            .member(member)
+                            .mainBoard(mainBoard)
+                            .boardComment(boardComment)
+                            .build();
+
+                    boardRecommendRepository.save(boardRecommend);
+                    commentRecommendCountUpdate(commentId, true);
+                }
+            }
+        } catch (Exception e) {
+            return ResponseDto.setFailed("Data Base Error!");
+        }
+
+        return ResponseDto.setSuccess("Success", null);
+    }
+
+    @Transactional
+    public ResponseDto<?> recommendUpCancel(RecommendRequestDto requestDto) {
+
+        MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
+
+        Member member = memberRepository.findById(requestDto.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
+
+        Long commentId = requestDto.getCommentId();
+
+        try {
+            BoardRecommend boardRecommend = new BoardRecommend();
+
+            if(commentId == null) {
+                boardRecommend = boardRecommendRepository.findByRecommendTypeAndMainBoardAndMember("BOARD", mainBoard, member)
+                        .orElseThrow(() -> new IllegalArgumentException("관련 ID가 없습니다."));
+
+                boardRecommendRepository.delete(boardRecommend);
+                mainRecommendCountUpdate(requestDto.getBoardId(), false);
+            } else {
+                BoardComment boardComment = boardCommentRepository.findById(commentId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 댓글 ID가 없습니다. id : " + commentId));
+
+                boardRecommend = boardRecommendRepository.findByRecommendTypeAndMainBoardAndMemberAndBoardComment("COMMENT", mainBoard, member, boardComment)
+                        .orElseThrow(() -> new IllegalArgumentException("관련 ID가 없습니다."));
+
+                boardRecommendRepository.delete(boardRecommend);
+                commentRecommendCountUpdate(commentId, false);
             }
         } catch (Exception e) {
             return ResponseDto.setFailed("Data Base Error!");
@@ -199,18 +264,8 @@ public class BoardService {
     @Transactional
     public ResponseDto<?> recommendDown(RecommendRequestDto requestDto) {
 
-        MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
-
-        Member member = memberRepository.findById(requestDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
-
-        BoardRecommend boardRecommend = boardRecommendRepository.findByMainBoardAndMember(mainBoard, member)
-                .orElseThrow(() -> new IllegalArgumentException("관련 ID가 없습니다."));
-
         try {
-            boardRecommendRepository.delete(boardRecommend);
-            recommendCountUpdate(requestDto.getBoardId(), false);
+
         } catch (Exception e) {
             return ResponseDto.setFailed("Data Base Error!");
         }
@@ -218,11 +273,31 @@ public class BoardService {
         return ResponseDto.setSuccess("Success", null);
     }
 
-    public void recommendCountUpdate(Long boardId, boolean x) {
+    @Transactional
+    public ResponseDto<?> recommendDownCancel(RecommendRequestDto requestDto) {
+
+        try {
+
+        } catch (Exception e) {
+            return ResponseDto.setFailed("Data Base Error!");
+        }
+
+        return ResponseDto.setSuccess("Success", null);
+    }
+
+    public void mainRecommendCountUpdate(Long boardId, boolean x) {
         if(x) {
             mainBoardRepository.updateByBoardRecommendCount(boardId, 1);
         } else {
             mainBoardRepository.updateByBoardRecommendCount(boardId, -1);
+        }
+    }
+
+    public void commentRecommendCountUpdate(Long commentId, boolean x) {
+        if(x) {
+            boardCommentRepository.updateByCommentRecommendCount(commentId, 1);
+        } else {
+            boardCommentRepository.updateByCommentRecommendCount(commentId, -1);
         }
     }
 
@@ -316,7 +391,7 @@ public class BoardService {
 
             boardCommentRepository.save(boardComment);
 
-
+            commentChildCountUpdate(commentParentId, true);
         } catch (Exception e) {
             return ResponseDto.setFailed("Data Base Error!");
         }
@@ -324,8 +399,17 @@ public class BoardService {
         return ResponseDto.setSuccess("Success", null);
     }
 
+    public void commentChildCountUpdate(Long commentParentId, boolean x) {
+        if(x) {
+            boardCommentRepository.updateByCommentChildCnt(commentParentId, 1);
+        } else {
+            boardCommentRepository.updateByCommentChildCnt(commentParentId, -1);
+        }
+    }
+
     public Map<String, Object> commentList(HttpServletRequest request) {
 
+        Long memberId = Long.valueOf(request.getParameter("memberId"));
         Long boardId = Long.valueOf(request.getParameter("boardId"));
         int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
         int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
@@ -337,6 +421,13 @@ public class BoardService {
         List<CommentResponseDto> commentList = pageable.stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
+
+//        commentList.get(0).setCommentRecommendCheck(true);
+
+        for(int i=0; i<commentList.size(); i++) {
+            Long commentId = commentList.get(i).getCommentId();
+            commentList.get(i).setCommentRecommendCheck(true);
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("commentList", commentList);

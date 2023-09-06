@@ -2,8 +2,6 @@ import AppBarNavigation from "../Navigation/AppBarNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useRef, useState} from "react";
-import {render, unmountComponentAtNode} from "react-dom";
-import {createRoot} from "react-dom/client";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp as recommendUp, faThumbsDown as recommendDown, faReply as nestedArrow, faAnglesLeft as leftArrow, faAnglesRight as rightArrow, faHouse as buttonHouse} from "@fortawesome/free-solid-svg-icons";
@@ -21,9 +19,9 @@ const DetailBoard = (props) => {
     const [prevId, setPrevId] = useState(0);
     const [nextId, setNextId] = useState(0);
     const [memberId, setMemberId] = useState(9999);
+
     const [mainRecommendUpCheck, setMainRecommendUpCheck] = useState(false);
     const [mainRecommendDownCheck, setMainRecommendDownCheck] = useState(false);
-
     const [commentRecommendUpCheck, setCommentRecommendUpCheck] = useState(false);
     const [commentRecommendDownCheck, setCommentRecommendDownCheck] = useState(false);
 
@@ -49,18 +47,21 @@ const DetailBoard = (props) => {
         memberId: '',
         memberNickname: '',
         createdDate: '',
-        modifiedDate: ''
+        modifiedDate: '',
+        commentRecommendCnt: ''
     }]);
 
     const paging = {
+        memberId: memberId,
         boardId: props.id,
         recordPerPage: 10,
         page: pageNo
     }
 
-    const recommendData = {
-        memberId: `${memberId}`,
-        boardId: props.id
+    const mainRecommendData = {
+        memberId: memberId,
+        boardId: props.id,
+        commentId: ""
     }
 
     const commentData = {
@@ -68,7 +69,7 @@ const DetailBoard = (props) => {
         commentTargetId: "",
         commentNestedId: "",
         commentNestedLevel: "",
-        memberId: 9999,
+        memberId: memberId,
         boardId: props.id,
         commentContent: commentText
     }
@@ -78,7 +79,7 @@ const DetailBoard = (props) => {
         commentTargetId: commentTargetId,
         commentNestedId: nestedId,
         commentNestedLevel: nestedLevel,
-        memberId: 9999,
+        memberId: memberId,
         boardId: props.id,
         commentContent: nestedText
     }
@@ -97,12 +98,12 @@ const DetailBoard = (props) => {
         alert('복사 성공 \n' + text);
     }
 
-    const onClickMainRecommend = async () => {
+    const onClickMainRecommendUp = async () => {
         if(mainRecommendUpCheck) {
             await axios({
                 method: "DELETE",
-                url: '/recommendDown',
-                data: JSON.stringify(recommendData),
+                url: '/recommendUpCancel',
+                data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
             setMainRecommendUpCheck(false);
@@ -110,23 +111,89 @@ const DetailBoard = (props) => {
             await axios({
                 method: "POST",
                 url: '/recommendUp',
-                data: JSON.stringify(recommendData),
+                data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
             setMainRecommendUpCheck(true);
         }
     }
 
-    const onClickCommentRecommend = async () => {
-        if(commentRecommendUpCheck) {
-            setCommentRecommendUpCheck(false);
+    const onClickMainRecommendDown = async () => {
+        if(mainRecommendUpCheck) {
+            await axios({
+                method: "DELETE",
+                url: '/recommendDownCancel',
+                data: JSON.stringify(mainRecommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+            setMainRecommendUpCheck(false);
         } else {
-            setCommentRecommendUpCheck(true);
+            await axios({
+                method: "POST",
+                url: '/recommendDown',
+                data: JSON.stringify(mainRecommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+            setMainRecommendUpCheck(true);
         }
     }
 
-    const changeDetailBoard = async (itemID, orderID) => {
+    const onClickCommentRecommendUp = async (selectCommentId) => {
 
+        console.log("commentId 확인 : " + selectCommentId)
+
+        const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendUp");
+        const test = comment_target
+        const CommentRecommendUpChecked = test[0].children[0].children[0].checked;
+
+        console.log(comment_target);
+        console.log(comment_target[0].children[0].children[0].checked);
+
+        const commentRecommendData = {
+            memberId: memberId,
+            boardId: props.id,
+            commentId: selectCommentId
+        }
+
+        if(CommentRecommendUpChecked) {
+            await axios({
+                method: "DELETE",
+                url: '/recommendUpCancel',
+                data: JSON.stringify(commentRecommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+        } else {
+            await axios({
+                method: "POST",
+                url: '/recommendUp',
+                data: JSON.stringify(commentRecommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+        }
+    }
+
+    const onClickCommentRecommendDown = async () => {
+        if(commentRecommendDownCheck) {
+            // await axios({
+            //     method: "DELETE",
+            //     url: '/recommendDownCancel',
+            //     data: JSON.stringify(commentRecommendData),
+            //     headers: {'Content-type': 'application/json'}
+            // });
+            setCommentRecommendDownCheck(false);
+        } else {
+            // await axios({
+            //     method: "POST",
+            //     url: '/recommendDown',
+            //     data: JSON.stringify(commentRecommendData),
+            //     headers: {'Content-type': 'application/json'}
+            // });
+            setCommentRecommendDownCheck(true);
+        }
+    }
+
+
+    const changeDetailBoard = async (itemID, orderID) => {
         if(itemID != null) {
             await axios({
                 method: "GET",
@@ -150,7 +217,7 @@ const DetailBoard = (props) => {
                 const recommends = await axios({
                     method: "GET",
                     url: '/recommendCheck',
-                    params: recommendData
+                    params: mainRecommendData
                 })
 
                 const selectBoard = await axios({
@@ -183,7 +250,7 @@ const DetailBoard = (props) => {
                 const recommends = await axios({
                     method: "GET",
                     url: '/checkRecommend',
-                    params: recommendData
+                    params: mainRecommendData
                 })
 
                 const selectBoard = await axios({
@@ -244,11 +311,11 @@ const DetailBoard = (props) => {
     }, [props.id]);
     // props.id:url 직접 입력 시를 위함 (세부적인 기능 체크 필요)
 
-    const changeCommentHandler = ({target: {value}}) => {
+    const changeCommentTextHandler = ({target: {value}}) => {
         setCommentText(value);
     }
 
-    const changeNestedHandler = ({target: {value}}) => {
+    const changeNestedTextHandler = ({target: {value}}) => {
         setNestedText(value);
     }
 
@@ -284,9 +351,10 @@ const DetailBoard = (props) => {
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
                 setCommentState(true);
-                const targetDiv_2 = document.getElementById(selectCommentId);
-                if(targetDiv_2) {
-                    targetDiv_2.style.display = "none";
+                const targetDiv_3 = document.getElementById(selectCommentId);
+                const nestedView_3 = targetDiv_3.lastChild;
+                if(nestedView_3) {
+                    nestedView_3.style.display = "none";
                 }
                 setNestedText("");
                 document.getElementById("nested-text").value='';
@@ -305,20 +373,24 @@ const DetailBoard = (props) => {
         setNestedLevel(nested_level);
 
         const targetDiv_1 = document.getElementById(selectCommentId);
+        const nestedView_1 = targetDiv_1.lastChild;
 
         if(commentId != selectCommentId) {
             box = false;
             const targetDiv_2 = document.getElementById(commentId);
             if(targetDiv_2) {
-                targetDiv_2.style.display = "none";
+                const nestedView_2 = targetDiv_2.lastChild;
+                if(nestedView_2) {
+                    nestedView_2.style.display = "none";
+                }
             }
         }
 
         if(box) {
-            targetDiv_1.style.display = "none";
+            nestedView_1.style.display = "none";
             setNestedBox(false);
         } else {
-            targetDiv_1.style.display = "block";
+            nestedView_1.style.display = "block";
             setNestedBox(true);
         }
 
@@ -432,7 +504,7 @@ const DetailBoard = (props) => {
                     </div>
                 </div>
                 <div className="detail-footer1">
-                    <Button onClick={onClickMainRecommend}>
+                    <Button onClick={onClickMainRecommendUp}>
                         {
                             mainRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />
                         }
@@ -487,7 +559,7 @@ const DetailBoard = (props) => {
                             댓글 {totalComments} 개
                         </div>
                         {commentList.map((comments) => (
-                            <div className="comment-list" key={comments.commentId} style={`${comments.commentNestedLevel}` == 1 ? {marginLeft: "40px"} : null }>
+                            <div className="comment-list" key={comments.commentId} id={comments.commentId} style={`${comments.commentNestedLevel}` == 1 ? {marginLeft: "40px"} : null }>
                                 <div className="comment-header">
                                     <div className="comment-header1">
                                         {
@@ -508,15 +580,17 @@ const DetailBoard = (props) => {
                                             }
                                         </span>
                                         <span className="comment-recommendUp">
-                                            <button onClick={onClickCommentRecommend} className="recommendUp-btn">
-                                                {
-                                                    commentRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />
-                                                }
-                                            </button>
-                                            <span className="comment-upCount"></span>
+                                            {/*{*/}
+                                            {/*    commentRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />*/}
+                                            {/*}*/}
+                                            <label>
+                                                <input type="checkbox" style={{display: "none"}}/>
+                                                <FontAwesomeIcon icon={recommendUpCancel} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
+                                            </label>
+                                            <span className="comment-upCount"> {comments.commentRecommendCnt}</span>
                                         </span>
                                         <span className="comment-recommendDown">
-                                            <button onClick={onClickCommentRecommend} className="recommendDown-btn">
+                                            <button onClick={(e) => onClickCommentRecommendDown(e)} className="recommendDown-btn" value={comments.commentId}>
                                                 {
                                                     commentRecommendDownCheck ? <FontAwesomeIcon icon={recommendDown} /> : <FontAwesomeIcon icon={recommendDownCancel} />
                                                 }
@@ -527,7 +601,7 @@ const DetailBoard = (props) => {
                                 </div>
                                 <div className="comment-content">{comments.commentContent}</div>
                                 <div className="nested-content"></div>
-                                <div className="nested-div" id={comments.commentId}>
+                                <div className="nested-div">
                                     <div className="nested-write">
                                         <div className="nested-tag">
                                             <div className="nested-header1">
@@ -539,7 +613,7 @@ const DetailBoard = (props) => {
                                             </div>
                                         </div>
                                         <div className="nested-box">
-                                            <textarea id="nested-text" placeholder="댓글을 입력하세요" onChange={changeNestedHandler}/>
+                                            <textarea id="nested-text" placeholder="댓글을 입력하세요" onChange={changeNestedTextHandler}/>
                                         </div>
                                         <div className="nested-btn">
                                             <button className="btn-design" onClick={(e) => nestedSaveHandler(e)} value={comments.commentId}>등록</button>
@@ -557,7 +631,7 @@ const DetailBoard = (props) => {
                     <div className="comment-write">
                         <div className="comment-tag">댓글 작성</div>
                         <div className="comment-box">
-                            <textarea id="comment-text" placeholder="댓글을 입력하세요" onChange={changeCommentHandler}/>
+                            <textarea id="comment-text" placeholder="댓글을 입력하세요" onChange={changeCommentTextHandler}/>
                         </div>
                         <div className="comment-btn" >
                             <button className="btn-design" onClick={commentSaveHandler}>등록</button>
