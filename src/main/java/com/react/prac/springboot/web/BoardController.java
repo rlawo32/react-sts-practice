@@ -39,10 +39,11 @@ public class BoardController {
         return boardService.update(id, requestDto);
     }
 
-    @GetMapping("/detailBoard/{boardId}")
-    public BoardDetailResponseDto findByBoardId (@PathVariable Long boardId) {
+    @PostMapping("/detailBoard/{boardId}")
+    public BoardDetailResponseDto detailBoard(@PathVariable Long boardId, @RequestBody Map<String, String> request) {
+        Long memberId = Long.parseLong(request.get("memberId"));
 
-        return boardService.findByBoardId(boardId);
+        return boardService.findByBoardId(boardId, memberId);
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
@@ -60,34 +61,20 @@ public class BoardController {
 
     @GetMapping("/recommendCheck")
     public boolean recommendCheck(HttpServletRequest request) {
-        Long boardId = Long.valueOf(request.getParameter("boardId"));
-        Long memberId = Long.valueOf(request.getParameter("memberId"));
 
-        return boardService.recommendCheck(boardId, memberId);
+        return boardService.recommendCheck(request);
     }
 
-    @PostMapping("/recommendUp")
-    public ResponseDto<?> recommendUp(@RequestBody RecommendRequestDto requestDto) {
+    @PostMapping("/recommendExec")
+    public ResponseDto<?> recommendExec(@RequestBody RecommendRequestDto requestDto) {
 
-        return boardService.recommendUp(requestDto);
+        return boardService.recommendExec(requestDto);
     }
 
-    @DeleteMapping("/recommendUpCancel")
-    public ResponseDto<?> recommendUpCancel(@RequestBody RecommendRequestDto requestDto) {
+    @DeleteMapping("/recommendCancel")
+    public ResponseDto<?> recommendCancel(@RequestBody RecommendRequestDto requestDto) {
 
-        return boardService.recommendUpCancel(requestDto);
-    }
-
-    @PostMapping("/recommendDown")
-    public ResponseDto<?> recommendDown(@RequestBody RecommendRequestDto requestDto) {
-
-        return boardService.recommendDown(requestDto);
-    }
-
-    @DeleteMapping("/recommendDownCancel")
-    public ResponseDto<?> recommendDownCancel(@RequestBody RecommendRequestDto requestDto) {
-
-        return boardService.recommendDownCancel(requestDto);
+        return boardService.recommendCancel(requestDto);
     }
 
     // 조회 기능

@@ -22,7 +22,10 @@ public class BoardRecommend extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String recommendType;
+    private String recommendType; // U : 좋아요, D : 싫어요
+
+    @Column(nullable = false)
+    private String recommendCategory; // B : BOARD, C : COMMENT
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id") // recommend_member_id 로 변경하기
@@ -37,8 +40,9 @@ public class BoardRecommend extends BaseTimeEntity {
     private BoardComment boardComment;
 
     @Builder
-    public BoardRecommend(String recommendType, Member member, MainBoard mainBoard, BoardComment boardComment) {
+    public BoardRecommend(String recommendType, String recommendCategory, Member member, MainBoard mainBoard, BoardComment boardComment) {
         this.recommendType = recommendType;
+        this.recommendCategory = recommendCategory;
         this.member = member;
         this.mainBoard = mainBoard;
         this.boardComment = boardComment;

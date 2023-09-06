@@ -13,8 +13,6 @@ public class BoardSaveRequestDto {
     private String boardTitle;
     private String boardContent;
     private String boardAuthor;
-    private int boardRecommendCnt;
-    private int boardViewsCnt;
 
     @Builder
     public BoardSaveRequestDto(String boardTab, String boardTitle, String boardContent, String boardAuthor, int boardRecommendCnt, int boardViewsCnt) {
@@ -22,8 +20,6 @@ public class BoardSaveRequestDto {
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
         this.boardAuthor = boardAuthor;
-        this.boardRecommendCnt = boardRecommendCnt;
-        this.boardViewsCnt = boardViewsCnt;
     }
 
     public MainBoard toEntity() {
@@ -32,8 +28,6 @@ public class BoardSaveRequestDto {
                 .boardTitle(boardTitle)
                 .boardContent(boardContent)
                 .boardAuthor("rlawo32")
-                .boardRecommendCnt(0)
-                .boardViewsCnt(0)
                 .build();
     }
 }

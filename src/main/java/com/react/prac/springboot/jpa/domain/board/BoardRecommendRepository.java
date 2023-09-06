@@ -10,8 +10,12 @@ import java.util.Optional;
 
 public interface BoardRecommendRepository extends JpaRepository<BoardRecommend, Long> {
 
-    Optional<BoardRecommend> findByRecommendTypeAndMainBoardAndMember(String recommendType, MainBoard mainBoard, Member member);
+    Optional<BoardRecommend> findByRecommendCategoryAndRecommendTypeAndMainBoardAndMember(String recommendCategory, String recommendType, MainBoard mainBoard, Member member);
 
-    Optional<BoardRecommend> findByRecommendTypeAndMainBoardAndMemberAndBoardComment(String recommendType, MainBoard mainBoard, Member member, BoardComment boardComment);
+    Optional<BoardRecommend> findByRecommendCategoryAndRecommendTypeAndMainBoardAndMemberAndBoardComment(String recommendCategory, String recommendType, MainBoard mainBoard, Member member, BoardComment boardComment);
+
+    boolean existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard(String recommendCategory, String recommendType, Member member, MainBoard mainBoard);
+
+    boolean existsByRecommendTypeAndMemberAndBoardComment(String recommendType, Member member, BoardComment boardComment);
 
 }

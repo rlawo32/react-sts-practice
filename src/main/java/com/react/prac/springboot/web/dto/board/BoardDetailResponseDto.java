@@ -1,9 +1,10 @@
 package com.react.prac.springboot.web.dto.board;
 
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class BoardDetailResponseDto {
 
     private Long boardId;
@@ -11,8 +12,11 @@ public class BoardDetailResponseDto {
     private String boardTitle;
     private String boardContent;
     private String boardAuthor;
-    private int boardRecommendCnt;
+    private int boardRecommendUpCnt;
+    private int boardRecommendDownCnt;
     private int boardViewsCnt;
+    private int boardRecommendUpCheck; // 0 = false, 1 = true
+    private int boardRecommendDownCheck; // 0 = false, 1 = true
     // private List<CommentResponseDto> boardComments;
 
     public BoardDetailResponseDto(MainBoard entity) {
@@ -21,7 +25,8 @@ public class BoardDetailResponseDto {
         this.boardTitle = entity.getBoardTitle();
         this.boardContent = entity.getBoardContent();
         this.boardAuthor = entity.getBoardAuthor();
-        this.boardRecommendCnt = entity.getBoardRecommendCnt();
+        this.boardRecommendUpCnt = entity.getBoardRecommendUpCnt();
+        this.boardRecommendDownCnt = entity.getBoardRecommendDownCnt();
         this.boardViewsCnt = entity.getBoardViewsCnt();
         // this.boardComments = entity.getBoardComments().stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }

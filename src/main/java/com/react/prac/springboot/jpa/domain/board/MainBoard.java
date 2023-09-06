@@ -30,11 +30,14 @@ public class MainBoard extends BaseTimeEntity {
     @Column(nullable = false)
     private String boardAuthor;
 
-    @Column(nullable = false)
-    private int boardRecommendCnt;
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int boardRecommendUpCnt;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int boardRecommendDownCnt;
 
     // @Column(columnDefinition = "integer default 0", nullable = false)	// 조회수의 기본 값을 0으로 지정, null 불가 처리
-    @Column(nullable = false)
+    @Column(columnDefinition = "integer default 0", nullable = false)
     private int boardViewsCnt;
 
 //    @OneToMany(mappedBy = "mainBoard", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
@@ -42,13 +45,11 @@ public class MainBoard extends BaseTimeEntity {
 //    private List<BoardComment> boardComments;
 
     @Builder
-    public MainBoard(String boardTab, String boardTitle, String boardContent, String boardAuthor, int boardRecommendCnt, int boardViewsCnt) {
+    public MainBoard(String boardTab, String boardTitle, String boardContent, String boardAuthor) {
         this.boardTab = boardTab;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
         this.boardAuthor = boardAuthor;
-        this.boardRecommendCnt = boardRecommendCnt;
-        this.boardViewsCnt = boardViewsCnt;
     }
 
     public void update(String boardTitle, String boardContent) {

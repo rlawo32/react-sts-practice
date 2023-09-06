@@ -20,10 +20,8 @@ const DetailBoard = (props) => {
     const [nextId, setNextId] = useState(0);
     const [memberId, setMemberId] = useState(9999);
 
-    const [mainRecommendUpCheck, setMainRecommendUpCheck] = useState(false);
-    const [mainRecommendDownCheck, setMainRecommendDownCheck] = useState(false);
-    const [commentRecommendUpCheck, setCommentRecommendUpCheck] = useState(false);
-    const [commentRecommendDownCheck, setCommentRecommendDownCheck] = useState(false);
+    const [mainRecommendCheck, setMainRecommendCheck] = useState(false);
+    const [commentRecommendCheck, setCommentRecommendCheck] = useState(false);
 
     const [commentState, setCommentState] = useState(false);
     const [commentId, setCommentId] = useState(""); // 댓글 id,
@@ -48,20 +46,21 @@ const DetailBoard = (props) => {
         memberNickname: '',
         createdDate: '',
         modifiedDate: '',
-        commentRecommendCnt: ''
+        commentRecommendUpCnt: '',
+        commentRecommendDownCnt: '',
+        commentRecommendUpCheck: '',
+        commentRecommendDownCheck: ''
     }]);
+
+    const memberData = {
+        memberId: memberId
+    }
 
     const paging = {
         memberId: memberId,
         boardId: props.id,
         recordPerPage: 10,
         page: pageNo
-    }
-
-    const mainRecommendData = {
-        memberId: memberId,
-        boardId: props.id,
-        commentId: ""
     }
 
     const commentData = {
@@ -98,97 +97,121 @@ const DetailBoard = (props) => {
         alert('복사 성공 \n' + text);
     }
 
-    const onClickMainRecommendUp = async () => {
-        if(mainRecommendUpCheck) {
+    const onClickMainRecommendUp = async (event) => {
+
+        const mainRecommendData = {
+            memberId: memberId,
+            boardId: props.id,
+            commentId: "",
+            recommendType: "U"
+        }
+
+        if(event == 1) {
             await axios({
                 method: "DELETE",
-                url: '/recommendUpCancel',
+                url: '/recommendCancel',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
-            setMainRecommendUpCheck(false);
+            setMainRecommendCheck(false);
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendUp',
+                url: '/recommendExec',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
-            setMainRecommendUpCheck(true);
+            setMainRecommendCheck(true);
         }
     }
 
-    const onClickMainRecommendDown = async () => {
-        if(mainRecommendUpCheck) {
+    const onClickMainRecommendDown = async (event) => {
+
+        const mainRecommendData = {
+            memberId: memberId,
+            boardId: props.id,
+            commentId: "",
+            recommendType: "D"
+        }
+
+        if(event == 1) {
             await axios({
                 method: "DELETE",
-                url: '/recommendDownCancel',
+                url: '/recommendCancel',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
-            setMainRecommendUpCheck(false);
+            setMainRecommendCheck(false);
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendDown',
+                url: '/recommendExec',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
-            setMainRecommendUpCheck(true);
+            setMainRecommendCheck(true);
         }
     }
 
     const onClickCommentRecommendUp = async (selectCommentId) => {
 
-        console.log("commentId 확인 : " + selectCommentId)
-
         const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendUp");
-        const test = comment_target
-        const CommentRecommendUpChecked = test[0].children[0].children[0].checked;
-
-        console.log(comment_target);
-        console.log(comment_target[0].children[0].children[0].checked);
+        const CommentRecommendUpChecked = comment_target[0].children[0].children[0].checked;
 
         const commentRecommendData = {
             memberId: memberId,
             boardId: props.id,
-            commentId: selectCommentId
+            commentId: selectCommentId,
+            recommendType: "U"
         }
 
         if(CommentRecommendUpChecked) {
             await axios({
                 method: "DELETE",
-                url: '/recommendUpCancel',
+                url: '/recommendCancel',
                 data: JSON.stringify(commentRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
+            setCommentRecommendCheck(false);
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendUp',
+                url: '/recommendExec',
                 data: JSON.stringify(commentRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
+            setCommentRecommendCheck(true);
         }
     }
 
-    const onClickCommentRecommendDown = async () => {
-        if(commentRecommendDownCheck) {
-            // await axios({
-            //     method: "DELETE",
-            //     url: '/recommendDownCancel',
-            //     data: JSON.stringify(commentRecommendData),
-            //     headers: {'Content-type': 'application/json'}
-            // });
-            setCommentRecommendDownCheck(false);
+    const onClickCommentRecommendDown = async (selectCommentId) => {
+
+        const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendDown");
+        const CommentRecommendDownChecked = comment_target[0].children[0].children[0].checked;
+
+        const commentRecommendData = {
+            memberId: memberId,
+            boardId: props.id,
+            commentId: selectCommentId,
+            recommendType: "D"
+        }
+
+        if(CommentRecommendDownChecked) {
+            await axios({
+                method: "DELETE",
+                url: '/recommendCancel',
+                data: JSON.stringify(commentRecommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+            setCommentRecommendCheck(false);
         } else {
-            // await axios({
-            //     method: "POST",
-            //     url: '/recommendDown',
-            //     data: JSON.stringify(commentRecommendData),
-            //     headers: {'Content-type': 'application/json'}
-            // });
-            setCommentRecommendDownCheck(true);
+            await axios({
+                method: "POST",
+                url: '/recommendExec',
+                data: JSON.stringify(commentRecommendData),
+                headers: {'Content-type': 'application/json'}
+            });
+            setCommentRecommendCheck(true);
         }
     }
 
@@ -214,12 +237,6 @@ const DetailBoard = (props) => {
         if(props.id != null) {
             const getBoards = async () => {
 
-                const recommends = await axios({
-                    method: "GET",
-                    url: '/recommendCheck',
-                    params: mainRecommendData
-                })
-
                 const selectBoard = await axios({
                     method: "GET",
                     url: '/boardPrevAndNextSelect',
@@ -231,9 +248,7 @@ const DetailBoard = (props) => {
                     url: '/commentList',
                     params: paging
                 })
-                console.log(boardComments.data.commentList);
 
-                setMainRecommendUpCheck(recommends.data);
                 setPrevId(selectBoard.data.boardIdPrev);
                 setNextId(selectBoard.data.boardIdNext);
                 setCommentList(boardComments.data.commentList);
@@ -247,12 +262,6 @@ const DetailBoard = (props) => {
 
             const getBoards = async () => {
 
-                const recommends = await axios({
-                    method: "GET",
-                    url: '/checkRecommend',
-                    params: mainRecommendData
-                })
-
                 const selectBoard = await axios({
                     method: "GET",
                     url: '/boardPrevAndNextSelect',
@@ -265,7 +274,6 @@ const DetailBoard = (props) => {
                     params: paging
                 })
 
-                setMainRecommendUpCheck(recommends.data);
                 setPrevId(selectBoard.data.boardIdPrev);
                 setNextId(selectBoard.data.boardIdNext);
                 setCommentList(comments.data.commentList);
@@ -275,16 +283,19 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [prevId, nextId, mainRecommendUpCheck, props.id, pageNo, commentState])
-    // prevId:이전글, nextId:다음글, mainRecommendCheck:추천체크, props.id:게시판에서 선택한 게시글 id,
-    // pageNo:댓글 페이지 이동, commentText: 댓글 작성 후 바로 추가, nestedId:대댓글을 작성할 댓글 id
+    }, [prevId, nextId, props.id, pageNo, commentState, commentRecommendCheck])
+    // prevId:이전글, nextId:다음글, props.id:게시판에서 선택한 게시글 id,
+    // pageNo:댓글 페이지 이동,
+    // 추후 다수 사용자로 인한 트래픽 확인 => commentState:댓글 작성 후 바로 추가, commentRecommendCheck:댓글 추천 체크
 
     useEffect(() => {
         if(props.id != null) {
             const getBoards = async () => {
                 const detail = await axios({
-                    method: "GET",
-                    url: '/detailBoard/' + props.id
+                    method: "POST",
+                    url: '/detailBoard/' + props.id,
+                    data: JSON.stringify(memberData),
+                    headers: {'Content-type': 'application/json'}
                 })
 
                 setBoardDetail(detail.data);
@@ -298,8 +309,10 @@ const DetailBoard = (props) => {
 
             const getBoards = async () => {
                 const detail = await axios({
-                    method: "GET",
-                    url: '/detailBoard/' + locationParameter.substring(7)
+                    method: "POST",
+                    url: '/detailBoard/' + locationParameter.substring(7),
+                    data: JSON.stringify(memberData),
+                    headers: {'Content-type': 'application/json'}
                 })
 
                 setBoardDetail(detail.data);
@@ -308,8 +321,9 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [props.id]);
+    }, [props.id, mainRecommendCheck]);
     // props.id:url 직접 입력 시를 위함 (세부적인 기능 체크 필요)
+    // 추후 다수 사용자로 인한 트래픽 확인 => mainRecommendCheck:게시글 추천 체크
 
     const changeCommentTextHandler = ({target: {value}}) => {
         setCommentText(value);
@@ -360,7 +374,6 @@ const DetailBoard = (props) => {
                 document.getElementById("nested-text").value='';
                 // window.location.reload();
             })
-            console.log(nestedData);
         }
     }
 
@@ -488,7 +501,7 @@ const DetailBoard = (props) => {
                     <span className="detail-author">{boardDetail.boardAuthor}</span>
                     <span className="detail-comment"></span>
                     <span className="detail-views">조회 수 {boardDetail.boardViewsCnt}</span>
-                    <span className="detail-recommend">추천 수 {boardDetail.boardRecommendCnt}</span>
+                    <span className="detail-recommend">추천 수 {boardDetail.boardRecommendUpCnt - boardDetail.boardRecommendDownCnt}</span>
                 </div>
                 <div className="detail-body">
                     <div className="detail-url">
@@ -504,11 +517,22 @@ const DetailBoard = (props) => {
                     </div>
                 </div>
                 <div className="detail-footer1">
-                    <Button onClick={onClickMainRecommendUp}>
+                    <span className="detail-recommendUp">
                         {
-                            mainRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />
+                            `${boardDetail.boardRecommendUpCheck}` == 1 ?
+                                <FontAwesomeIcon icon={recommendUp} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
+                                :
+                                <FontAwesomeIcon icon={recommendUpCancel} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
                         }
-                    </Button>
+                    </span>
+                    <span className="detail-recommendDown">
+                        {
+                            `${boardDetail.boardRecommendDownCheck}` == 1 ?
+                                <FontAwesomeIcon icon={recommendDown} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
+                                :
+                                <FontAwesomeIcon icon={recommendDownCancel} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
+                        }
+                    </span>
                 </div>
                 <div className="detail-footer2">
                     <span className="detail-prev">
@@ -574,28 +598,43 @@ const DetailBoard = (props) => {
                                             <input type="hidden" value={comments.commentNestedLevel} />
                                             {
                                                 `${comments.commentNestedLevel}` == 1 ? null :
-                                                    <button className="comment-nested-btn" onClick={(e) => nestedActionHandler(nestedBox, e, `${comments.commentParentId}`, `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
+                                                    <button className="comment-nested-btn" onClick={(e) =>
+                                                        nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
+                                                            `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)}
+                                                            value={comments.commentId}>
                                                         댓글
                                                     </button>
                                             }
                                         </span>
                                         <span className="comment-recommendUp">
-                                            {/*{*/}
-                                            {/*    commentRecommendUpCheck ? <FontAwesomeIcon icon={recommendUp} /> : <FontAwesomeIcon icon={recommendUpCancel} />*/}
-                                            {/*}*/}
-                                            <label>
-                                                <input type="checkbox" style={{display: "none"}}/>
-                                                <FontAwesomeIcon icon={recommendUpCancel} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
-                                            </label>
-                                            <span className="comment-upCount"> {comments.commentRecommendCnt}</span>
+                                            {
+                                                `${comments.commentRecommendUpCheck}` == 1 ?
+                                                    <label>
+                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
+                                                        <FontAwesomeIcon icon={recommendUp} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
+                                                    </label>
+                                                    :
+                                                    <label>
+                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={false} />
+                                                        <FontAwesomeIcon icon={recommendUpCancel} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
+                                                    </label>
+                                            }
+                                            <span className="comment-upCount"> {comments.commentRecommendUpCnt}</span>
                                         </span>
                                         <span className="comment-recommendDown">
-                                            <button onClick={(e) => onClickCommentRecommendDown(e)} className="recommendDown-btn" value={comments.commentId}>
-                                                {
-                                                    commentRecommendDownCheck ? <FontAwesomeIcon icon={recommendDown} /> : <FontAwesomeIcon icon={recommendDownCancel} />
-                                                }
-                                            </button>
-                                            <span className="comment-downCount"></span>
+                                            {
+                                                `${comments.commentRecommendDownCheck}` == 1 ?
+                                                    <label>
+                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
+                                                        <FontAwesomeIcon icon={recommendDown} className="recommendDown-btn" onClick={(e) => onClickCommentRecommendDown(`${comments.commentId}`)}/>
+                                                    </label>
+                                                    :
+                                                    <label>
+                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={false} />
+                                                        <FontAwesomeIcon icon={recommendDownCancel} className="recommendDown-btn" onClick={(e) => onClickCommentRecommendDown(`${comments.commentId}`)}/>
+                                                    </label>
+                                            }
+                                            <span className="comment-downCount"> {comments.commentRecommendDownCnt}</span>
                                         </span>
                                     </div>
                                 </div>

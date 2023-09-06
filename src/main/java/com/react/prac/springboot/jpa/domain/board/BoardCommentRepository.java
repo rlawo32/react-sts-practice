@@ -16,16 +16,20 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
     @Query("SELECT c FROM BoardComment c WHERE c.mainBoard.id = :boardId")
     Page<BoardComment> findByBoardComment(@Param("boardId") Long boardId, Pageable pageable);
 
-    @Query("UPDATE BoardComment c SET c.commentParentId = :commentParentId WHERE c.id = :commentParentId")
-    void updateByCommentParentId(@Param("commentParentId") Long commentParentId);
+//    @Query("SELECT c FROM BoardComment c WHERE c.id = :commentId AND c.member.id = :memberId")
+//    boolean existsByIdAndMember(@Param("commentId") Long commentId, @Param("memberId") Long memberId);
 
     @Modifying
     @Query("UPDATE BoardComment c SET c.commentChildCnt = c.commentChildCnt + :cnt WHERE c.id = :commentParentId")
     void updateByCommentChildCnt(@Param("commentParentId") Long commentParentId, @Param("cnt") int cnt);
 
     @Modifying
-    @Query("UPDATE BoardComment c SET c.commentRecommendCnt = c.commentRecommendCnt + :cnt WHERE c.id = :commentId")
-    void updateByCommentRecommendCount(@Param("commentId") Long commentId, @Param("cnt") int cnt);
+    @Query("UPDATE BoardComment c SET c.commentRecommendUpCnt = c.commentRecommendUpCnt + :cnt WHERE c.id = :commentId")
+    void updateByCommentRecommendUpCount(@Param("commentId") Long commentId, @Param("cnt") int cnt);
+
+    @Modifying
+    @Query("UPDATE BoardComment c SET c.commentRecommendDownCnt = c.commentRecommendDownCnt + :cnt WHERE c.id = :commentId")
+    void updateByCommentRecommendDownCount(@Param("commentId") Long commentId, @Param("cnt") int cnt);
 
     // 부모 댓글 설정 (의도한 것과 다름으로 보류)
     @Query("SELECT NVL(MAX(c.commentParentId), 0) FROM BoardComment c WHERE c.mainBoard.id = :boardId")

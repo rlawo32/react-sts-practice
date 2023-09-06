@@ -35,8 +35,12 @@ public interface MainBoardRepository extends JpaRepository<MainBoard, Long> {
     Long findByNext(@Param("boardId") Long boardId);
 
     @Modifying
-    @Query("UPDATE MainBoard b SET b.boardRecommendCnt = b.boardRecommendCnt + :cnt WHERE b.id = :boardId")
-    void updateByBoardRecommendCount(@Param("boardId") Long boardId, @Param("cnt") int cnt);
+    @Query("UPDATE MainBoard b SET b.boardRecommendUpCnt = b.boardRecommendUpCnt + :cnt WHERE b.id = :boardId")
+    void updateByBoardRecommendUpCount(@Param("boardId") Long boardId, @Param("cnt") int cnt);
+
+    @Modifying
+    @Query("UPDATE MainBoard b SET b.boardRecommendDownCnt = b.boardRecommendDownCnt + :cnt WHERE b.id = :boardId")
+    void updateByBoardRecommendDownCount(@Param("boardId") Long boardId, @Param("cnt") int cnt);
 
     @Modifying
     @Query("UPDATE MainBoard b SET b.boardViewsCnt = b.boardViewsCnt + 1 WHERE b.id = :boardId")
