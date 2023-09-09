@@ -4,13 +4,13 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-public class MemberSignInDto {
+public class MemberSignInRequestDto {
 
     private String memberEmail;
     private String memberPw;
 
     @Builder
-    public MemberSignInDto(String memberEmail, String memberPw) {
+    public MemberSignInRequestDto(String memberEmail, String memberPw) {
         this.memberEmail = memberEmail;
         this.memberPw = memberPw;
     }

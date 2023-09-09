@@ -265,7 +265,7 @@ const SignUp = () => {
             console.log(userEmail);
             await axios({
                 method: "GET",
-                url: "/users/signUpDuplicationChk",
+                url: "/member/signUpDuplicationChk",
                 params: {memberEmail: userEmail}
             }).then((result) => {
                     console.log(result.data);
@@ -294,7 +294,7 @@ const SignUp = () => {
             console.log(userNickName);
             await axios({
                 method: "GET",
-                url: "/users/signUpDuplicationChk",
+                url: "/member/signUpDuplicationChk",
                 params: {memberNickname: userNickName}
             }).then((result) => {
                 console.log(result.data);
@@ -349,7 +349,7 @@ const SignUp = () => {
             setUserEmailMessage('');
             await axios({
                 method: "GET",
-                url: "/users/sendAuthCode",
+                url: "/member/sendAuthCode",
                 params: {memberEmail: userEmail}
             }).then(function(obj) {
                 alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
@@ -439,7 +439,7 @@ const SignUp = () => {
             console.log(JSON.stringify(userData));
             axios({
                 method: "POST",
-                url: "/users/signUp",
+                url: "/member/signUp",
                 data: JSON.stringify(userData),
                 headers: {'Content-type': 'application/json'}
             }).then(function() {

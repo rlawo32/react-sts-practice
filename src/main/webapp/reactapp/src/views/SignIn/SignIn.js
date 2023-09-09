@@ -37,7 +37,7 @@ const SignIn = () => {
 
         await axios({
             method: "POST",
-            url: "/users/signIn",
+            url: "/member/signIn",
             data: JSON.stringify(loginBody),
             headers: {'Content-type': 'application/json'}
         }).then((response) => {
@@ -53,6 +53,12 @@ const SignIn = () => {
 
                 setCookies('token', token, {expires});
 
+                const { accessToken } = responseData.data;
+
+                // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+                axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+                // accessToken을 localStorage, cookie 등에 저장하지 않는다!
 
                 // window.location.href = "/";
             } else {

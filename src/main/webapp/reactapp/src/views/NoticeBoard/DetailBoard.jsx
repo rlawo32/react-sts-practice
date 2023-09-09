@@ -109,7 +109,7 @@ const DetailBoard = (props) => {
         if(event == 1) {
             await axios({
                 method: "DELETE",
-                url: '/recommendCancel',
+                url: '/board/recommendCancel',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -117,7 +117,7 @@ const DetailBoard = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendExec',
+                url: '/board/recommendExec',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -137,7 +137,7 @@ const DetailBoard = (props) => {
         if(event == 1) {
             await axios({
                 method: "DELETE",
-                url: '/recommendCancel',
+                url: '/board/recommendCancel',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -145,7 +145,7 @@ const DetailBoard = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendExec',
+                url: '/board/recommendExec',
                 data: JSON.stringify(mainRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -168,7 +168,7 @@ const DetailBoard = (props) => {
         if(CommentRecommendUpChecked) {
             await axios({
                 method: "DELETE",
-                url: '/recommendCancel',
+                url: '/board/recommendCancel',
                 data: JSON.stringify(commentRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -176,7 +176,7 @@ const DetailBoard = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendExec',
+                url: '/board/recommendExec',
                 data: JSON.stringify(commentRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -199,7 +199,7 @@ const DetailBoard = (props) => {
         if(CommentRecommendDownChecked) {
             await axios({
                 method: "DELETE",
-                url: '/recommendCancel',
+                url: '/board/recommendCancel',
                 data: JSON.stringify(commentRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -207,7 +207,7 @@ const DetailBoard = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: '/recommendExec',
+                url: '/board/recommendExec',
                 data: JSON.stringify(commentRecommendData),
                 headers: {'Content-type': 'application/json'}
             });
@@ -220,7 +220,7 @@ const DetailBoard = (props) => {
         if(itemID != null) {
             await axios({
                 method: "GET",
-                url: '/boardPrevAndNext',
+                url: '/board/boardPrevAndNext',
                 params: {boardId: itemID, orderId: orderID}
             })
             if(orderID == 'prev') {
@@ -239,13 +239,13 @@ const DetailBoard = (props) => {
 
                 const selectBoard = await axios({
                     method: "GET",
-                    url: '/boardPrevAndNextSelect',
+                    url: '/board/boardPrevAndNextSelect',
                     params: {boardId: props.id}
                 })
 
                 const boardComments = await axios({
                     method: "GET",
-                    url: '/commentList',
+                    url: '/board/commentList',
                     params: paging
                 })
 
@@ -264,13 +264,13 @@ const DetailBoard = (props) => {
 
                 const selectBoard = await axios({
                     method: "GET",
-                    url: '/boardPrevAndNextSelect',
+                    url: '/board/boardPrevAndNextSelect',
                     params: {boardId: locationParameter.substring(7)}
                 })
 
                 const comments = await axios({
                     method: "GET",
-                    url: '/commentList',
+                    url: '/board/commentList',
                     params: paging
                 })
 
@@ -293,7 +293,7 @@ const DetailBoard = (props) => {
             const getBoards = async () => {
                 const detail = await axios({
                     method: "POST",
-                    url: '/detailBoard/' + props.id,
+                    url: '/board/detailBoard/' + props.id,
                     data: JSON.stringify(memberData),
                     headers: {'Content-type': 'application/json'}
                 })
@@ -310,7 +310,7 @@ const DetailBoard = (props) => {
             const getBoards = async () => {
                 const detail = await axios({
                     method: "POST",
-                    url: '/detailBoard/' + locationParameter.substring(7),
+                    url: '/board/detailBoard/' + locationParameter.substring(7),
                     data: JSON.stringify(memberData),
                     headers: {'Content-type': 'application/json'}
                 })
@@ -340,7 +340,7 @@ const DetailBoard = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: '/commentSave',
+                url: '/board/commentSave',
                 data: JSON.stringify(commentData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
@@ -360,7 +360,7 @@ const DetailBoard = (props) => {
         } else {
             await axios({
                 method: "POST",
-                url: '/commentSave',
+                url: '/board/commentSave',
                 data: JSON.stringify(nestedData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {

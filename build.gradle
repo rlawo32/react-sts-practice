@@ -41,9 +41,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // oauth2-add
     implementation 'org.springframework.boot:spring-boot-starter-validation' // validation 어노테이션 사용을 위함
-    // implementation 'io.jsonwebtoken:jjwt-api:0.11.2' // jwt 사용을 위함
-    // runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    // runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     testImplementation 'org.springframework.security:spring-security-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools' // 소스 변경시 자동 빌드
     // email-auth dependency
@@ -54,7 +51,9 @@ dependencies {
         Advanced Settings > Allow auto-make to start even if developed application is currently running 체크
     */
     // jwt token dependency
-    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
     implementation 'javax.xml.bind:jaxb-api:2.3.0' // java 버전에 따른 JAXV API 제거로 인한 의존성 추가 
 }
 

@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/board")
 public class BoardController {
 
     private final BoardService boardService;

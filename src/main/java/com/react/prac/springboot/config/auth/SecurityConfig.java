@@ -1,11 +1,16 @@
 package com.react.prac.springboot.config.auth;
 
+import com.react.prac.springboot.config.security.JwtAccessDeniedHandler;
+import com.react.prac.springboot.config.security.JwtAuthenticationEntryPoint;
+import com.react.prac.springboot.config.security.JwtSecurityConfig;
+import com.react.prac.springboot.config.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -18,33 +23,52 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CorsConfig corsConfig;
+    private final TokenProvider tokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 //    private final TokenService tokenService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable() // rest api 사용시 disable
-                .headers().frameOptions().disable()
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf().disable() // rest api 사용시 disable / token을 사용하는 방식일 경우 disable
+
+
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
                 .and()
                 .cors()
                 .configurationSource(corsConfig.corsConfigurationSource())
-                .and()
-                // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .authorizeHttpRequests()
-                .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-                // .anyRequest().authenticated()
-                .anyRequest().permitAll()
-                //.requestMatchers("/api/v1/**").hasRole(Role.USER.name())
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
-                .and()
-                .oauth2Login()
-                .successHandler(new MyAuthenticationSuccessHandler())
-                //.defaultSuccessUrl("/oauth/loginInfo", true)
-                .userInfoEndpoint().userService(customOAuth2UserService);
 
-        return http.build();
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+                .authorizeHttpRequests()// HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정하겠다.
+                .requestMatchers("/member/**").permitAll()
+                .requestMatchers("/board/**").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
+                .anyRequest().authenticated()
+
+                .and()
+                .apply(new JwtSecurityConfig(tokenProvider));
+                //.anyRequest().permitAll()
+                //.requestMatchers("/api/v1/**").hasRole(Role.USER.name())
+
+//                .and()
+//                .logout()
+//                .logoutSuccessUrl("/")
+//
+//                .and()
+//                .oauth2Login()
+//                .successHandler(new MyAuthenticationSuccessHandler())
+//                //.defaultSuccessUrl("/oauth/loginInfo", true)
+//                .userInfoEndpoint().userService(customOAuth2UserService);
+
+        return httpSecurity.build();
     }
 
     /*@Bean

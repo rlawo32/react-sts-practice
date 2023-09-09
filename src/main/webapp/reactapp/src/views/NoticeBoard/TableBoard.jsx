@@ -49,7 +49,7 @@ const TableBoard = (props) => {
         const getBoards = async () => {
             const tableBoardList = await axios({
                 method: "GET",
-                url: '/tableBoardList',
+                url: '/board/tableBoardList',
                 params: paging
             });
             setGame1BoardList(tableBoardList.data.boardList);
@@ -71,7 +71,7 @@ const TableBoard = (props) => {
 
         await axios({
             method: "POST",
-            url: '/viewsUp',
+            url: '/board/viewsUp',
             data: JSON.stringify(viewsBody),
             headers: {'Content-type': 'application/json'}
         })
@@ -81,7 +81,7 @@ const TableBoard = (props) => {
     const changeSearchBoard = async () => {
         const search = await axios({
             method: "GET",
-            url: '/tableBoardList',
+            url: '/board/tableBoardList',
             params: paging
         });
         setGame1BoardList(search.data.boardList);
