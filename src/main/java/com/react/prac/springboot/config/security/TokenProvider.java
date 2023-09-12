@@ -1,5 +1,6 @@
 package com.react.prac.springboot.config.security;
 
+import com.react.prac.springboot.config.security.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -27,7 +28,9 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider implements InitializingBean {
     // JWT 생성 및 검증을 위한 키
-    private static final String SECURITY_KEY = "auth";
+    private static final String SECURITY_KEY = "security";
+    private static final String AUTHORITIES_KEY = "auth";
+    private static final String BEARER_TYPE = "Bearer";
     private final long tokenValidityInMilliseconds;
     private final String secret;
     private Key key;
@@ -39,7 +42,7 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000; // 86400ms : 1.44m(0.001d), 86400000ms : 1440m(1d)
     }
 
 
@@ -48,6 +51,42 @@ public class TokenProvider implements InitializingBean {
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public TokenDto generateTokenDto(Authentication authentication) {
+        // 권한들 가져오기
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        // 토큰의 expire 시간을 설정
+        long now = (new Date()).getTime();
+        Date exprTime = new Date(now + this.tokenValidityInMilliseconds);
+
+        System.out.println("key 확인 1 : " + key.getEncoded());
+        System.out.println("key 확인 2 : " + key.getAlgorithm());
+        System.out.println("key 확인 3 : " + key.getFormat());
+        System.out.println("key 확인 4 : " + key.toString());
+
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())       // payload "sub": "name"
+                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
+                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                .setExpiration(exprTime)        // payload "exp": 1516239022 (예시)
+                .compact();
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(exprTime)
+                .compact();
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpiresIn(exprTime)
+                .build();
     }
 
     // JWT 생성 메서드
@@ -91,7 +130,7 @@ public class TokenProvider implements InitializingBean {
                 .getBody();
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(SECURITY_KEY).toString().split(","))
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 

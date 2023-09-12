@@ -1,5 +1,6 @@
 package com.react.prac.springboot.web;
 
+import com.react.prac.springboot.config.security.dto.TokenDto;
 import com.react.prac.springboot.service.users.MemberService;
 import com.react.prac.springboot.util.EmailUtil;
 import com.react.prac.springboot.web.dto.*;
@@ -57,10 +58,10 @@ public class MemberController {
     }
 
     @PostMapping("/signIn")
-    public ResponseDto<MemberSignInResponseDto> signIn(@RequestBody MemberSignInRequestDto requestDto) {
+    public ResponseDto<TokenDto> signIn(@RequestBody MemberSignInRequestDto requestDto) {
         System.out.println("SignIn!!!!!!!!!!!");
 
-        ResponseDto<MemberSignInResponseDto> result = memberService.signIn(requestDto);
+        ResponseDto<TokenDto> result = memberService.signIn(requestDto);
 
         return result;
     }

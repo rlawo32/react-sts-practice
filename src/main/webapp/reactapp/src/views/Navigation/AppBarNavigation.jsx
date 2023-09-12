@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link} from "react-router-dom";
+import cookie from "react-cookies";
 
 export default function ButtonAppBar() {
     return (
@@ -32,6 +33,9 @@ export default function ButtonAppBar() {
                 <Link to="/signUp">
                     <Button sx={{color: "white"}}>회원가입</Button>
                 </Link>
+
+                <Button sx={{color: "white"}} onClick={() => cookie.remove('refreshToken')}>로그아웃</Button>
+
                 <Link to="/board" state={{ mainReset: null }}>
                     <Button sx={{color: "white"}}>게시판</Button>
                 </Link>

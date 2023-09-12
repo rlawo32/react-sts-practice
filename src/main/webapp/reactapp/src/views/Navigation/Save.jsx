@@ -61,7 +61,7 @@ const Save = () => {
         console.log(JSON.stringify(BoardData))
         await axios({
             method: "POST",
-            url: "/boardSave",
+            url: "board/boardSave",
             data: JSON.stringify(BoardData),
             headers: {'Content-type': 'application/json'}
         }).then((result) => {

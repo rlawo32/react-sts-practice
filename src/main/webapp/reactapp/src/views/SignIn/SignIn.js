@@ -4,7 +4,9 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+import cookie from "react-cookies";
+import { Cookies } from "react-cookie";
+import {useNavigate} from "react-router-dom";
 
 const googleOauthLogin = () => {
     window.location.href = `http://localhost:8080/oauth2/authorization/google`;
@@ -12,13 +14,14 @@ const googleOauthLogin = () => {
 }
 
 const SignIn = () => {
+    const navigate = useNavigate();
+    const cookies = new Cookies();
+
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
     const [isLoginConfirmEffect, setIsLoginConfirmEffect] = useState(false);
 
     const [loginMemberEmail, setLoginMemberEmail] = useState("");
     const [loginMemberPw, setLoginMemberPw] = useState("");
-
-    const [cookies, setCookies] = useCookies();
 
     const onMemberEmailHandler = (e) => {
         setLoginMemberEmail(e.target.value);
@@ -30,6 +33,7 @@ const SignIn = () => {
 
     const onLoginHandler = async (e) => {
         e.preventDefault();
+
         let loginBody = {
             memberEmail: loginMemberEmail,
             memberPw: loginMemberPw
@@ -42,31 +46,75 @@ const SignIn = () => {
             headers: {'Content-type': 'application/json'}
         }).then((response) => {
             const responseData = response.data;
-            console.log(response.data);
             if(responseData.data) {
                 // localStorage.setItem("users", JSON.stringify(response.data));
 
-                const { token, exprTime, users } = responseData.data;
-                console.log("token" + token);
-                const expires = new Date();
-                expires.setMilliseconds(expires.getMilliseconds + exprTime);
+                // const { token, exprTime, users } = responseData.data;
+                // console.log("token" + token);
+                // const expires = new Date();
+                // expires.setMilliseconds(expires.getMilliseconds + exprTime);
+                //
+                // setCookies('token', token, {expires});
+                onLoginSuccess(responseData);
 
-                setCookies('token', token, {expires});
-
-                const { accessToken } = responseData.data;
-
-                // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-                axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-                // accessToken을 localStorage, cookie 등에 저장하지 않는다!
-
-                // window.location.href = "/";
+                navigate('/');
             } else {
                 setIsLoginConfirmEffect(false);
                 setLoginErrorMessage("ID가 존재하지 않거나 비밀번호가 일치하지 않습니다. 다시 시도해주세요.");
             }
 
         })
+    }
+
+    const onSilentRefresh = async () => {
+
+        let token = {
+            accessToken: loginMemberEmail,
+            refreshToken: loginMemberPw
+        }
+
+        await axios({
+            method: "POST",
+            url: "/auth/reissue",
+            data: JSON.stringify(token),
+            headers: {'Content-type': 'application/json'}
+        }).then((response) => {
+            const responseData = response.data;
+            onLoginSuccess(responseData);
+        })
+    }
+
+    const onLoginSuccess = (response) => {
+
+        console.log(response.data);
+
+        console.log(response.data.accessToken);
+        console.log(response.data.refreshToken);
+
+        const { grantType, accessToken, refreshToken, accessTokenExpiresIn} = response.data;
+
+        console.log(accessToken);
+        console.log(refreshToken);
+        console.log(accessTokenExpiresIn);
+
+        const expires = new Date(accessTokenExpiresIn);
+
+        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+        axios.defaults.headers.common['Authorization'] = `${grantType} ${accessToken}`;
+
+        // refreshToken은 cookie에 담아놓기
+        cookie.save('refreshToken', refreshToken, {
+            path: '/',
+            // httpOnly: true,
+            expires
+        });
+
+
+
+        // accessToken을 localStorage, cookie 등에 저장하지 않는다!
+
+        // accessToken 만료하기 1분 전에 로그인 연장
+        // setTimeout(onSilentRefresh, accessTokenExpiresIn - 60000);
     }
 
     return (
