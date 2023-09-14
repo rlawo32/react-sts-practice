@@ -19,8 +19,8 @@ public class CommentRequestDto {
     private Long commentNestedLevel;
     private Long boardId;
     private String commentContent;
-    private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-    private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+    private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+    private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
     @Builder
     public CommentRequestDto(Long commentParentId, Long commentTargetId, Long commentNestedId,

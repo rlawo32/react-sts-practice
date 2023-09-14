@@ -77,14 +77,18 @@ const MemberInfoBoardLog = () => {
                     {tableBoardList.map((boards, idx) => {
                         return (
                             <tr key={boards.boardId}>
-                                <td>{boards.boardTab}</td>
+                                { `${boards.boardTab}` === 'T1' && <td>화제</td> }
+                                { `${boards.boardTab}` === 'T2' && <td>정보</td> }
+                                { `${boards.boardTab}` === 'T3' && <td>오류</td> }
+                                { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
+                                { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
                                 <td>
                                     <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
                                         {boards.boardTitle}
                                     </Link>
                                 </td>
                                 <td>{boards.boardAuthor}</td>
-                                <td>{boards.modifiedDate}</td>
+                                <td>{boards.modifiedDate.substring(0,10)}</td>
                                 <td>{boards.boardViewsCnt}</td>
                                 <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
                             </tr>

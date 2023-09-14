@@ -203,13 +203,11 @@ const TableBoard = (props) => {
                         {tableBoardList.map((boards, idx) => {
                             return (
                                 <tr key={boards.boardId}>
-
                                     { `${boards.boardTab}` === 'T1' && <td>화제</td> }
                                     { `${boards.boardTab}` === 'T2' && <td>정보</td> }
                                     { `${boards.boardTab}` === 'T3' && <td>오류</td> }
                                     { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
                                     { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
-
                                     <td>
                                         <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} onClick={() => changeDetailBoard(boards.boardId)} style={{textDecoration: 'none', color: 'white'}}>
                                             {boards.boardTitle}

@@ -91,7 +91,7 @@ const MemberInfoCommentLog = () => {
                                 { `${comments.commentBoardCategory}` === 'C6' && <td>스팀</td> }
                                 <td>{comments.commentContent}</td>
                                 <td>{comments.commentRecommendUpCnt - comments.commentRecommendDownCnt}</td>
-                                <td>{comments.modifiedDate}</td>
+                                <td>{comments.modifiedDate.substring(0,10)}</td>
                             </tr>
                         )
                     })}
