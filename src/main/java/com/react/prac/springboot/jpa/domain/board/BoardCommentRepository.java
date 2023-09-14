@@ -16,6 +16,9 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
     @Query("SELECT c FROM BoardComment c WHERE c.mainBoard.id = :boardId")
     Page<BoardComment> findByBoardComment(@Param("boardId") Long boardId, Pageable pageable);
 
+    @Query("SELECT c FROM BoardComment c WHERE c.member.id = :memberId")
+    Page<BoardComment> findByMemberComment(@Param("memberId") Long memberId, Pageable pageable);
+
 //    @Query("SELECT c FROM BoardComment c WHERE c.id = :commentId AND c.member.id = :memberId")
 //    boolean existsByIdAndMember(@Param("commentId") Long commentId, @Param("memberId") Long memberId);
 

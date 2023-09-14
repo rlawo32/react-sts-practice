@@ -44,11 +44,10 @@ public class AuthController {
     public ResponseDto<TokenDto> reissue(@RequestBody TokenRequestDto requestDto, HttpServletRequest request) {
         requestDto.setAccessToken(request.getHeader(AUTHORIZATION_HEADER));
 
-        System.out.println("AccessToken 확인 : " + requestDto.getAccessToken());
-        System.out.println("RefreshToken 확인 : " + requestDto.getRefreshToken());
+        System.out.println(requestDto.getRefreshToken());
 
-        // ResponseDto<TokenDto> result = memberService.reissue(requestDto);
+        ResponseDto<TokenDto> result = memberService.reissue(requestDto);
 
-        return null;
+        return result;
     }
 }

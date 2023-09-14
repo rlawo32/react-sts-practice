@@ -12,11 +12,11 @@ public class RecommendResponseDto {
     private String boardContent;
     private String boardAuthor;
 
-    public RecommendResponseDto(MainBoard entity) {
-        this.boardId = entity.getId();
-        this.boardTab = entity.getBoardTab();
-        this.boardTitle = entity.getBoardTitle();
-        this.boardContent = entity.getBoardContent();
-        this.boardAuthor = entity.getBoardAuthor();
+    public RecommendResponseDto(MainBoard mainBoard) {
+        this.boardId = mainBoard.getId();
+        this.boardTab = mainBoard.getBoardTab();
+        this.boardTitle = mainBoard.getBoardTitle();
+        this.boardContent = mainBoard.getBoardContent();
+        this.boardAuthor = mainBoard.getBoardAuthor();
     }
 }

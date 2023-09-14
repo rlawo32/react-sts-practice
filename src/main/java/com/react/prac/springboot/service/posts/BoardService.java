@@ -1,5 +1,7 @@
 package com.react.prac.springboot.service.posts;
 
+import com.react.prac.springboot.config.auth.SecurityConfig;
+import com.react.prac.springboot.config.auth.SecurityUtil;
 import com.react.prac.springboot.jpa.domain.board.*;
 import com.react.prac.springboot.jpa.domain.user.Member;
 import com.react.prac.springboot.jpa.domain.user.MemberRepository;
@@ -8,6 +10,7 @@ import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,12 @@ public class BoardService {
 
     @Transactional
     public Long boardInsert(BoardSaveRequestDto requestDto) {
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+
+        requestDto.setBoardAuthorId(memberId);
+        requestDto.setBoardAuthor(memberRepository.findByMemberNickname(memberId));
+
         return mainBoardRepository.save(requestDto.toEntity()).getId();
     }
 
@@ -37,26 +46,31 @@ public class BoardService {
         return id;
     }
 
-    public BoardDetailResponseDto findByBoardId(Long boardId, Long memberId) {
+    @Transactional
+    public BoardDetailResponseDto findByBoardId(Long boardId) {
 
         MainBoard mainBoard = mainBoardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId=" + boardId));
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         BoardDetailResponseDto boardDetailResponseDto = new BoardDetailResponseDto(mainBoard);
 
-        if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "U", member, mainBoard)) {
-            boardDetailResponseDto.setBoardRecommendUpCheck(1);
-        } else {
-            boardDetailResponseDto.setBoardRecommendUpCheck(0);
-        }
+        if(memberId != null) {
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
-        if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "D", member, mainBoard)) {
-            boardDetailResponseDto.setBoardRecommendDownCheck(1);
-        } else {
-            boardDetailResponseDto.setBoardRecommendDownCheck(0);
+            if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "U", member, mainBoard)) {
+                boardDetailResponseDto.setBoardRecommendUpCheck(1);
+            } else {
+                boardDetailResponseDto.setBoardRecommendUpCheck(0);
+            }
+
+            if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "D", member, mainBoard)) {
+                boardDetailResponseDto.setBoardRecommendDownCheck(1);
+            } else {
+                boardDetailResponseDto.setBoardRecommendDownCheck(0);
+            }
         }
 
         return boardDetailResponseDto;
@@ -68,6 +82,7 @@ public class BoardService {
         int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
         int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
         int pagePerBlock = Integer.parseInt(request.getParameter("pagePerBlock")); // 하단 페이지 블럭
+        String pageCategory = request.getParameter("pageCategory"); // 카테고리 정렬 조건
         String pageSort = request.getParameter("pageSort"); // 탭 정렬 조건
         int totalPage = 0; // pageable에서 출력한 전체 페이지
 
@@ -76,16 +91,31 @@ public class BoardService {
 
         List<BoardListResponseDto> pagingList = new ArrayList<>();
 
+        Long boardAuthorId = SecurityUtil.getCurrentMemberId();
+
+        System.out.println("pageCategory 확인 : " + pageCategory);
+        System.out.println("pageSort 확인 : " + pageSort);
+
+        if(boardAuthorId != null) {
+            if(searchSelect.equals("M")) {
+                Page<MainBoard> pageable = mainBoardRepository.findAllByBoardAuthorId(boardAuthorId, PageRequest.of(page, recordPerPage));
+                pagingList = pageable.stream()
+                        .map(BoardListResponseDto::new)
+                        .collect(Collectors.toList());
+
+                totalPage = pageable.getTotalPages();
+            }
+        }
+
         if(searchText.equals("")) {
-            if(pageSort.equals("")) {
+            if(pageCategory.equals("C0") && pageSort.equals("T0")) {
                 Page<MainBoard> pageable = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage));
                 pagingList = pageable.stream()
                         .map(BoardListResponseDto::new)
                         .collect(Collectors.toList());
 
                 totalPage = pageable.getTotalPages();
-                System.out.println("111 전체 페이징 카운트 : " + pageable.getTotalPages());
-            } else {
+            } else if(pageCategory.equals("C0")) {
                 // Sort sort = Sort.by(pageSort).descending();
                 Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTab(pageSort ,PageRequest.of(page, recordPerPage));
                 pagingList = pageable.stream()
@@ -93,19 +123,32 @@ public class BoardService {
                         .collect(Collectors.toList());
 
                 totalPage = pageable.getTotalPages();
-                System.out.println("111 정렬 페이징 카운트 : " + pageable.getTotalPages());
+            } else if(pageSort.equals("T0")) {
+                // Sort sort = Sort.by(pageSort).descending();
+                Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategory(pageCategory ,PageRequest.of(page, recordPerPage));
+                pagingList = pageable.stream()
+                        .map(BoardListResponseDto::new)
+                        .collect(Collectors.toList());
+
+                totalPage = pageable.getTotalPages();
+            } else {
+                Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTab(pageCategory, pageSort ,PageRequest.of(page, recordPerPage));
+                pagingList = pageable.stream()
+                        .map(BoardListResponseDto::new)
+                        .collect(Collectors.toList());
+
+                totalPage = pageable.getTotalPages();
             }
         } else {
             if(searchSelect.equals("title")) {
-                if(pageSort.equals("")) {
+                if(pageSort.equals("T0") && pageSort.equals("T0")) {
                     Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTitleContaining(searchText, PageRequest.of(page, recordPerPage));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
-                    System.out.println("222 전체 페이징 카운트 : " + pageable.getTotalPages());
-                } else {
+                } else if(pageCategory.equals("C0")) {
                     // Sort sort = Sort.by(pageSort).descending();
                     Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardTitleContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
                     pagingList = pageable.stream()
@@ -113,18 +156,30 @@ public class BoardService {
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
-                    System.out.println("222 정렬 페이징 카운트 : " + pageable.getTotalPages());
+                } else if(pageSort.equals("T0")) {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTitleContaining(pageCategory, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                } else {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTabAndBoardTitleContaining(pageCategory, pageSort, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
                 }
             } else if(searchSelect.equals("content")) {
-                if(pageSort.equals("")) {
+                if(pageSort.equals("T0") && pageSort.equals("T0")) {
                     Page<MainBoard> pageable = mainBoardRepository.findAllByBoardContentContaining(searchText, PageRequest.of(page, recordPerPage));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
-                    System.out.println("333 전체 페이징 카운트 : " + pageable.getTotalPages());
-                } else {
+                } else if(pageCategory.equals("C0"))  {
                     // Sort sort = Sort.by(pageSort).descending();
                     Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardContentContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
                     pagingList = pageable.stream()
@@ -132,18 +187,30 @@ public class BoardService {
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
-                    System.out.println("333 정렬 페이징 카운트 : " + pageable.getTotalPages());
+                } else if(pageSort.equals("T0")) {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardContentContaining(pageCategory, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                } else {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTabAndBoardContentContaining(pageCategory, pageSort, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
                 }
             } else if(searchSelect.equals("nickname")) {
-                if(pageSort.equals("")) {
+                if(pageSort.equals("T0") && pageSort.equals("T0")) {
                     Page<MainBoard> pageable = mainBoardRepository.findAllByBoardAuthorContaining(searchText, PageRequest.of(page, recordPerPage));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
-                    System.out.println("444 전체 페이징 카운트 : " + pageable.getTotalPages());
-                } else {
+                } else if(pageCategory.equals("C0")) {
                     // Sort sort = Sort.by(pageSort).descending();
                     Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardAuthorContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
                     pagingList = pageable.stream()
@@ -151,7 +218,20 @@ public class BoardService {
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
-                    System.out.println("444 정렬 페이징 카운트 : " + pageable.getTotalPages());
+                } else if(pageSort.equals("T0")) {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardAuthorContaining(pageCategory, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
+                } else {
+                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTabAndBoardAuthorContaining(pageCategory, pageSort, searchText, PageRequest.of(page, recordPerPage));
+                    pagingList = pageable.stream()
+                            .map(BoardListResponseDto::new)
+                            .collect(Collectors.toList());
+
+                    totalPage = pageable.getTotalPages();
                 }
             }
         }
@@ -171,7 +251,7 @@ public class BoardService {
     }
 
     // 추천 기능
-
+    @Transactional
     public boolean recommendCheck(HttpServletRequest request) { // 제거 확인
 
         Long boardId = Long.valueOf(request.getParameter("boardId"));
@@ -198,8 +278,8 @@ public class BoardService {
         MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
 
-        Member member = memberRepository.findById(requestDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
 
         Long commentId = requestDto.getCommentId();
         String recommendType = requestDto.getRecommendType();
@@ -253,8 +333,8 @@ public class BoardService {
         MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
 
-        Member member = memberRepository.findById(requestDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
 
         Long commentId = requestDto.getCommentId();
         String recommendType = requestDto.getRecommendType();
@@ -285,6 +365,7 @@ public class BoardService {
         return ResponseDto.setSuccess("Success", null);
     }
 
+    @Transactional
     public void mainRecommendCountUpdate(String recommendType, Long boardId, boolean x) {
         if(recommendType.equals("U")) {
             if(x) {
@@ -300,7 +381,7 @@ public class BoardService {
             }
         }
     }
-
+    @Transactional
     public void commentRecommendCountUpdate(String recommendType, Long commentId, boolean x) {
         if(recommendType.equals("U")) {
             if(x) {
@@ -362,10 +443,10 @@ public class BoardService {
         MainBoard mainBoard = mainBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글 ID가 없습니다. id : " + requestDto.getBoardId()));
 
-        Member member = memberRepository.findById(requestDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + requestDto.getMemberId()));
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
 
-        String commentNickname = memberRepository.findByMemberNickname(requestDto.getMemberId());
+        String commentNickname = memberRepository.findByMemberNickname(SecurityUtil.getCurrentMemberId());
 
         Long commentParentId = requestDto.getCommentParentId();
         Long commentTargetId = requestDto.getCommentTargetId();
@@ -415,6 +496,7 @@ public class BoardService {
         return ResponseDto.setSuccess("Success", null);
     }
 
+    @Transactional
     public void commentChildCountUpdate(Long commentParentId, boolean x) {
         if(x) {
             boardCommentRepository.updateByCommentChildCnt(commentParentId, 1);
@@ -423,40 +505,61 @@ public class BoardService {
         }
     }
 
+    @Transactional
     public Map<String, Object> commentList(HttpServletRequest request) {
 
-        Long memberId = Long.valueOf(request.getParameter("memberId"));
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
-
         Long boardId = Long.valueOf(request.getParameter("boardId"));
+
         int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
         int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
 
-        Page<BoardComment> pageable = boardCommentRepository.findByBoardComment(boardId, PageRequest.of(page, recordPerPage, Sort.by("commentParentId").and(Sort.by("id"))));
-        int totalPage = pageable.getTotalPages();
-        Long totalComments = pageable.getTotalElements();
+        Page<BoardComment> pageable = Page.empty();
+        int totalPage = 0;
+        int totalComments = 0;
+
+        if(boardId == 0) {
+            pageable = boardCommentRepository.findByMemberComment(SecurityUtil.getCurrentMemberId(), PageRequest.of(page, recordPerPage, Sort.by("commentParentId").and(Sort.by("id"))));
+
+            totalPage = pageable.getTotalPages();
+            totalComments = (int) pageable.getTotalElements();
+        } else {
+            pageable = boardCommentRepository.findByBoardComment(boardId, PageRequest.of(page, recordPerPage, Sort.by("commentParentId").and(Sort.by("id"))));
+
+            totalPage = pageable.getTotalPages();
+            totalComments = (int) pageable.getTotalElements();
+
+            mainBoardRepository.updateByBoardCommentCount(boardId, totalComments);
+        }
 
         List<CommentResponseDto> commentList = pageable.stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
 
-        for(int i=0; i<commentList.size(); i++) {
-            Long commentId = commentList.get(i).getCommentId();
-            BoardComment boardComment = boardCommentRepository.findById(commentId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 댓글 ID가 없습니다. id : " + commentId));
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
-            if(boardRecommendRepository.existsByRecommendTypeAndMemberAndBoardComment("U", member, boardComment)) {
-                commentList.get(i).setCommentRecommendUpCheck(1);
-            } else {
-                commentList.get(i).setCommentRecommendUpCheck(0);
-            }
+        if(memberId != null) {
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
-            if(boardRecommendRepository.existsByRecommendTypeAndMemberAndBoardComment("D", member, boardComment)) {
-                commentList.get(i).setCommentRecommendDownCheck(1);
-            } else {
-                commentList.get(i).setCommentRecommendDownCheck(0);
+            for(int i=0; i<commentList.size(); i++) {
+                Long commentId = commentList.get(i).getCommentId();
+                Long findCategory = commentList.get(i).getBoardId();
+                BoardComment boardComment = boardCommentRepository.findById(commentId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 댓글 ID가 없습니다. id : " + commentId));
+
+                commentList.get(i).setCommentBoardCategory(mainBoardRepository.findByBoardCategory(findCategory));
+
+                if(boardRecommendRepository.existsByRecommendTypeAndMemberAndBoardComment("U", member, boardComment)) {
+                    commentList.get(i).setCommentRecommendUpCheck(1);
+                } else {
+                    commentList.get(i).setCommentRecommendUpCheck(0);
+                }
+
+                if(boardRecommendRepository.existsByRecommendTypeAndMemberAndBoardComment("D", member, boardComment)) {
+                    commentList.get(i).setCommentRecommendDownCheck(1);
+                } else {
+                    commentList.get(i).setCommentRecommendDownCheck(0);
+                }
             }
         }
 

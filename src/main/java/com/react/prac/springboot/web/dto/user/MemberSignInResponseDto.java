@@ -25,4 +25,5 @@ public class MemberSignInResponseDto {
     private int exprTime;
     private Member member;
 
+    // tokenDto로 대체
 }

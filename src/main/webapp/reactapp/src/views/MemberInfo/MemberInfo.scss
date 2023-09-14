@@ -1,0 +1,125 @@
+
+.member-info {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+
+  .info-select {
+    margin-top: 100px;
+    margin-bottom: 20px;
+    ul {
+      list-style: none;
+      border: none;
+
+      li {
+        display: inline-block;
+        text-align: center;
+
+        .list-item {
+
+          background-color: transparent;
+          border: 2px solid #5c636a;
+          border-radius: 0.6em;
+          color: #e2e3e5;
+          cursor: pointer;
+          font-size: 1.3rem;
+          font-weight: 400;
+          text-transform: uppercase;
+          margin: 2px;
+          padding: 0.3em 0.8em;
+
+          &:hover {
+            box-shadow: 0 0 40px 40px #4d5154 inset;
+          }
+        }
+
+      }
+    }
+  }
+
+  .profile-view {
+    border: 4px solid #565e64;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: 600px;
+    height: 700px;
+
+    .profile-picture {
+      border: 1px solid #565e64;
+      border-radius: 100%;
+      margin: 30px auto 90px;
+      width: 250px;
+      height: 250px;
+    }
+
+    .profile-info {
+      display: flex;
+      justify-content: flex-start;
+      border: 1px solid #bcbebf;
+      border-radius: 12px;
+      margin: 40px 40px;
+      padding: 15px 50px 15px;
+
+      .profile-key {
+        font-size: 18px;
+        font-weight: bold;
+        color: #6c757d;
+      }
+
+      .profile-value {
+        font-size: 18px;
+        text-align: left;
+        margin-left: 20px;
+      }
+
+      .profile-email {
+
+      }
+
+      .profile-nickname {
+        margin-top: 10px;
+
+      }
+
+      .profile-birth {
+        margin-top: 10px;
+
+      }
+
+      .profile-joinDate {
+        margin-top: 10px;
+
+      }
+
+      .profile-lastLog {
+        margin-top: 10px;
+
+      }
+    }
+
+  }
+
+  .boardLog-view {
+    border: 4px solid #565e64;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: 900px;
+    height: 700px;
+  }
+
+  .commentLog-view {
+    border: 4px solid #565e64;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: 900px;
+    height: 700px;
+  }
+
+  .loginLog-view {
+    border: 4px solid #565e64;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: 600px;
+    height: 700px;
+  }
+}

@@ -20,15 +20,15 @@ public class BoardListResponseDto {
     private int boardViewsCnt;
     private String modifiedDate;
 
-    public BoardListResponseDto(MainBoard entity) {
-        this.boardId = entity.getId();
-        this.boardTab = entity.getBoardTab();
-        this.boardTitle = entity.getBoardTitle();
-        this.boardContent = entity.getBoardContent();
-        this.boardAuthor = entity.getBoardAuthor();
-        this.boardRecommendUpCnt = entity.getBoardRecommendUpCnt();
-        this.boardRecommendDownCnt = entity.getBoardRecommendDownCnt();
-        this.boardViewsCnt = entity.getBoardViewsCnt();
-        this.modifiedDate = entity.getModifiedDate();
+    public BoardListResponseDto(MainBoard mainBoard) {
+        this.boardId = mainBoard.getId();
+        this.boardTab = mainBoard.getBoardTab();
+        this.boardTitle = mainBoard.getBoardTitle();
+        this.boardContent = mainBoard.getBoardContent();
+        this.boardAuthor = mainBoard.getBoardAuthor();
+        this.boardRecommendUpCnt = mainBoard.getBoardRecommendUpCnt();
+        this.boardRecommendDownCnt = mainBoard.getBoardRecommendDownCnt();
+        this.boardViewsCnt = mainBoard.getBoardViewsCnt();
+        this.modifiedDate = mainBoard.getModifiedDate();
     }
 }

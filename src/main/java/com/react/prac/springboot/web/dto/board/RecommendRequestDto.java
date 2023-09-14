@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecommendRequestDto {
 
-    private Long memberId;
     private Long boardId;
     private Long commentId;
     private String recommendType; // U : 좋아요, D : 싫어요
 
     @Builder
-    public RecommendRequestDto(Long memberId, Long boardId, Long commentId, String recommendType) {
-        this.memberId = memberId;
+    public RecommendRequestDto(Long boardId, Long commentId, String recommendType) {
         this.boardId = boardId;
         this.commentId = commentId;
         this.recommendType = recommendType;

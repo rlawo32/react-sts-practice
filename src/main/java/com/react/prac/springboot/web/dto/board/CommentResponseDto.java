@@ -28,20 +28,21 @@ public class CommentResponseDto {
     private int commentRecommendDownCnt;
     private int commentRecommendUpCheck; // 0 = false, 1 = true
     private int commentRecommendDownCheck; // 0 = false, 1 = true
+    private String commentBoardCategory;
 
-    public CommentResponseDto(BoardComment entity) {
-        this.commentId = entity.getId();
-        this.commentParentId = entity.getCommentParentId();
-        this.commentTargetId = entity.getCommentTargetId();
-        this.commentNestedId = entity.getCommentNestedId();
-        this.commentNestedLevel = entity.getCommentNestedLevel();
-        this.commentContent = entity.getCommentContent();
-        this.boardId = entity.getMainBoard().getId();
-        this.memberId = entity.getMember().getId();
-        this.memberNickname = entity.getCommentNickname();
-        this.createdDate = entity.getCreatedDate();
-        this.modifiedDate = entity.getModifiedDate();
-        this.commentRecommendUpCnt = entity.getCommentRecommendUpCnt();
-        this.commentRecommendDownCnt = entity.getCommentRecommendDownCnt();
+    public CommentResponseDto(BoardComment boardComment) {
+        this.commentId = boardComment.getId();
+        this.commentParentId = boardComment.getCommentParentId();
+        this.commentTargetId = boardComment.getCommentTargetId();
+        this.commentNestedId = boardComment.getCommentNestedId();
+        this.commentNestedLevel = boardComment.getCommentNestedLevel();
+        this.commentContent = boardComment.getCommentContent();
+        this.boardId = boardComment.getMainBoard().getId();
+        this.memberId = boardComment.getMember().getId();
+        this.memberNickname = boardComment.getCommentNickname();
+        this.createdDate = boardComment.getCreatedDate();
+        this.modifiedDate = boardComment.getModifiedDate();
+        this.commentRecommendUpCnt = boardComment.getCommentRecommendUpCnt();
+        this.commentRecommendDownCnt = boardComment.getCommentRecommendDownCnt();
     }
 }

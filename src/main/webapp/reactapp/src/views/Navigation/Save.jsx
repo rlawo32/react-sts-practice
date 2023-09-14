@@ -34,10 +34,16 @@ const Save = () => {
         ],
     };
 
-    const [boardTab, setBoardTab] = useState("화제");
+    const categoryMenu = props.category_name;
+    const subTabMenu = props.subTab_name;
+    const [boardCategory, setBoardCategory] = useState(categoryMenu[0].key);
+    const [boardTab, setBoardTab] = useState(subTabMenu[0].key);
     const [boardTitle, setBoardTitle] = useState("");
     const [boardContent, setBoardContent] = useState("");
-    const tabMenu = props.subTab_name;
+
+    const boardCategoryChangeHandler = ({target: {value}}) => {
+        setBoardCategory(value);
+    }
 
     const boardTabChangeHandler = ({target: {value}}) => {
         setBoardTab(value);
@@ -52,6 +58,7 @@ const Save = () => {
     }
 
     const BoardData = {
+        boardCategory: `${boardCategory}`,
         boardTab: `${boardTab}`,
         boardTitle: `${boardTitle}`,
         boardContent: `${boardContent}`
@@ -68,7 +75,6 @@ const Save = () => {
             window.alert("등록이 완료되었습니다람쥐");
             navigate('/board');
         })
-
     }
 
     return (
@@ -78,9 +84,9 @@ const Save = () => {
                 <Form>
                     <Form.Group className="mb-3" controlId="boardSubject">
                         <Col sm>
-                            <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
-                                {tabMenu.map((tl) => (
-                                    <option key={tl}>{tl}</option>
+                            <Form.Select value={boardCategory} onChange={boardCategoryChangeHandler}>
+                                {categoryMenu.map((cl) => (
+                                    <option key={cl.key} value={cl.key}>{cl.value}</option>
                                 ))}
                             </Form.Select>
                         </Col>
@@ -89,8 +95,8 @@ const Save = () => {
                     <Form.Group className="mb-3" controlId="boardTab">
                         <Col sm>
                             <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
-                                {tabMenu.map((tl) => (
-                                    <option key={tl}>{tl}</option>
+                                {subTabMenu.map((tl) => (
+                                    <option key={tl.key} value={tl.key}>{tl.value}</option>
                                 ))}
                             </Form.Select>
                         </Col>

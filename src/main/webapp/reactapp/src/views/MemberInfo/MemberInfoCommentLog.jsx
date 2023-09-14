@@ -1,0 +1,107 @@
+import React, {useEffect, useState} from "react";
+import "./MemberInfo.scss";
+import '../Layouts/MainView.scss'
+import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    faReply as nestedArrow,
+    faThumbsDown as recommendDown,
+    faThumbsUp as recommendUp
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    faThumbsDown as recommendDownCancel,
+    faThumbsUp as recommendUpCancel
+} from "@fortawesome/free-regular-svg-icons";
+import {Link} from "react-router-dom";
+
+const MemberInfoCommentLog = () => {
+
+    const [pageNo, setPageNo] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    const [totalComments, setTotalComments] = useState(0);
+
+    const [commentList, setCommentList] = useState([{
+        commentId: '',
+        commentNestedId: '',
+        commentNestedLevel: '',
+        commentContent: '',
+        boardId: '',
+        memberId: '',
+        memberNickname: '',
+        createdDate: '',
+        modifiedDate: '',
+        commentRecommendUpCnt: '',
+        commentRecommendDownCnt: '',
+        commentRecommendUpCheck: '',
+        commentRecommendDownCheck: '',
+        commentBoardCategory: ''
+    }]);
+
+    const paging = {
+        boardId: 0,
+        recordPerPage: 10,
+        page: pageNo
+    }
+
+    useEffect(() => {
+        const getBoards = async () => {
+
+            const boardComments = await axios({
+                method: "GET",
+                url: '/board/commentList',
+                params: paging
+            })
+
+            setCommentList(boardComments.data.commentList);
+            setTotalPage(boardComments.data.totalPage);
+            setTotalComments(boardComments.data.totalComments);
+        };
+
+        getBoards();
+
+    }, [])
+
+    return (
+        <div className="member-info">
+
+            <h3>내 댓글 확인</h3>
+
+            <div className="commentLog-view">
+
+                <table>
+                    <thead className="table-header">
+                    <tr>
+                        <td style={{width: "100px"}}>번호</td>
+                        <td style={{width: "400px"}}>게시판</td>
+                        <td style={{width: "150px"}}>내용</td>
+                        <td style={{width: "170px"}}>추천</td>
+                        <td style={{width: "120px"}}>날짜</td>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    {commentList.map((comments, idx) => {
+                        return (
+                            <tr key={comments.commentId}>
+                                <td>NULL</td>
+                                { `${comments.commentBoardCategory}` === 'C1' && <td>리그오브레전드</td> }
+                                { `${comments.commentBoardCategory}` === 'C2' && <td>오버워치</td> }
+                                { `${comments.commentBoardCategory}` === 'C3' && <td>배틀그라운드</td> }
+                                { `${comments.commentBoardCategory}` === 'C4' && <td>메이플스토리</td> }
+                                { `${comments.commentBoardCategory}` === 'C5' && <td>마인크래프트</td> }
+                                { `${comments.commentBoardCategory}` === 'C6' && <td>스팀</td> }
+                                <td>{comments.commentContent}</td>
+                                <td>{comments.commentRecommendUpCnt - comments.commentRecommendDownCnt}</td>
+                                <td>{comments.modifiedDate}</td>
+                            </tr>
+                        )
+                    })}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    )
+}
+
+export default MemberInfoCommentLog;

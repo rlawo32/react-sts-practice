@@ -36,12 +36,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable() // rest api 사용시 disable / token을 사용하는 방식일 경우 disable
-
 
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -58,6 +56,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()// HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정하겠다.
                 .requestMatchers("/member/**").permitAll()
+                .requestMatchers("/board/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
                 .anyRequest().authenticated()

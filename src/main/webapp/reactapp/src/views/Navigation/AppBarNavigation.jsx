@@ -8,8 +8,30 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link} from "react-router-dom";
 import cookie from "react-cookies";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function ButtonAppBar() {
+
+    const [isLoginCheck, setIsLoginCheck] = useState(0);;
+
+    const logout = () => {
+        cookie.remove('refreshToken');
+        window.location.reload();
+    }
+
+    const memberInfo = () => {
+
+    }
+
+    useEffect(() => {
+        if(cookie.load("refreshToken")) {
+            setIsLoginCheck(1);
+        } else {
+            setIsLoginCheck(0);
+        }
+    }, [isLoginCheck])
+
     return (
         <AppBar sx={{height: 55, backgroundColor:'rgba(153, 153, 153, 0.1)'}}>
             <Toolbar>
@@ -27,14 +49,26 @@ export default function ButtonAppBar() {
 
                 </Typography>
 
-                <Link to="/signIn">
-                    <Button sx={{color: "white"}}>로그인</Button>
-                </Link>
-                <Link to="/signUp">
-                    <Button sx={{color: "white"}}>회원가입</Button>
-                </Link>
-
-                <Button sx={{color: "white"}} onClick={() => cookie.remove('refreshToken')}>로그아웃</Button>
+                {
+                    `${isLoginCheck}` == 1 ?
+                        <span>
+                            <Link to="/memberInfo">
+                                <Button sx={{color: "white"}} onClick={() => memberInfo()}>내 정보</Button>
+                            </Link>
+                            <Link to="/">
+                                <Button sx={{color: "white"}} onClick={() => logout()}>로그아웃</Button>
+                            </Link>
+                        </span>
+                        :
+                        <span>
+                            <Link to="/signIn">
+                                <Button sx={{color: "white"}}>로그인</Button>
+                            </Link>
+                            <Link to="/signUp">
+                                <Button sx={{color: "white"}}>회원가입</Button>
+                            </Link>
+                        </span>
+                }
 
                 <Link to="/board" state={{ mainReset: null }}>
                     <Button sx={{color: "white"}}>게시판</Button>

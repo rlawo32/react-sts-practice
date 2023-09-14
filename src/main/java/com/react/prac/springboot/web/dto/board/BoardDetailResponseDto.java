@@ -8,9 +8,11 @@ import lombok.Getter;
 public class BoardDetailResponseDto {
 
     private Long boardId;
+    private String boardCategory;
     private String boardTab;
     private String boardTitle;
     private String boardContent;
+    private Long boardAuthorId;
     private String boardAuthor;
     private int boardRecommendUpCnt;
     private int boardRecommendDownCnt;
@@ -19,15 +21,17 @@ public class BoardDetailResponseDto {
     private int boardRecommendDownCheck; // 0 = false, 1 = true
     // private List<CommentResponseDto> boardComments;
 
-    public BoardDetailResponseDto(MainBoard entity) {
-        this.boardId = entity.getId();
-        this.boardTab = entity.getBoardTab();
-        this.boardTitle = entity.getBoardTitle();
-        this.boardContent = entity.getBoardContent();
-        this.boardAuthor = entity.getBoardAuthor();
-        this.boardRecommendUpCnt = entity.getBoardRecommendUpCnt();
-        this.boardRecommendDownCnt = entity.getBoardRecommendDownCnt();
-        this.boardViewsCnt = entity.getBoardViewsCnt();
+    public BoardDetailResponseDto(MainBoard mainBoard) {
+        this.boardId = mainBoard.getId();
+        this.boardCategory = mainBoard.getBoardCategory();
+        this.boardTab = mainBoard.getBoardTab();
+        this.boardTitle = mainBoard.getBoardTitle();
+        this.boardContent = mainBoard.getBoardContent();
+        this.boardAuthorId = mainBoard.getBoardAuthorId();
+        this.boardAuthor = mainBoard.getBoardAuthor();
+        this.boardRecommendUpCnt = mainBoard.getBoardRecommendUpCnt();
+        this.boardRecommendDownCnt = mainBoard.getBoardRecommendDownCnt();
+        this.boardViewsCnt = mainBoard.getBoardViewsCnt();
         // this.boardComments = entity.getBoardComments().stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 }

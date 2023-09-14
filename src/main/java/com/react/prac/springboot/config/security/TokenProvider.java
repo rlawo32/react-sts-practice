@@ -31,7 +31,8 @@ public class TokenProvider implements InitializingBean {
     private static final String SECURITY_KEY = "security";
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private final long tokenValidityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
     private final String secret;
     private Key key;
 
@@ -42,7 +43,8 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000; // 86400ms : 1.44m(0.001d), 86400000ms : 1440m(1d)
+        this.accessTokenValidityInMilliseconds = tokenValidityInSeconds * 1000; // 86400ms : 1.44m(0.001d), 86400000ms : 1440m(1d)
+        this.refreshTokenValidityInMilliseconds = tokenValidityInSeconds * 10000; // 86400ms : 1.44m(0.001d), 864000000ms : 14400m(10d)
     }
 
 
@@ -59,9 +61,13 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // 만료기한 설정 (현재 시간 + 1시간으로 설정)
+        // Date exprTime = Date.from(Instant.now().plus(1,  ChronoUnit.HOURS));
+
         // 토큰의 expire 시간을 설정
         long now = (new Date()).getTime();
-        Date exprTime = new Date(now + this.tokenValidityInMilliseconds);
+        Date accessExprTime = new Date(now + this.accessTokenValidityInMilliseconds);
+        Date refreshExprTime = new Date(now + this.refreshTokenValidityInMilliseconds);
 
         System.out.println("key 확인 1 : " + key.getEncoded());
         System.out.println("key 확인 2 : " + key.getAlgorithm());
@@ -72,44 +78,23 @@ public class TokenProvider implements InitializingBean {
                 .setSubject(authentication.getName())       // payload "sub": "name"
                 .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
                 .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
-                .setExpiration(exprTime)        // payload "exp": 1516239022 (예시)
+                .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
                 .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(exprTime)
+                .setExpiration(refreshExprTime)
                 .compact();
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .accessTokenExpiresIn(exprTime)
+                .accessTokenExpiresIn(refreshExprTime)
                 .build();
-    }
-
-    // JWT 생성 메서드
-    public String createJwtToken(String userEmail) {
-        // 만료기한 설정 (현재 시간 + 1시간으로 설정)
-        // Date exprTime = Date.from(Instant.now().plus(1,  ChronoUnit.HOURS));
-
-        // 토큰의 expire 시간을 설정
-        long now = (new Date()).getTime();
-        Date exprTime = new Date(now + this.tokenValidityInMilliseconds);
-
-        // base64로 인코딩
-        // SECURITY_KEY = Base64.getEncoder().encodeToString(SECURITY_KEY.getBytes());
-
-        Claims claims = Jwts.claims().setSubject(userEmail);
-
-        // JWT 생성
-        return Jwts.builder()
-                .setClaims(claims) // JWT 이름(sub) 설정
-                .setIssuedAt(new Date()) // JWT 생성일
-                .setExpiration(exprTime) // JWT 만료일
-                .signWith(SignatureAlgorithm.HS512, SECURITY_KEY) // 암호화에 사용될 알고리즘, 키 설정
-                .compact(); // JWT 생성 COMPACT
     }
 
     // JWT 검증 메서드

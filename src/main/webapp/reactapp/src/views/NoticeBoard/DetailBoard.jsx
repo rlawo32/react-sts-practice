@@ -10,12 +10,28 @@ import axios from "axios";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {Viewer} from "@toast-ui/react-editor";
 import Button from "@mui/material/Button";
+import cookie from "react-cookies";
 
 const DetailBoard = (props) => {
     const locationURL = window.location.href;
     const editorRef = useRef(null);
 
-    const [boardDetail, setBoardDetail] = useState("");
+    const [isLoginCheck, setIsLoginCheck] = useState(0);
+
+    const [boardDetail, setBoardDetail] = useState({
+        boardId: '',
+        boardCategory: '',
+        boardTab: '',
+        boardTitle: '',
+        boardContent: '',
+        boardAuthorId: '',
+        boardAuthor: '',
+        boardRecommendUpCnt: '',
+        boardRecommendDownCnt: '',
+        boardViewsCnt: '',
+        boardRecommendUpCheck: '',
+        boardRecommendDownCheck: ''
+    });
     const [prevId, setPrevId] = useState(0);
     const [nextId, setNextId] = useState(0);
     const [memberId, setMemberId] = useState(9999);
@@ -52,12 +68,7 @@ const DetailBoard = (props) => {
         commentRecommendDownCheck: ''
     }]);
 
-    const memberData = {
-        memberId: memberId
-    }
-
     const paging = {
-        memberId: memberId,
         boardId: props.id,
         recordPerPage: 10,
         page: pageNo
@@ -97,59 +108,68 @@ const DetailBoard = (props) => {
         alert('복사 성공 \n' + text);
     }
 
-    const onClickMainRecommendUp = async (event) => {
+    const onClickMainRecommendUp = async (e) => {
 
-        const mainRecommendData = {
-            memberId: memberId,
-            boardId: props.id,
-            commentId: "",
-            recommendType: "U"
-        }
+        console.log("테스트 확인 : " + e);
 
-        if(event == 1) {
-            await axios({
-                method: "DELETE",
-                url: '/board/recommendCancel',
-                data: JSON.stringify(mainRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setMainRecommendCheck(false);
+        if(isLoginCheck == 1) {
+            const mainRecommendData = {
+                boardId: props.id,
+                commentId: "",
+                recommendType: "U"
+            }
+
+            if(e == 1) {
+                await axios({
+                    method: "DELETE",
+                    url: '/board/recommendCancel',
+                    data: JSON.stringify(mainRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setMainRecommendCheck(false);
+            } else {
+                await axios({
+                    method: "POST",
+                    url: '/board/recommendExec',
+                    data: JSON.stringify(mainRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setMainRecommendCheck(true);
+            }
+            console.log(mainRecommendCheck);
         } else {
-            await axios({
-                method: "POST",
-                url: '/board/recommendExec',
-                data: JSON.stringify(mainRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setMainRecommendCheck(true);
+            alert("로그인 하시길 바랍니다.");
         }
     }
 
-    const onClickMainRecommendDown = async (event) => {
+    const onClickMainRecommendDown = async (e) => {
 
-        const mainRecommendData = {
-            memberId: memberId,
-            boardId: props.id,
-            commentId: "",
-            recommendType: "D"
-        }
+        if(isLoginCheck == 1) {
+            const mainRecommendData = {
+                boardId: props.id,
+                commentId: "",
+                recommendType: "D"
+            }
 
-        if(event == 1) {
-            await axios({
-                method: "DELETE",
-                url: '/board/recommendCancel',
-                data: JSON.stringify(mainRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setMainRecommendCheck(false);
+            if(e == 1) {
+                await axios({
+                    method: "DELETE",
+                    url: '/board/recommendCancel',
+                    data: JSON.stringify(mainRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setMainRecommendCheck(false);
+            } else {
+                await axios({
+                    method: "POST",
+                    url: '/board/recommendExec',
+                    data: JSON.stringify(mainRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setMainRecommendCheck(true);
+            }
         } else {
-            await axios({
-                method: "POST",
-                url: '/board/recommendExec',
-                data: JSON.stringify(mainRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setMainRecommendCheck(true);
+            alert("로그인 하시길 바랍니다.");
         }
     }
 
@@ -158,29 +178,32 @@ const DetailBoard = (props) => {
         const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendUp");
         const CommentRecommendUpChecked = comment_target[0].children[0].children[0].checked;
 
-        const commentRecommendData = {
-            memberId: memberId,
-            boardId: props.id,
-            commentId: selectCommentId,
-            recommendType: "U"
-        }
+        if(isLoginCheck == 1) {
+            const commentRecommendData = {
+                boardId: props.id,
+                commentId: selectCommentId,
+                recommendType: "U"
+            }
 
-        if(CommentRecommendUpChecked) {
-            await axios({
-                method: "DELETE",
-                url: '/board/recommendCancel',
-                data: JSON.stringify(commentRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setCommentRecommendCheck(false);
+            if(CommentRecommendUpChecked) {
+                await axios({
+                    method: "DELETE",
+                    url: '/board/recommendCancel',
+                    data: JSON.stringify(commentRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setCommentRecommendCheck(false);
+            } else {
+                await axios({
+                    method: "POST",
+                    url: '/board/recommendExec',
+                    data: JSON.stringify(commentRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setCommentRecommendCheck(true);
+            }
         } else {
-            await axios({
-                method: "POST",
-                url: '/board/recommendExec',
-                data: JSON.stringify(commentRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setCommentRecommendCheck(true);
+            alert("로그인 하시길 바랍니다.");
         }
     }
 
@@ -189,29 +212,32 @@ const DetailBoard = (props) => {
         const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendDown");
         const CommentRecommendDownChecked = comment_target[0].children[0].children[0].checked;
 
-        const commentRecommendData = {
-            memberId: memberId,
-            boardId: props.id,
-            commentId: selectCommentId,
-            recommendType: "D"
-        }
+        if(isLoginCheck == 1) {
+            const commentRecommendData = {
+                boardId: props.id,
+                commentId: selectCommentId,
+                recommendType: "D"
+            }
 
-        if(CommentRecommendDownChecked) {
-            await axios({
-                method: "DELETE",
-                url: '/board/recommendCancel',
-                data: JSON.stringify(commentRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setCommentRecommendCheck(false);
+            if(CommentRecommendDownChecked) {
+                await axios({
+                    method: "DELETE",
+                    url: '/board/recommendCancel',
+                    data: JSON.stringify(commentRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setCommentRecommendCheck(false);
+            } else {
+                await axios({
+                    method: "POST",
+                    url: '/board/recommendExec',
+                    data: JSON.stringify(commentRecommendData),
+                    headers: {'Content-type': 'application/json'}
+                });
+                setCommentRecommendCheck(true);
+            }
         } else {
-            await axios({
-                method: "POST",
-                url: '/board/recommendExec',
-                data: JSON.stringify(commentRecommendData),
-                headers: {'Content-type': 'application/json'}
-            });
-            setCommentRecommendCheck(true);
+            alert("로그인 하시길 바랍니다.");
         }
     }
 
@@ -293,9 +319,7 @@ const DetailBoard = (props) => {
             const getBoards = async () => {
                 const detail = await axios({
                     method: "POST",
-                    url: '/board/detailBoard/' + props.id,
-                    data: JSON.stringify(memberData),
-                    headers: {'Content-type': 'application/json'}
+                    url: '/board/detailBoard/' + props.id
                 })
 
                 setBoardDetail(detail.data);
@@ -310,9 +334,7 @@ const DetailBoard = (props) => {
             const getBoards = async () => {
                 const detail = await axios({
                     method: "POST",
-                    url: '/board/detailBoard/' + locationParameter.substring(7),
-                    data: JSON.stringify(memberData),
-                    headers: {'Content-type': 'application/json'}
+                    url: '/board/detailBoard/' + locationParameter.substring(7)
                 })
 
                 setBoardDetail(detail.data);
@@ -321,7 +343,13 @@ const DetailBoard = (props) => {
 
             getBoards();
         }
-    }, [props.id, mainRecommendCheck]);
+
+        if(cookie.load("refreshToken")) {
+            setIsLoginCheck(1);
+        } else {
+            setIsLoginCheck(0);
+        }
+    }, [props.id, mainRecommendCheck, isLoginCheck]);
     // props.id:url 직접 입력 시를 위함 (세부적인 기능 체크 필요)
     // 추후 다수 사용자로 인한 트래픽 확인 => mainRecommendCheck:게시글 추천 체크
 
@@ -495,7 +523,11 @@ const DetailBoard = (props) => {
             <div className="detail-main">
                 <div className="detail-header1">
                     <span className="detail-title">{boardDetail.boardTitle}</span>
-                    <span className="detail-date">{boardDetail.boardTab}</span>
+                    { `${boardDetail.boardTab}` === 'T1' && <span className="detail-date">화제</span> }
+                    { `${boardDetail.boardTab}` === 'T2' && <span className="detail-date">정보</span> }
+                    { `${boardDetail.boardTab}` === 'T3' && <span className="detail-date">오류</span> }
+                    { `${boardDetail.boardTab}` === 'T4' && <span className="detail-date">사진/동영상</span> }
+                    { `${boardDetail.boardTab}` === 'T5' && <span className="detail-date">팁과 노하우</span> }
                 </div>
                 <div className="detail-header2">
                     <span className="detail-author">{boardDetail.boardAuthor}</span>
@@ -597,6 +629,7 @@ const DetailBoard = (props) => {
                                             <input type="hidden" value={comments.commentNestedId} />
                                             <input type="hidden" value={comments.commentNestedLevel} />
                                             {
+                                                `${isLoginCheck}` == 1 ?
                                                 `${comments.commentNestedLevel}` == 1 ? null :
                                                     <button className="comment-nested-btn" onClick={(e) =>
                                                         nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
@@ -604,6 +637,8 @@ const DetailBoard = (props) => {
                                                             value={comments.commentId}>
                                                         댓글
                                                     </button>
+                                                    :
+                                                    null
                                             }
                                         </span>
                                         <span className="comment-recommendUp">
@@ -669,11 +704,21 @@ const DetailBoard = (props) => {
                     </div>
                     <div className="comment-write">
                         <div className="comment-tag">댓글 작성</div>
-                        <div className="comment-box">
-                            <textarea id="comment-text" placeholder="댓글을 입력하세요" onChange={changeCommentTextHandler}/>
+                        <div className="comment-box" style={ isLoginCheck ? {} : {} }>
+                            {
+                                `${isLoginCheck}` == 1 ?
+                                    <textarea id="comment-text" placeholder="댓글을 입력하세요" onChange={changeCommentTextHandler}/>
+                                    :
+                                    <textarea id="comment-text" placeholder="댓글을 작성하시려면 로그인 해주세요." readOnly/>
+                            }
                         </div>
-                        <div className="comment-btn" >
-                            <button className="btn-design" onClick={commentSaveHandler}>등록</button>
+                        <div className="comment-btn" style={ isLoginCheck ? {} : {} }>
+                            {
+                                `${isLoginCheck}` == 1 ?
+                                    <button className="btn-design" onClick={commentSaveHandler}>등록</button>
+                                    :
+                                    <button className="btn-design" onClick={() => alert('로그인 하시길 바랍니다.')}>등록</button>
+                            }
                         </div>
                     </div>
                 </div>

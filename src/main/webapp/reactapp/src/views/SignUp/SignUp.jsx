@@ -340,7 +340,7 @@ const SignUp = () => {
         memberEmail: `${userEmail}`,
         memberPw: `${userPw}`,
         memberNickname: `${userNickName}`,
-        memberBirth: `${userBirthY}` + `${userBirthM}` + `${userBirthD}`,
+        memberBirth: `${userBirthY}` + "/" + `${userBirthM}` + "/" + `${userBirthD}`,
     }
 
     const HandleEmailChkSend = async () => {

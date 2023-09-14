@@ -5,25 +5,56 @@ import AppBarNavigation from "../Navigation/AppBarNavigation";
 import './MainBoard.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
+import cookie from "react-cookies";
 
 const TableBoard = (props) => {
     const navigate = useNavigate();
 
-    const subTab_name = ['전체', '화제', '정보', '오류', '사진/동영상', '팁과 노하우'];
-    const [currentSubTab, clickSubTab] = useState("");
+    const [isLoginCheck, setIsLoginCheck] = useState(false);
+
+    const subTab_name = [
+        {
+            key: 'T0',
+            value: '전체'
+        },
+        {
+            key: 'T1',
+            value: '화제'
+        },
+        {
+            key: 'T2',
+            value: '정보'
+        },
+        {
+            key: 'T3',
+            value: '오류'
+        },
+        {
+            key: 'T4',
+            value: '사진/동영상'
+        },
+        {
+            key: 'T5',
+            value: '팁과 노하우'
+        },
+        ];
+    const category_name = props.category;
+    const [currentCategoryTab, clickCategoryTab] = useState(props.sey);
+    const [currentSubTab, clickSubTab] = useState(subTab_name[0].key);
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
 
     const [searchText, setSearchText] = useState("");
     const [searchSelect, setSearchSelect] = useState("title");
 
-    const [game1BoardList, setGame1BoardList] = useState([{
+    const [tableBoardList, setTableBoardList] = useState([{
         boardId: '',
         boardTab: '',
         boardTitle: '',
         boardContent: '',
         boardAuthor: '',
-        boardRecommendCnt: '',
+        boardRecommendUpCnt: '',
+        boardRecommendDownCnt: '',
         boardViewsCnt: '',
         modifiedDate: ''
     }]);
@@ -34,6 +65,7 @@ const TableBoard = (props) => {
         recordPerPage: 5,
         page: pageNo,
         pagePerBlock: 10,
+        pageCategory: props.sey,
         pageSort: currentSubTab
     }
 
@@ -52,13 +84,21 @@ const TableBoard = (props) => {
                 url: '/board/tableBoardList',
                 params: paging
             });
-            setGame1BoardList(tableBoardList.data.boardList);
+            setTableBoardList(tableBoardList.data.boardList);
             setTotalPage(tableBoardList.data.totalPage);
             console.log(tableBoardList.data);
         };
 
         getBoards();
-    }, [pageNo, currentSubTab]);
+
+        if(cookie.load("refreshToken")) {
+            setIsLoginCheck(true);
+        } else {
+            setIsLoginCheck(false);
+        }
+
+        console.log("띵띵 확인 : " + props.sey);
+    }, [props.sey, pageNo, currentSubTab, isLoginCheck]);
 
     const changeDetailBoard = async (itemID) => {
         const detailBoardId = itemID;
@@ -84,25 +124,25 @@ const TableBoard = (props) => {
             url: '/board/tableBoardList',
             params: paging
         });
-        setGame1BoardList(search.data.boardList);
+        setTableBoardList(search.data.boardList);
         setTotalPage(search.data.totalPage);
     }
 
     const changeSubTabHandler = () => {
         let subTab_data = [];
         for(let i=0; i<subTab_name.length; i++) {
-            subTab_data.push({id: i, name: subTab_name[i]});
+            subTab_data.push({id: i, key: subTab_name[i].key, value: subTab_name[i].value});
         }
         return subTab_data;
     }
 
-    const selectSubTabHandler = (subTabName) => {
-        if(subTabName == '전체') {
+    const selectSubTabHandler = (subTabKey) => {
+        if(subTabKey == 'T0') {
             clickSubTab("");
             setSearchText("");
             // navigate("/board");
         } else {
-            clickSubTab(subTabName);
+            clickSubTab(subTabKey);
         }
     }
 
@@ -127,12 +167,12 @@ const TableBoard = (props) => {
                 <div className="sub_tab">
                     <ul>
                         {changeSubTabHandler().map((rl) => (
-                            <li key={rl.id} onClick={() => selectSubTabHandler(rl.name)}>{rl.name}</li>
+                            <li key={rl.id} onClick={() => selectSubTabHandler(rl.key)}>{rl.value}</li>
                         ))}
                     </ul>
                 </div>
                 <div className="board-tableName">
-                    {props.name}
+                    {props.value}
                 </div>
                 <div className="board-table">
                     <div className="board-header">
@@ -160,15 +200,16 @@ const TableBoard = (props) => {
                         </tr>
                         </thead>
                         <tbody id="tbody">
-                        {game1BoardList.map((boards, idx) => {
+                        {tableBoardList.map((boards, idx) => {
                             return (
                                 <tr key={boards.boardId}>
-                                    <td>{boards.boardTab}</td>
-                                    {/*<td>*/}
-                                    {/*    <Link to={{ pathname: `/detailBoard/${boards.boardNo}` }} style={{textDecoration: 'none', color: 'white'}}>*/}
-                                    {/*        {boards.boardTitle}*/}
-                                    {/*    </Link>*/}
-                                    {/*</td>*/}
+
+                                    { `${boards.boardTab}` === 'T1' && <td>화제</td> }
+                                    { `${boards.boardTab}` === 'T2' && <td>정보</td> }
+                                    { `${boards.boardTab}` === 'T3' && <td>오류</td> }
+                                    { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
+                                    { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
+
                                     <td>
                                         <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} onClick={() => changeDetailBoard(boards.boardId)} style={{textDecoration: 'none', color: 'white'}}>
                                             {boards.boardTitle}
@@ -177,7 +218,7 @@ const TableBoard = (props) => {
                                     <td>{boards.boardAuthor}</td>
                                     <td>{boards.modifiedDate}</td>
                                     <td>{boards.boardViewsCnt}</td>
-                                    <td>{boards.boardRecommendCnt}</td>
+                                    <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
                                 </tr>
                             )
                         })}
@@ -185,7 +226,7 @@ const TableBoard = (props) => {
                     </table>
                     <div className="board-footer">
                         <div className="board-write">
-                            <Link to="/save" state={{subTab_name}}>
+                            <Link to="/save" state={{subTab_name, category_name}} style={ isLoginCheck ? {} : {visibility: "hidden"} }>
                                 <button className="write-box"><FontAwesomeIcon icon={faPen} /> 글 쓰기</button>
                             </Link>
                         </div>

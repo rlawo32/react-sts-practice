@@ -1,9 +1,11 @@
 package com.react.prac.springboot.web;
 
+import com.react.prac.springboot.config.auth.SecurityUtil;
 import com.react.prac.springboot.config.security.dto.TokenDto;
 import com.react.prac.springboot.service.users.MemberService;
 import com.react.prac.springboot.util.EmailUtil;
 import com.react.prac.springboot.web.dto.*;
+import com.react.prac.springboot.web.dto.user.MemberInfoResponseDto;
 import com.react.prac.springboot.web.dto.user.MemberSignInRequestDto;
 import com.react.prac.springboot.web.dto.user.MemberSignInResponseDto;
 import com.react.prac.springboot.web.dto.user.MemberSignUpRequestDto;
@@ -23,17 +25,14 @@ public class MemberController {
 
     @GetMapping("/sendAuthCode")
     public Map<String, Object> sendAuthCode(HttpServletRequest request) {
-        System.out.println(request);
+
         return EmailUtil.sendAuthCode(request.getParameter("userEmail"));
     }
 
     @PostMapping("/signUp")
     public ResponseDto<?> signUp(@RequestBody MemberSignUpRequestDto requestDto) {
-        System.out.println("SignUp!!!!!!!!!!!" + requestDto.toString());
 
         ResponseDto<?> result = memberService.signUp(requestDto);
-
-        System.out.println(result);
 
         return result;
     }
@@ -59,9 +58,16 @@ public class MemberController {
 
     @PostMapping("/signIn")
     public ResponseDto<TokenDto> signIn(@RequestBody MemberSignInRequestDto requestDto) {
-        System.out.println("SignIn!!!!!!!!!!!");
 
         ResponseDto<TokenDto> result = memberService.signIn(requestDto);
+
+        return result;
+    }
+
+    @PostMapping("/memberInfo")
+    public ResponseDto<MemberInfoResponseDto> findMemberInfo() {
+
+        ResponseDto<MemberInfoResponseDto> result = memberService.memberInfo(SecurityUtil.getCurrentMemberId());
 
         return result;
     }

@@ -1,5 +1,6 @@
 package com.react.prac.springboot.web;
 
+import com.react.prac.springboot.config.auth.SecurityUtil;
 import com.react.prac.springboot.service.posts.BoardService;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
@@ -41,10 +42,9 @@ public class BoardController {
     }
 
     @PostMapping("/detailBoard/{boardId}")
-    public BoardDetailResponseDto detailBoard(@PathVariable Long boardId, @RequestBody Map<String, String> request) {
-        Long memberId = Long.parseLong(request.get("memberId"));
+    public BoardDetailResponseDto detailBoard(@PathVariable Long boardId) {
 
-        return boardService.findByBoardId(boardId, memberId);
+        return boardService.findByBoardId(boardId);
     }
 
     @DeleteMapping("/api/v1/posts/{id}")

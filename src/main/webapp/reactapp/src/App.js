@@ -8,6 +8,7 @@ import SignIn from "./views/SignIn/SignIn";
 import MainBoard from "./views/NoticeBoard/MainBoard";
 import TableBoard from "./views/NoticeBoard/TableBoard";
 import DetailBoard from "./views/NoticeBoard/DetailBoard";
+import MemberInfo from "./views/MemberInfo/MemberInfo";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
 import axios from "axios";
@@ -17,27 +18,22 @@ class App extends Component {
 
 
     componentDidMount() {
+        if(cookie.load('refreshToken')) {
+            let token = {
+                accessToken: "",
+                refreshToken: cookie.load('refreshToken')
+            }
 
-        // let token = {
-        //     accessToken: `${accessToken}`,
-        //     refreshToken: `${refreshToken}`
-        // }
-        let token = {
-            accessToken: "",
-            refreshToken: cookie.load('refreshToken')
+            axios({
+                method: "POST",
+                url: "/auth/reissue",
+                data: JSON.stringify(token),
+                headers: {'Content-type': 'application/json'}
+            }).then((response) => {
+                const responseData = response.data;
+                this.onLoginSuccess(responseData);
+            })
         }
-
-        axios({
-            method: "POST",
-            url: "/auth/reissue",
-            data: JSON.stringify(token),
-            headers: {'Content-type': 'application/json'}
-        }).then((response) => {
-            const responseData = response.data;
-            this.onLoginSuccess(responseData);
-        })
-
-        console.log("띵띵 확인 : " + cookie.load('refreshToken'));
     }
 
 
@@ -69,8 +65,9 @@ class App extends Component {
                         <Route path="/signUp" element={<SignUp />} />
                         <Route path="/signIn" element={<SignIn />} />
                         <Route path="/board" element={<MainBoard />} />
+                        <Route path="/memberInfo" element={<MemberInfo />} />
 
-                        <Route path="/game1board" element={<TableBoard />} />
+                        <Route path="/tableBoard" element={<TableBoard />} />
 
                         {/*<Route path="/detailBoard/:boardNo" element={<DetailBoard />} />*/}
                         <Route path="/detailBoard" element={<DetailBoard />} />

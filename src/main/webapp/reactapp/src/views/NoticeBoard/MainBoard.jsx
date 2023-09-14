@@ -2,20 +2,45 @@ import AppBarNavigation from "../Navigation/AppBarNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss'
-import BoardTagBarNavigation from "./BoardTagBarNavigation";
 import TableBoard from "./TableBoard";
 import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGithubSquare, faYoutubeSquare} from "@fortawesome/free-brands-svg-icons";
 import DetailBoard from "./DetailBoard";
-import axios from "axios";
 
 const MainBoard = () => {
     const props = useLocation().state?.mainReset;
     const locationParameter = window.location.pathname;
 
-    const tab_name = ['리그오브레전드', '오버워치', '배틀그라운드', '메이플스토리', '마인크래프트', '스팀'];
+    const category_name = [
+        {
+            key: "C0",
+            value: '전체'
+        },
+        {
+            key: "C1",
+            value: '리그오브레전드'
+        },
+        {
+            key: "C2",
+            value: '오버워치'
+        },
+        {
+            key: "C3",
+            value: '배틀그라운드'
+        },
+        {
+            key: "C4",
+            value: '메이플스토리'
+        },
+        {
+            key: "C5",
+            value: '마인크래프트'
+        },
+        {
+            key: "C6",
+            value: '스팀'
+        },
+        ];
     const [currentTab, clickTab] = useState(0);
 
     const [detailBoardId, setDetailBoardId] = useState(null);
@@ -25,8 +50,8 @@ const MainBoard = () => {
 
     const changeTabHandler = () => {
         let tab_data = [];
-        for(let i=0; i<tab_name.length; i++) {
-            tab_data.push({id: i, name: tab_name[i], view:<TableBoard id={i} name={tab_name[i]} changeBoardId={changeDetailBoardId}/>});
+        for(let i=0; i<category_name.length; i++) {
+            tab_data.push({id: i, name: category_name[i].value, view:<TableBoard id={i} sey={category_name[i].key} value={category_name[i].value} category={category_name} changeBoardId={changeDetailBoardId}/>});
         }
         return tab_data;
     }
@@ -46,10 +71,6 @@ const MainBoard = () => {
         if(props === null) {
             setDetailBoardId(props)
         }
-
-        console.log("부모 props 확인 : " + detailBoardId);
-        console.log(changeTabHandler());
-        console.log(props);
     }, [props, locationParameter]);
 
     return (

@@ -8,6 +8,7 @@ import com.react.prac.springboot.jpa.domain.user.Member;
 import com.react.prac.springboot.jpa.domain.user.RefreshToken;
 import com.react.prac.springboot.jpa.domain.user.RefreshTokenRepository;
 import com.react.prac.springboot.web.dto.ResponseDto;
+import com.react.prac.springboot.web.dto.user.MemberInfoResponseDto;
 import com.react.prac.springboot.web.dto.user.MemberSignInResponseDto;
 import com.react.prac.springboot.web.dto.user.MemberSignInRequestDto;
 import com.react.prac.springboot.web.dto.user.MemberSignUpRequestDto;
@@ -51,11 +52,13 @@ public class MemberService {
         return ResponseDto.setSuccess("Sign Up Success", null);
     }
 
+    @Transactional
     public boolean emailDuplicationChk(String memberEmail) {
 
         return memberRepository.existsByMemberEmail(memberEmail);
     }
 
+    @Transactional
     public boolean nickNameDuplicationChk(String memberNickname) {
 
         return memberRepository.existsByMemberNickname(memberNickname);
@@ -64,37 +67,14 @@ public class MemberService {
     @Transactional
     public ResponseDto<TokenDto> signIn(MemberSignInRequestDto requestDto) {
 
-        MemberSignInResponseDto memberSignInResponseDto = new MemberSignInResponseDto();
         TokenDto tokenDto = new TokenDto();
 
         try {
-            // getInstance() 메소드의 매개변수에 SHA-256 알고리즘 이름으로 지정
-            MessageDigest mdSHA256 = MessageDigest.getInstance("SHA-256");
+            boolean existsLogin = memberRepository.existsByMemberEmail(requestDto.getMemberEmail());
 
-            // 받아온 데이터(패스워드)를 암호화 후 바이트 배열로 해쉬를 반환
-            byte[] sha256Hash = mdSHA256.digest(requestDto.getMemberPw().getBytes("UTF-8"));
-
-            // StringBuffer 객체는 계속해서 append를 해도 객체는 오직 하나만 생성된다. => 메모리 낭비 개선
-            StringBuffer hexSHA256hash = new StringBuffer();
-
-            // 256비트로 생성 => 32Byte => 1Byte(8bit) => 16진수 2자리로 변환 => 16진수 한 자리는 4bit
-            for(byte b : sha256Hash) {
-                String hexString = String.format("%02x", b);
-                hexSHA256hash.append(hexString);
-            }
-
-            String memberEmail = requestDto.getMemberEmail();
-            String memberPw = hexSHA256hash.toString();
-
-            System.out.println("패스워드 암호화 확인 : " + passwordEncoder.encode(requestDto.getMemberPw()));
-
-            boolean existsLogin = memberRepository.existsByMemberEmailAndMemberPw(memberEmail, passwordEncoder.encode(requestDto.getMemberPw()));
-
-            if(existsLogin) {
+            if(!existsLogin) {
                 return ResponseDto.setFailed("Sign In Information Does Not Match");
             } else {
-                Member member = memberRepository.findByMemberEmail(memberEmail).get();
-
                 // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
                 UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
 
@@ -109,20 +89,15 @@ public class MemberService {
                 // 3. 인증 정보를 기반으로 JWT 토큰 생성
                 tokenDto = tokenProvider.generateTokenDto(authentication);
 
-                // String token = tokenProvider.createJwtToken(memberEmail);
-//                int exprTime = 3600000;
-//
-//                memberSignInResponseDto.setToken(token);
-//                memberSignInResponseDto.setExprTime(exprTime);
-//                memberSignInResponseDto.setMember(member);
+                // 4. RefreshToken 저장
+                RefreshToken refreshToken = RefreshToken.builder()
+                        .key(authentication.getName())
+                        .value(tokenDto.getRefreshToken())
+                        .build();
+
+                refreshTokenRepository.save(refreshToken);
             }
 
-        } catch (NoSuchAlgorithmException n) {
-            n.printStackTrace();
-            return ResponseDto.setFailed("SHA-256 Error!");
-        } catch (UnsupportedEncodingException u) {
-            u.printStackTrace();
-            return ResponseDto.setFailed("Byte : getBytes Error!");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("Data Base Error!");
@@ -142,7 +117,7 @@ public class MemberService {
                 return ResponseDto.setFailed("Refresh Token 이 유효하지 않습니다.");
             } else {
                 // 2. Access Token 에서 Member ID 가져오기
-                Authentication authentication = tokenProvider.getAuthentication(requestDto.getAccessToken());
+                Authentication authentication = tokenProvider.getAuthentication(requestDto.getRefreshToken());
 
                 // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
                 RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
@@ -167,5 +142,18 @@ public class MemberService {
 
         // 토큰 발급
         return ResponseDto.setSuccess("Reissue Success", tokenDto);
+    }
+
+    @Transactional
+    public ResponseDto<MemberInfoResponseDto> memberInfo(Long memberId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+        MemberInfoResponseDto memberInfoResponseDto = new MemberInfoResponseDto(member);
+
+        System.out.println(memberInfoResponseDto.getMemberId());
+
+        return ResponseDto.setSuccess("memberInfo Success", memberInfoResponseDto);
     }
 }

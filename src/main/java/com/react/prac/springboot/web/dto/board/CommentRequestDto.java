@@ -17,7 +17,6 @@ public class CommentRequestDto {
     private Long commentTargetId;
     private Long commentNestedId;
     private Long commentNestedLevel;
-    private Long memberId;
     private Long boardId;
     private String commentContent;
     private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
@@ -25,13 +24,12 @@ public class CommentRequestDto {
 
     @Builder
     public CommentRequestDto(Long commentParentId, Long commentTargetId, Long commentNestedId,
-                             Long commentNestedLevel, Long memberId, Long boardId, String commentContent,
+                             Long commentNestedLevel, Long boardId, String commentContent,
                              String createdDate, String modifiedDate) {
         this.commentParentId = commentParentId;
         this.commentTargetId = commentTargetId;
         this.commentNestedId = commentNestedId;
         this.commentNestedLevel = commentNestedLevel;
-        this.memberId = memberId;
         this.boardId = boardId;
         this.commentContent = commentContent;
         this.createdDate = createdDate;
