@@ -518,7 +518,7 @@ public class BoardService {
         int totalComments = 0;
 
         if(boardId == 0) {
-            pageable = boardCommentRepository.findByMemberComment(SecurityUtil.getCurrentMemberId(), PageRequest.of(page, recordPerPage, Sort.by("commentParentId").and(Sort.by("id"))));
+            pageable = boardCommentRepository.findByMemberComment(SecurityUtil.getCurrentMemberId(), PageRequest.of(page, recordPerPage));
 
             totalPage = pageable.getTotalPages();
             totalComments = (int) pageable.getTotalElements();

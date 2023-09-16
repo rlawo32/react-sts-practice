@@ -19,8 +19,10 @@ const MemberInfoCommentLog = () => {
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [totalComments, setTotalComments] = useState(0);
+    const [logNo, setLogNo] = useState(0);
 
     const [commentList, setCommentList] = useState([{
+        commentLogNo: '',
         commentId: '',
         commentNestedId: '',
         commentNestedLevel: '',
@@ -43,6 +45,14 @@ const MemberInfoCommentLog = () => {
         page: pageNo
     }
 
+    const pagination = () => {
+        let result = [];
+        for (let i=0; i<totalPage; i++) {
+            result.push(<li key={i} onClick={() => setPageNo(i)}><button className="list-item">{i+1}</button></li>);
+        }
+        return result;
+    }
+
     useEffect(() => {
         const getBoards = async () => {
 
@@ -52,14 +62,20 @@ const MemberInfoCommentLog = () => {
                 params: paging
             })
 
-            setCommentList(boardComments.data.commentList);
+            const datalist = boardComments.data.commentList;
+
+            setCommentList(datalist);
             setTotalPage(boardComments.data.totalPage);
             setTotalComments(boardComments.data.totalComments);
+
+            for(let i=0; i<datalist.length; i++) {
+                datalist[i].commentLogNo = (i  + (pageNo * 10)) + 1;
+            }
         };
 
         getBoards();
 
-    }, [])
+    }, [pageNo])
 
     return (
         <div className="member-info">
@@ -82,7 +98,7 @@ const MemberInfoCommentLog = () => {
                     {commentList.map((comments, idx) => {
                         return (
                             <tr key={comments.commentId}>
-                                <td>NULL</td>
+                                <td>{comments.commentLogNo}</td>
                                 { `${comments.commentBoardCategory}` === 'C1' && <td>리그오브레전드</td> }
                                 { `${comments.commentBoardCategory}` === 'C2' && <td>오버워치</td> }
                                 { `${comments.commentBoardCategory}` === 'C3' && <td>배틀그라운드</td> }
@@ -97,6 +113,11 @@ const MemberInfoCommentLog = () => {
                     })}
                     </tbody>
                 </table>
+                <div className="comment-paging">
+                    <ul>
+                        {pagination()}
+                    </ul>
+                </div>
 
             </div>
 

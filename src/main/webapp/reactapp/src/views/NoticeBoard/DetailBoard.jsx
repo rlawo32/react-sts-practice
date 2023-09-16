@@ -53,6 +53,7 @@ const DetailBoard = (props) => {
     const [totalComments, setTotalComments] = useState(0);
     const [commentText, setCommentText] = useState("");
     const [commentList, setCommentList] = useState([{
+        commentLogNo: '',
         commentId: '',
         commentNestedId: '',
         commentNestedLevel: '',
@@ -65,7 +66,8 @@ const DetailBoard = (props) => {
         commentRecommendUpCnt: '',
         commentRecommendDownCnt: '',
         commentRecommendUpCheck: '',
-        commentRecommendDownCheck: ''
+        commentRecommendDownCheck: '',
+        commentBoardCategory: ''
     }]);
 
     const paging = {

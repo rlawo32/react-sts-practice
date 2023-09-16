@@ -28,6 +28,7 @@ public class CommentResponseDto {
     private int commentRecommendDownCnt;
     private int commentRecommendUpCheck; // 0 = false, 1 = true
     private int commentRecommendDownCheck; // 0 = false, 1 = true
+    private int commentLogNo;
     private String commentBoardCategory;
 
     public CommentResponseDto(BoardComment boardComment) {

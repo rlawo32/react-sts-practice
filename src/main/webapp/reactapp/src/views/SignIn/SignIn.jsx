@@ -86,16 +86,7 @@ const SignIn = () => {
 
     const onLoginSuccess = (response) => {
 
-        console.log(response.data);
-
-        console.log(response.data.accessToken);
-        console.log(response.data.refreshToken);
-
         const { grantType, accessToken, refreshToken, accessTokenExpiresIn} = response.data;
-
-        console.log(accessToken);
-        console.log(refreshToken);
-        console.log(accessTokenExpiresIn);
 
         const expires = new Date(accessTokenExpiresIn);
 

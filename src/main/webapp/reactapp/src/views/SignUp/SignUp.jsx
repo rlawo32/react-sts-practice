@@ -442,7 +442,7 @@ const SignUp = () => {
                 url: "/member/signUp",
                 data: JSON.stringify(userData),
                 headers: {'Content-type': 'application/json'}
-            }).then(function() {
+            }).then((res) => {
                 window.alert("회원가입이 완료되었습니다");
                 navigate("/");
             }).catch(function(error) {
