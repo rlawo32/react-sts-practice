@@ -6,18 +6,20 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import cookie from "react-cookies";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
 export default function ButtonAppBar() {
+    const navigate = useNavigate();
 
     const [isLoginCheck, setIsLoginCheck] = useState(0);;
 
     const logout = () => {
         cookie.remove('refreshToken');
         window.location.reload();
+        navigate("/");
     }
 
     const memberInfo = () => {

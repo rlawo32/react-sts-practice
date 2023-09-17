@@ -51,9 +51,9 @@ public class Member extends BaseTimeEntity {
         this.picture = picture;
     }
 
-    public Member update(String name, String picture) {
-        this.memberNickname = name;
-        this.picture = picture;
+    public Member update(String memberNickname, String memberBirth) {
+        this.memberNickname = memberNickname;
+        this.memberBirth = memberBirth;
 
         return this;
     }

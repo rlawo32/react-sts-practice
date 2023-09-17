@@ -1,6 +1,7 @@
 package com.react.prac.springboot.jpa.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,4 +25,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByMemberEmail(String memberEmail);
 
     boolean existsByMemberNickname(String memberNickname);
+
+    @Modifying
+    @Query("UPDATE Member m SET m.picture = :picture WHERE m.id = :memberId")
+    void updateByMemberPicture(@Param("memberId") Long memberId, @Param("picture") String picture);
+
 }

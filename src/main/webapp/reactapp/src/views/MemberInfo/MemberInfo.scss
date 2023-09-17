@@ -7,34 +7,6 @@
   .info-select {
     margin-top: 100px;
     margin-bottom: 20px;
-    ul {
-      list-style: none;
-      border: none;
-
-      li {
-        display: inline-block;
-        text-align: center;
-
-        .list-item {
-
-          background-color: transparent;
-          border: 2px solid #5c636a;
-          border-radius: 0.6em;
-          color: #e2e3e5;
-          cursor: pointer;
-          font-size: 1.3rem;
-          font-weight: 400;
-          text-transform: uppercase;
-          margin: 2px;
-          padding: 0.3em 0.8em;
-
-          &:hover {
-            box-shadow: 0 0 40px 40px #4d5154 inset;
-          }
-        }
-
-      }
-    }
   }
 
   .profile-view {
@@ -50,6 +22,16 @@
       margin: 30px auto 90px;
       width: 250px;
       height: 250px;
+      cursor: pointer;
+
+      .upload-picture {
+        position: relative;
+        border: none;
+        border-radius: 100%;
+        width: 250px;
+        height: 250px;
+        background-color: transparent;
+      }
     }
 
     .profile-info {
@@ -114,44 +96,158 @@
     width: 900px;
     height: 700px;
 
-    .comment-paging {
-      ul {
-        margin-top: 10px;
-        list-style: none;
-        border: none;
-
-        li {
-          display: inline-block;
-          text-align: center;
-
-          .list-item {
-
-            background-color: transparent;
-            border: 2px solid #5c636a;
-            border-radius: 0.6em;
-            color: #e2e3e5;
-            cursor: pointer;
-            font-size: 1.3rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            margin: 2px;
-            padding: 0.3em 0.8em;
-
-            &:hover {
-              box-shadow: 0 0 40px 40px #4d5154 inset;
-            }
-          }
-
-        }
-      }
-    }
   }
 
   .loginLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
     margin: 20px auto;
-    width: 600px;
+    width: 900px;
     height: 700px;
+  }
+
+  .update-view {
+    border: 4px solid #565e64;
+    border-radius: 8px;
+    margin: 20px auto;
+    width: 900px;
+    height: 800px;
+
+    .profile-picture {
+      margin: 30px auto 90px;
+      width: 250px;
+      height: 250px;
+
+      .upload-picture {
+        position: relative;
+        border: none;
+        border-radius: 100%;
+        width: 250px;
+        height: 250px;
+        background-color: transparent;
+      }
+
+      .update-picture {
+        position: relative;
+        border: none;
+        border-radius: 15px;
+        top: -50px;
+        left: 90px;
+        width: 45px;
+        height: 42px;
+        cursor: pointer;
+        background-color: #343a40;
+      }
+    }
+
+    .update-info {
+      display: flex;
+      justify-content: flex-start;
+      border: 1px solid #bcbebf;
+      border-radius: 12px;
+      margin: 40px 40px;
+      padding: 15px 50px 15px;
+
+      .update-key {
+        font-size: 18px;
+        font-weight: bold;
+        color: #6c757d;
+      }
+
+      .update-value {
+        font-size: 18px;
+        text-align: left;
+        margin-left: 20px;
+
+        .update-birth-input {
+          margin-top: 39px;
+
+          .update-birthY {
+            width: 80px;
+            height: 30px;
+            background-color: #4d5154;
+            border: none;
+            border-radius: 10px;
+            padding: 0 0 2px 7px;
+
+          }
+
+          .update-birthM {
+            margin-left: 10px;
+            height: 31px;
+            background-color: #4d5154;
+            border: none;
+            border-radius: 10px;
+            padding: 0 0 1px 7px;
+
+          }
+
+          .update-birthD {
+            margin-left: 10px;
+            width: 80px;
+            height: 30px;
+            background-color: #4d5154;
+            border: none;
+            border-radius: 10px;
+            padding: 0 0 2px 7px;
+
+          }
+        }
+      }
+
+      .update-email {
+
+      }
+
+      .update-nickname {
+        margin-top: 15px;
+
+        input {
+          background-color: #4d5154;
+          border: none;
+          border-radius: 10px;
+          padding: 0 0 2px 7px;
+          height: 30px;
+        }
+      }
+
+      .update-birth {
+        margin-top: 90px;
+
+
+      }
+    }
+  }
+
+  .paging-design {
+    ul {
+      margin-top: 10px;
+      list-style: none;
+      border: none;
+
+      li {
+        display: inline-block;
+        text-align: center;
+
+        .list-item {
+
+          background-color: transparent;
+          border: 2px solid #5c636a;
+          border-radius: 0.6em;
+          color: #e2e3e5;
+          cursor: pointer;
+          font-size: 1.3rem;
+          font-weight: 400;
+          text-transform: uppercase;
+          margin: 2px;
+          padding: 0.3em 0.8em;
+
+          &:hover {
+            box-shadow: 0 0 40px 40px #4d5154 inset;
+          }
+        }
+
+      }
+    }
   }
 }

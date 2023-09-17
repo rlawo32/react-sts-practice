@@ -19,7 +19,6 @@ const MemberInfoCommentLog = () => {
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const [totalComments, setTotalComments] = useState(0);
-    const [logNo, setLogNo] = useState(0);
 
     const [commentList, setCommentList] = useState([{
         commentLogNo: '',
@@ -87,11 +86,11 @@ const MemberInfoCommentLog = () => {
                 <table>
                     <thead className="table-header">
                     <tr>
-                        <td style={{width: "100px"}}>번호</td>
-                        <td style={{width: "400px"}}>게시판</td>
-                        <td style={{width: "150px"}}>내용</td>
-                        <td style={{width: "170px"}}>추천</td>
-                        <td style={{width: "120px"}}>날짜</td>
+                        <td style={{width: "80px"}}>번호</td>
+                        <td style={{width: "200px"}}>게시판</td>
+                        <td style={{width: "400px"}}>내용</td>
+                        <td style={{width: "80px"}}>추천</td>
+                        <td style={{width: "150px"}}>날짜</td>
                     </tr>
                     </thead>
                     <tbody id="tbody">
@@ -113,7 +112,7 @@ const MemberInfoCommentLog = () => {
                     })}
                     </tbody>
                 </table>
-                <div className="comment-paging">
+                <div className="paging-design">
                     <ul>
                         {pagination()}
                     </ul>

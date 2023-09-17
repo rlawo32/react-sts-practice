@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 public class MemberInfoResponseDto {
@@ -16,6 +17,7 @@ public class MemberInfoResponseDto {
     private String memberNickname;
     private String createdDate;
     private String modifiedDate;
+    private String picture;
 
     public MemberInfoResponseDto(Member member) {
         this.memberId = member.getId();
@@ -24,5 +26,6 @@ public class MemberInfoResponseDto {
         this.memberNickname = member.getMemberNickname();
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
+        this.picture = member.getPicture();
     }
 }

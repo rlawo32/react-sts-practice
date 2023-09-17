@@ -10,6 +10,7 @@ const MemberInfoBoardLog = () => {
     const [totalPage, setTotalPage] = useState(0);
 
     const [tableBoardList, setTableBoardList] = useState([{
+        boardLogNo: '',
         boardId: '',
         boardTab: '',
         boardTitle: '',
@@ -46,9 +47,15 @@ const MemberInfoBoardLog = () => {
                 url: '/board/tableBoardList',
                 params: paging
             });
-            setTableBoardList(tableBoardList.data.boardList);
+
+            const datalist = tableBoardList.data.boardList;
+
+            setTableBoardList(datalist);
             setTotalPage(tableBoardList.data.totalPage);
-            console.log(tableBoardList.data.boardList);
+
+            for(let i=0; i<datalist.length; i++) {
+                datalist[i].boardLogNo = (i  + (pageNo * 10)) + 1;
+            }
         };
 
         getBoards();
@@ -65,18 +72,20 @@ const MemberInfoBoardLog = () => {
                 <table>
                     <thead className="table-header">
                     <tr>
-                        <td style={{width: "100px"}}>탭</td>
+                        <td style={{width: "80px"}}>번호</td>
+                        <td style={{width: "200px"}}>탭</td>
                         <td style={{width: "400px"}}>제목</td>
                         <td style={{width: "150px"}}>작성자</td>
-                        <td style={{width: "170px"}}>날짜</td>
-                        <td style={{width: "120px"}}>조회</td>
-                        <td style={{width: "100px"}}>추천</td>
+                        <td style={{width: "80px"}}>조회</td>
+                        <td style={{width: "80px"}}>추천</td>
+                        <td style={{width: "150px"}}>날짜</td>
                     </tr>
                     </thead>
                     <tbody id="tbody">
                     {tableBoardList.map((boards, idx) => {
                         return (
                             <tr key={boards.boardId}>
+                                <td>{boards.boardLogNo}</td>
                                 { `${boards.boardTab}` === 'T1' && <td>화제</td> }
                                 { `${boards.boardTab}` === 'T2' && <td>정보</td> }
                                 { `${boards.boardTab}` === 'T3' && <td>오류</td> }
@@ -88,14 +97,19 @@ const MemberInfoBoardLog = () => {
                                     </Link>
                                 </td>
                                 <td>{boards.boardAuthor}</td>
-                                <td>{boards.modifiedDate.substring(0,10)}</td>
                                 <td>{boards.boardViewsCnt}</td>
                                 <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
+                                <td>{boards.modifiedDate.substring(0,10)}</td>
                             </tr>
                         )
                     })}
                     </tbody>
                 </table>
+                <div className="paging-design">
+                    <ul>
+                        {pagination()}
+                    </ul>
+                </div>
 
             </div>
 
