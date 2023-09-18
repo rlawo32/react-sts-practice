@@ -11,11 +11,11 @@ public class MemberImageUploadRequestDto {
     private MultipartFile multipartFile;
     private String caption;
 
-    public MemberImage toEntity(Member member, String post_image_url) {
+    public MemberImage toEntity(Member member, String memberImageName) {
         return MemberImage.builder()
                 .member(member)
                 .caption(caption)
-                .post_image_url(post_image_url)
+                .memberImageName(memberImageName)
                 .build();
     }
 }

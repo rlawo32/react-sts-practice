@@ -68,7 +68,7 @@ const MemberInfoLoginLog = () => {
                 <table>
                     <thead className="table-header">
                     <tr>
-                        <td style={{width: "80px"}}>번호</td>
+                        <td style={{width: "70px"}}>번호</td>
                         <td style={{width: "80px"}}>분류</td>
                         <td style={{width: "300px"}}>아이피 주소</td>
                         <td style={{width: "300px"}}>내용</td>

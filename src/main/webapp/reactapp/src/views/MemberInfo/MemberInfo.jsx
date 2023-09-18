@@ -6,6 +6,7 @@ import FooterNavigation from "../Navigation/FooterNavigation";
 import MemberInfoProfile from "./MemberInfoProfile";
 import MemberInfoBoardLog from "./MemberInfoBoardLog";
 import MemberInfoCommentLog from "./MemberInfoCommentLog";
+import MemberInfoRecommendLog from "./MemberInfoRecommendLog";
 import MemberInfoLoginLog from "./MemberInfoLoginLog";
 import MemberInfoUpdate from "./MemberInfoUpdate";
 import "./MemberInfo.scss";
@@ -21,6 +22,7 @@ const MemberInfo = () => {
 
     const [memberInfo, setMemberInfo] = useState([]);
     const [memberProfileImg, setMemberProfileImg] = useState("");
+    const [memberInfoUpdateChk, setMemberInfoUpdateChk] = useState(false);
     const [currentTab, clickTab] = useState(0);
 
 
@@ -43,13 +45,18 @@ const MemberInfo = () => {
             },
             {
                 id: 3,
+                name: '내 추천',
+                view: <MemberInfoRecommendLog />
+            },
+            {
+                id: 4,
                 name: '로그인 기록',
                 view: <MemberInfoLoginLog />
             },
             {
-                id: 4,
+                id: 5,
                 name: '내 정보 수정',
-                view: <MemberInfoUpdate info={memberInfo} setData={setMemberProfileImg} img={memberProfileImg}/>
+                view: <MemberInfoUpdate info={memberInfo} setData={setMemberInfoUpdateChk} img={memberProfileImg} setImg={setMemberProfileImg}/>
             }
         ];
         return result;
@@ -76,10 +83,13 @@ const MemberInfo = () => {
         }).then((res) => {
             const responseData = res.data;
             setMemberInfo(responseData.data);
-            console.log(responseData.data);
+            if(responseData.data.picture) {
+                setMemberProfileImg("/upload/" + responseData.data.picture);
+            } else {
+                setMemberProfileImg("");
+            }
         })
-
-    }, [])
+    }, [memberInfoUpdateChk])
 
     return (
         <div className="member-info">

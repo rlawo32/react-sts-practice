@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberLogRepository extends JpaRepository<MemberLog, Long> {
 
-    @Query("SELECT l FROM MemberLog l WHERE l.logMemberId = :memberId")
+    @Query("SELECT l FROM MemberLog l WHERE l.member.id = :memberId")
     Page<MemberLog> findByMemberLog(@Param("memberId") Long memberId, Pageable pageable);
 
 }

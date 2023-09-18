@@ -6,6 +6,7 @@ import com.react.prac.springboot.config.security.JwtSecurityConfig;
 import com.react.prac.springboot.config.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,9 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 //    private final TokenService tokenService;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -58,7 +62,8 @@ public class SecurityConfig {
                 .requestMatchers("/member/**").permitAll()
                 .requestMatchers("/board/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/favicon.ico", "/css/**", "/images/**").permitAll()
+                .requestMatchers("/upload/**").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

@@ -12,6 +12,7 @@ const MemberInfoBoardLog = () => {
     const [tableBoardList, setTableBoardList] = useState([{
         boardLogNo: '',
         boardId: '',
+        boardCategory: '',
         boardTab: '',
         boardTitle: '',
         boardContent: '',
@@ -72,12 +73,11 @@ const MemberInfoBoardLog = () => {
                 <table>
                     <thead className="table-header">
                     <tr>
-                        <td style={{width: "80px"}}>번호</td>
-                        <td style={{width: "200px"}}>탭</td>
-                        <td style={{width: "400px"}}>제목</td>
-                        <td style={{width: "150px"}}>작성자</td>
-                        <td style={{width: "80px"}}>조회</td>
-                        <td style={{width: "80px"}}>추천</td>
+                        <td style={{width: "70px"}}>번호</td>
+                        <td style={{width: "200px"}}>게시판</td>
+                        <td style={{width: "350px"}}>제목</td>
+                        <td style={{width: "90px"}}>조회수</td>
+                        <td style={{width: "90px"}}>추천수</td>
                         <td style={{width: "150px"}}>날짜</td>
                     </tr>
                     </thead>
@@ -86,17 +86,17 @@ const MemberInfoBoardLog = () => {
                         return (
                             <tr key={boards.boardId}>
                                 <td>{boards.boardLogNo}</td>
-                                { `${boards.boardTab}` === 'T1' && <td>화제</td> }
-                                { `${boards.boardTab}` === 'T2' && <td>정보</td> }
-                                { `${boards.boardTab}` === 'T3' && <td>오류</td> }
-                                { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
-                                { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
+                                { `${boards.boardCategory}` === 'C1' && <td>리그오브레전드</td> }
+                                { `${boards.boardCategory}` === 'C2' && <td>오버워치</td> }
+                                { `${boards.boardCategory}` === 'C3' && <td>배틀그라운드</td> }
+                                { `${boards.boardCategory}` === 'C4' && <td>메이플스토리</td> }
+                                { `${boards.boardCategory}` === 'C5' && <td>마인크래프트</td> }
+                                { `${boards.boardCategory}` === 'C6' && <td>스팀</td> }
                                 <td>
                                     <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
                                         {boards.boardTitle}
                                     </Link>
                                 </td>
-                                <td>{boards.boardAuthor}</td>
                                 <td>{boards.boardViewsCnt}</td>
                                 <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
                                 <td>{boards.modifiedDate.substring(0,10)}</td>

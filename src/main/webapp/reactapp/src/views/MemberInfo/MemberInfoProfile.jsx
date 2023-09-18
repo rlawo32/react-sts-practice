@@ -1,19 +1,15 @@
 import React, {useEffect, useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
-import axios from "axios";
 import memberDefaultImg from "../../images/userDefault.png";
 
 const MemberInfoProfile = (props) => {
 
-    const [memberProfileImg, setMemberProfileImg] = useState("");
-
     const profileInfo = props.info;
-    const profileImage = profileInfo.picture;
-    const uploadFolder = "C:/upload/";
+    const profileImg = props.img;
 
     useEffect(() => {
-        console.log(profileImage);
+
     }, [])
 
     return (
@@ -23,8 +19,8 @@ const MemberInfoProfile = (props) => {
 
             <div className="profile-view">
 
-                <div className="profile-picture" onClick={() => props.setData(4)}>
-                    <img src={profileImage ? profileImage : memberDefaultImg} alt="프로필 이미지" className="upload-picture"/>
+                <div className="profile-picture" onClick={() => props.setData(5)}>
+                    <img src={profileImg ? profileImg : memberDefaultImg} alt="프로필 이미지" className="upload-picture"/>
                 </div>
 
                 <div className="profile-info">
@@ -66,7 +62,7 @@ const MemberInfoProfile = (props) => {
                 </div>
 
                 <div className="profile-update">
-                    <button onClick={() => props.setData(4)}>수정</button>
+                    <button onClick={() => props.setData(5)}>수정</button>
                 </div>
 
             </div>

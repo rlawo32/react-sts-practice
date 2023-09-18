@@ -18,8 +18,8 @@ export default function ButtonAppBar() {
 
     const logout = () => {
         cookie.remove('refreshToken');
-        window.location.reload();
         navigate("/");
+        window.location.reload();
     }
 
     const memberInfo = () => {

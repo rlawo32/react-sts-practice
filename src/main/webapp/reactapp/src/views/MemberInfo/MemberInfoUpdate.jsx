@@ -5,6 +5,7 @@ import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPencil as pencil} from "@fortawesome/free-solid-svg-icons";
 import memberDefaultImg from "../../images/userDefault.png";
+import UploadModal from "./UploadModal";
 import {useNavigate} from "react-router-dom";
 
 const MemberInfoUpdate = (props) => {
@@ -13,37 +14,112 @@ const MemberInfoUpdate = (props) => {
     const profileBirth = profileInfo.memberBirth;
     const navigate = useNavigate();
 
-    const [previewProfileImg, setPreviewProfileImg] = useState(props.img);
+    const [previewProfileImg, setPreviewProfileImg] = useState("");
     const [uploadProfileImg, setUploadProfileImg] = useState("");
+
     const [memberNickname, setMemberNickname] = useState(profileInfo.memberNickname);
     const [memberBirthY, setMemberBirthY] = useState(profileBirth.substring(0, 4));
-    const [memberBirthM, setMemberBirthM] = useState(profileBirth.substring(4, 6));
-    const [memberBirthD, setMemberBirthD] = useState(profileBirth.substring(6));
+    const [memberBirthM, setMemberBirthM] = useState(profileBirth.substring(5, 7));
+    const [memberBirthD, setMemberBirthD] = useState(profileBirth.substring(8));
 
-    const memberProfileImgChangeHandler = (e) => {
-        const file = e.target.files[0];
-        setUploadProfileImg(file);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setPreviewProfileImg(reader.result);
-        }
-    }
+    const [isNicknameEffect, setIsNicknameEffect] = useState(true);
+    const [isBirthYEffect, setIsBirthYEffect] = useState(true);
+    const [isBirthMEffect, setIsBirthMEffect] = useState(true);
+    const [isBirthDEffect, setIsBirthDEffect] = useState(true);
+
+    const [nicknameMessage, setNicknameMessage] = useState("");
+    const [birthYMessage, setBirthYMessage] = useState("");
+    const [birthMMessage, setBirthMMessage] = useState("");
+    const [birthDMessage, setBirthDMessage] = useState("");
+
+    const [uploadModal, setUploadModal] = useState(false);
 
     const memberNicknameChangeHandler = (e) => {
-        setMemberNickname(e.target.value);
+        const changeNickname = e.target.value;
+        const nicknameRegex = /^.{2,20}$/;
+        const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+        const gapRegex  = /\s/g;
+
+        if (changeNickname.length < 1) {
+            setNicknameMessage('필수 정보입니다.');
+            setIsNicknameEffect(false);
+        } else {
+            if (!nicknameRegex.test(changeNickname)) {
+                // setUserNameMessage('한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)');
+                setNicknameMessage('최소 2자 이상 최대 20자 이하로 작성해주시기 바랍니다.');
+                setIsNicknameEffect(false);
+            } else {
+                if(specialRegex.test(changeNickname) || gapRegex.test(changeNickname)) {
+                    setNicknameMessage('닉네임에 띄어쓰기 혹은 특수문자를 사용하실 수 없습니다.');
+                    setIsNicknameEffect(false);
+                } else {
+                    setNicknameMessage('');
+                    setIsNicknameEffect(true);
+                }
+            }
+        }
+
+        setMemberNickname(changeNickname);
     }
 
     const memberBirthYChangeHandler = (e) => {
-        setMemberBirthY(e.target.value);
+        const changeBirthY = e.target.value;
+        const birthYRegex = /^(19[0-9][0-9]|20\d{2})$/;
+
+        if(changeBirthY.length < 1) {
+            setBirthYMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsBirthYEffect(false);
+        } else {
+            if (!birthYRegex.test(changeBirthY)) {
+                setBirthYMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+                setIsBirthYEffect(false);
+            } else {
+                setBirthYMessage('');
+                setIsBirthYEffect(true);
+            }
+        }
+
+        setMemberBirthY(changeBirthY);
     }
 
     const memberBirthMChangeHandler = (e) => {
-        setMemberBirthM(e.target.value);
+        const changeBirthM = e.target.value;
+        const birthMRegex = /^(0[0-9]|1[0-2])$/;
+
+        if(changeBirthM.length < 1) {
+            setBirthMMessage('태어난 월을 선택하세요.');
+            setIsBirthMEffect(false);
+        } else {
+            if (!birthMRegex.test(changeBirthM)) {
+                setBirthMMessage('태어난 월을 선택하세요.');
+                setIsBirthMEffect(false);
+            } else {
+                setBirthMMessage('');
+                setIsBirthMEffect(true);
+            }
+        }
+
+        setMemberBirthM(changeBirthM);
     }
 
     const memberBirthDChangeHandler = (e) => {
-        setMemberBirthD(e.target.value);
+        const changeBirthD = e.target.value;
+        const birthDRegex = /^([1-9]|[1-2][0-9]|3[0-1])$/;
+
+        if(changeBirthD.length < 1) {
+            setBirthDMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+            setIsBirthDEffect(false);
+        } else {
+            if (!birthDRegex.test(changeBirthD)) {
+                setBirthDMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+                setIsBirthDEffect(false);
+            } else {
+                setBirthDMessage('');
+                setIsBirthDEffect(true);
+            }
+        }
+
+        setMemberBirthD(changeBirthD);
     }
 
     const updateData = {
@@ -53,32 +129,62 @@ const MemberInfoUpdate = (props) => {
 
     const saveMemberInfo = async() => {
         const formData = new FormData();
-        formData.append('multipartFile', uploadProfileImg);
+        if(uploadProfileImg == "D") {
+            await axios({
+                method: "DELETE",
+                url: "member/imageDelete"
+            })
+        } else {
+            formData.append('multipartFile', uploadProfileImg);
+            if(uploadProfileImg) {
+                await axios({
+                    method: "POST",
+                    url: "member/imageUpload",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    enctype: "multipart/form-data"
+                })
+            }
+        }
 
-        await axios({
-            method: "PUT",
-            url: "member/memberUpdate",
-            params: updateData
-        }).then((result) => {
-            window.alert("등록이 완료되었습니다람쥐");
-            navigate('/memberInfo');
-        })
 
-        await axios({
-            method: "POST",
-            url: "member/imageUpload",
-            data: formData,
-            contentType: false,
-            processData: false,
-            enctype: "multipart/form-data"
-        }).then((result) => {
-            window.alert("등록이 완료되었습니다람쥐");
-            navigate('/memberInfo');
-        })
+        if(isNicknameEffect && isBirthYEffect && isBirthMEffect && isBirthDEffect) {
+            await axios({
+                method: "PUT",
+                url: "member/memberUpdate",
+                params: updateData
+            }).then((res) => {
+                window.alert("등록이 완료되었습니다람쥐");
+                props.setData(true);
+                navigate(-1);
+            })
+        } else {
+            if(!isNicknameEffect) {
+                alert("닉네임이 잘못 입력되었습니다.");
+                setNicknameMessage('조건에 맞게 닉네임을 작성해주시길 바랍니다.');
+                setIsNicknameEffect(false);
+            }
+            if(!isBirthYEffect) {
+                alert("태어난 년도가 잘못 입력되었습니다.");
+                setBirthYMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+                setIsBirthYEffect(false);
+            }
+            if(!isBirthMEffect) {
+                alert("태어난 월이 잘못 입력되었습니다.");
+                setBirthMMessage('태어난 월을 선택하세요.');
+                setIsBirthMEffect(false);
+            }
+            if(!isBirthDEffect) {
+                alert("태어난 날짜가 잘못 입력되었습니다.");
+                setBirthDMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+                setIsBirthDEffect(false);
+            }
+        }
     }
 
     useEffect(() => {
-
+        setPreviewProfileImg(props.img);
     }, [])
 
     return (
@@ -90,14 +196,10 @@ const MemberInfoUpdate = (props) => {
 
                 <div className="profile-picture">
                     <img src={previewProfileImg ? previewProfileImg : memberDefaultImg} alt="프로필 이미지" className="upload-picture"/>
-                    <form>
-                        <input type="file" id="profileImg" accept="image/*" onChange={memberProfileImgChangeHandler} style={{display: 'none'}} multiple/>
-                        <label htmlFor="profileImg">
-                            <div className="update-picture">
-                                <FontAwesomeIcon icon={pencil} style={{color: 'white'}}/>
-                            </div>
-                        </label>
-                    </form>
+                    <button onClick={() => setUploadModal(true)} className="update-picture">
+                        <FontAwesomeIcon icon={pencil} style={{color: 'white'}}/>
+                    </button>
+                    {uploadModal ? <UploadModal setUploadModal={setUploadModal} setUploadProfileImg={setUploadProfileImg} setPreviewProfileImg={setPreviewProfileImg} /> : null}
                 </div>
 
                 <div className="update-info">
@@ -119,6 +221,9 @@ const MemberInfoUpdate = (props) => {
                         </div>
                         <div className="update-nickname">
                             <input type="text" value={memberNickname} onChange={memberNicknameChangeHandler} />
+                            {(
+                                <span style={ isNicknameEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{nicknameMessage}</span>
+                            )}
                             <p style={ {fontSize: "13px", marginTop: "7px", color: "#5c636a"} }>
                                 최소 3자 이상 최대 20자 이하로 작성해주시기 바랍니다. <br />
                                 닉네임에 띄어쓰기 혹은 특수문자를 사용하실 수 없습니다.
@@ -142,6 +247,15 @@ const MemberInfoUpdate = (props) => {
                                 <option value="12">12</option>
                             </select>
                             <input type="text" value={memberBirthD} className="update-birthD" onChange={memberBirthDChangeHandler} />
+                            {(
+                                <span style={ isBirthYEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{birthYMessage}</span>
+                            )}
+                            {(
+                                <span style={ isBirthMEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{birthMMessage}</span>
+                            )}
+                            {(
+                                <span style={ isBirthDEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{birthDMessage}</span>
+                            )}
                             <p style={ {fontSize: "13px", marginTop: "7px", color: "#5c636a"} }>
                                 태어난 년도 4자리를 정확하게 입력하세요. <br />
                                 태어난 월을 선택하세요. <br />

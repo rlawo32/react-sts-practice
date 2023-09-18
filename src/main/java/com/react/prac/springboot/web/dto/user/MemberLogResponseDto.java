@@ -17,7 +17,7 @@ public class MemberLogResponseDto {
 
     public MemberLogResponseDto(MemberLog memberLog) {
         this.logId = memberLog.getId();
-        this.logMemberId = memberLog.getLogMemberId();
+        this.logMemberId = memberLog.getMember().getId();
         this.logMemberEmail = memberLog.getLogMemberEmail();
         this.logLoginDate = memberLog.getCreatedDate();
         this.logLoginSuccess = memberLog.getLogLoginSuccess();

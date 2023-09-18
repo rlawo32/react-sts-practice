@@ -17,9 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 // @CrossOrigin(originPatterns = "http://localhost:3000")
@@ -91,22 +94,62 @@ public class MemberController {
         return result;
     }
 
+    @DeleteMapping("/imageDelete")
+    public ResponseDto<?> imageDelete() {
+
+        ResponseDto<?> result = memberService.memberImageDelete();
+
+        return result;
+    }
+
     @GetMapping("/imageView")
-    public void imageView(HttpServletResponse response) throws IOException {
+    public String imageView(HttpServletResponse response) throws IOException {
 
         MemberImage memberImage = memberImageRepository.findByMember(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
 
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        ServletOutputStream sos = null;
+
         response.setContentType("image/gif");
-        ServletOutputStream bout = response.getOutputStream();
 
-        String imageName = memberImage.getPost_image_url();
-        String imagePath = uploadFolder + imageName;
+        String imageName = memberImage.getMemberImageName();
+        String imagePath = uploadFolder + File.separator + imageName;
 
-        FileInputStream fis = new FileInputStream(imagePath);
+        System.out.println("이미지 경로 확인 1 : " + imagePath);
 
-        byte[] buffer = new byte[10];
+        File file = new File(imagePath);
 
+        System.out.println("이미지 경로 확인 2 : " + file);
+
+        fis = new FileInputStream(file);
+
+        System.out.println("이미지 경로 확인 3 : " + fis.read());
+
+        bis = new BufferedInputStream(fis);
+
+        System.out.println("이미지 경로 확인 4 : " + bis.read());
+
+        sos = response.getOutputStream();
+
+        byte[] buf = new byte[(int)file.length()];
+        int length = 0;
+
+        fis.read(buf);
+
+        while( (length = fis.read(buf)) != -1){
+            sos.write(buf, 0, length);
+        }
+
+        if(bis != null) {
+            bis.close();
+        }
+        if(sos != null) {
+            sos.close();
+        }
+
+        return null;
     }
 
     @PutMapping("/memberUpdate")

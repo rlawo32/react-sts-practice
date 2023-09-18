@@ -14,7 +14,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import {Link} from "react-router-dom";
 
-const MemberInfoCommentLog = () => {
+const MemberInfoRecommendLog = () => {
 
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
@@ -128,4 +128,4 @@ const MemberInfoCommentLog = () => {
     )
 }
 
-export default MemberInfoCommentLog;
+export default MemberInfoRecommendLog;

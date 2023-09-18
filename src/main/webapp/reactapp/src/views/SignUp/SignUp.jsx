@@ -129,7 +129,7 @@ const SignUp = () => {
     }, [userPw, userPwChk])
 
     const SignUpChangeNm = useCallback((e) => {
-        const userNameRegex = /^.{3,20}$/;
+        const userNameRegex = /^.{2,20}$/;
         const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
         const gapRegex  = /\s/g;
 

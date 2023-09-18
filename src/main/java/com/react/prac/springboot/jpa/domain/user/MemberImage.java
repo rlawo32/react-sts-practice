@@ -25,9 +25,11 @@ public class MemberImage {
     private Member member;
 
     private String caption;
-    private String post_image_url;    //사진을 전달받아서 서버의 특정 폴더에 저장할 것이므로 사진이 저장된 경로를 저장
 
-    @Column(name = "image_upload_date")
+    @Column(nullable = false)
+    private String memberImageName;    //사진을 전달받아서 서버의 특정 폴더에 저장할 것이므로 사진이 저장된 경로를 저장
+
+    @Column(name = "image_upload_date", nullable = false)
     private String createDate;
 
     @PrePersist
@@ -36,10 +38,10 @@ public class MemberImage {
     }
 
     @Builder
-    public MemberImage(Member member, String caption, String post_image_url, String createDate) {
+    public MemberImage(Member member, String caption, String memberImageName, String createDate) {
         this.member = member;
         this.caption = caption;
-        this.post_image_url = post_image_url;
+        this.memberImageName = memberImageName;
         this.createDate = createDate;
     }
 }

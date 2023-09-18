@@ -107,8 +107,11 @@ public class MemberService {
                     String username = authentication.getName();
                     Long memberId = Long.valueOf(username);
 
+                    Member member = memberRepository.findById(memberId)
+                            .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
                     memberLog = MemberLog.builder()
-                            .logMemberId(memberId)
+                            .member(member)
                             .logMemberEmail(memberEmail)
                             .logLoginSuccess("S")
                             .logLoginReason("JWT 인증 성공")
@@ -207,6 +210,7 @@ public class MemberService {
 
         //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
         UUID uuid = UUID.randomUUID();
+
         String imageFileName = uuid + "_" + multipartFile.getOriginalFilename();
 
         System.out.println("이미지 파일 이름 확인 : " + imageFileName);
@@ -216,16 +220,14 @@ public class MemberService {
 
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
-        //
-
         System.out.println("이미지 파일 PATH 확인 : " + imageFilePath);
 
         try {
 
             if(!Files.exists(dir)) {
                 Files.createDirectory(dir);
-                Files.write(imageFilePath, multipartFile.getBytes());
             }
+            Files.write(imageFilePath, multipartFile.getBytes());
 
             Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
@@ -233,11 +235,41 @@ public class MemberService {
             MemberImage memberImage = MemberImage.builder()
                     .member(member)
                     .caption("프로필 이미지")
-                    .post_image_url(imageFileName)
+                    .memberImageName(imageFileName)
                     .build();
 
             memberImageRepository.save(memberImage);
             memberRepository.updateByMemberPicture(SecurityUtil.getCurrentMemberId(), imageFileName);
+
+        } catch(IOException i) {
+            i.printStackTrace();
+            return ResponseDto.setFailed("Upload Error!");
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("Database Error!");
+        }
+
+        return ResponseDto.setSuccess("Image Upload Success", null);
+    }
+
+    @Transactional
+    public ResponseDto<?> memberImageDelete() {
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+        String picture = member.getPicture();
+
+        Path imageFilePath = Paths.get(uploadFolder + picture);
+
+        try {
+
+            Files.deleteIfExists(imageFilePath);
+
+            memberImageRepository.deleteByMember(memberId);
+            memberRepository.updateByMemberPicture(memberId, "");
 
         } catch(IOException i) {
             i.printStackTrace();

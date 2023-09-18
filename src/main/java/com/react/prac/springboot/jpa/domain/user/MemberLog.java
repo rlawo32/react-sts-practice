@@ -18,8 +18,9 @@ public class MemberLog {
     @Column(name = "log_id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
-    private Long logMemberId; // 로그인 한 회원 id
+    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
     @Column(nullable = false)
     private String logMemberEmail; // 로그인 한 회원 email
@@ -35,8 +36,8 @@ public class MemberLog {
     private String logLoginReason; // 로그인 성공/실패 이유
 
     @Builder
-    public MemberLog(Long logMemberId, String logMemberEmail, String createdDate, String logLoginSuccess, String logLoginReason) {
-        this.logMemberId = logMemberId;
+    public MemberLog(Member member, String logMemberEmail, String createdDate, String logLoginSuccess, String logLoginReason) {
+        this.member = member;
         this.logMemberEmail = logMemberEmail;
         this.createdDate = createdDate;
         this.logLoginSuccess = logLoginSuccess;

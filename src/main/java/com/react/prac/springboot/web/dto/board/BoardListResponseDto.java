@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class BoardListResponseDto {
 
     private Long boardId;
+    private String boardCategory;
     private String boardTab;
     private String boardTitle;
     private String boardContent;
@@ -23,6 +24,7 @@ public class BoardListResponseDto {
 
     public BoardListResponseDto(MainBoard mainBoard) {
         this.boardId = mainBoard.getId();
+        this.boardCategory = mainBoard.getBoardCategory();
         this.boardTab = mainBoard.getBoardTab();
         this.boardTitle = mainBoard.getBoardTitle();
         this.boardContent = mainBoard.getBoardContent();
