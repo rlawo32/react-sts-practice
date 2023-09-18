@@ -18,8 +18,6 @@ const MemberInfo = () => {
     const navigate = useNavigate();
     const cookies = new Cookies();
 
-    const category_name = ['회원 정보', '내 글', '내 댓글', '로그인 기록'];
-
     const [memberInfo, setMemberInfo] = useState([]);
     const [memberProfileImg, setMemberProfileImg] = useState("");
     const [memberInfoUpdateChk, setMemberInfoUpdateChk] = useState(false);

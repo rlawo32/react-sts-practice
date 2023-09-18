@@ -9,7 +9,7 @@ import {Row} from "react-bootstrap";
 import './SignUp.css';
 
 const SignUp = () => {
-    const navigate = useNavigate();
+    let navigate = useNavigate();
     const emailRef = useRef();
     const nickNameRef = useRef();
 
@@ -118,7 +118,7 @@ const SignUp = () => {
 
     useEffect(() => {
         if(userPwChk.length > 1) {
-            if (userPw === userPwChk) {
+            if (userPw == userPwChk) {
                 setUserPwChkMessage('');
                 setIsPasswordConfirmEffect(true);
             } else {
@@ -344,7 +344,7 @@ const SignUp = () => {
     }
 
     const HandleEmailChkSend = async () => {
-        if(isUserEmailDuplicationEffect === true) {
+        if(isUserEmailDuplicationEffect == true) {
             setIsUserEmailHideEffect(true);
             setUserEmailMessage('');
             await axios({
@@ -354,14 +354,11 @@ const SignUp = () => {
             }).then(function(obj) {
                 alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
                 setIsUserEmailEffect(true);
-                console.log('2' + obj.data.authCode);
+                console.log('authCode : ' + obj.data.authCode);
                 setUserEmailCode(obj.data.authCode);
             }).catch(function(error) {
                 alert('인증코드 발송에 실패했습니다.');
             })
-        } else {
-            setUserEmailMessage("이미 사용중인 이메일 ID 입니다.");
-            setIsUserEmailEffect(false);
         }
     }
 
@@ -380,7 +377,7 @@ const SignUp = () => {
         }
     }
 
-    const HandleJoin = (e) => {
+    const HandleJoin = async (e) => {
         // if(isUserIdEffect === false) {
         //     setUserIdMessage('필수 정보입니다.');
         //     setIsPasswordEffect(false);
@@ -429,15 +426,8 @@ const SignUp = () => {
             setUserBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
             setIsUserBirthEffect(false);
             e.preventDefault();
-        } else
-        // if(isUserGenderEffect === false) {
-        //     setUserGenderMessage('필수 정보입니다.');
-        //     setIsUserGenderEffect(false);
-        //     e.preventDefault();
-        // } else
-            {
-            console.log(JSON.stringify(userData));
-            axios({
+        } else {
+            await axios({
                 method: "POST",
                 url: "/member/signUp",
                 data: JSON.stringify(userData),
@@ -445,8 +435,6 @@ const SignUp = () => {
             }).then((res) => {
                 window.alert("회원가입이 완료되었습니다");
                 navigate("/");
-            }).catch(function(error) {
-                console.log("에러내용:", JSON.stringify(error));
             })
         }
 
@@ -514,7 +502,7 @@ const SignUp = () => {
 
                     <Form.Group className="mb-3" controlId="userNickName">
                         <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"230px", fontSize:"20px", fontWeight:"bold"} }>이름</Form.Text>
+                            <Form.Text className="text-muted" style={ {position:"relative", right:"220px", fontSize:"20px", fontWeight:"bold"} }>닉네임</Form.Text>
                             <Form.Control type="userNickName" placeholder="닉네임" value={userNickName} onChange={SignUpChangeNm} onBlur={nickNameDuplicationChk} ref={nickNameRef} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
                             {(
                                 <span style={ isUserNameEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userNameMessage}</span>

@@ -295,7 +295,6 @@ public class BoardService {
                             .recommendCategory("B")
                             .member(member)
                             .mainBoard(mainBoard)
-                            .boardComment(null)
                             .build();
 
                     boardRecommendRepository.save(boardRecommend);
@@ -568,6 +567,71 @@ public class BoardService {
         result.put("commentList", commentList);
         result.put("totalPage", totalPage);
         result.put("totalComments", totalComments);
+
+        return result;
+    }
+
+    @Transactional
+    public Map<String, Object> recommendList(HttpServletRequest request) {
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+
+        int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
+        int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
+
+        Page<BoardRecommend> pageableB = Page.empty();
+        Page<BoardRecommend> pageableC = Page.empty();
+
+        int totalPageB = 0;
+        int totalRecommendsB = 0;
+        int totalPageC = 0;
+        int totalRecommendsC = 0;
+
+        pageableB = boardRecommendRepository.findByBoardRecommend(memberId, "B", PageRequest.of(page, recordPerPage));
+
+        totalPageB = pageableB.getTotalPages();
+        totalRecommendsB = (int) pageableB.getTotalElements();
+
+        pageableC = boardRecommendRepository.findByBoardRecommend(memberId, "C", PageRequest.of(page, recordPerPage));
+
+        totalPageC = pageableC.getTotalPages();
+        totalRecommendsC = (int) pageableC.getTotalElements();
+
+        List<RecommendResponseDto> boardRecommendList = pageableB.stream()
+                .map(RecommendResponseDto::new)
+                .collect(Collectors.toList());
+
+        List<RecommendResponseDto> commentRecommendList = pageableC.stream()
+                .map(RecommendResponseDto::new)
+                .collect(Collectors.toList());
+
+        for(int i=0; i<boardRecommendList.size(); i++) {
+            Long boardId = boardRecommendList.get(i).getBoardId();
+
+            MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 댓글 ID가 없습니다. id : " + boardId));
+
+            boardRecommendList.get(i).setTargetAuthor(mainBoard.getBoardAuthor());
+            boardRecommendList.get(i).setTargetData(mainBoard.getBoardTitle());
+        }
+
+        for(int i=0; i<commentRecommendList.size(); i++) {
+            Long commentId= commentRecommendList.get(i).getCommentId();
+
+            BoardComment boardComment = boardCommentRepository.findById(commentId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 댓글 ID가 없습니다. id : " + commentId));
+
+            commentRecommendList.get(i).setTargetAuthor(boardComment.getCommentNickname());
+            commentRecommendList.get(i).setTargetData(boardComment.getCommentContent());
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("boardRecommendList", boardRecommendList);
+        result.put("commentRecommendList", commentRecommendList);
+        result.put("totalPageB", totalPageB);
+        result.put("totalRecommendsB", totalRecommendsB);
+        result.put("totalPageC", totalPageC);
+        result.put("totalRecommendsC", totalRecommendsC);
 
         return result;
     }

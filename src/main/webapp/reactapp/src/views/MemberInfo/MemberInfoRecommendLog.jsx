@@ -16,63 +16,88 @@ import {Link} from "react-router-dom";
 
 const MemberInfoRecommendLog = () => {
 
-    const [pageNo, setPageNo] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
-    const [totalComments, setTotalComments] = useState(0);
+    const [recommendLogSelect, setRecommendLogSelect] = useState(false);
 
-    const [commentList, setCommentList] = useState([{
-        commentLogNo: '',
-        commentId: '',
-        commentNestedId: '',
-        commentNestedLevel: '',
-        commentContent: '',
+    const [pageNo, setPageNo] = useState(0);
+    const [totalPageB, setTotalPageB] = useState(0);
+    const [totalRecommendsB, setTotalRecommendsB] = useState(0);
+    const [totalPageC, setTotalPageC] = useState(0);
+    const [totalRecommendsC, setTotalRecommendsC] = useState(0);
+
+    const [boardRecommendList, setBoardRecommendList] = useState([{
+        recommendLogNo: '',
+        recommendId: '',
         boardId: '',
-        memberId: '',
-        memberNickname: '',
-        createdDate: '',
-        modifiedDate: '',
-        commentRecommendUpCnt: '',
-        commentRecommendDownCnt: '',
-        commentRecommendUpCheck: '',
-        commentRecommendDownCheck: '',
-        commentBoardCategory: ''
+        recommendType: '',
+        recommendCategory: '',
+        targetAuthor: '',
+        targetData: '',
+        createdDate: ''
+    }]);
+
+    const [commentRecommendList, setCommentRecommendList] = useState([{
+        recommendLogNo: '',
+        recommendId: '',
+        boardId: '',
+        recommendType: '',
+        recommendCategory: '',
+        targetAuthor: '',
+        targetData: '',
+        createdDate: ''
     }]);
 
     const paging = {
-        boardId: 0,
         recordPerPage: 10,
         page: pageNo
     }
 
-    const pagination = () => {
+    const paginationB = () => {
         let result = [];
-        for (let i=0; i<totalPage; i++) {
+        for (let i=0; i<totalPageB; i++) {
+            result.push(<li key={i} onClick={() => setPageNo(i)}><button className="list-item">{i+1}</button></li>);
+        }
+        return result;
+    }
+
+    const paginationC = () => {
+        let result = [];
+        for (let i=0; i<totalPageC; i++) {
             result.push(<li key={i} onClick={() => setPageNo(i)}><button className="list-item">{i+1}</button></li>);
         }
         return result;
     }
 
     useEffect(() => {
-        const getBoards = async () => {
+        const getRecommends = async () => {
 
-            const boardComments = await axios({
+            const boardRecommends = await axios({
                 method: "GET",
-                url: '/board/commentList',
+                url: '/board/recommendList',
                 params: paging
             })
 
-            const datalist = boardComments.data.commentList;
+            const boardDataList = boardRecommends.data.boardRecommendList;
+            const commentDataList = boardRecommends.data.commentRecommendList;
 
-            setCommentList(datalist);
-            setTotalPage(boardComments.data.totalPage);
-            setTotalComments(boardComments.data.totalComments);
+            setBoardRecommendList(boardDataList);
+            setCommentRecommendList(commentDataList);
+            setTotalPageB(boardRecommends.data.totalPageB);
+            setTotalRecommendsB(boardRecommends.data.totalRecommendsB);
+            setTotalPageC(boardRecommends.data.totalPageC);
+            setTotalRecommendsC(boardRecommends.data.totalRecommendsC);
 
-            for(let i=0; i<datalist.length; i++) {
-                datalist[i].commentLogNo = (i  + (pageNo * 10)) + 1;
+
+            for(let i=0; i<boardDataList.length; i++) {
+                boardDataList[i].recommendLogNo = (i + (pageNo * 10)) + 1;
             }
+
+            for(let i=0; i<commentDataList.length; i++) {
+                commentDataList[i].recommendLogNo = (i  + (pageNo * 10)) + 1;
+            }
+
         };
 
-        getBoards();
+        getRecommends();
 
     }, [pageNo])
 
@@ -81,46 +106,94 @@ const MemberInfoRecommendLog = () => {
 
             <h3>내 댓글 확인</h3>
 
-            <div className="commentLog-view">
+            <div className="recommendLog-view">
+
+                <div className="recommendLog-select">
+                    <div onClick={() => setRecommendLogSelect(false)}>게시글</div>
+                    <div onClick={() => setRecommendLogSelect(true)}>댓글</div>
+                </div>
 
                 <table>
-                    <thead className="table-header">
-                    <tr>
-                        <td style={{width: "70px"}}>번호</td>
-                        <td style={{width: "200px"}}>게시판</td>
-                        <td style={{width: "400px"}}>내용</td>
-                        <td style={{width: "70px"}}>추천</td>
-                        <td style={{width: "150px"}}>날짜</td>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    {commentList.map((comments, idx) => {
-                        return (
-                            <tr key={comments.commentId}>
-                                <td>{comments.commentLogNo}</td>
-                                { `${comments.commentBoardCategory}` === 'C1' && <td>리그오브레전드</td> }
-                                { `${comments.commentBoardCategory}` === 'C2' && <td>오버워치</td> }
-                                { `${comments.commentBoardCategory}` === 'C3' && <td>배틀그라운드</td> }
-                                { `${comments.commentBoardCategory}` === 'C4' && <td>메이플스토리</td> }
-                                { `${comments.commentBoardCategory}` === 'C5' && <td>마인크래프트</td> }
-                                { `${comments.commentBoardCategory}` === 'C6' && <td>스팀</td> }
-                                <td>
-                                    <Link to={{ pathname: `/board/${comments.boardId}` }} state={{ boardId: `${comments.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
-                                        {comments.commentContent}
-                                    </Link>
-                                </td>
-                                <td>{comments.commentRecommendUpCnt - comments.commentRecommendDownCnt}</td>
-                                <td>{comments.modifiedDate.substring(0,10)}</td>
-                            </tr>
-                        )
-                    })}
-                    </tbody>
+
                 </table>
-                <div className="paging-design">
-                    <ul>
-                        {pagination()}
-                    </ul>
-                </div>
+                {
+                    recommendLogSelect ?
+                        <div>
+                            <table>
+                                <thead className="table-header">
+                                    <tr>
+                                        <td style={{width: "70px"}}>번호</td>
+                                        <td style={{width: "150px"}}>분류</td>
+                                        <td style={{width: "400px"}}>내용</td>
+                                        <td style={{width: "150px"}}>작성자</td>
+                                        <td style={{width: "150px"}}>날짜</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                {commentRecommendList.map((commentRecommends, idx) => {
+                                    return (
+                                        <tr key={commentRecommends.recommendId}>
+                                            <td>{commentRecommends.recommendLogNo}</td>
+                                            { `${commentRecommends.recommendType}` === 'U' && <td>추천 Up</td> }
+                                            { `${commentRecommends.recommendType}` === 'D' && <td>추천 Down</td> }
+                                            <td>
+                                                <Link to={{ pathname: `/board/${commentRecommends.boardId}` }} state={{ boardId: `${commentRecommends.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                                    {commentRecommends.targetData}
+                                                </Link>
+                                            </td>
+                                            <td>{commentRecommends.targetAuthor}</td>
+                                            <td>{commentRecommends.createdDate.substring(0,10)}</td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+
+                            <div className="paging-design">
+                                <ul>
+                                    {paginationC()}
+                                </ul>
+                            </div>
+                        </div>
+                        :
+                        <div>
+                            <table>
+                                <thead className="table-header">
+                                <tr>
+                                    <td style={{width: "70px"}}>번호</td>
+                                    <td style={{width: "150px"}}>분류</td>
+                                    <td style={{width: "400px"}}>제목</td>
+                                    <td style={{width: "150px"}}>작성자</td>
+                                    <td style={{width: "150px"}}>날짜</td>
+                                </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                {boardRecommendList.map((boardRecommends, idx) => {
+                                    return (
+                                        <tr key={boardRecommends.recommendId}>
+                                            <td>{boardRecommends.recommendLogNo}</td>
+                                            { `${boardRecommends.recommendType}` === 'U' && <td>추천 Up</td> }
+                                            { `${boardRecommends.recommendType}` === 'D' && <td>추천 Down</td> }
+                                            <td>
+                                                <Link to={{ pathname: `/board/${boardRecommends.boardId}` }} state={{ boardId: `${boardRecommends.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                                    {boardRecommends.targetData}
+                                                </Link>
+                                            </td>
+                                            <td>{boardRecommends.targetAuthor}</td>
+                                            <td>{boardRecommends.createdDate.substring(0,10)}</td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+
+                            <div className="paging-design">
+                                <ul>
+                                    {paginationB()}
+                                </ul>
+                            </div>
+                        </div>
+                }
 
             </div>
 

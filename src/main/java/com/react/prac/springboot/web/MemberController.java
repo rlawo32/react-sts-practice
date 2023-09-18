@@ -40,7 +40,7 @@ public class MemberController {
     @GetMapping("/sendAuthCode")
     public Map<String, Object> sendAuthCode(HttpServletRequest request) {
 
-        return EmailUtil.sendAuthCode(request.getParameter("userEmail"));
+        return EmailUtil.sendAuthCode(request.getParameter("memberEmail"));
     }
 
     @PostMapping("/signUp")
@@ -53,21 +53,29 @@ public class MemberController {
 
     @GetMapping("/signUpDuplicationChk")
     public boolean signUpDuplicationChk(HttpServletRequest request) {
-        String userEmail = request.getParameter("userEmail");
-        String userNickName = request.getParameter("userNickName");
+        String memberEmail = request.getParameter("memberEmail");
+        String memberNickname = request.getParameter("memberNickname");
 
         boolean result = false;
 
-        if(userEmail != null) {
-            System.out.println("이메일 확인 : " + userEmail);
-            result = memberService.emailDuplicationChk(userEmail);
+        if(memberEmail != null && memberNickname == null) {
+            System.out.println("이메일 중복 체크 !!");
+            result = memberService.emailDuplicationChk(memberEmail);
+        } else if(memberEmail == null && memberNickname != null) {
+            System.out.println("닉네임 중복 체크 !!");
+            result = memberService.nicknameDuplicationChk(memberNickname);
         } else {
-            System.out.println("닉네임 확인 : " + userNickName);
-            result = memberService.nickNameDuplicationChk(userNickName);
+            System.out.println("이메일/닉네임 중복 체크 !!");
+            result = memberService.emailAndNicknameDuplicationChk(memberEmail, memberNickname);
         }
-        System.out.println("중복체크 : " + result);
 
         return result;
+    }
+
+    @GetMapping("/passwordDuplicationChk")
+    public boolean passwordDuplicationChk(HttpServletRequest request) {
+
+        return memberService.passwordDuplicationChk(request.getParameter("passwordCheck"));
     }
 
     @PostMapping("/signIn")

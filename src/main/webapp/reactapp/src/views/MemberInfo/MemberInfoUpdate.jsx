@@ -21,18 +21,52 @@ const MemberInfoUpdate = (props) => {
     const [memberBirthY, setMemberBirthY] = useState(profileBirth.substring(0, 4));
     const [memberBirthM, setMemberBirthM] = useState(profileBirth.substring(5, 7));
     const [memberBirthD, setMemberBirthD] = useState(profileBirth.substring(8));
+    const [memberPwCheck, setMemberPwCheck] = useState("");
 
     const [isNicknameEffect, setIsNicknameEffect] = useState(true);
     const [isBirthYEffect, setIsBirthYEffect] = useState(true);
     const [isBirthMEffect, setIsBirthMEffect] = useState(true);
     const [isBirthDEffect, setIsBirthDEffect] = useState(true);
+    const [isPwChkEffect, setIsPwChkEffect] = useState(true);
 
     const [nicknameMessage, setNicknameMessage] = useState("");
     const [birthYMessage, setBirthYMessage] = useState("");
     const [birthMMessage, setBirthMMessage] = useState("");
     const [birthDMessage, setBirthDMessage] = useState("");
+    const [pwChkMessage, setPwChkMessage] = useState("");
 
     const [uploadModal, setUploadModal] = useState(false);
+
+
+
+    const nickNameDuplicationChk = async (changeNickname) => {
+        await axios({
+            method: "GET",
+            url: "/member/signUpDuplicationChk",
+            params: {memberEmail: profileInfo.memberEmail, memberNickname: changeNickname}
+        }).then((res) => {
+            console.log("제대로 되나..? " + res.data);
+            if(res.data) {
+                setNicknameMessage('이미 사용중인 닉네임입니다.');
+                setIsNicknameEffect(false);
+            } else {
+                setNicknameMessage('');
+                setIsNicknameEffect(true);
+            }
+
+        })
+    }
+
+    const passwordDuplicationChk = async() => {
+        await axios({
+            method: "GET",
+            url: "member/passwordDuplicationChk",
+            params: {passwordCheck: memberPwCheck}
+        }).then((res) => {
+            console.log(res.data);
+            saveMemberInfo(res.data);
+        })
+    }
 
     const memberNicknameChangeHandler = (e) => {
         const changeNickname = e.target.value;
@@ -58,6 +92,7 @@ const MemberInfoUpdate = (props) => {
                 }
             }
         }
+        nickNameDuplicationChk(changeNickname);
 
         setMemberNickname(changeNickname);
     }
@@ -122,65 +157,94 @@ const MemberInfoUpdate = (props) => {
         setMemberBirthD(changeBirthD);
     }
 
-    const updateData = {
-        memberNickname: `${memberNickname}`,
-        memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`
+    const memberPwCheckChangeHandler = (e) => {
+        const changePwCheck = e.target.value;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+
+        if (changePwCheck.length < 1) {
+            setPwChkMessage('필수 정보입니다.');
+            setIsPwChkEffect(false);
+        } else {
+            if (!passwordRegex.test(changePwCheck)) {
+                setPwChkMessage('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+                setIsPwChkEffect(false);
+            } else {
+                setPwChkMessage('');
+                setIsPwChkEffect(true);
+            }
+        }
+
+        setMemberPwCheck(changePwCheck);
     }
 
-    const saveMemberInfo = async() => {
+    const saveMemberInfo = async(passwordCheck) => {
+
+        const updateData = {
+            memberNickname: `${memberNickname}`,
+            memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`
+        }
+
         const formData = new FormData();
-        if(uploadProfileImg == "D") {
-            await axios({
-                method: "DELETE",
-                url: "member/imageDelete"
-            })
-        } else {
-            formData.append('multipartFile', uploadProfileImg);
-            if(uploadProfileImg) {
+
+        if(passwordCheck) {
+
+            if(uploadProfileImg == "D") {
                 await axios({
-                    method: "POST",
-                    url: "member/imageUpload",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    enctype: "multipart/form-data"
+                    method: "DELETE",
+                    url: "member/imageDelete"
                 })
+            } else {
+                formData.append('multipartFile', uploadProfileImg);
+                if(uploadProfileImg) {
+                    await axios({
+                        method: "POST",
+                        url: "member/imageUpload",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        enctype: "multipart/form-data"
+                    })
+                }
             }
-        }
 
-
-        if(isNicknameEffect && isBirthYEffect && isBirthMEffect && isBirthDEffect) {
-            await axios({
-                method: "PUT",
-                url: "member/memberUpdate",
-                params: updateData
-            }).then((res) => {
-                window.alert("등록이 완료되었습니다람쥐");
-                props.setData(true);
-                navigate(-1);
-            })
+            if(isNicknameEffect && isBirthYEffect && isBirthMEffect && isBirthDEffect) {
+                await axios({
+                    method: "PUT",
+                    url: "member/memberUpdate",
+                    params: updateData
+                }).then((res) => {
+                    window.alert("등록이 완료되었습니다람쥐");
+                    props.setData(true);
+                    navigate(-1);
+                })
+            } else {
+                if(!isNicknameEffect) {
+                    alert("닉네임이 잘못 입력되었습니다.");
+                    setNicknameMessage('조건에 맞게 닉네임을 작성해주시길 바랍니다.');
+                    setIsNicknameEffect(false);
+                }
+                if(!isBirthYEffect) {
+                    alert("태어난 년도가 잘못 입력되었습니다.");
+                    setBirthYMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+                    setIsBirthYEffect(false);
+                }
+                if(!isBirthMEffect) {
+                    alert("태어난 월이 잘못 입력되었습니다.");
+                    setBirthMMessage('태어난 월을 선택하세요.');
+                    setIsBirthMEffect(false);
+                }
+                if(!isBirthDEffect) {
+                    alert("태어난 날짜가 잘못 입력되었습니다.");
+                    setBirthDMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+                    setIsBirthDEffect(false);
+                }
+            }
         } else {
-            if(!isNicknameEffect) {
-                alert("닉네임이 잘못 입력되었습니다.");
-                setNicknameMessage('조건에 맞게 닉네임을 작성해주시길 바랍니다.');
-                setIsNicknameEffect(false);
-            }
-            if(!isBirthYEffect) {
-                alert("태어난 년도가 잘못 입력되었습니다.");
-                setBirthYMessage('태어난 년도 4자리를 정확하게 입력하세요.');
-                setIsBirthYEffect(false);
-            }
-            if(!isBirthMEffect) {
-                alert("태어난 월이 잘못 입력되었습니다.");
-                setBirthMMessage('태어난 월을 선택하세요.');
-                setIsBirthMEffect(false);
-            }
-            if(!isBirthDEffect) {
-                alert("태어난 날짜가 잘못 입력되었습니다.");
-                setBirthDMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
-                setIsBirthDEffect(false);
-            }
+            alert("현재 비밀번호를 정확히 입력해주세요.");
+            setPwChkMessage('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+            setIsPwChkEffect(false);
         }
+
     }
 
     useEffect(() => {
@@ -214,6 +278,9 @@ const MemberInfoUpdate = (props) => {
                         <div className="update-birth">
                             생년월일
                         </div>
+                        <div className="update-check">
+                            현재 비밀번호
+                        </div>
                     </div>
                     <div className="update-value">
                         <div className="update-email">
@@ -222,7 +289,7 @@ const MemberInfoUpdate = (props) => {
                         <div className="update-nickname">
                             <input type="text" value={memberNickname} onChange={memberNicknameChangeHandler} />
                             {(
-                                <span style={ isNicknameEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{nicknameMessage}</span>
+                                <span style={ isNicknameEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{nicknameMessage}</span>
                             )}
                             <p style={ {fontSize: "13px", marginTop: "7px", color: "#5c636a"} }>
                                 최소 3자 이상 최대 20자 이하로 작성해주시기 바랍니다. <br />
@@ -248,13 +315,13 @@ const MemberInfoUpdate = (props) => {
                             </select>
                             <input type="text" value={memberBirthD} className="update-birthD" onChange={memberBirthDChangeHandler} />
                             {(
-                                <span style={ isBirthYEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{birthYMessage}</span>
+                                <span style={ isBirthYEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{birthYMessage}</span>
                             )}
                             {(
-                                <span style={ isBirthMEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{birthMMessage}</span>
+                                <span style={ isBirthMEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{birthMMessage}</span>
                             )}
                             {(
-                                <span style={ isBirthDEffect ? null : {color:'red', fontSize:'12px', marginLeft: "7px"} }>{birthDMessage}</span>
+                                <span style={ isBirthDEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{birthDMessage}</span>
                             )}
                             <p style={ {fontSize: "13px", marginTop: "7px", color: "#5c636a"} }>
                                 태어난 년도 4자리를 정확하게 입력하세요. <br />
@@ -262,11 +329,18 @@ const MemberInfoUpdate = (props) => {
                                 태어난 일(날짜) 2자리를 정확하게 입력하세요.
                             </p>
                         </div>
+
+                        <div className="update-check">
+                            <input type="password" value={memberPwCheck} onChange={memberPwCheckChangeHandler} />
+                            {(
+                                <span style={ isPwChkEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{pwChkMessage}</span>
+                            )}
+                        </div>
                     </div>
                 </div>
 
                 <div className="profile-update">
-                    <button onClick={() => saveMemberInfo()}>등록</button>
+                    <button onClick={() => passwordDuplicationChk()}>등록</button>
                 </div>
 
             </div>

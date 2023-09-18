@@ -116,4 +116,10 @@ public class BoardController {
         return boardService.commentList(request);
     }
 
+    @GetMapping("/recommendList")
+    public Map<String, Object> recommendList(HttpServletRequest request) {
+
+        return boardService.recommendList(request);
+    }
+
 }

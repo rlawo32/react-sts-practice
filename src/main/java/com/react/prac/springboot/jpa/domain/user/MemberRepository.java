@@ -26,6 +26,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByMemberNickname(String memberNickname);
 
+    boolean existsByMemberEmailAndMemberNickname(String memberEmail, String memberNickname);
+
     @Modifying
     @Query("UPDATE Member m SET m.picture = :picture WHERE m.id = :memberId")
     void updateByMemberPicture(@Param("memberId") Long memberId, @Param("picture") String picture);

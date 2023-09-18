@@ -14,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,9 +80,35 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean nickNameDuplicationChk(String memberNickname) {
+    public boolean nicknameDuplicationChk(String memberNickname) {
 
         return memberRepository.existsByMemberNickname(memberNickname);
+    }
+
+    @Transactional
+    public boolean emailAndNicknameDuplicationChk(String memberEmail, String memberNickname) {
+
+        boolean result = memberRepository.existsByMemberNickname(memberNickname);
+        boolean exists = memberRepository.existsByMemberEmailAndMemberNickname(memberEmail, memberNickname);
+
+        if(exists) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    @Transactional
+    public boolean passwordDuplicationChk(String passwordCheck) {
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+        boolean matchPassword = passwordEncoder.matches(passwordCheck, member.getMemberPw());
+
+        return matchPassword;
     }
 
     @Transactional

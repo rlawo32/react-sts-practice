@@ -1,22 +1,31 @@
 package com.react.prac.springboot.web.dto.board;
 
-import com.react.prac.springboot.jpa.domain.board.MainBoard;
-import lombok.Getter;
+import com.react.prac.springboot.jpa.domain.board.BoardRecommend;
+import lombok.Data;
 
-@Getter
+@Data
 public class RecommendResponseDto {
 
+    private Long recommendId;
+    private String recommendType;
+    private String recommendCategory;
     private Long boardId;
-    private String boardTab;
-    private String boardTitle;
-    private String boardContent;
-    private String boardAuthor;
+    private Long commentId;
+    private String createdDate;
+    private String targetAuthor;
+    private String targetData;
+    private int recommendLogNo;
 
-    public RecommendResponseDto(MainBoard mainBoard) {
-        this.boardId = mainBoard.getId();
-        this.boardTab = mainBoard.getBoardTab();
-        this.boardTitle = mainBoard.getBoardTitle();
-        this.boardContent = mainBoard.getBoardContent();
-        this.boardAuthor = mainBoard.getBoardAuthor();
+    public RecommendResponseDto(BoardRecommend boardRecommend) {
+        this.recommendId = boardRecommend.getId();
+        this.recommendType = boardRecommend.getRecommendType();
+        this.recommendCategory = boardRecommend.getRecommendCategory();
+        this.boardId = boardRecommend.getMainBoard().getId();
+        if(boardRecommend.getBoardComment() == null) {
+            this.commentId = 0L;
+        } else {
+            this.commentId = boardRecommend.getBoardComment().getId();
+        }
+        this.createdDate = boardRecommend.getCreatedDate();
     }
 }

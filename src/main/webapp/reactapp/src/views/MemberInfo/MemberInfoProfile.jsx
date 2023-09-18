@@ -53,7 +53,7 @@ const MemberInfoProfile = (props) => {
                             {profileInfo.memberBirth}
                         </div>
                         <div className="profile-joinDate">
-                            {profileInfo.createdDate}
+                            {profileInfo.createdDate.substring(0, 10)}
                         </div>
                         <div className="profile-lastLog">
                             {profileInfo.createdDate}
