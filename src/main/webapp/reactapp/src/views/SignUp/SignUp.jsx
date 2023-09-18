@@ -77,7 +77,7 @@ const SignUp = () => {
     }, [])
 
     const SignUpChangePw = useCallback((e) => {
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!?@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
         const passwordCurrent = e.target.value;
         setUserPw(passwordCurrent);
 

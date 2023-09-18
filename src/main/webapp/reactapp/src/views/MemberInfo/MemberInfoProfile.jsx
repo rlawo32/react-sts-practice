@@ -53,7 +53,7 @@ const MemberInfoProfile = (props) => {
                             {profileInfo.memberBirth}
                         </div>
                         <div className="profile-joinDate">
-                            {profileInfo.createdDate.substring(0, 10)}
+                            {profileInfo.createdDate}
                         </div>
                         <div className="profile-lastLog">
                             {profileInfo.createdDate}
@@ -62,7 +62,8 @@ const MemberInfoProfile = (props) => {
                 </div>
 
                 <div className="profile-update">
-                    <button onClick={() => props.setData(5)}>수정</button>
+                    <button onClick={() => props.setData(5)}>프로필 수정</button>
+                    <button onClick={() => props.setData(6)}>비밀번호 변경</button>
                 </div>
 
             </div>

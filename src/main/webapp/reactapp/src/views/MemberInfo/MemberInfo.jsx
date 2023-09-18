@@ -9,6 +9,7 @@ import MemberInfoCommentLog from "./MemberInfoCommentLog";
 import MemberInfoRecommendLog from "./MemberInfoRecommendLog";
 import MemberInfoLoginLog from "./MemberInfoLoginLog";
 import MemberInfoUpdate from "./MemberInfoUpdate";
+import MemberInfoPwUpdate from "./MemberInfoPwUpdate";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import axios from "axios";
@@ -55,6 +56,11 @@ const MemberInfo = () => {
                 id: 5,
                 name: '내 정보 수정',
                 view: <MemberInfoUpdate info={memberInfo} setData={setMemberInfoUpdateChk} img={memberProfileImg} setImg={setMemberProfileImg}/>
+            },
+            {
+                id: 6,
+                name: '비밀번호 변경',
+                view: <MemberInfoPwUpdate />
             }
         ];
         return result;
@@ -62,7 +68,7 @@ const MemberInfo = () => {
 
     const pagination = () => {
         let result = [];
-        for (let i=0; i<select_tab().length-1; i++) {
+        for (let i=0; i<select_tab().length-2; i++) {
             result.push(<li key={select_tab()[i].id} onClick={() => selectTabHandler(select_tab()[i].id)}>
                 <button className="list-item">{select_tab()[i].name}</button>
             </li>);

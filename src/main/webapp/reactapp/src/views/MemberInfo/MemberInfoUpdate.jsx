@@ -21,7 +21,7 @@ const MemberInfoUpdate = (props) => {
     const [memberBirthY, setMemberBirthY] = useState(profileBirth.substring(0, 4));
     const [memberBirthM, setMemberBirthM] = useState(profileBirth.substring(5, 7));
     const [memberBirthD, setMemberBirthD] = useState(profileBirth.substring(8));
-    const [memberPwCheck, setMemberPwCheck] = useState("");
+    const [pwDuplicationCheck, setPwDuplicationCheck] = useState("");
 
     const [isNicknameEffect, setIsNicknameEffect] = useState(true);
     const [isBirthYEffect, setIsBirthYEffect] = useState(true);
@@ -61,9 +61,8 @@ const MemberInfoUpdate = (props) => {
         await axios({
             method: "GET",
             url: "member/passwordDuplicationChk",
-            params: {passwordCheck: memberPwCheck}
+            params: {passwordCheck: pwDuplicationCheck}
         }).then((res) => {
-            console.log(res.data);
             saveMemberInfo(res.data);
         })
     }
@@ -174,7 +173,7 @@ const MemberInfoUpdate = (props) => {
             }
         }
 
-        setMemberPwCheck(changePwCheck);
+        setPwDuplicationCheck(changePwCheck);
     }
 
     const saveMemberInfo = async(passwordCheck) => {
@@ -331,7 +330,7 @@ const MemberInfoUpdate = (props) => {
                         </div>
 
                         <div className="update-check">
-                            <input type="password" value={memberPwCheck} onChange={memberPwCheckChangeHandler} />
+                            <input type="password" value={pwDuplicationCheck} onChange={memberPwCheckChangeHandler} />
                             {(
                                 <span style={ isPwChkEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{pwChkMessage}</span>
                             )}
@@ -341,6 +340,7 @@ const MemberInfoUpdate = (props) => {
 
                 <div className="profile-update">
                     <button onClick={() => passwordDuplicationChk()}>등록</button>
+                    <button onClick={() => navigate(-1)}>취소</button>
                 </div>
 
             </div>

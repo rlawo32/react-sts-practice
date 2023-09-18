@@ -229,7 +229,20 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
-        member.update(memberNickname, memberBirth);
+        member.infoUpdate(memberNickname, memberBirth);
+
+        return memberId;
+    }
+
+    @Transactional
+    public Long passwordUpdate(HttpServletRequest request) {
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+        member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
 
         return memberId;
     }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @NoArgsConstructor
@@ -51,9 +52,15 @@ public class Member extends BaseTimeEntity {
         this.picture = picture;
     }
 
-    public Member update(String memberNickname, String memberBirth) {
+    public Member infoUpdate(String memberNickname, String memberBirth) {
         this.memberNickname = memberNickname;
         this.memberBirth = memberBirth;
+
+        return this;
+    }
+
+    public Member passwordUpdate(String changePassword) {
+        this.memberPw = changePassword;
 
         return this;
     }

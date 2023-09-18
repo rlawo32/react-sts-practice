@@ -166,6 +166,12 @@ public class MemberController {
         return memberService.memberUpdate(request);
     }
 
+    @PutMapping("/passwordUpdate")
+    public Long passwordUpdate(HttpServletRequest request) {
+
+        return memberService.passwordUpdate(request);
+    }
+
 
     @GetMapping("/memberLog")
     public Map<String, Object> findMemberLog(HttpServletRequest request) {
