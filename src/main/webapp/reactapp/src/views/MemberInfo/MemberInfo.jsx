@@ -13,7 +13,6 @@ import MemberInfoPwUpdate from "./MemberInfoPwUpdate";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import axios from "axios";
-import TableBoard from "../NoticeBoard/TableBoard";
 
 const MemberInfo = () => {
     const navigate = useNavigate();

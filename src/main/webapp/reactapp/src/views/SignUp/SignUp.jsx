@@ -1,14 +1,13 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
-import {Row} from "react-bootstrap";
-import './SignUp.css';
+import './SignUp.scss';
 import AppBarNavigation from "../Navigation/AppBarNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEnvelope as emailIcon, faEnvelopeCircleCheck as emailCheckIcon, faLock as passwordIcon, faUnlockKeyhole as passwordCheckIcon,
+    faUserPen as nicknameIcon, faCalendarDay as birthIcon} from "@fortawesome/free-solid-svg-icons"
+import {} from "@fortawesome/free-brands-svg-icons"
 
 const SignUp = () => {
     let navigate = useNavigate();
@@ -35,14 +34,17 @@ const SignUp = () => {
     const [memberBirthMessage, setMemberBirthMessage] = useState("");
 
     // 유효성 검사
-    const [isMemberEmailEffect, setIsMemberEmailEffect] = useState(false);
+    const [isMemberEmailEffect, setIsMemberEmailEffect] = useState(true);
     const [isMemberEmailHideEffect, setIsMemberEmailHideEffect] = useState(false);
-    const [isMemberEmailCheckEffect, setIsMemberEmailCheckEffect] = useState(false);
-    const [isMemberEmailDuplicationEffect, setIsMemberEmailDuplicationEffect] = useState(false);
-    const [isMemberPasswordEffect, setIsMemberPasswordEffect] = useState(false);
-    const [isMemberPasswordCheckEffect, setIsMemberPasswordCheckEffect] = useState(false);
-    const [isMemberNicknameEffect, setIsMemberNicknameEffect] = useState(false);
-    const [isMemberBirthEffect, setIsMemberBirthEffect] = useState(false);
+    const [isMemberEmailCheckEffect, setIsMemberEmailCheckEffect] = useState(true);
+    const [isMemberPasswordEffect, setIsMemberPasswordEffect] = useState(true);
+    const [isMemberPasswordCheckEffect, setIsMemberPasswordCheckEffect] = useState(true);
+    const [isMemberNicknameEffect, setIsMemberNicknameEffect] = useState(true);
+    const [isMemberBirthEffect, setIsMemberBirthEffect] = useState(true);
+
+    const [isMemberEmailConfirm, setIsMemberEmailConfirm] = useState(false);
+    const [isMemberEmailDuplicationConfirm, setIsMemberEmailDuplicationConfirm] = useState(false);
+    const [isMemberEmailCheckConfirm, setIsMemberEmailCheckConfirm] = useState(false);
 
     const signUpEmailHandler = (e)=> {
         const memberEmailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
@@ -52,13 +54,16 @@ const SignUp = () => {
         if(memberEmailCurrent.length < 1) {
             setMemberEmailMessage('필수 정보입니다.');
             setIsMemberEmailEffect(false);
+            setIsMemberEmailConfirm(false);
         } else {
             if (!memberEmailRegex.test(memberEmailCurrent)) {
                 setMemberEmailMessage('이메일 주소를 다시 확인해주세요.');
                 setIsMemberEmailEffect(false);
+                setIsMemberEmailConfirm(false);
             } else {
                 setMemberEmailMessage('');
                 setIsMemberEmailEffect(true);
+                setIsMemberEmailConfirm(true);
             }
         }
     }
@@ -75,61 +80,92 @@ const SignUp = () => {
                 console.log(result.data);
                 if(result.data) {
                     setMemberEmailMessage("이미 사용중인 이메일 ID 입니다.");
-                    setIsMemberEmailDuplicationEffect(false);
+                    setIsMemberEmailDuplicationConfirm(false);
                     setIsMemberEmailEffect(false);
                 } else {
-                    setIsMemberEmailDuplicationEffect(true);
+                    setIsMemberEmailDuplicationConfirm(true);
                     setIsMemberEmailEffect(true);
                 }
             }).catch(error => {
                 console.log("에러내용:", JSON.stringify(error));
             })
         } else {
-            setMemberEmailMessage('필수 정보입니다.');
+            setMemberEmailMessage('이메일 주소를 다시 확인해주세요.');
             setIsMemberEmailEffect(false);
-            emailRef.current.focus();
+            setIsMemberEmailConfirm(false);
+            // emailRef.current.focus();
         }
     }
 
-    const signUpEmailCheckHandler = (e) => {
-        setMemberEmailCheck(e.target.value);
-    }
-
     const emailCheckSendHandler = async () => {
-        if(isMemberEmailDuplicationEffect == true) {
+
+        if(isMemberEmailConfirm == true && isMemberEmailDuplicationConfirm == true) {
+            alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
+            setIsMemberEmailEffect(true);
             setIsMemberEmailHideEffect(true);
             setMemberEmailMessage('');
+
             await axios({
                 method: "GET",
                 url: "/member/sendAuthCode",
                 params: {memberEmail: memberEmail}
             }).then(function(obj) {
-                alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
-                setIsMemberEmailEffect(true);
                 console.log('authCode : ' + obj.data.authCode);
                 setMemberEmailCode(obj.data.authCode);
             }).catch(function(error) {
                 alert('인증코드 발송에 실패했습니다.');
             })
+        } else {
+            alert('이메일을 확인해주세요.');
+            setMemberEmailMessage('이메일 주소를 다시 확인해주세요.');
+            setIsMemberEmailEffect(false);
+            setIsMemberEmailConfirm(false);
+            // emailRef.current.focus();
+        }
+    }
+
+    const signUpEmailCheckHandler = (e) => {
+        const memberEmailCheckRegex = /^.{6}$/;
+        const memberEmailCheckCurrent = e.target.value;
+
+        setMemberEmailCheck(memberEmailCheckCurrent);
+
+        if(memberEmailCheckCurrent.length < 1) {
+            setMemberEmailCheckMessage('필수 정보입니다.');
+            setIsMemberEmailCheckEffect(false);
+        } else {
+            if (!memberEmailCheckRegex.test(memberEmailCheckCurrent)) {
+                setMemberEmailCheckMessage('인증번호는 6자리입니다.');
+                setIsMemberEmailCheckEffect(false);
+            } else {
+                setMemberEmailCheckMessage('');
+                setIsMemberEmailCheckEffect(true);
+            }
         }
     }
 
     const emailCheckConfirmHandler = () => {
         if(memberEmailCheck.length < 1) {
-            setMemberEmailCheckMessage('인증이 필요합니다.');
+            alert('인증번호를 입력해주세요.');
+            setMemberEmailCheckMessage('인증번호를 입력해주세요.');
             setIsMemberEmailCheckEffect(false);
+            setIsMemberEmailCheckConfirm(false);
         } else {
-            if(memberEmailCheck === memberEmailCode) {
+            if(memberEmailCheck == memberEmailCode) {
+                alert('인증되었습니다.');
                 setMemberEmailCheckMessage('인증되었습니다.');
                 setIsMemberEmailCheckEffect(true);
+                setIsMemberEmailCheckConfirm(true);
             } else {
+                alert('인증에 실패했습니다.');
                 setMemberEmailCheckMessage('인증에 실패했습니다.');
                 setIsMemberEmailCheckEffect(false);
+                setIsMemberEmailCheckConfirm(false);
             }
         }
     }
 
-    const signUpPasswordHandler = useCallback((e) => {
+    const signUpPasswordHandler = (e)=> {
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!?@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
         const passwordCurrent = e.target.value;
         setMemberPassword(passwordCurrent);
@@ -146,7 +182,7 @@ const SignUp = () => {
                 setIsMemberPasswordEffect(true);
             }
         }
-    }, [])
+    }
 
     const signUpPasswordCheckHandler = useCallback((e) => {
         const passwordCheckCurrent = e.target.value;
@@ -166,7 +202,7 @@ const SignUp = () => {
         }
     }, [memberPassword])
 
-    const signUpNicknameHandler = useCallback((e) => {
+    const signUpNicknameHandler = (e)=> {
         const memberNicknameRegex = /^.{2,20}$/;
         const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
         const gapRegex  = /\s/g;
@@ -192,11 +228,10 @@ const SignUp = () => {
                 }
             }
         }
-    }, [])
+    }
 
     // 닉네임 중복 확인
     const nicknameDuplicationHandler = async () => {
-        const nickNameDuplicationRegex = /^[a-zA-Z가-힣]{3,20}$/;
         if(isMemberNicknameEffect === true) {
 
             await axios({
@@ -216,7 +251,7 @@ const SignUp = () => {
         } else {
             setMemberEmailMessage('필수 정보입니다.');
             setIsMemberEmailEffect(false);
-            nickNameRef.current.focus();
+            // nickNameRef.current.focus();
         }
     }
 
@@ -263,11 +298,7 @@ const SignUp = () => {
         const memberBirthDRegex = /^([1-9]|[1-2][0-9]|3[0-1])$/;
         const memberBirthDCurrent = e.target.value;
 
-        if(memberBirthDCurrent.length < 2) {
-            setMemberBirthD('0' + memberBirthDCurrent);
-        } else {
-            setMemberBirthD(memberBirthDCurrent);
-        }
+        setMemberBirthD(memberBirthDCurrent);
 
         if(memberBirthY.length < 1) {
             setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
@@ -339,6 +370,10 @@ const SignUp = () => {
 
     const onJoinHandler = async (e) => {
 
+        if(memberBirthD.length == 1) {
+            setMemberBirthD("0" + memberBirthD);
+        }
+
         const memberData = {
             memberEmail: `${memberEmail}`,
             memberPw: `${memberPassword}`,
@@ -347,49 +382,61 @@ const SignUp = () => {
         }
 
         if(memberEmail.length < 1) {
+            alert('이메일을 입력해주세요.');
             setMemberEmailMessage('필수 정보입니다.');
             setIsMemberEmailEffect(false);
             e.preventDefault();
         } else
-        if(isMemberEmailCheckEffect === false) {
-            setIsMemberEmailEffect(false);
-            if(isMemberEmailHideEffect === true) {
-                setMemberEmailCheckMessage('인증이 필요합니다.');
-            } else {
-                setMemberEmailMessage('인증이 필요합니다.');
-            }
+        if(memberEmailCheck.length < 1) {
+            alert('인증을 진행해주세요.');
+            setMemberEmailCheckMessage('인증이 필요합니다.');
+            setIsMemberEmailCheckEffect(false);
             e.preventDefault();
         } else
-        if(isMemberPasswordEffect === false) {
+        if(isMemberEmailCheckConfirm == false) {
+            alert('인증번호가 틀립니다.');
+            setMemberEmailCheckMessage('인증이 필요합니다.');
+            setIsMemberEmailCheckEffect(false);
+            e.preventDefault();
+        } else
+        if(memberPassword.length < 1) {
+            alert('비밀번호를 입력해주세요.');
             setMemberPasswordMessage('필수 정보입니다.');
             setIsMemberPasswordEffect(false);
             e.preventDefault();
         } else
-        if(isMemberPasswordCheckEffect === false) {
+        if(memberPasswordCheck.length < 1 || memberPassword != memberPasswordCheck) {
+            alert('비밀번호를 확인해주세요.');
             setMemberPasswordCheckMessage('비밀번호가 일치하지 않습니다.');
             setIsMemberPasswordCheckEffect(false);
             e.preventDefault();
         } else
-        if(isMemberNicknameEffect === false) {
+        if(memberNickname.length < 1) {
+            alert('닉네임을 입력해주세요.');
             setMemberNicknameMessage('필수 정보입니다.');
             setIsMemberNicknameEffect(false);
             e.preventDefault();
         } else
         if(memberBirthY.length < 1) {
+            alert('생일 날짜를 입력해주세요.');
             setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
             setIsMemberBirthEffect(false);
             e.preventDefault();
         } else
         if(memberBirthM.length < 1) {
+            alert('생일 날짜를 입력해주세요.');
             setMemberBirthMessage('태어난 월을 선택하세요.');
             setIsMemberBirthEffect(false);
             e.preventDefault();
         } else
         if(memberBirthD.length < 1) {
+            alert('생일 날짜를 입력해주세요.');
             setMemberBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
             setIsMemberBirthEffect(false);
             e.preventDefault();
         } else {
+            console.log(memberData);
+
             await axios({
                 method: "POST",
                 url: "/member/signUp",
@@ -403,7 +450,7 @@ const SignUp = () => {
     }
 
     useEffect(() => {
-        emailRef.current.focus();
+        // emailRef.current.focus();
     }, []);
 
     return (
@@ -418,98 +465,120 @@ const SignUp = () => {
                     <div className="signUp-email">
                         <div className="email-enter">
                             <span className="email-input">
-                                <input type="text" value={memberEmail} onChange={signUpEmailHandler} onBlur={emailDuplicationHandler} ref={emailRef} placeholder="이메일 주소" />
+                                <FontAwesomeIcon icon={emailIcon} className="email-icon"/>
+                                <input type="text" value={memberEmail} onChange={signUpEmailHandler} onBlur={emailDuplicationHandler}
+                                       ref={emailRef} placeholder="이메일 주소" style={ isMemberEmailEffect ? {border: 'none'} : {border: '2px solid red'} } />
                             </span>
                             <span className="email-btn">
-                                <button onClick={emailCheckSendHandler}>전송하기</button>
+                                {
+                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>전송</button> : <button onClick={emailCheckSendHandler}>전송</button>
+                                }
                             </span>
-
-                            {(
-                                <span style={ isMemberEmailEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberEmailMessage}</span>
-                            )}
                         </div>
                         <div className="email-check" style={ isMemberEmailHideEffect ? {display:'block'} : {display:'none'} }>
                             <span className="email-input">
-                                <input type="text" value={memberEmailCheck} onChange={signUpEmailCheckHandler} placeholder="인증번호를 입력하세요" />
+                                <FontAwesomeIcon icon={emailCheckIcon} className="email-icon"/>
+                                <input type="text" value={memberEmailCheck} onChange={signUpEmailCheckHandler} placeholder="인증번호 확인" style={ isMemberEmailCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
                             </span>
                             <span className="email-btn">
-                                <button onClick={emailCheckConfirmHandler}>인증하기</button>
+                                {
+                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>인증</button> : <button onClick={emailCheckConfirmHandler}>인증</button>
+                                }
                             </span>
-
-                            {(
-                                <span style={ isMemberEmailCheckEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberEmailCheckMessage}</span>
-                            )}
                         </div>
+
+                        {(
+                            <div style={ isMemberEmailEffect ? null : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailMessage}</div>
+                        )}
+
+                        {(
+                            <div style={ isMemberEmailCheckEffect ? {color:'green', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailCheckMessage}</div>
+                        )}
                     </div>
                     <div className="signUp-password">
                         <div className="password-input">
-                            <input type="password" value={memberPassword} onChange={signUpPasswordHandler} placeholder="비밀번호" />
+                            <FontAwesomeIcon icon={passwordIcon} className="password-icon"/>
+                            <input type="password" value={ memberPassword} onChange={signUpPasswordHandler} placeholder="비밀번호" style={ isMemberPasswordEffect ? {border: 'none'} : {border: '2px solid red'} } />
+
+                            {(
+                                <div style={ isMemberPasswordEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordMessage}</div>
+                            )}
                         </div>
 
-                        {(
-                            <span style={ isMemberPasswordEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberPasswordMessage}</span>
-                        )}
+                        <div className="signUp-password-check">
+                            <div className="password-check-input">
+                                <FontAwesomeIcon icon={passwordCheckIcon} className="password-icon"/>
+                                <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} onChange={signUpPasswordCheckHandler} style={ isMemberPasswordCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
+
+                                {(
+                                    <div style={ isMemberPasswordCheckEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordCheckMessage}</div>
+                                )}
+                            </div>
+                        </div>
+
                     </div>
-                    <div className="signUp-password-check">
-                        <div className="password-check-input">
-                            <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} onChange={signUpPasswordCheckHandler} />
-                        </div>
+                    <div className="signUp-etc">
+                        <div className="signUp-nickname">
+                            <div className="nickname-input">
+                                <FontAwesomeIcon icon={nicknameIcon} className="nickname-icon"/>
+                                <input type="text" value={memberNickname} onChange={signUpNicknameHandler} onBlur={nicknameDuplicationHandler}
+                                       ref={nickNameRef} placeholder="닉네임" style={ isMemberNicknameEffect ? {border: 'none'} : {border: '2px solid red'} } />
 
-                        {(
-                            <span style={ isMemberPasswordCheckEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberPasswordCheckMessage}</span>
-                        )}
-                    </div>
-                    <div className="signUp-nickname">
-                        <div className="nickname-input">
-                            <input type="text" value={memberNickname} onChange={signUpNicknameHandler} onBlur={nicknameDuplicationHandler} ref={nickNameRef} placeholder="닉네임" />
+                                {(
+                                    <div style={ isMemberNicknameEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberNicknameMessage}</div>
+                                )}
+                            </div>
                         </div>
+                        <div className="signUp-birth">
+                            <div className="birth-input">
+                                <span className="birth-year">
+                                    <FontAwesomeIcon icon={birthIcon} className="birth-icon"/>
+                                    <input type="text" id="userBirthY" value={memberBirthY} onChange={signUpBirthYearHandler} placeholder="년(4자)"
+                                           style={ isMemberBirthEffect ? {border: 'none'} : {borderTop: '2px solid red', borderBottom: '2px solid red', borderLeft: '2px solid red'} } />
+                                </span>
+                                <span className="birth-month">
+                                    <select id="userBirthM" value={memberBirthM} onChange={signUpBirthMonthHandler} style={ isMemberBirthEffect ? null : {borderTop: '2px solid red', borderBottom: '2px solid red'} } >
+                                        <option value="">월</option>
+                                        <option value="01">1</option>
+                                        <option value="02">2</option>
+                                        <option value="03">3</option>
+                                        <option value="04">4</option>
+                                        <option value="05">5</option>
+                                        <option value="06">6</option>
+                                        <option value="07">7</option>
+                                        <option value="08">8</option>
+                                        <option value="09">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </span>
+                                <span className="birth-day">
+                                    <input type="text" id="userBirthD" value={memberBirthD} onChange={signUpBirthDayHandler} placeholder="일"
+                                           style={ isMemberBirthEffect ? {border: 'none'} : {borderTop: '2px solid red', borderBottom: '2px solid red', borderRight: '2px solid red'} } />
+                                </span>
 
-                        {(
-                            <span style={ isMemberNicknameEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberNicknameMessage}</span>
-                        )}
-                    </div>
-                    <div className="signUp-birth">
-                        <div className="birth-input">
-                            <span className="birth-year">
-                                <input type="text" id="userBirthY" value={memberBirthY} onChange={signUpBirthYearHandler} placeholder="년(4자)" />
-                            </span>
-                            <span className="birth-month">
-                                <select id="userBirthM" value={memberBirthM} onChange={signUpBirthMonthHandler}>
-                                    <option value="">월</option>
-                                    <option value="01">1</option>
-                                    <option value="02">2</option>
-                                    <option value="03">3</option>
-                                    <option value="04">4</option>
-                                    <option value="05">5</option>
-                                    <option value="06">6</option>
-                                    <option value="07">7</option>
-                                    <option value="08">8</option>
-                                    <option value="09">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                            </span>
-                            <span className="birth-day">
-                                <input type="text" id="userBirthD" value={memberBirthD} onChange={signUpBirthDayHandler} placeholder="일" />
-                            </span>
+                                {(
+                                    <div style={ isMemberBirthEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberBirthMessage}</div>
+                                )}
+                            </div>
                         </div>
-
-                        {(
-                            <span style={ isMemberBirthEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberBirthMessage}</span>
-                        )}
                     </div>
                 </div>
                 <div className="on-submit">
-                    <button onClick={onJoinHandler} className="on-signUp">
-                        가입하기
-                    </button>
-                    <Link to="/">
-                        <button className="on-cancel">
-                            취소
+                    <div className="on-signUp">
+                        <button onClick={onJoinHandler}>
+                            가입하기
                         </button>
-                    </Link>
-                </div>
+                    </div>
+                    <div className="on-cancel">
+                        <Link to="/">
+                            <button>
+                                취소
+                            </button>
+                        </Link>
+                    </div>
+                    </div>
 
             </div>
 

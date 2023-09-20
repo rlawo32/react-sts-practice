@@ -1,0 +1,257 @@
+
+.signUp-body {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+
+    .signUp-view {
+        margin-bottom: 200px;
+
+        input {
+            border: none;
+            border-radius: 15px;
+            background-color: #51585e;
+            padding: 8px 0 8px 60px;
+            font-size: 20px;
+            color: black;
+            width: 380px;
+        }
+
+        .common-signUp {
+            margin-top: 100px;
+
+            .signUp-email {
+                border: 2px solid #495057;
+                border-radius: 15px;
+                padding: 20px 10px 20px 10px;
+                margin: 30px auto 0;
+                width: 600px;
+                height: 200px;
+
+                input {
+                    border: none;
+                    border-radius: 15px 0 0 15px;
+                    background-color: #51585e;
+                    padding: 8px 10px 8px 60px;
+                    font-size: 20px;
+                    color: black;
+                    width: 300px;
+                }
+
+                button {
+                    border: none;
+                    border-left: 2px solid #000000;
+                    border-radius: 0 15px 15px 0;
+                    background-color: #d1e7dd;
+                    padding: 8px 15px 8px 8px;
+                    font-size: 20px;
+                    width: 80px;
+                }
+
+                .email-enter {
+                    position: relative;
+                    margin-bottom: 15px;
+
+                    .email-input {
+
+                        .email-icon {
+                            position: absolute;
+                            top: 2.5px;
+                            left: 100px;
+                            border: none;
+                            border-radius: 15px 0 0 15px;
+                            background-color: #51585e;
+                            padding: 9px 0 7px 15px;
+                            margin-right: 20px;
+                            font-size: 25px;
+                        }
+
+                    }
+                }
+
+                .email-check {
+                    position: relative;
+                    margin-bottom: 15px;
+
+                    .email-input {
+
+                        .email-icon {
+                            position: absolute;
+                            top: 2.5px;
+                            left: 100px;
+                            border: none;
+                            border-radius: 15px 0 0 15px;
+                            background-color: #51585e;
+                            padding: 9px 0 7px 15px;
+                            margin-right: 20px;
+                            font-size: 25px;
+                        }
+
+                    }
+                }
+
+            }
+
+            .signUp-password {
+                position: relative;
+                border: 2px solid #495057;
+                border-radius: 15px;
+                padding: 30px 10px 30px 10px;
+                margin: 20px auto 20px;
+                width: 600px;
+                height: 240px;
+
+                .password-input {
+                    position: relative;
+                    margin-bottom: 15px;
+
+                    .password-icon {
+                        position: absolute;
+                        top: 2.5px;
+                        left: 100px;
+                        border: none;
+                        border-radius: 15px 0 0 15px;
+                        background-color: #51585e;
+                        padding: 9px 0 7px 17px;
+                        margin-right: 20px;
+                        font-size: 25px;
+                    }
+                }
+
+                .signUp-password-check {
+                    position: absolute;
+                    top: 130px;
+                    left: 108px;
+
+                    .password-check-input {
+                        position: relative;
+                        margin-bottom: 15px;
+
+                        .password-icon {
+                            position: absolute;
+                            top: 2.5px;
+                            left: 2px;
+                            border: none;
+                            border-radius: 15px 0 0 15px;
+                            background-color: #51585e;
+                            padding: 9px 0 7px 17px;
+                            margin-right: 20px;
+                            font-size: 25px;
+                        }
+                    }
+                }
+            }
+
+            .signUp-etc {
+                position: relative;
+                border: 2px solid #495057;
+                border-radius: 15px;
+                padding: 30px 10px 30px 10px;
+                margin: 20px auto 20px;
+                width: 600px;
+                height: 240px;
+
+                .signUp-nickname {
+                    position: relative;
+                    margin-bottom: 15px;
+
+                    .nickname-input {
+
+                        .nickname-icon {
+                            position: absolute;
+                            top: 2.5px;
+                            left: 100px;
+                            border: none;
+                            border-radius: 15px 0 0 15px;
+                            background-color: #51585e;
+                            padding: 9px 0 7px 15px;
+                            margin-right: 20px;
+                            font-size: 25px;
+                        }
+
+                    }
+
+                }
+
+                .signUp-birth {
+                    position: absolute;
+                    top: 130px;
+                    left: 108px;
+
+                    .birth-year {
+                        position: relative;
+                        margin-bottom: 15px;
+
+                        .birth-icon {
+                            position: absolute;
+                            top: 0.5px;
+                            left: 2px;
+                            border: none;
+                            border-radius: 15px 0 0 15px;
+                            background-color: #51585e;
+                            padding: 9px 0 7px 18px;
+                            margin-right: 20px;
+                            font-size: 25px;
+                        }
+
+                    }
+
+                    .birth-year input {
+                        border: none;
+                        border-radius: 15px 0 0 15px;
+                        background-color: #51585e;
+                        padding: 8px 0 8px 60px;
+                        font-size: 20px;
+                        color: black;
+                        width: 200px;
+                    }
+
+                    .birth-day input {
+                        border: none;
+                        border-radius: 0 15px 15px 0;
+                        background-color: #51585e;
+                        padding: 8px 0 8px 15px;
+                        font-size: 20px;
+                        color: black;
+                        width: 100px;
+                    }
+
+                    select {
+                        border: none;
+                        border-left: 1px solid #000000;
+                        border-right: 1px solid #000000;
+                        background-color: #51585e;
+                        padding: 8px 0 9px 15px;
+                        font-size: 20px;
+                        color: black;
+                        width: 80px;
+
+                    }
+
+                }
+
+            }
+        }
+
+        .on-submit {
+
+            button {
+                border: none;
+                border-radius: 15px;
+                background-color: #5c636a;
+                padding: 8px;
+                font-size: 20px;
+                width: 600px;
+            }
+
+            .on-signUp {
+
+            }
+
+            .on-cancel {
+
+            }
+
+        }
+    }
+}
