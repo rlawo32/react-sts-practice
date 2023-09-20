@@ -4,519 +4,477 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Row} from "react-bootstrap";
 import './SignUp.css';
+import AppBarNavigation from "../Navigation/AppBarNavigation";
+import FooterNavigation from "../Navigation/FooterNavigation";
 
 const SignUp = () => {
     let navigate = useNavigate();
+
     const emailRef = useRef();
     const nickNameRef = useRef();
 
-    const text1 = "필수 정보입니다.";
+    const [memberEmail, setMemberEmail] = useState("");
+    const [memberEmailCheck, setMemberEmailCheck] = useState("");
+    const [memberEmailCode, setMemberEmailCode] = useState("");
+    const [memberPassword, setMemberPassword] = useState("");
+    const [memberPasswordCheck, setMemberPasswordCheck] = useState("");
+    const [memberNickname, setMemberNickname] = useState("");
+    const [memberBirthY, setMemberBirthY] = useState("");
+    const [memberBirthM, setMemberBirthM] = useState("");
+    const [memberBirthD, setMemberBirthD] = useState("");
 
-    useEffect(() => {
-        emailRef.current.focus();
-    }, []);
-
-    const [userId, setUserId] = useState("");
-    const [userPw, setUserPw] = useState("");
-    const [userPwChk, setUserPwChk] = useState("");
-    const [userName, setUserName] = useState("");
-    const [userNickName, setUserNickName] = useState("");
-    const [userBirthY, setUserBirthY] = useState("");
-    const [userBirthM, setUserBirthM] = useState("");
-    const [userBirthD, setUserBirthD] = useState("");
-    const [userGender, setUserGender] = useState("");
-    const [userEmail, setUserEmail] = useState("");
-    const [userEmailChk, setUserEmailChk] = useState("");
-    const [userEmailCode, setUserEmailCode] = useState("");
-    const [userPhone, setUserPhone] = useState("");
-
-    //오류메시지 상태저장
-    const [userIdMessage, setUserIdMessage] = useState("");
-    const [userPwMessage, setUserPwMessage] = useState("");
-    const [userPwChkMessage, setUserPwChkMessage] = useState("");
-    const [userNameMessage, setUserNameMessage] = useState("");
-    const [userBirthMessage, setUserBirthMessage] = useState("");
-    const [userGenderMessage, setUserGenderMessage] = useState("");
-    const [userEmailMessage, setUserEmailMessage] = useState("");
-    const [userEmailChkMessage, setUserEmailChkMessage] = useState("");
-    const [userPhoneMessage, setUserPhoneMessage] = useState("");
+    // 오류메시지 저장
+    const [memberEmailMessage, setMemberEmailMessage] = useState("");
+    const [memberEmailCheckMessage, setMemberEmailCheckMessage] = useState("");
+    const [memberPasswordMessage, setMemberPasswordMessage] = useState("");
+    const [memberPasswordCheckMessage, setMemberPasswordCheckMessage] = useState("");
+    const [memberNicknameMessage, setMemberNicknameMessage] = useState("");
+    const [memberBirthMessage, setMemberBirthMessage] = useState("");
 
     // 유효성 검사
-    const [isUserIdEffect, setIsUserIdEffect] = useState(false);
-    const [isPasswordEffect, setIsPasswordEffect] = useState(false);
-    const [isPasswordConfirmEffect, setIsPasswordConfirmEffect] = useState(false);
-    const [isUserNameEffect, setIsUserNameEffect] = useState(false);
-    const [isUserBirthEffect, setIsUserBirthEffect] = useState(false);
-    const [isUserGenderEffect, setIsUserGenderEffect] = useState(false);
-    const [isUserEmailEffect, setIsUserEmailEffect] = useState(false);
-    const [isUserEmailHideEffect, setIsUserEmailHideEffect] = useState(false);
-    const [isUserEmailChkEffect, setIsUserEmailChkEffect] = useState(false);
-    const [isUserEmailDuplicationEffect, setIsUserEmailDuplicationEffect] = useState(false);
-    const [isUserPhoneEffect, setIsUserPhoneEffect] = useState(false);
+    const [isMemberEmailEffect, setIsMemberEmailEffect] = useState(false);
+    const [isMemberEmailHideEffect, setIsMemberEmailHideEffect] = useState(false);
+    const [isMemberEmailCheckEffect, setIsMemberEmailCheckEffect] = useState(false);
+    const [isMemberEmailDuplicationEffect, setIsMemberEmailDuplicationEffect] = useState(false);
+    const [isMemberPasswordEffect, setIsMemberPasswordEffect] = useState(false);
+    const [isMemberPasswordCheckEffect, setIsMemberPasswordCheckEffect] = useState(false);
+    const [isMemberNicknameEffect, setIsMemberNicknameEffect] = useState(false);
+    const [isMemberBirthEffect, setIsMemberBirthEffect] = useState(false);
 
-    const SignUpChangeId = useCallback((e) => {
-        const userIdRegex = /^[a-z0-9_-]{5,20}$/;
-        const userIdCurrent = e.target.value;
-        setUserId(userIdCurrent);
+    const signUpEmailHandler = (e)=> {
+        const memberEmailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const memberEmailCurrent = e.target.value;
+        setMemberEmail(memberEmailCurrent);
 
-        if (userIdCurrent < 1) {
-            setUserIdMessage(text1);
-            setIsPasswordEffect(false);
+        if(memberEmailCurrent.length < 1) {
+            setMemberEmailMessage('필수 정보입니다.');
+            setIsMemberEmailEffect(false);
         } else {
-            if (!userIdRegex.test(userIdCurrent)) {
-                setUserIdMessage('5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다..');
-                setIsUserIdEffect(false);
+            if (!memberEmailRegex.test(memberEmailCurrent)) {
+                setMemberEmailMessage('이메일 주소를 다시 확인해주세요.');
+                setIsMemberEmailEffect(false);
             } else {
-                setUserIdMessage('');
-                setIsUserIdEffect(true);
+                setMemberEmailMessage('');
+                setIsMemberEmailEffect(true);
             }
-        }
-    }, [])
-
-    const SignUpChangePw = useCallback((e) => {
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!?@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-        const passwordCurrent = e.target.value;
-        setUserPw(passwordCurrent);
-
-        if (passwordCurrent.length < 1) {
-            setUserPwMessage(text1);
-            setIsPasswordEffect(false);
-        } else {
-            if (!passwordRegex.test(passwordCurrent)) {
-                setUserPwMessage('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
-                setIsPasswordEffect(false);
-            } else {
-                setUserPwMessage('');
-                setIsPasswordEffect(true);
-            }
-        }
-    }, [])
-
-    const SignUpChangePc = useCallback((e) => {
-        const passwordConfirmCurrent = e.target.value;
-        setUserPwChk(passwordConfirmCurrent);
-
-        console.log(passwordConfirmCurrent);
-        console.log(userPw);
-
-        if (passwordConfirmCurrent.length < 1) {
-            setUserPwChkMessage('필수 정보입니다.');
-            setIsPasswordEffect(false);
-        } else {
-            if (userPw === passwordConfirmCurrent) {
-                setUserPwChkMessage('');
-                setIsPasswordConfirmEffect(true);
-            } else {
-                setUserPwChkMessage('비밀번호가 일치하지 않습니다.');
-                setIsPasswordConfirmEffect(false);
-            }
-        }
-    }, [userPw])
-
-    useEffect(() => {
-        if(userPwChk.length > 1) {
-            if (userPw == userPwChk) {
-                setUserPwChkMessage('');
-                setIsPasswordConfirmEffect(true);
-            } else {
-                setUserPwChkMessage('비밀번호가 일치하지 않습니다.');
-                setIsPasswordConfirmEffect(false);
-            }
-        }
-    }, [userPw, userPwChk])
-
-    const SignUpChangeNm = useCallback((e) => {
-        const userNameRegex = /^.{2,20}$/;
-        const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
-        const gapRegex  = /\s/g;
-
-        const userNameCurrent = e.target.value;
-        // setUserName(userNameCurrent);
-        setUserNickName(userNameCurrent);
-
-        if (userNameCurrent.length < 1) {
-            setUserNameMessage('필수 정보입니다.');
-            setIsUserNameEffect(false);
-        } else {
-            if (!userNameRegex.test(userNameCurrent)) {
-                // setUserNameMessage('한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)');
-                setUserNameMessage('최소 3자 이상 최대 20자 이하로 작성해주시기 바랍니다.');
-                setIsUserNameEffect(false);
-            } else {
-                if(specialRegex.test(userNameCurrent) || gapRegex.test(userNameCurrent)) {
-                    setUserNameMessage('닉네임에 띄어쓰기 혹은 특수문자를 사용하실 수 없습니다.');
-                    setIsUserNameEffect(false);
-                } else {
-                    setUserNameMessage('');
-                    setIsUserNameEffect(true);
-                }
-            }
-        }
-    }, [])
-
-    const SignUpChangeBrY = useCallback((e) => {
-        const userBirthYRegex = /^(19[0-9][0-9]|20\d{2})$/;
-        const userBirthYCurrent = e.target.value;
-        setUserBirthY(userBirthYCurrent);
-
-        if (!userBirthYRegex.test(userBirthYCurrent)) {
-            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
-            setIsUserBirthEffect(false);
-        } else if(userBirthM.length < 1) {
-            setUserBirthMessage('태어난 월을 선택하세요.');
-            setIsUserBirthEffect(false);
-        } else {
-            setUserBirthMessage('');
-            setIsUserBirthEffect(true);
-        }
-
-    }, [userBirthM])
-
-    const SignUpChangeBrM = useCallback((e) => {
-        const userBirthMRegex = /^(0[0-9]|1[0-2])$/;
-        const userBirthMCurrent = e.target.value;
-
-        setUserBirthM(userBirthMCurrent);
-
-        if(userBirthY.length < 1) {
-            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
-            setIsUserBirthEffect(false);
-        } else {
-            if (!userBirthMRegex.test(userBirthMCurrent)) {
-                setUserBirthMessage('태어난 월을 선택하세요.');
-                setIsUserBirthEffect(false);
-            } else {
-                setUserBirthMessage('');
-                setIsUserBirthEffect(true);
-            }
-        }
-
-    }, [userBirthY])
-
-    const SignUpChangeBrD = useCallback((e) => {
-        const userBirthDRegex = /^([1-9]|[1-2][0-9]|3[0-1])$/;
-        const userBirthDCurrent = e.target.value;
-
-        if(userBirthDCurrent.length < 2) {
-            setUserBirthD('0' + userBirthDCurrent);
-        } else {
-            setUserBirthD(userBirthDCurrent);
-        }
-
-        if(userBirthY.length < 1) {
-            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
-            setIsUserBirthEffect(false);
-        } else if(userBirthM.length < 1) {
-            setUserBirthMessage('태어난 월을 선택하세요.');
-            setIsUserBirthEffect(false);
-        } else {
-            if (!userBirthDRegex.test(userBirthDCurrent)) {
-                setUserBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
-                setIsUserBirthEffect(false);
-            } else {
-                setUserBirthMessage('');
-                setIsUserBirthEffect(true);
-            }
-        }
-
-    }, [userBirthY, userBirthM])
-
-    const SignUpChangeGe = useCallback((e) => {
-        const userGenderCurrent = e.target.value;
-        setUserGender(userGenderCurrent);
-
-        if (userGenderCurrent.length < 1) {
-            setUserGenderMessage('필수 정보입니다.');
-            setIsUserGenderEffect(false);
-        } else {
-            setUserGenderMessage('');
-            setIsUserGenderEffect(true);
-        }
-    }, [])
-
-    // 윤년 등 해당 월에 대한 날짜 로직 추가 (예정)
-
-    const SignUpChangeEm = useCallback((e) => {
-        const userEmailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-        const userEmailCurrent = e.target.value;
-        setUserEmail(userEmailCurrent);
-
-        if(userEmailCurrent.length < 1) {
-            setUserEmailMessage('필수 정보입니다.');
-            setIsUserEmailEffect(false);
-        } else {
-            if (!userEmailRegex.test(userEmailCurrent)) {
-                setUserEmailMessage('이메일 주소를 다시 확인해주세요.');
-                setIsUserEmailEffect(false);
-            } else {
-                setUserEmailMessage('');
-                setIsUserEmailEffect(true);
-            }
-        }
-    }, [])
-
-    // 이메일 중복 확인
-    const EmailDuplicationChk = async () => {
-        const emailDuplicationRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-        if(emailDuplicationRegex.test(userEmail)) {
-            console.log(userEmail);
-            await axios({
-                method: "GET",
-                url: "/member/signUpDuplicationChk",
-                params: {memberEmail: userEmail}
-            }).then((result) => {
-                    console.log(result.data);
-                    if(result.data) {
-                        setUserEmailMessage("이미 사용중인 이메일 ID 입니다.");
-                        setIsUserEmailDuplicationEffect(false);
-                        setIsUserEmailEffect(false);
-                    } else {
-                        setIsUserEmailDuplicationEffect(true);
-                        setIsUserEmailEffect(true);
-                    }
-                }).catch(error => {
-                console.log("에러내용:", JSON.stringify(error));
-            })
-        } else {
-            setUserEmailMessage('필수 정보입니다.');
-            setIsUserEmailEffect(false);
-            emailRef.current.focus();
         }
     }
 
-    // 닉네임 중복 확인
-    const nickNameDuplicationChk = async () => {
-        const nickNameDuplicationRegex = /^[a-zA-Z가-힣]{3,20}$/;
-        if(isUserNameEffect === true) {
-            console.log(userNickName);
+    // 이메일 중복 확인
+    const emailDuplicationHandler = async () => {
+        const emailDuplicationRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        if(emailDuplicationRegex.test(memberEmail)) {
             await axios({
                 method: "GET",
                 url: "/member/signUpDuplicationChk",
-                params: {memberNickname: userNickName}
+                params: {memberEmail: memberEmail}
             }).then((result) => {
                 console.log(result.data);
                 if(result.data) {
-                    setUserNameMessage("이미 사용중인 닉네임입니다.");
-                    setIsUserNameEffect(false);
+                    setMemberEmailMessage("이미 사용중인 이메일 ID 입니다.");
+                    setIsMemberEmailDuplicationEffect(false);
+                    setIsMemberEmailEffect(false);
                 } else {
-                    setIsUserNameEffect(true);
+                    setIsMemberEmailDuplicationEffect(true);
+                    setIsMemberEmailEffect(true);
                 }
             }).catch(error => {
                 console.log("에러내용:", JSON.stringify(error));
             })
         } else {
-            setUserEmailMessage('필수 정보입니다.');
-            setIsUserEmailEffect(false);
-            nickNameRef.current.focus();
+            setMemberEmailMessage('필수 정보입니다.');
+            setIsMemberEmailEffect(false);
+            emailRef.current.focus();
         }
     }
 
-    const SignUpChangeEc = ({target: {value}}) => {
-        setUserEmailChk(value);
+    const signUpEmailCheckHandler = (e) => {
+        setMemberEmailCheck(e.target.value);
     }
 
-    const SignUpChangePh = useCallback((e) => {
-        const userPhoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-        const userPhoneCurrent = e.target.value;
-        setUserPhone(userPhoneCurrent);
-
-        if(userPhoneCurrent.length < 1) {
-            setUserPhoneMessage('');
-        } else {
-            if (!userPhoneRegex.test(userPhoneCurrent)) {
-                setUserPhoneMessage('형식에 맞지 않는 번호입니다.');
-                setIsUserPhoneEffect(false);
-            } else {
-                setUserPhoneMessage('');
-                setIsUserPhoneEffect(true);
-            }
-        }
-    }, [])
-
-    const userData = {
-        memberEmail: `${userEmail}`,
-        memberPw: `${userPw}`,
-        memberNickname: `${userNickName}`,
-        memberBirth: `${userBirthY}` + "/" + `${userBirthM}` + "/" + `${userBirthD}`,
-    }
-
-    const HandleEmailChkSend = async () => {
-        if(isUserEmailDuplicationEffect == true) {
-            setIsUserEmailHideEffect(true);
-            setUserEmailMessage('');
+    const emailCheckSendHandler = async () => {
+        if(isMemberEmailDuplicationEffect == true) {
+            setIsMemberEmailHideEffect(true);
+            setMemberEmailMessage('');
             await axios({
                 method: "GET",
                 url: "/member/sendAuthCode",
-                params: {memberEmail: userEmail}
+                params: {memberEmail: memberEmail}
             }).then(function(obj) {
                 alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
-                setIsUserEmailEffect(true);
+                setIsMemberEmailEffect(true);
                 console.log('authCode : ' + obj.data.authCode);
-                setUserEmailCode(obj.data.authCode);
+                setMemberEmailCode(obj.data.authCode);
             }).catch(function(error) {
                 alert('인증코드 발송에 실패했습니다.');
             })
         }
     }
 
-    const HandleEmailCheck = () => {
-        if(userEmailChk.length < 1) {
-            setUserEmailChkMessage('인증이 필요합니다.');
-            setIsUserEmailChkEffect(false);
+    const emailCheckConfirmHandler = () => {
+        if(memberEmailCheck.length < 1) {
+            setMemberEmailCheckMessage('인증이 필요합니다.');
+            setIsMemberEmailCheckEffect(false);
         } else {
-            if(userEmailChk === userEmailCode) {
-                setUserEmailChkMessage('인증되었습니다.');
-                setIsUserEmailChkEffect(true);
+            if(memberEmailCheck === memberEmailCode) {
+                setMemberEmailCheckMessage('인증되었습니다.');
+                setIsMemberEmailCheckEffect(true);
             } else {
-                setUserEmailChkMessage('인증에 실패했습니다.');
-                setIsUserEmailChkEffect(false);
+                setMemberEmailCheckMessage('인증에 실패했습니다.');
+                setIsMemberEmailCheckEffect(false);
             }
         }
     }
 
-    const HandleJoin = async (e) => {
-        // if(isUserIdEffect === false) {
-        //     setUserIdMessage('필수 정보입니다.');
-        //     setIsPasswordEffect(false);
-        //     e.preventDefault();
-        // } else
-        if(userEmail.length < 1) {
-            setUserEmailMessage('필수 정보입니다.');
-            setIsUserEmailEffect(false);
+    const signUpPasswordHandler = useCallback((e) => {
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!?@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+        const passwordCurrent = e.target.value;
+        setMemberPassword(passwordCurrent);
+
+        if (passwordCurrent.length < 1) {
+            setMemberPasswordMessage('필수 정보입니다.');
+            setIsMemberPasswordEffect(false);
+        } else {
+            if (!passwordRegex.test(passwordCurrent)) {
+                setMemberPasswordMessage('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+                setIsMemberPasswordEffect(false);
+            } else {
+                setMemberPasswordMessage('');
+                setIsMemberPasswordEffect(true);
+            }
+        }
+    }, [])
+
+    const signUpPasswordCheckHandler = useCallback((e) => {
+        const passwordCheckCurrent = e.target.value;
+        setMemberPasswordCheck(passwordCheckCurrent);
+
+        if (passwordCheckCurrent.length < 1) {
+            setMemberPasswordCheckMessage('필수 정보입니다.');
+            setIsMemberPasswordEffect(false);
+        } else {
+            if (memberPassword === passwordCheckCurrent) {
+                setMemberPasswordCheckMessage('');
+                setIsMemberPasswordCheckEffect(true);
+            } else {
+                setMemberPasswordCheckMessage('비밀번호가 일치하지 않습니다.');
+                setIsMemberPasswordCheckEffect(false);
+            }
+        }
+    }, [memberPassword])
+
+    const signUpNicknameHandler = useCallback((e) => {
+        const memberNicknameRegex = /^.{2,20}$/;
+        const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+        const gapRegex  = /\s/g;
+
+        const memberNicknameCurrent = e.target.value;
+
+        setMemberNickname(memberNicknameCurrent);
+
+        if (memberNicknameCurrent.length < 1) {
+            setMemberNicknameMessage('필수 정보입니다.');
+            setIsMemberNicknameEffect(false);
+        } else {
+            if (!memberNicknameRegex.test(memberNicknameCurrent)) {
+                setMemberNicknameMessage('최소 2자 이상 최대 20자 이하로 작성해주시기 바랍니다.');
+                setIsMemberNicknameEffect(false);
+            } else {
+                if(specialRegex.test(memberNicknameCurrent) || gapRegex.test(memberNicknameCurrent)) {
+                    setMemberNicknameMessage('닉네임에 띄어쓰기 혹은 특수문자를 사용하실 수 없습니다.');
+                    setIsMemberNicknameEffect(false);
+                } else {
+                    setMemberNicknameMessage('');
+                    setIsMemberNicknameEffect(true);
+                }
+            }
+        }
+    }, [])
+
+    // 닉네임 중복 확인
+    const nicknameDuplicationHandler = async () => {
+        const nickNameDuplicationRegex = /^[a-zA-Z가-힣]{3,20}$/;
+        if(isMemberNicknameEffect === true) {
+
+            await axios({
+                method: "GET",
+                url: "/member/signUpDuplicationChk",
+                params: {memberNickname: memberNickname}
+            }).then((result) => {
+                if(result.data) {
+                    setMemberNicknameMessage("이미 사용중인 닉네임입니다.");
+                    setIsMemberNicknameEffect(false);
+                } else {
+                    setIsMemberNicknameEffect(true);
+                }
+            }).catch(error => {
+                console.log("에러내용:", JSON.stringify(error));
+            })
+        } else {
+            setMemberEmailMessage('필수 정보입니다.');
+            setIsMemberEmailEffect(false);
+            nickNameRef.current.focus();
+        }
+    }
+
+    const signUpBirthYearHandler = useCallback((e) => {
+        const memberBirthYRegex = /^(19[0-9][0-9]|20\d{2})$/;
+        const memberBirthYCurrent = e.target.value;
+        setMemberBirthY(memberBirthYCurrent);
+
+        if (!memberBirthYRegex.test(memberBirthYCurrent)) {
+            setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsMemberBirthEffect(false);
+        } else if(memberBirthM.length < 1) {
+            setMemberBirthMessage('태어난 월을 선택하세요.');
+            setIsMemberBirthEffect(false);
+        } else {
+            setMemberBirthMessage('');
+            setIsMemberBirthEffect(true);
+        }
+
+    }, [memberBirthM])
+
+    const signUpBirthMonthHandler = useCallback((e) => {
+        const memberBirthMRegex = /^(0[0-9]|1[0-2])$/;
+        const memberBirthMCurrent = e.target.value;
+
+        setMemberBirthM(memberBirthMCurrent);
+
+        if(memberBirthY.length < 1) {
+            setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsMemberBirthEffect(false);
+        } else {
+            if (!memberBirthMRegex.test(memberBirthMCurrent)) {
+                setMemberBirthMessage('태어난 월을 선택하세요.');
+                setIsMemberBirthEffect(false);
+            } else {
+                setMemberBirthMessage('');
+                setIsMemberBirthEffect(true);
+            }
+        }
+
+    }, [memberBirthY])
+
+    const signUpBirthDayHandler = useCallback((e) => {
+        const memberBirthDRegex = /^([1-9]|[1-2][0-9]|3[0-1])$/;
+        const memberBirthDCurrent = e.target.value;
+
+        if(memberBirthDCurrent.length < 2) {
+            setMemberBirthD('0' + memberBirthDCurrent);
+        } else {
+            setMemberBirthD(memberBirthDCurrent);
+        }
+
+        if(memberBirthY.length < 1) {
+            setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsMemberBirthEffect(false);
+        } else if(memberBirthM.length < 1) {
+            setMemberBirthMessage('태어난 월을 선택하세요.');
+            setIsMemberBirthEffect(false);
+        } else {
+            if (!memberBirthDRegex.test(memberBirthDCurrent)) {
+                setMemberBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+                setIsMemberBirthEffect(false);
+            } else {
+                setMemberBirthMessage('');
+                setIsMemberBirthEffect(true);
+            }
+        }
+
+    }, [memberBirthY, memberBirthM])
+
+    // const SignUpChangeId = useCallback((e) => {
+    //     const memberIdRegex = /^[a-z0-9_-]{5,20}$/;
+    //     const memberIdCurrent = e.target.value;
+    //     setMemberId(memberIdCurrent);
+    //
+    //     if (memberIdCurrent < 1) {
+    //         setMemberIdMessage('필수 정보입니다.');
+    //         setIsPasswordEffect(false);
+    //     } else {
+    //         if (!memberIdRegex.test(memberIdCurrent)) {
+    //             setMemberIdMessage('5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다..');
+    //             setIsMemberIdEffect(false);
+    //         } else {
+    //             setMemberIdMessage('');
+    //             setIsMemberIdEffect(true);
+    //         }
+    //     }
+    // }, [])
+
+    // const SignUpChangeGe = useCallback((e) => {
+    //     const memberGenderCurrent = e.target.value;
+    //     setMemberGender(memberGenderCurrent);
+    //
+    //     if (memberGenderCurrent.length < 1) {
+    //         setMemberGenderMessage('필수 정보입니다.');
+    //         setIsMemberGenderEffect(false);
+    //     } else {
+    //         setMemberGenderMessage('');
+    //         setIsMemberGenderEffect(true);
+    //     }
+    // }, [])
+
+    // const SignUpChangePh = useCallback((e) => {
+    //     const memberPhoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+    //     const memberPhoneCurrent = e.target.value;
+    //     setMemberPhone(memberPhoneCurrent);
+    //
+    //     if(memberPhoneCurrent.length < 1) {
+    //         setMemberPhoneMessage('');
+    //     } else {
+    //         if (!memberPhoneRegex.test(memberPhoneCurrent)) {
+    //             setMemberPhoneMessage('형식에 맞지 않는 번호입니다.');
+    //             setIsMemberPhoneEffect(false);
+    //         } else {
+    //             setMemberPhoneMessage('');
+    //             setIsMemberPhoneEffect(true);
+    //         }
+    //     }
+    // }, [])
+
+    const onJoinHandler = async (e) => {
+
+        const memberData = {
+            memberEmail: `${memberEmail}`,
+            memberPw: `${memberPassword}`,
+            memberNickname: `${memberNickname}`,
+            memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`,
+        }
+
+        if(memberEmail.length < 1) {
+            setMemberEmailMessage('필수 정보입니다.');
+            setIsMemberEmailEffect(false);
             e.preventDefault();
         } else
-        if(isUserEmailChkEffect === false) {
-            setIsUserEmailEffect(false);
-            if(isUserEmailHideEffect === true) {
-                setUserEmailChkMessage('인증이 필요합니다.');
+        if(isMemberEmailCheckEffect === false) {
+            setIsMemberEmailEffect(false);
+            if(isMemberEmailHideEffect === true) {
+                setMemberEmailCheckMessage('인증이 필요합니다.');
             } else {
-                setUserEmailMessage('인증이 필요합니다.');
+                setMemberEmailMessage('인증이 필요합니다.');
             }
             e.preventDefault();
         } else
-        if(isPasswordEffect === false) {
-            setUserPwMessage('필수 정보입니다.');
-            setIsPasswordEffect(false);
+        if(isMemberPasswordEffect === false) {
+            setMemberPasswordMessage('필수 정보입니다.');
+            setIsMemberPasswordEffect(false);
             e.preventDefault();
         } else
-        if(isPasswordConfirmEffect === false) {
-            setUserPwChkMessage('비밀번호가 일치하지 않습니다.');
-            setIsPasswordConfirmEffect(false);
+        if(isMemberPasswordCheckEffect === false) {
+            setMemberPasswordCheckMessage('비밀번호가 일치하지 않습니다.');
+            setIsMemberPasswordCheckEffect(false);
             e.preventDefault();
         } else
-        if(isUserNameEffect === false) {
-            setUserNameMessage('필수 정보입니다.');
-            setIsUserNameEffect(false);
+        if(isMemberNicknameEffect === false) {
+            setMemberNicknameMessage('필수 정보입니다.');
+            setIsMemberNicknameEffect(false);
             e.preventDefault();
         } else
-        if(userBirthY.length < 1) {
-            setUserBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
-            setIsUserBirthEffect(false);
+        if(memberBirthY.length < 1) {
+            setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
+            setIsMemberBirthEffect(false);
             e.preventDefault();
         } else
-        if(userBirthM.length < 1) {
-            setUserBirthMessage('태어난 월을 선택하세요.');
-            setIsUserBirthEffect(false);
+        if(memberBirthM.length < 1) {
+            setMemberBirthMessage('태어난 월을 선택하세요.');
+            setIsMemberBirthEffect(false);
             e.preventDefault();
         } else
-        if(userBirthD.length < 1) {
-            setUserBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
-            setIsUserBirthEffect(false);
+        if(memberBirthD.length < 1) {
+            setMemberBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
+            setIsMemberBirthEffect(false);
             e.preventDefault();
         } else {
             await axios({
                 method: "POST",
                 url: "/member/signUp",
-                data: JSON.stringify(userData),
+                data: JSON.stringify(memberData),
                 headers: {'Content-type': 'application/json'}
             }).then((res) => {
                 window.alert("회원가입이 완료되었습니다");
                 navigate("/");
             })
         }
-
     }
 
+    useEffect(() => {
+        emailRef.current.focus();
+    }, []);
+
     return (
-        <div>
-            <div style={ {marginBottom:"55px"} }><h1>회원가입</h1></div>
-            <Container className="panel">
-                <Form onSubmit={HandleJoin}>
-                    <Form.Group className="mb-3" controlId="userEmail">
-                        <Col sm>
-                            <Row>
-                                <Form.Text className="text-muted" style={ {position:"relative", right:"173px", fontSize:"20px", fontWeight:"bold"} }>본인 확인 이메일</Form.Text>
-                                <Form.Control type="userEmail" placeholder="이메일 주소" value={userEmail} onChange={SignUpChangeEm} onBlur={EmailDuplicationChk} ref={emailRef} style={ {width:"400px", height:"50px", marginLeft:"auto"} }/>
-                                <Button variant="primary" onClick={HandleEmailChkSend} style={ {width:"100px", height:"50px", marginRight:"auto"} }>전송하기</Button>
-                            </Row>
-                            {(
-                                <span style={ isUserEmailEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userEmailMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>
+        <div className="signUp-body">
+            <AppBarNavigation />
 
-                    <Form.Group controlId="userEmailChk" style={ isUserEmailHideEffect ? {display:'block'} : {display:'none'} }>
-                        <Col sm>
-                            <Row>
-                                <Form.Control type="userEmailChk" placeholder="인증번호를 입력하세요" value={userEmailChk} onChange={SignUpChangeEc} style={ {width:"400px", height:"50px", marginLeft:"auto"} }/>
-                                <Button variant="primary" onClick={HandleEmailCheck} style={ {width:"100px", height:"50px", marginRight:"auto"} }>인증하기</Button>
-                            </Row>
-                            {(
-                                <span style={ isUserEmailChkEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userEmailChkMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>
+            <div className="signUp-view">
 
-                    {/*<Form.Group className="mb-3" controlId="userId">
-                        <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"220px", fontSize:"20px", fontWeight:"bold"} }>아이디</Form.Text>
-                            <Form.Control type="userId" placeholder="아이디를 입력하세요" value={userId} onChange={SignUpChangeId} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
-                            {(
-                                <span style={ isUserIdEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userIdMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>*/}
+                <div className="common-signUp">
+                    <h1>회원가입</h1>
 
-                    <Form.Group className="mb-3" controlId="userPw">
-                        <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"210px", fontSize:"20px", fontWeight:"bold"} }>비밀번호</Form.Text>
-                            <Form.Control type="password" placeholder="비밀번호" value={userPw} onChange={SignUpChangePw} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
-                            {(
-                                <span style={ isPasswordEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userPwMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>
+                    <div className="signUp-email">
+                        <div className="email-enter">
+                            <span className="email-input">
+                                <input type="text" value={memberEmail} onChange={signUpEmailHandler} onBlur={emailDuplicationHandler} ref={emailRef} placeholder="이메일 주소" />
+                            </span>
+                            <span className="email-btn">
+                                <button onClick={emailCheckSendHandler}>전송하기</button>
+                            </span>
 
-                    <Form.Group className="mb-3" controlId="userPwChk">
-                        <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"177px", fontSize:"20px", fontWeight:"bold"} }>비밀번호 재확인</Form.Text>
-                            <Form.Control type="password" placeholder="비밀번호 확인" value={userPwChk} onChange={SignUpChangePc} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
                             {(
-                                <span style={ isPasswordConfirmEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userPwChkMessage}</span>
+                                <span style={ isMemberEmailEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberEmailMessage}</span>
                             )}
-                        </Col>
-                    </Form.Group>
+                        </div>
+                        <div className="email-check" style={ isMemberEmailHideEffect ? {display:'block'} : {display:'none'} }>
+                            <span className="email-input">
+                                <input type="text" value={memberEmailCheck} onChange={signUpEmailCheckHandler} placeholder="인증번호를 입력하세요" />
+                            </span>
+                            <span className="email-btn">
+                                <button onClick={emailCheckConfirmHandler}>인증하기</button>
+                            </span>
 
-                    <Form.Group className="mb-3" controlId="userNickName">
-                        <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"220px", fontSize:"20px", fontWeight:"bold"} }>닉네임</Form.Text>
-                            <Form.Control type="userNickName" placeholder="닉네임" value={userNickName} onChange={SignUpChangeNm} onBlur={nickNameDuplicationChk} ref={nickNameRef} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
                             {(
-                                <span style={ isUserNameEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userNameMessage}</span>
+                                <span style={ isMemberEmailCheckEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberEmailCheckMessage}</span>
                             )}
-                        </Col>
-                    </Form.Group>
+                        </div>
+                    </div>
+                    <div className="signUp-password">
+                        <div className="password-input">
+                            <input type="password" value={memberPassword} onChange={signUpPasswordHandler} placeholder="비밀번호" />
+                        </div>
 
-                    <Form.Group className="mb-3">
-                        <Col sm>
-                            <Row>
-                                <Form.Text className="text-muted" style={ {position:"relative", right:"210px", fontSize:"20px", fontWeight:"bold"} }>생년월일</Form.Text>
-                                <Form.Control type="userBirthY" itemID="userBirthY" placeholder="년(4자)" value={userBirthY} onChange={SignUpChangeBrY} style={ {width:"149px", height:"50px", marginLeft:"auto", marginRight:"27px"} }/>
-                                {/*<Form.Control type="userBirthM" itemID="userBirthM" placeholder="월" value={userBirthM} onChange={SignUpChangeBrM} style={ {width:"149px", height:"50px"} }/>*/}
-                                <Form.Select itemID="userBirthM" onChange={SignUpChangeBrM} style={ {width:"149px", height:"50px"} }>
+                        {(
+                            <span style={ isMemberPasswordEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberPasswordMessage}</span>
+                        )}
+                    </div>
+                    <div className="signUp-password-check">
+                        <div className="password-check-input">
+                            <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} onChange={signUpPasswordCheckHandler} />
+                        </div>
+
+                        {(
+                            <span style={ isMemberPasswordCheckEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberPasswordCheckMessage}</span>
+                        )}
+                    </div>
+                    <div className="signUp-nickname">
+                        <div className="nickname-input">
+                            <input type="text" value={memberNickname} onChange={signUpNicknameHandler} onBlur={nicknameDuplicationHandler} ref={nickNameRef} placeholder="닉네임" />
+                        </div>
+
+                        {(
+                            <span style={ isMemberNicknameEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberNicknameMessage}</span>
+                        )}
+                    </div>
+                    <div className="signUp-birth">
+                        <div className="birth-input">
+                            <span className="birth-year">
+                                <input type="text" id="userBirthY" value={memberBirthY} onChange={signUpBirthYearHandler} placeholder="년(4자)" />
+                            </span>
+                            <span className="birth-month">
+                                <select id="userBirthM" value={memberBirthM} onChange={signUpBirthMonthHandler}>
                                     <option value="">월</option>
                                     <option value="01">1</option>
                                     <option value="02">2</option>
@@ -530,51 +488,33 @@ const SignUp = () => {
                                     <option value="10">10</option>
                                     <option value="11">11</option>
                                     <option value="12">12</option>
-                                </Form.Select>
-                                <Form.Control type="userBirthD" itemID="userBirthD" placeholder="일" onChange={SignUpChangeBrD} style={ {width:"149px", height:"50px", marginLeft:"27px", marginRight:"auto"} }/>
-                            </Row>
-                            {(
-                                <span style={ isUserBirthEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userBirthMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>
+                                </select>
+                            </span>
+                            <span className="birth-day">
+                                <input type="text" id="userBirthD" value={memberBirthD} onChange={signUpBirthDayHandler} placeholder="일" />
+                            </span>
+                        </div>
 
-                    {/*<Form.Group className="mb-3" controlId="userGender">
-                        <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"230px", fontSize:"20px", fontWeight:"bold"} }>성별</Form.Text>
-                            <Form.Control type="userGender" placeholder="성별을 입력하세요" value={userGender} onChange={SignUpChangeGe} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
-                            <Form.Select onChange={SignUpChangeGe} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }>
-                                <option value="">성별</option>
-                                <option value="M">남자</option>
-                                <option value="W">여자</option>
-                                <option value="X">선택 안함</option>
-                            </Form.Select>
-                            {(
-                                <span style={ isUserGenderEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userGenderMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>*/}
-
-                    {/*<Form.Group className="mb-3" controlId="userPhone">
-                        <Col sm>
-                            <Form.Text className="text-muted" style={ {position:"relative", right:"182px", fontSize:"20px", fontWeight:"bold"} }>휴대전화(선택)</Form.Text>
-                            <Form.Control type="userPhone" placeholder="휴대폰 번호를 입력하세요" value={userPhone} onChange={SignUpChangePh} style={ {width:"500px", height:"50px", marginLeft:"auto", marginRight:"auto"} }/>
-                            {(
-                                <span style={ isUserPhoneEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{userPhoneMessage}</span>
-                            )}
-                        </Col>
-                    </Form.Group>*/}
-
-                    <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="primary" type="submit">가입하기</Button>
+                        {(
+                            <span style={ isMemberBirthEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{memberBirthMessage}</span>
+                        )}
                     </div>
-                    <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="secondary" href="/">취소</Button>
-                    </div>
-                </Form>
-            </Container>
+                </div>
+                <div className="on-submit">
+                    <button onClick={onJoinHandler} className="on-signUp">
+                        가입하기
+                    </button>
+                    <Link to="/">
+                        <button className="on-cancel">
+                            취소
+                        </button>
+                    </Link>
+                </div>
+
+            </div>
+
+            <FooterNavigation />
         </div>
     )
 }
-
 export default SignUp;

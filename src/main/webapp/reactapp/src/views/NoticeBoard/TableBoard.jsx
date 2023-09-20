@@ -36,7 +36,7 @@ const TableBoard = (props) => {
         {
             key: 'T5',
             value: '팁과 노하우'
-        },
+        }
         ];
     const category_name = props.category;
     const [currentCategoryTab, clickCategoryTab] = useState(props.sey);
@@ -62,7 +62,7 @@ const TableBoard = (props) => {
     const paging = {
         searchText: searchText,
         searchSelect: searchSelect,
-        recordPerPage: 5,
+        recordPerPage: 10,
         page: pageNo,
         pagePerBlock: 10,
         pageCategory: props.sey,
@@ -86,7 +86,6 @@ const TableBoard = (props) => {
             });
             setTableBoardList(tableBoardList.data.boardList);
             setTotalPage(tableBoardList.data.totalPage);
-            console.log(tableBoardList.data);
         };
 
         getBoards();
@@ -97,7 +96,6 @@ const TableBoard = (props) => {
             setIsLoginCheck(false);
         }
 
-        console.log("띵띵 확인 : " + props.sey);
     }, [props.sey, pageNo, currentSubTab, isLoginCheck]);
 
     const changeDetailBoard = async (itemID) => {
@@ -188,40 +186,42 @@ const TableBoard = (props) => {
                             </button>
                         </div>
                     </div>
-                    <table>
-                        <thead className="table-header">
-                        <tr>
-                            <td style={{width: "100px"}}>탭</td>
-                            <td style={{width: "400px"}}>제목</td>
-                            <td style={{width: "150px"}}>작성자</td>
-                            <td style={{width: "170px"}}>날짜</td>
-                            <td style={{width: "120px"}}>조회</td>
-                            <td style={{width: "100px"}}>추천</td>
-                        </tr>
-                        </thead>
-                        <tbody id="tbody">
-                        {tableBoardList.map((boards, idx) => {
-                            return (
-                                <tr key={boards.boardId}>
-                                    { `${boards.boardTab}` === 'T1' && <td>화제</td> }
-                                    { `${boards.boardTab}` === 'T2' && <td>정보</td> }
-                                    { `${boards.boardTab}` === 'T3' && <td>오류</td> }
-                                    { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
-                                    { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
-                                    <td>
-                                        <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} onClick={() => changeDetailBoard(boards.boardId)} style={{textDecoration: 'none', color: 'white'}}>
-                                            {boards.boardTitle}
-                                        </Link>
-                                    </td>
-                                    <td>{boards.boardAuthor}</td>
-                                    <td>{boards.modifiedDate}</td>
-                                    <td>{boards.boardViewsCnt}</td>
-                                    <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
-                                </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
+                    <div className="table-view">
+                        <table>
+                            <thead className="table-header">
+                            <tr>
+                                <td style={{width: "130px"}}>탭</td>
+                                <td style={{width: "450px"}}>제목</td>
+                                <td style={{width: "150px"}}>작성자</td>
+                                <td style={{width: "170px"}}>날짜</td>
+                                <td style={{width: "80px"}}>조회수</td>
+                                <td style={{width: "80px"}}>추천수</td>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            {tableBoardList.map((boards, idx) => {
+                                return (
+                                    <tr key={boards.boardId}>
+                                        { `${boards.boardTab}` === 'T1' && <td>화제</td> }
+                                        { `${boards.boardTab}` === 'T2' && <td>정보</td> }
+                                        { `${boards.boardTab}` === 'T3' && <td>오류</td> }
+                                        { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
+                                        { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
+                                        <td>
+                                            <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} onClick={() => changeDetailBoard(boards.boardId)} style={{textDecoration: 'none', color: 'white'}}>
+                                                {boards.boardTitle}
+                                            </Link>
+                                        </td>
+                                        <td>{boards.boardAuthor}</td>
+                                        <td>{boards.modifiedDate.substring(0, 10)}</td>
+                                        <td>{boards.boardViewsCnt}</td>
+                                        <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
+                                    </tr>
+                                )
+                            })}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className="board-footer">
                         <div className="board-write">
                             <Link to="/save" state={{subTab_name, category_name}} style={ isLoginCheck ? {} : {visibility: "hidden"} }>

@@ -66,32 +66,36 @@
 
   .board-table {
     width: 1400px;
-    margin-top: 40px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 40px auto 200px;
 
-    table {
-      width: 100%;
-      margin-top: 40px;
-      margin-left: auto;
-      margin-right: auto;
+    .table-view {
+      height: 500px;
 
-      color: white;
 
-      thead tr {
-        border-bottom: 1px solid gray;
-        font-weight: bold;
+      table {
+        width: 100%;
+        margin-top: 40px;
+        margin-left: auto;
+        margin-right: auto;
+
+        color: white;
+
+        thead tr {
+          border-bottom: 1px solid gray;
+          font-weight: bold;
+        }
+
+        tbody tr {
+          font-size: 25px;
+          border-bottom: 1px solid gray;
+        }
+
+        tbody tr:hover {
+          background-color: rgba(80, 80, 80, 0.8);
+          color: #fff;
+        }
       }
 
-      tbody tr {
-        font-size: 25px;
-        border-bottom: 1px solid gray;
-      }
-
-      tbody tr:hover {
-        background-color: rgba(80, 80, 80, 0.8);
-        color: #fff;
-      }
     }
 
     .board-header {
@@ -469,7 +473,7 @@
 
 
   .detail-sub {
-    margin: auto;
+    margin: 0 auto 200px;
     width: 900px;
 
     .comment-view {

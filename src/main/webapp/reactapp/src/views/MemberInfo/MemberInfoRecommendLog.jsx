@@ -104,7 +104,7 @@ const MemberInfoRecommendLog = () => {
     return (
         <div className="member-info">
 
-            <h3>내 댓글 확인</h3>
+            <h3>내 추천 확인</h3>
 
             <div className="recommendLog-view">
 
@@ -113,14 +113,12 @@ const MemberInfoRecommendLog = () => {
                     <div onClick={() => setRecommendLogSelect(true)}>댓글</div>
                 </div>
 
-                <table>
-
-                </table>
                 {
                     recommendLogSelect ?
                         <div>
-                            <table>
-                                <thead className="table-header">
+                            <div className="table-view">
+                                <table>
+                                    <thead className="table-header">
                                     <tr>
                                         <td style={{width: "70px"}}>번호</td>
                                         <td style={{width: "150px"}}>분류</td>
@@ -128,27 +126,27 @@ const MemberInfoRecommendLog = () => {
                                         <td style={{width: "150px"}}>작성자</td>
                                         <td style={{width: "150px"}}>날짜</td>
                                     </tr>
-                                </thead>
-                                <tbody id="tbody">
-                                {commentRecommendList.map((commentRecommends, idx) => {
-                                    return (
-                                        <tr key={commentRecommends.recommendId}>
-                                            <td>{commentRecommends.recommendLogNo}</td>
-                                            { `${commentRecommends.recommendType}` === 'U' && <td>추천 Up</td> }
-                                            { `${commentRecommends.recommendType}` === 'D' && <td>추천 Down</td> }
-                                            <td>
-                                                <Link to={{ pathname: `/board/${commentRecommends.boardId}` }} state={{ boardId: `${commentRecommends.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
-                                                    {commentRecommends.targetData}
-                                                </Link>
-                                            </td>
-                                            <td>{commentRecommends.targetAuthor}</td>
-                                            <td>{commentRecommends.createdDate.substring(0,10)}</td>
-                                        </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
-
+                                    </thead>
+                                    <tbody id="tbody">
+                                    {commentRecommendList.map((commentRecommends, idx) => {
+                                        return (
+                                            <tr key={commentRecommends.recommendId}>
+                                                <td>{commentRecommends.recommendLogNo}</td>
+                                                { `${commentRecommends.recommendType}` === 'U' && <td>추천 Up</td> }
+                                                { `${commentRecommends.recommendType}` === 'D' && <td>추천 Down</td> }
+                                                <td>
+                                                    <Link to={{ pathname: `/board/${commentRecommends.boardId}` }} state={{ boardId: `${commentRecommends.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                                        {commentRecommends.targetData}
+                                                    </Link>
+                                                </td>
+                                                <td>{commentRecommends.targetAuthor}</td>
+                                                <td>{commentRecommends.createdDate.substring(0,10)}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                    </tbody>
+                                </table>
+                            </div>
                             <div className="paging-design">
                                 <ul>
                                     {paginationC()}
@@ -157,36 +155,37 @@ const MemberInfoRecommendLog = () => {
                         </div>
                         :
                         <div>
-                            <table>
-                                <thead className="table-header">
-                                <tr>
-                                    <td style={{width: "70px"}}>번호</td>
-                                    <td style={{width: "150px"}}>분류</td>
-                                    <td style={{width: "400px"}}>제목</td>
-                                    <td style={{width: "150px"}}>작성자</td>
-                                    <td style={{width: "150px"}}>날짜</td>
-                                </tr>
-                                </thead>
-                                <tbody id="tbody">
-                                {boardRecommendList.map((boardRecommends, idx) => {
-                                    return (
-                                        <tr key={boardRecommends.recommendId}>
-                                            <td>{boardRecommends.recommendLogNo}</td>
-                                            { `${boardRecommends.recommendType}` === 'U' && <td>추천 Up</td> }
-                                            { `${boardRecommends.recommendType}` === 'D' && <td>추천 Down</td> }
-                                            <td>
-                                                <Link to={{ pathname: `/board/${boardRecommends.boardId}` }} state={{ boardId: `${boardRecommends.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
-                                                    {boardRecommends.targetData}
-                                                </Link>
-                                            </td>
-                                            <td>{boardRecommends.targetAuthor}</td>
-                                            <td>{boardRecommends.createdDate.substring(0,10)}</td>
-                                        </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
-
+                            <div className="table-view">
+                                <table>
+                                    <thead className="table-header">
+                                    <tr>
+                                        <td style={{width: "70px"}}>번호</td>
+                                        <td style={{width: "150px"}}>분류</td>
+                                        <td style={{width: "400px"}}>제목</td>
+                                        <td style={{width: "150px"}}>작성자</td>
+                                        <td style={{width: "150px"}}>날짜</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    {boardRecommendList.map((boardRecommends, idx) => {
+                                        return (
+                                            <tr key={boardRecommends.recommendId}>
+                                                <td>{boardRecommends.recommendLogNo}</td>
+                                                { `${boardRecommends.recommendType}` === 'U' && <td>추천 Up</td> }
+                                                { `${boardRecommends.recommendType}` === 'D' && <td>추천 Down</td> }
+                                                <td>
+                                                    <Link to={{ pathname: `/board/${boardRecommends.boardId}` }} state={{ boardId: `${boardRecommends.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                                        {boardRecommends.targetData}
+                                                    </Link>
+                                                </td>
+                                                <td>{boardRecommends.targetAuthor}</td>
+                                                <td>{boardRecommends.createdDate.substring(0,10)}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                    </tbody>
+                                </table>
+                            </div>
                             <div className="paging-design">
                                 <ul>
                                     {paginationB()}

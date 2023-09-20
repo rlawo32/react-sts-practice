@@ -70,41 +70,43 @@ const MemberInfoBoardLog = () => {
 
             <div className="boardLog-view">
 
-                <table>
-                    <thead className="table-header">
-                    <tr>
-                        <td style={{width: "70px"}}>번호</td>
-                        <td style={{width: "200px"}}>게시판</td>
-                        <td style={{width: "350px"}}>제목</td>
-                        <td style={{width: "90px"}}>조회수</td>
-                        <td style={{width: "90px"}}>추천수</td>
-                        <td style={{width: "150px"}}>날짜</td>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    {tableBoardList.map((boards, idx) => {
-                        return (
-                            <tr key={boards.boardId}>
-                                <td>{boards.boardLogNo}</td>
-                                { `${boards.boardCategory}` === 'C1' && <td>리그오브레전드</td> }
-                                { `${boards.boardCategory}` === 'C2' && <td>오버워치</td> }
-                                { `${boards.boardCategory}` === 'C3' && <td>배틀그라운드</td> }
-                                { `${boards.boardCategory}` === 'C4' && <td>메이플스토리</td> }
-                                { `${boards.boardCategory}` === 'C5' && <td>마인크래프트</td> }
-                                { `${boards.boardCategory}` === 'C6' && <td>스팀</td> }
-                                <td>
-                                    <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
-                                        {boards.boardTitle}
-                                    </Link>
-                                </td>
-                                <td>{boards.boardViewsCnt}</td>
-                                <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
-                                <td>{boards.modifiedDate.substring(0,10)}</td>
-                            </tr>
-                        )
-                    })}
-                    </tbody>
-                </table>
+                <div className="table-view">
+                    <table>
+                        <thead className="table-header">
+                        <tr>
+                            <td style={{width: "70px"}}>번호</td>
+                            <td style={{width: "220px"}}>게시판</td>
+                            <td style={{width: "300px"}}>제목</td>
+                            <td style={{width: "100px"}}>조회수</td>
+                            <td style={{width: "100px"}}>추천수</td>
+                            <td style={{width: "150px"}}>날짜</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        {tableBoardList.map((boards, idx) => {
+                            return (
+                                <tr key={boards.boardId}>
+                                    <td>{boards.boardLogNo}</td>
+                                    { `${boards.boardCategory}` === 'C1' && <td>리그오브레전드</td> }
+                                    { `${boards.boardCategory}` === 'C2' && <td>오버워치</td> }
+                                    { `${boards.boardCategory}` === 'C3' && <td>배틀그라운드</td> }
+                                    { `${boards.boardCategory}` === 'C4' && <td>메이플스토리</td> }
+                                    { `${boards.boardCategory}` === 'C5' && <td>마인크래프트</td> }
+                                    { `${boards.boardCategory}` === 'C6' && <td>스팀</td> }
+                                    <td>
+                                        <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                            {boards.boardTitle}
+                                        </Link>
+                                    </td>
+                                    <td>{boards.boardViewsCnt}</td>
+                                    <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
+                                    <td>{boards.modifiedDate.substring(0,10)}</td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="paging-design">
                     <ul>
                         {pagination()}

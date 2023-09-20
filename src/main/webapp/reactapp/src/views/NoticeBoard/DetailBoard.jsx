@@ -36,8 +36,8 @@ const DetailBoard = (props) => {
     const [nextId, setNextId] = useState(0);
     const [memberId, setMemberId] = useState(9999);
 
-    const [mainRecommendCheck, setMainRecommendCheck] = useState(false);
-    const [commentRecommendCheck, setCommentRecommendCheck] = useState(false);
+    const [mainRecommendCheck, setMainRecommendCheck] = useState(0);
+    const [commentRecommendCheck, setCommentRecommendCheck] = useState(0);
 
     const [commentState, setCommentState] = useState(false);
     const [commentId, setCommentId] = useState(""); // 댓글 id,
@@ -112,8 +112,6 @@ const DetailBoard = (props) => {
 
     const onClickMainRecommendUp = async (e) => {
 
-        console.log("테스트 확인 : " + e);
-
         if(isLoginCheck == 1) {
             const mainRecommendData = {
                 boardId: props.id,
@@ -128,7 +126,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(mainRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setMainRecommendCheck(false);
+                setMainRecommendCheck(mainRecommendCheck - 1);
             } else {
                 await axios({
                     method: "POST",
@@ -136,9 +134,8 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(mainRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setMainRecommendCheck(true);
+                setMainRecommendCheck(mainRecommendCheck + 1);
             }
-            console.log(mainRecommendCheck);
         } else {
             alert("로그인 하시길 바랍니다.");
         }
@@ -160,7 +157,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(mainRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setMainRecommendCheck(false);
+                setMainRecommendCheck(mainRecommendCheck - 1);
             } else {
                 await axios({
                     method: "POST",
@@ -168,7 +165,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(mainRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setMainRecommendCheck(true);
+                setMainRecommendCheck(mainRecommendCheck + 1);
             }
         } else {
             alert("로그인 하시길 바랍니다.");
@@ -194,7 +191,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(commentRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setCommentRecommendCheck(false);
+                setCommentRecommendCheck(commentRecommendCheck - 1);
             } else {
                 await axios({
                     method: "POST",
@@ -202,7 +199,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(commentRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setCommentRecommendCheck(true);
+                setCommentRecommendCheck(commentRecommendCheck + 1);
             }
         } else {
             alert("로그인 하시길 바랍니다.");
@@ -228,7 +225,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(commentRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setCommentRecommendCheck(false);
+                setCommentRecommendCheck(commentRecommendCheck - 1);
             } else {
                 await axios({
                     method: "POST",
@@ -236,7 +233,7 @@ const DetailBoard = (props) => {
                     data: JSON.stringify(commentRecommendData),
                     headers: {'Content-type': 'application/json'}
                 });
-                setCommentRecommendCheck(true);
+                setCommentRecommendCheck(commentRecommendCheck + 1);
             }
         } else {
             alert("로그인 하시길 바랍니다.");

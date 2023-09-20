@@ -19,8 +19,20 @@ const MemberInfo = () => {
     const navigate = useNavigate();
     const cookies = new Cookies();
 
-    const [memberInfo, setMemberInfo] = useState([]);
+    const [memberInfo, setMemberInfo] = useState([{
+        memberId: '',
+        memberEmail: '',
+        memberBirth: '',
+        memberNickname: '',
+        createdDate: '',
+        modifiedDate: '',
+        recentLogDate: '',
+        picture: ''
+    }]);
+
     const [memberProfileImg, setMemberProfileImg] = useState("");
+    const [memberProfileDate, setMemberProfileDate] = useState("");
+
     const [memberInfoUpdateChk, setMemberInfoUpdateChk] = useState(false);
     const [currentTab, clickTab] = useState(0);
 
@@ -30,7 +42,7 @@ const MemberInfo = () => {
             {
                 id: 0,
                 name: '회원 정보',
-                view: <MemberInfoProfile info={memberInfo} setData={clickTab} img={memberProfileImg}/>
+                view: <MemberInfoProfile info={memberInfo} setData={clickTab} img={memberProfileImg} date={memberProfileDate}/>
             },
             {
                 id: 1,
@@ -81,18 +93,30 @@ const MemberInfo = () => {
     }
 
     useEffect( () => {
-        axios({
-            method: "POST",
-            url: '/member/memberInfo'
-        }).then((res) => {
-            const responseData = res.data;
+
+        const getMemberInfo = async () => {
+
+            const axiosHeaderReissue = await axios({
+                method: "GET",
+                url: '/auth/axiosHeaderReissue'
+            })
+
+            const findMemberInfo = await axios({
+                method: "POST",
+                url: '/member/memberInfo'
+            })
+
+            const responseData = findMemberInfo.data;
             setMemberInfo(responseData.data);
+            setMemberProfileDate(responseData.data.createdDate.substring(0, 10));
             if(responseData.data.picture) {
                 setMemberProfileImg("/upload/" + responseData.data.picture);
             } else {
                 setMemberProfileImg("");
             }
-        })
+        };
+
+        getMemberInfo();
     }, [memberInfoUpdateChk])
 
     return (

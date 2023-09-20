@@ -115,14 +115,29 @@ public class MemberService {
     public ResponseDto<TokenDto> signIn(MemberSignInRequestDto requestDto) {
 
         String memberEmail = requestDto.getMemberEmail();
+        String memberPw = requestDto.getMemberPw();
         TokenDto tokenDto = new TokenDto();
 
         MemberLog memberLog = new MemberLog();
+        Member member = new Member();
 
         try {
-            boolean existsLogin = memberRepository.existsByMemberEmail(memberEmail);
+            member = memberRepository.findByMemberEmail(memberEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. id : " + memberEmail));
+            
+            boolean matchPassword = passwordEncoder.matches(memberPw, member.getMemberPw());
 
-            if(!existsLogin) {
+            if(!matchPassword) {
+                memberLog = MemberLog.builder()
+                        .member(member)
+                        .logMemberEmail(memberEmail)
+                        .logLoginSuccess("F")
+                        .logLoginReason("비밀번호 인증 실패")
+                        .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
+                        .build();
+
+                memberLogRepository.save(memberLog);
+                
                 return ResponseDto.setFailed("Sign In Information Does Not Match");
             } else {
                 // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
@@ -136,7 +151,7 @@ public class MemberService {
                     String username = authentication.getName();
                     Long memberId = Long.valueOf(username);
 
-                    Member member = memberRepository.findById(memberId)
+                    member = memberRepository.findById(memberId)
                             .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
                     memberLog = MemberLog.builder()
@@ -214,7 +229,16 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
+        MemberLog memberLog = memberLogRepository.findByRecentLog(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자의 로그인 로그가 없습니다. id : " + memberId));
+
+        String recentLogDate = memberLog.getCreatedDate();
+
+        System.out.println("최신 로그인 확인 : " + recentLogDate);
+
         MemberInfoResponseDto memberInfoResponseDto = new MemberInfoResponseDto(member);
+
+        memberInfoResponseDto.setRecentLogDate(recentLogDate);
 
         return ResponseDto.setSuccess("memberInfo Success", memberInfoResponseDto);
     }

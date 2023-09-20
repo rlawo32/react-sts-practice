@@ -83,39 +83,41 @@ const MemberInfoCommentLog = () => {
 
             <div className="commentLog-view">
 
-                <table>
-                    <thead className="table-header">
-                    <tr>
-                        <td style={{width: "70px"}}>번호</td>
-                        <td style={{width: "200px"}}>게시판</td>
-                        <td style={{width: "400px"}}>내용</td>
-                        <td style={{width: "70px"}}>추천</td>
-                        <td style={{width: "150px"}}>날짜</td>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    {commentList.map((comments, idx) => {
-                        return (
-                            <tr key={comments.commentId}>
-                                <td>{comments.commentLogNo}</td>
-                                { `${comments.commentBoardCategory}` === 'C1' && <td>리그오브레전드</td> }
-                                { `${comments.commentBoardCategory}` === 'C2' && <td>오버워치</td> }
-                                { `${comments.commentBoardCategory}` === 'C3' && <td>배틀그라운드</td> }
-                                { `${comments.commentBoardCategory}` === 'C4' && <td>메이플스토리</td> }
-                                { `${comments.commentBoardCategory}` === 'C5' && <td>마인크래프트</td> }
-                                { `${comments.commentBoardCategory}` === 'C6' && <td>스팀</td> }
-                                <td>
-                                    <Link to={{ pathname: `/board/${comments.boardId}` }} state={{ boardId: `${comments.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
-                                        {comments.commentContent}
-                                    </Link>
-                                </td>
-                                <td>{comments.commentRecommendUpCnt - comments.commentRecommendDownCnt}</td>
-                                <td>{comments.modifiedDate.substring(0,10)}</td>
-                            </tr>
-                        )
-                    })}
-                    </tbody>
-                </table>
+                <div className="table-view">
+                    <table>
+                        <thead className="table-header">
+                        <tr>
+                            <td style={{width: "70px"}}>번호</td>
+                            <td style={{width: "220px"}}>게시판</td>
+                            <td style={{width: "380px"}}>내용</td>
+                            <td style={{width: "100px"}}>추천수</td>
+                            <td style={{width: "150px"}}>날짜</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        {commentList.map((comments, idx) => {
+                            return (
+                                <tr key={comments.commentId}>
+                                    <td>{comments.commentLogNo}</td>
+                                    { `${comments.commentBoardCategory}` === 'C1' && <td>리그오브레전드</td> }
+                                    { `${comments.commentBoardCategory}` === 'C2' && <td>오버워치</td> }
+                                    { `${comments.commentBoardCategory}` === 'C3' && <td>배틀그라운드</td> }
+                                    { `${comments.commentBoardCategory}` === 'C4' && <td>메이플스토리</td> }
+                                    { `${comments.commentBoardCategory}` === 'C5' && <td>마인크래프트</td> }
+                                    { `${comments.commentBoardCategory}` === 'C6' && <td>스팀</td> }
+                                    <td>
+                                        <Link to={{ pathname: `/board/${comments.boardId}` }} state={{ boardId: `${comments.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                            {comments.commentContent}
+                                        </Link>
+                                    </td>
+                                    <td>{comments.commentRecommendUpCnt - comments.commentRecommendDownCnt}</td>
+                                    <td>{comments.modifiedDate.substring(0,10)}</td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="paging-design">
                     <ul>
                         {pagination()}

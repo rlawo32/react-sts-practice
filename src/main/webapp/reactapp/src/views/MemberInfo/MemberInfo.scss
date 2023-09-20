@@ -4,6 +4,10 @@
   width: 100%;
   background-color: black;
 
+  .table-view {
+    height: 490px;
+  }
+
   .info-select {
     margin-top: 100px;
     margin-bottom: 20px;
@@ -12,7 +16,7 @@
   .profile-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto;
+    margin: 20px auto 200px;
     width: 600px;
     height: 700px;
 
@@ -84,26 +88,26 @@
   .boardLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto;
+    margin: 20px auto 200px;
     width: 900px;
-    height: 700px;
+    height: 600px;
   }
 
   .commentLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto;
+    margin: 20px auto 200px;
     width: 900px;
-    height: 700px;
+    height: 600px;
 
   }
 
   .recommendLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto;
+    margin: 20px auto 200px;
     width: 900px;
-    height: 700px;
+    height: 640px;
 
     .recommendLog-select {
       display: flex;
@@ -126,15 +130,15 @@
   .loginLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto;
+    margin: 20px auto 200px;
     width: 900px;
-    height: 700px;
+    height: 600px;
   }
 
   .update-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto;
+    margin: 20px auto 200px;
     width: 900px;
     height: 850px;
 
@@ -259,6 +263,18 @@
       }
     }
 
+    .on-update {
+
+    }
+  }
+
+  .update-pw-view {
+    border: 4px solid #565e64;
+    border-radius: 8px;
+    margin: 20px auto 200px;
+    width: 900px;
+    height: 350px;
+
     .update-password {
       display: flex;
       justify-content: flex-start;
@@ -312,8 +328,9 @@
   }
 
   .paging-design {
+    margin-top: 40px;
+
     ul {
-      margin-top: 10px;
       list-style: none;
       border: none;
 

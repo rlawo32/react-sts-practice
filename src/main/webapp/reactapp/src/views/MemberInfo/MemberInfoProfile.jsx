@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
-import memberDefaultImg from "../../images/userDefault.png";
+import memberDefaultImg from "../../images/ProfileDefault.png";
 
 const MemberInfoProfile = (props) => {
 
     const profileInfo = props.info;
     const profileImg = props.img;
-
-    useEffect(() => {
-
-    }, [])
 
     return (
         <div className="member-info">
@@ -53,10 +49,10 @@ const MemberInfoProfile = (props) => {
                             {profileInfo.memberBirth}
                         </div>
                         <div className="profile-joinDate">
-                            {profileInfo.createdDate}
+                            {props.date}
                         </div>
                         <div className="profile-lastLog">
-                            {profileInfo.createdDate}
+                            {profileInfo.recentLogDate}
                         </div>
                     </div>
                 </div>

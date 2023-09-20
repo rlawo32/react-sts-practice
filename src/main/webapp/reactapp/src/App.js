@@ -36,8 +36,8 @@ class App extends Component {
         }
     }
 
-
     onLoginSuccess(response) {
+        console.log("잘 되는지 확인하자 !!");
 
         const { grantType, accessToken, refreshToken, accessTokenExpiresIn} = response.data;
 

@@ -22,6 +22,14 @@ public class AuthController {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final MemberService memberService;
 
+
+    @GetMapping("/axiosHeaderReissue")
+    public void axiosHeaderReissue() {
+
+        System.out.println("새로고침 오류 보완 !!");
+
+    }
+
     @PostMapping("/signUp")
     public ResponseDto<?> signUp(@RequestBody MemberSignUpRequestDto requestDto) {
 

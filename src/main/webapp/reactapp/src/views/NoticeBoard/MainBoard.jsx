@@ -39,7 +39,7 @@ const MainBoard = () => {
         {
             key: "C6",
             value: '스팀'
-        },
+        }
         ];
     const [currentTab, clickTab] = useState(0);
 

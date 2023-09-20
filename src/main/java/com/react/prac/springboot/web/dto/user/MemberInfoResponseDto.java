@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
-@Getter
+@Data
 public class MemberInfoResponseDto {
 
     private Long memberId;
@@ -17,6 +17,7 @@ public class MemberInfoResponseDto {
     private String memberNickname;
     private String createdDate;
     private String modifiedDate;
+    private String recentLogDate;
     private String picture;
 
     public MemberInfoResponseDto(Member member) {

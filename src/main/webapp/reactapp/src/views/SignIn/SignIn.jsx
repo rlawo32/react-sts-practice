@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
 import cookie from "react-cookies";
-import { Cookies } from "react-cookie";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import AppBarNavigation from "../Navigation/AppBarNavigation";
+import FooterNavigation from "../Navigation/FooterNavigation";
 
 const googleOauthLogin = () => {
     window.location.href = `http://localhost:8080/oauth2/authorization/google`;
@@ -15,7 +12,6 @@ const googleOauthLogin = () => {
 
 const SignIn = () => {
     const navigate = useNavigate();
-    const cookies = new Cookies();
 
     const [loginErrorMessage, setLoginErrorMessage] = useState("");
     const [isLoginConfirmEffect, setIsLoginConfirmEffect] = useState(false);
@@ -27,7 +23,7 @@ const SignIn = () => {
         setLoginMemberEmail(e.target.value);
     }
 
-    const onMemberPwHandler = (e) => {
+    const onMemberPasswordHandler = (e) => {
         setLoginMemberPw(e.target.value);
     }
 
@@ -85,7 +81,6 @@ const SignIn = () => {
     }
 
     const onLoginSuccess = (response) => {
-
         const { grantType, accessToken, refreshToken, accessTokenExpiresIn} = response.data;
 
         const expires = new Date(accessTokenExpiresIn);
@@ -99,9 +94,6 @@ const SignIn = () => {
             // httpOnly: true,
             expires
         });
-
-
-
         // accessToken을 localStorage, cookie 등에 저장하지 않는다!
 
         // accessToken 만료하기 1분 전에 로그인 연장
@@ -109,46 +101,50 @@ const SignIn = () => {
     }
 
     return (
-        <div>
-            <div style={ {marginBottom:"55px"} }><h1>간편 로그인</h1></div>
-            <div>
-                <Button onClick={googleOauthLogin}>구글 로그인</Button>
-            </div>
-            <div>
-                <Button onClick={googleOauthLogin}>네이버 로그인</Button>
-            </div>
-            <div>
-                <Button onClick={googleOauthLogin}>카카오 로그인</Button>
-            </div>
-            {/*<div>*/}
-            {/*    <Button onClick={localStorage.clear()}>로컬 초기화</Button>*/}
-            {/*</div>*/}
+        <div className="signIn-body">
+            <AppBarNavigation />
 
-            <div style={ {marginBottom:"55px"} }><h1>일반 로그인</h1></div>
-            <Container className="panel">
-                <Form onSubmit={onLoginHandler}>
-                    <Form.Group className="mb-3" controlId="title">
-                        <Col sm>
-                            <Form.Control type="title" placeholder="아이디" value={loginMemberEmail} onChange={onMemberEmailHandler}/>
-                        </Col>
-                    </Form.Group>
+            <div className="signIn-view">
 
-                    <Form.Group className="mb-3" controlId="author">
-                        <Col sm>
-                            <Form.Control type="author" placeholder="비밀번호" value={loginMemberPw} onChange={onMemberPwHandler}/>
-                        </Col>
-                        {(
-                            <span style={ isLoginConfirmEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{loginErrorMessage}</span>
-                        )}
-                    </Form.Group>
-                    <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="primary" type="submit">로그인</Button>
+                <div className="easy-signIn">
+                    <h1>간편 로그인</h1>
+                    <div className="signIn-google">
+                        <button onClick={googleOauthLogin}>구글 로그인</button>
                     </div>
-                    <div className="d-grid gap-1" style={ {margin:"5px"} }>
-                        <Button variant="primary" href="/signUp">회원가입</Button>
+                    <div className="signIn-naver">
+                        <button onClick={googleOauthLogin}>네이버 로그인</button>
                     </div>
-                </Form>
-            </Container>
+                    <div className="signIn-kakao">
+                        <button onClick={googleOauthLogin}>카카오 로그인</button>
+                    </div>
+                </div>
+
+                <div className="common-signIn">
+                    <h1>일반 로그인</h1>
+                    <div className="signIn-email">
+                        <input type="text" value={loginMemberEmail} onChange={onMemberEmailHandler} placeholder="이메일"/>
+                    </div>
+                    <div className="signIn-password">
+                        <input type="password" value={loginMemberPw} onChange={onMemberPasswordHandler} placeholder="비밀번호"/>
+                    </div>
+                    {(
+                        <span style={ isLoginConfirmEffect ? { color:'green', fontSize:'16px'} : {color:'red', fontSize:'16px'} }>{loginErrorMessage}</span>
+                    )}
+                    <div className="on-submit">
+                        <button onClick={onLoginHandler} className="on-signIn">
+                            로그인
+                        </button>
+                        <Link to="/signUp">
+                            <button className="on-signUp">
+                                회원가입
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+
+            </div>
+
+            <FooterNavigation />
         </div>
     )
 }

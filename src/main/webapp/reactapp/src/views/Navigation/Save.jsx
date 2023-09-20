@@ -35,9 +35,10 @@ const Save = () => {
     };
 
     const categoryMenu = props.category_name;
-    const subTabMenu = props.subTab_name;
-    const [boardCategory, setBoardCategory] = useState(categoryMenu[0].key);
-    const [boardTab, setBoardTab] = useState(subTabMenu[0].key);
+    const tabMenu = props.subTab_name;
+
+    const [boardCategory, setBoardCategory] = useState(categoryMenu[1].key);
+    const [boardTab, setBoardTab] = useState(tabMenu[1].key);
     const [boardTitle, setBoardTitle] = useState("");
     const [boardContent, setBoardContent] = useState("");
 
@@ -57,15 +58,15 @@ const Save = () => {
         setBoardContent(editorRef.current.getInstance().getMarkdown());
     }
 
-    const BoardData = {
-        boardCategory: `${boardCategory}`,
-        boardTab: `${boardTab}`,
-        boardTitle: `${boardTitle}`,
-        boardContent: `${boardContent}`
-    }
-
     const saveBoard = async() => {
-        console.log(JSON.stringify(BoardData))
+
+        const BoardData = {
+            boardCategory: `${boardCategory}`,
+            boardTab: `${boardTab}`,
+            boardTitle: `${boardTitle}`,
+            boardContent: `${boardContent}`
+        }
+
         await axios({
             method: "POST",
             url: "board/boardSave",
@@ -79,13 +80,13 @@ const Save = () => {
 
     return (
         <div>
-            <div style={ {marginBottom:"55px"} }><h1>다른 페이지 게시글 등록</h1></div>
+            <div style={ {marginBottom:"55px"} }><h1>게시글 등록</h1></div>
             <Container className="panel">
                 <Form>
                     <Form.Group className="mb-3" controlId="boardSubject">
                         <Col sm>
                             <Form.Select value={boardCategory} onChange={boardCategoryChangeHandler}>
-                                {categoryMenu.map((cl) => (
+                                {categoryMenu.filter((cl) => (cl.key != "C0")).map((cl) => (
                                     <option key={cl.key} value={cl.key}>{cl.value}</option>
                                 ))}
                             </Form.Select>
@@ -95,7 +96,7 @@ const Save = () => {
                     <Form.Group className="mb-3" controlId="boardTab">
                         <Col sm>
                             <Form.Select value={boardTab} onChange={boardTabChangeHandler}>
-                                {subTabMenu.map((tl) => (
+                                {tabMenu.filter((tl) => (tl.key != "T0")).map((tl) => (
                                     <option key={tl.key} value={tl.key}>{tl.value}</option>
                                 ))}
                             </Form.Select>

@@ -65,31 +65,33 @@ const MemberInfoLoginLog = () => {
 
             <div className="loginLog-view">
 
-                <table>
-                    <thead className="table-header">
-                    <tr>
-                        <td style={{width: "70px"}}>번호</td>
-                        <td style={{width: "80px"}}>분류</td>
-                        <td style={{width: "300px"}}>아이피 주소</td>
-                        <td style={{width: "300px"}}>내용</td>
-                        <td style={{width: "250px"}}>날짜</td>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    {loginLogList.map((loginLogs, idx) => {
-                        return (
-                            <tr key={loginLogs.logId}>
-                                <td>{loginLogs.loginLogNo}</td>
-                                { `${loginLogs.logLoginSuccess}` === 'S' && <td>성공</td> }
-                                { `${loginLogs.logLoginSuccess}` === 'F' && <td>실패</td> }
-                                <td>NULL</td>
-                                <td>{loginLogs.logLoginReason}</td>
-                                <td>{loginLogs.logLoginDate}</td>
-                            </tr>
-                        )
-                    })}
-                    </tbody>
-                </table>
+                <div className="table-view">
+                    <table>
+                        <thead className="table-header">
+                        <tr>
+                            <td style={{width: "70px"}}>번호</td>
+                            <td style={{width: "80px"}}>분류</td>
+                            <td style={{width: "300px"}}>아이피 주소</td>
+                            <td style={{width: "300px"}}>내용</td>
+                            <td style={{width: "250px"}}>날짜</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        {loginLogList.map((loginLogs, idx) => {
+                            return (
+                                <tr key={loginLogs.logId}>
+                                    <td>{loginLogs.loginLogNo}</td>
+                                    { `${loginLogs.logLoginSuccess}` === 'S' && <td>성공</td> }
+                                    { `${loginLogs.logLoginSuccess}` === 'F' && <td>실패</td> }
+                                    <td>NULL</td>
+                                    <td>{loginLogs.logLoginReason}</td>
+                                    <td>{loginLogs.logLoginDate}</td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="paging-design">
                     <ul>
                         {pagination()}

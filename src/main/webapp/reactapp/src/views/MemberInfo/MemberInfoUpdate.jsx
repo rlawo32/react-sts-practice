@@ -4,7 +4,7 @@ import '../Layouts/MainView.scss'
 import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPencil as pencil} from "@fortawesome/free-solid-svg-icons";
-import memberDefaultImg from "../../images/userDefault.png";
+import memberDefaultImg from "../../images/ProfileDefault.png";
 import UploadModal from "./UploadModal";
 import {useNavigate} from "react-router-dom";
 
