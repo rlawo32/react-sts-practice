@@ -632,8 +632,7 @@ const DetailBoard = (props) => {
                                                 `${comments.commentNestedLevel}` == 1 ? null :
                                                     <button className="comment-nested-btn" onClick={(e) =>
                                                         nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
-                                                            `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)}
-                                                            value={comments.commentId}>
+                                                            `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
                                                         댓글
                                                     </button>
                                                     :

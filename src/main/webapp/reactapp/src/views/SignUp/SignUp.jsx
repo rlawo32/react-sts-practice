@@ -6,13 +6,15 @@ import AppBarNavigation from "../Navigation/AppBarNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEnvelope as emailIcon, faEnvelopeCircleCheck as emailCheckIcon, faLock as passwordIcon, faUnlockKeyhole as passwordCheckIcon,
-    faUserPen as nicknameIcon, faCalendarDay as birthIcon} from "@fortawesome/free-solid-svg-icons"
-import {} from "@fortawesome/free-brands-svg-icons"
+    faUserPen as nicknameIcon, faCalendarDay as birthIcon, faEye as passwordSeeIcon} from "@fortawesome/free-solid-svg-icons"
+
 
 const SignUp = () => {
     let navigate = useNavigate();
 
     const emailRef = useRef();
+    const passwordRef = useRef(null);
+    const passwordCheckRef = useRef(null);
     const nickNameRef = useRef();
 
     const [memberEmail, setMemberEmail] = useState("");
@@ -201,6 +203,26 @@ const SignUp = () => {
             }
         }
     }, [memberPassword])
+
+    const passwordSeeHandler = () => {
+        const typeCheck = passwordRef.current.type;
+
+        if(typeCheck == 'password') {
+            passwordRef.current.type = 'text';
+        } else {
+            passwordRef.current.type = 'password';
+        }
+    }
+
+    const passwordCheckSeeHandler = () => {
+        const typeCheck = passwordCheckRef.current.type;
+
+        if(typeCheck == 'password') {
+            passwordCheckRef.current.type = 'text';
+        } else {
+            passwordCheckRef.current.type = 'password';
+        }
+    }
 
     const signUpNicknameHandler = (e)=> {
         const memberNicknameRegex = /^.{2,20}$/;
@@ -471,47 +493,58 @@ const SignUp = () => {
                             </span>
                             <span className="email-btn">
                                 {
-                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>전송</button> : <button onClick={emailCheckSendHandler}>전송</button>
+                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>전송</button>
+                                        : <button onClick={emailCheckSendHandler}>전송</button>
                                 }
                             </span>
                         </div>
                         <div className="email-check" style={ isMemberEmailHideEffect ? {display:'block'} : {display:'none'} }>
                             <span className="email-input">
                                 <FontAwesomeIcon icon={emailCheckIcon} className="email-icon"/>
-                                <input type="text" value={memberEmailCheck} onChange={signUpEmailCheckHandler} placeholder="인증번호 확인" style={ isMemberEmailCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
+                                <input type="text" value={memberEmailCheck} onChange={signUpEmailCheckHandler}
+                                       placeholder="인증번호 확인" style={ isMemberEmailCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
                             </span>
                             <span className="email-btn">
                                 {
-                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>인증</button> : <button onClick={emailCheckConfirmHandler}>인증</button>
+                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>인증</button>
+                                        : <button onClick={emailCheckConfirmHandler}>인증</button>
                                 }
                             </span>
                         </div>
 
                         {(
-                            <div style={ isMemberEmailEffect ? null : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailMessage}</div>
+                            <div style={  isMemberEmailEffect ? null
+                                : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailMessage}</div>
                         )}
 
                         {(
-                            <div style={ isMemberEmailCheckEffect ? {color:'green', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailCheckMessage}</div>
+                            <div style={ isMemberEmailCheckEffect ? {color:'green', fontSize:'13px', marginTop:'15px', fontWeight:'bold'}
+                                : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailCheckMessage}</div>
                         )}
                     </div>
                     <div className="signUp-password">
                         <div className="password-input">
                             <FontAwesomeIcon icon={passwordIcon} className="password-icon"/>
-                            <input type="password" value={ memberPassword} onChange={signUpPasswordHandler} placeholder="비밀번호" style={ isMemberPasswordEffect ? {border: 'none'} : {border: '2px solid red'} } />
+                            <FontAwesomeIcon icon={passwordSeeIcon} onClick={() => passwordSeeHandler()} className="passwordSee-icon"/>
+                            <input type="password" value={ memberPassword} onChange={signUpPasswordHandler} ref={passwordRef}
+                                   placeholder="비밀번호" style={ isMemberPasswordEffect ? {border: 'none'} : {border: '2px solid red'} } />
 
                             {(
-                                <div style={ isMemberPasswordEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordMessage}</div>
+                                <div style={ isMemberPasswordEffect ? null
+                                    : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordMessage}</div>
                             )}
                         </div>
 
                         <div className="signUp-password-check">
                             <div className="password-check-input">
                                 <FontAwesomeIcon icon={passwordCheckIcon} className="password-icon"/>
-                                <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} onChange={signUpPasswordCheckHandler} style={ isMemberPasswordCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
+                                <FontAwesomeIcon icon={passwordSeeIcon} onClick={() => passwordCheckSeeHandler()} className="passwordSee-icon"/>
+                                <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} ref={passwordCheckRef}
+                                       onChange={signUpPasswordCheckHandler} style={ isMemberPasswordCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
 
                                 {(
-                                    <div style={ isMemberPasswordCheckEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordCheckMessage}</div>
+                                    <div style={ isMemberPasswordCheckEffect ? null
+                                        : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordCheckMessage}</div>
                                 )}
                             </div>
                         </div>
@@ -525,7 +558,8 @@ const SignUp = () => {
                                        ref={nickNameRef} placeholder="닉네임" style={ isMemberNicknameEffect ? {border: 'none'} : {border: '2px solid red'} } />
 
                                 {(
-                                    <div style={ isMemberNicknameEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberNicknameMessage}</div>
+                                    <div style={ isMemberNicknameEffect ? null
+                                        : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberNicknameMessage}</div>
                                 )}
                             </div>
                         </div>
@@ -534,10 +568,12 @@ const SignUp = () => {
                                 <span className="birth-year">
                                     <FontAwesomeIcon icon={birthIcon} className="birth-icon"/>
                                     <input type="text" id="userBirthY" value={memberBirthY} onChange={signUpBirthYearHandler} placeholder="년(4자)"
-                                           style={ isMemberBirthEffect ? {border: 'none'} : {borderTop: '2px solid red', borderBottom: '2px solid red', borderLeft: '2px solid red'} } />
+                                           style={ isMemberBirthEffect ? {border: 'none'}
+                                               : {borderTop: '2px solid red', borderBottom: '2px solid red', borderLeft: '2px solid red'} } />
                                 </span>
                                 <span className="birth-month">
-                                    <select id="userBirthM" value={memberBirthM} onChange={signUpBirthMonthHandler} style={ isMemberBirthEffect ? null : {borderTop: '2px solid red', borderBottom: '2px solid red'} } >
+                                    <select id="userBirthM" value={memberBirthM} onChange={signUpBirthMonthHandler}
+                                            style={ isMemberBirthEffect ? null : {borderTop: '2px solid red', borderBottom: '2px solid red'} } >
                                         <option value="">월</option>
                                         <option value="01">1</option>
                                         <option value="02">2</option>
@@ -555,11 +591,13 @@ const SignUp = () => {
                                 </span>
                                 <span className="birth-day">
                                     <input type="text" id="userBirthD" value={memberBirthD} onChange={signUpBirthDayHandler} placeholder="일"
-                                           style={ isMemberBirthEffect ? {border: 'none'} : {borderTop: '2px solid red', borderBottom: '2px solid red', borderRight: '2px solid red'} } />
+                                           style={ isMemberBirthEffect ? {border: 'none'}
+                                               : {borderTop: '2px solid red', borderBottom: '2px solid red', borderRight: '2px solid red'} } />
                                 </span>
 
                                 {(
-                                    <div style={ isMemberBirthEffect ? null : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberBirthMessage}</div>
+                                    <div style={ isMemberBirthEffect ? null
+                                        : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberBirthMessage}</div>
                                 )}
                             </div>
                         </div>
@@ -578,7 +616,7 @@ const SignUp = () => {
                             </button>
                         </Link>
                     </div>
-                    </div>
+                </div>
 
             </div>
 

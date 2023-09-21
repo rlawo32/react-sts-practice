@@ -1,0 +1,205 @@
+
+.signIn-body {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+
+  .signIn-view {
+    border: 2px solid #badbcc;
+    border-radius: 15px;
+    padding: 20px 10px 20px 10px;
+    margin: 130px auto 200px;
+    height: 800px;
+    width: 600px;
+    background: radial-gradient(
+
+      rgba(60, 60, 60, 0.7),
+      rgba(20, 20, 30, 0.9) 70%
+    );
+
+    box-shadow: 1px 1px 25px 0 white;
+
+
+
+    .common-signIn {
+      position: relative;
+      margin-top: 50px;
+      height: 250px;
+
+      .signIn-input {
+        margin-top: 30px;
+        margin-bottom: 50px;
+
+        input {
+          border: 1px solid #6c757d;
+          border-radius: 5px;
+          padding: 10px 15px 10px 15px;
+          background-color: #141619;
+          color: white;
+          width: 320px;
+
+          font-size: 20px;
+          margin-top: 5px;
+        }
+
+        .signIn-email {
+
+        }
+
+        .signIn-password {
+          position: relative;
+
+          .passwordSee-icon {
+            position: absolute;
+            top: 19px;
+            left: 405px;
+
+            font-size: 25px;
+            cursor: pointer;
+            opacity: 0.2;
+
+            &:hover {
+              opacity: 0.9;
+            }
+          }
+
+        }
+
+      }
+
+      .on-submit {
+        position: absolute;
+        top: 220px;
+        left: 128px;
+
+        button {
+          border: none;
+          border-radius: 5px;
+          width: 320px;
+
+          font-size: 22px;
+          font-weight: bold;
+          padding: 5px 13px 5px 13px;
+          margin-top: 5px;
+        }
+
+        .on-passwordFind {
+
+          .link-passwordFind {
+            text-decoration: none;
+            padding: 0 0 0 220px;
+
+            font-size: 14px;
+            color: white;
+            opacity: 0.6;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+        }
+
+
+      }
+
+    }
+
+
+    .middle-line {
+      position: relative;
+      margin-top: 155px;
+      margin-bottom: 65px;
+
+      font-size: 19px;
+      opacity: 0.6;
+
+      .custom-line1 {
+        position: absolute;
+        left: 50px;
+        top: 15px;
+        border: none;
+        height: 1px;
+        width: 205px;
+        background-color: white;
+      }
+
+      .custom-line2 {
+        position: absolute;
+        left: 320px;
+        top: 15px;
+        border: none;
+        height: 1px;
+        width: 200px;
+        background-color: white;
+      }
+    }
+
+
+    .easy-signIn {
+
+      button {
+        border: none;
+        border-radius: 5px;
+        width: 320px;
+
+        font-size: 18px;
+        font-weight: bold;
+        padding: 7px 13px 7px 63px;
+        margin-top: 8px;
+      }
+
+      .signIn-google {
+        position: relative;
+
+        button {
+          background-color: white;
+        }
+
+        .google-icon {
+          position: absolute;
+          top: 15px;
+          left: 210px;
+
+          color: black;
+        }
+      }
+
+      .signIn-kakao {
+        position: relative;
+
+        button {
+          background-color: yellow;
+        }
+
+        .kakao-icon {
+          position: absolute;
+          top: 15px;
+          left: 210px;
+
+          color: black;
+        }
+      }
+
+      .signIn-naver {
+        position: relative;
+
+        button {
+          background-color: green;
+        }
+
+        .naver-icon {
+          position: absolute;
+          top: 2px;
+          left: 210px;
+
+          color: white;
+          font-size: 34px;
+          font-weight: bolder;
+        }
+      }
+
+    }
+
+  }
+}

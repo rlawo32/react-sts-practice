@@ -116,6 +116,20 @@
                         margin-right: 20px;
                         font-size: 25px;
                     }
+
+                    .passwordSee-icon {
+                         position: absolute;
+                         top: 12px;
+                         left: 435px;
+
+                         font-size: 25px;
+                         cursor: pointer;
+                         opacity: 0.2;
+
+                         &:hover {
+                             opacity: 0.9;
+                         }
+                     }
                 }
 
                 .signUp-password-check {
@@ -137,6 +151,20 @@
                             padding: 9px 0 7px 17px;
                             margin-right: 20px;
                             font-size: 25px;
+                        }
+
+                        .passwordSee-icon {
+                            position: absolute;
+                            top: 12px;
+                            left: 335px;
+
+                            font-size: 25px;
+                            cursor: pointer;
+                            opacity: 0.2;
+
+                            &:hover {
+                                opacity: 0.9;
+                            }
                         }
                     }
                 }
