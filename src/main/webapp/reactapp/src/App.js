@@ -3,8 +3,9 @@ import './App.css';
 import MainHome from "./views/Navigation/MainHome";
 import Save from "./views/Navigation/Save";
 import About from "./views/Navigation/About";
-import SignUp from "./views/SignUp/SignUp";
 import SignIn from "./views/SignIn/SignIn";
+import SignUp from "./views/SignUp/SignUp";
+import FindPasswordView from "./views/SignIn/FindPasswordView";
 import MainBoard from "./views/NoticeBoard/MainBoard";
 import TableBoard from "./views/NoticeBoard/TableBoard";
 import DetailBoard from "./views/NoticeBoard/DetailBoard";
@@ -62,14 +63,13 @@ class App extends Component {
                         <Route exact path="/" element={<MainHome />} />
                         <Route path="/save" element={<Save />} />
                         <Route path="/about" element={<About />} />
-                        <Route path="/signUp" element={<SignUp />} />
                         <Route path="/signIn" element={<SignIn />} />
+                        <Route path="/signUp" element={<SignUp />} />
+                        <Route path="/findPasswordView" element={<FindPasswordView />} />
                         <Route path="/board" element={<MainBoard />} />
                         <Route path="/memberInfo" element={<MemberInfo />} />
 
                         <Route path="/tableBoard" element={<TableBoard />} />
-
-                        {/*<Route path="/detailBoard/:boardNo" element={<DetailBoard />} />*/}
                         <Route path="/detailBoard" element={<DetailBoard />} />
                         <Route path="/board/:boardId" element={<MainBoard />} />
                         <Route path="/board/:boardId" element={<DetailBoard />} />

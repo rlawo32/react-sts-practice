@@ -261,12 +261,27 @@ public class MemberService {
     @Transactional
     public Long passwordUpdate(HttpServletRequest request) {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
+        String memberEmail = request.getParameter("memberEmail");
+        Long memberId = 0L;
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+        if(memberEmail != null) {
 
-        member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
+            Member member = memberRepository.findByMemberEmail(memberEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. email : " + memberEmail));
+
+            memberId = member.getId();
+            member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
+
+        } else {
+
+            memberId = SecurityUtil.getCurrentMemberId();
+
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다."));
+
+            member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
+        }
+
 
         return memberId;
     }

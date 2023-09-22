@@ -192,9 +192,9 @@ const SignUp = () => {
 
         if (passwordCheckCurrent.length < 1) {
             setMemberPasswordCheckMessage('필수 정보입니다.');
-            setIsMemberPasswordEffect(false);
+            setIsMemberPasswordCheckEffect(false);
         } else {
-            if (memberPassword === passwordCheckCurrent) {
+            if (memberPassword == passwordCheckCurrent) {
                 setMemberPasswordCheckMessage('');
                 setIsMemberPasswordCheckEffect(true);
             } else {

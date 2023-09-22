@@ -207,7 +207,8 @@ const SignIn = () => {
                     </div>
                     <div className="signIn-naver">
                         <span className="naver-icon" >N</span>
-                        <button onClick={googleOauthLogin}>네이버 로그인</button>
+                        <button onClick={() => alert("비밀번호 재설정에 성공하였습니다. \n" +
+                            "인증에 사용한 이메일과 변경한 비밀번호로 로그인 하시길 바랍니다.")}>네이버 로그인</button>
                     </div>
                 </div>
 
