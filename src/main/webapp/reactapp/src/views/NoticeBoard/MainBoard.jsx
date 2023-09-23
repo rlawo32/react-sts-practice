@@ -1,4 +1,4 @@
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss'

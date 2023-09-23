@@ -11,9 +11,9 @@ const MemberInfoProfile = (props) => {
     return (
         <div className="member-info">
 
-            <h3>내 정보 확인</h3>
-
             <div className="profile-view">
+
+                <h3>내 정보 보기</h3>
 
                 <div className="profile-picture" onClick={() => props.setData(5)}>
                     <img src={profileImg ? profileImg : memberDefaultImg} alt="프로필 이미지" className="upload-picture"/>
@@ -39,19 +39,19 @@ const MemberInfoProfile = (props) => {
                         </div>
                     </div>
                     <div className="profile-value">
-                        <div className="profile-email">
+                        <div className="profile-email font-custom">
                             {profileInfo.memberEmail}
                         </div>
-                        <div className="profile-nickname">
+                        <div className="profile-nickname font-custom">
                             {profileInfo.memberNickname}
                         </div>
-                        <div className="profile-birth">
+                        <div className="profile-birth font-custom">
                             {profileInfo.memberBirth}
                         </div>
-                        <div className="profile-joinDate">
+                        <div className="profile-joinDate font-custom">
                             {props.date}
                         </div>
-                        <div className="profile-lastLog">
+                        <div className="profile-lastLog font-custom">
                             {profileInfo.recentLogDate}
                         </div>
                     </div>

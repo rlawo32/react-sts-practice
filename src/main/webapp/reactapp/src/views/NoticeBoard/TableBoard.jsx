@@ -1,7 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import './MainBoard.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
@@ -198,7 +198,7 @@ const TableBoard = (props) => {
                                 <td style={{width: "80px"}}>추천수</td>
                             </tr>
                             </thead>
-                            <tbody id="tbody">
+                            <tbody id="tbody" className="font-list">
                             {tableBoardList.map((boards, idx) => {
                                 return (
                                     <tr key={boards.boardId}>

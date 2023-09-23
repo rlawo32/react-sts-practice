@@ -127,7 +127,7 @@ const MemberInfoRecommendLog = () => {
                                         <td style={{width: "150px"}}>날짜</td>
                                     </tr>
                                     </thead>
-                                    <tbody id="tbody">
+                                    <tbody id="tbody" className="font-custom">
                                     {commentRecommendList.map((commentRecommends, idx) => {
                                         return (
                                             <tr key={commentRecommends.recommendId}>
@@ -166,7 +166,7 @@ const MemberInfoRecommendLog = () => {
                                         <td style={{width: "150px"}}>날짜</td>
                                     </tr>
                                     </thead>
-                                    <tbody id="tbody">
+                                    <tbody id="tbody" className="font-custom">
                                     {boardRecommendList.map((boardRecommends, idx) => {
                                         return (
                                             <tr key={boardRecommends.recommendId}>

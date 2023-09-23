@@ -73,10 +73,10 @@ const MemberInfoLoginLog = () => {
                             <td style={{width: "80px"}}>분류</td>
                             <td style={{width: "300px"}}>아이피 주소</td>
                             <td style={{width: "300px"}}>내용</td>
-                            <td style={{width: "250px"}}>날짜</td>
+                            <td style={{width: "300px"}}>날짜</td>
                         </tr>
                         </thead>
-                        <tbody id="tbody">
+                        <tbody id="tbody" className="font-custom">
                         {loginLogList.map((loginLogs, idx) => {
                             return (
                                 <tr key={loginLogs.logId}>

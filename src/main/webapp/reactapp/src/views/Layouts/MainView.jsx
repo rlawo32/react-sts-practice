@@ -7,7 +7,7 @@ import logo_4 from '../../images/maplestory_logo.jpg';
 import logo_5 from '../../images/minecraft_logo.png';
 import logo_6 from '../../images/steam_logo.png';
 import DrawWord from './DrawWord';
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 
 const MainView = () => {

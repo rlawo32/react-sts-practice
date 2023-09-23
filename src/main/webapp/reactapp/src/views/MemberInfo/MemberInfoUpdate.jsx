@@ -88,10 +88,10 @@ const MemberInfoUpdate = (props) => {
                 } else {
                     setNicknameMessage('');
                     setIsNicknameEffect(true);
+                    nickNameDuplicationChk(changeNickname);
                 }
             }
         }
-        nickNameDuplicationChk(changeNickname);
 
         setMemberNickname(changeNickname);
     }
@@ -334,11 +334,14 @@ const MemberInfoUpdate = (props) => {
                             {(
                                 <span style={ isPwChkEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{pwChkMessage}</span>
                             )}
+                            <p style={ {fontSize: "13px", marginTop: "7px", color: "#5c636a"} }>
+                                현재 비밀번호를 정확히 입력해야 수정이 완료됩니다.
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <div className="profile-update">
+                <div className="on-update">
                     <button onClick={() => passwordDuplicationChk()}>등록</button>
                     <button onClick={() => navigate(-1)}>취소</button>
                 </div>

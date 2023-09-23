@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { Cookies } from "react-cookie";
 import {Link, useNavigate} from "react-router-dom";
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import MemberInfoProfile from "./MemberInfoProfile";
 import MemberInfoBoardLog from "./MemberInfoBoardLog";
@@ -71,7 +71,7 @@ const MemberInfo = () => {
             {
                 id: 6,
                 name: '비밀번호 변경',
-                view: <MemberInfoPwUpdate />
+                view: <MemberInfoPwUpdate info={memberInfo} />
             }
         ];
         return result;

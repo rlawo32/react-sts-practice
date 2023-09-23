@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import "./SignIn.scss";
 import '../Layouts/MainView.scss'
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {

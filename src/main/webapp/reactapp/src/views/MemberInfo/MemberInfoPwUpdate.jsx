@@ -8,9 +8,10 @@ import memberDefaultImg from "../../images/ProfileDefault.png";
 import UploadModal from "./UploadModal";
 import {useNavigate} from "react-router-dom";
 
-const MemberInfoPwUpdate = () => {
+const MemberInfoPwUpdate = (props) => {
 
     const navigate = useNavigate();
+    const memberInfo = props.info;;
 
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!?@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
@@ -147,10 +148,17 @@ const MemberInfoPwUpdate = () => {
             <h3>비밀번호 변경</h3>
 
             <div className="update-pw-view">
+                <p style={{ fontSize: '16px', textAlign: 'left', marginTop: '40px', marginLeft: '100px'}}>
+                    - 비밀번호는 8~16자이내로 영문 대 소문자, 숫자, 특수문자를 조합하여 등록하셔야 합니다. <br/>
+                    &nbsp; 변경된 비밀번호는 바로 반영되어 사용하실 수 있습니다.
+                </p>
 
                 <div className="update-password">
 
                     <div className="update-pw-key">
+                        <div className="update-pw-email">
+                            이메일
+                        </div>
                         <div className="update-pw-present">
                             현재 비밀번호
                         </div>
@@ -162,19 +170,22 @@ const MemberInfoPwUpdate = () => {
                         </div>
                     </div>
                     <div className="update-pw-value">
-                        <div className="update-pw-present">
+                        <div className="update-pw-email font-custom">
+                            {memberInfo.memberEmail}
+                        </div>
+                        <div className="update-pw-present font-custom">
                             <input type="password" value={memberPresentPwChk} onChange={memberPresentPwCheckHandler} />
                             {(
                                 <span style={ isPresentPwChkEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{presentPwChkMessage}</span>
                             )}
                         </div>
-                        <div className="update-pw-new">
+                        <div className="update-pw-new font-custom">
                             <input type="password" value={memberChangePw} onChange={memberChangePwHandler} />
                             {(
                                 <span style={ isChangePwEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{changePwMessage}</span>
                             )}
                         </div>
-                        <div className="update-pw-check">
+                        <div className="update-pw-check font-custom">
                             <input type="password" value={memberChangePwChk} onChange={memberChangePwCheckHandler} />
                             {(
                                 <span style={ isChangePwChkEffect ? null : {color:'red', fontSize:'12px', marginLeft: '7px', fontWeight: 'bold'} }>{changePwChkMessage}</span>

@@ -94,7 +94,7 @@ const MemberInfoCommentLog = () => {
                             <td style={{width: "150px"}}>날짜</td>
                         </tr>
                         </thead>
-                        <tbody id="tbody">
+                        <tbody id="tbody" className="font-custom">
                         {commentList.map((comments, idx) => {
                             return (
                                 <tr key={comments.commentId}>

@@ -82,7 +82,7 @@ const MemberInfoBoardLog = () => {
                             <td style={{width: "150px"}}>날짜</td>
                         </tr>
                         </thead>
-                        <tbody id="tbody">
+                        <tbody id="tbody" className="font-custom">
                         {tableBoardList.map((boards, idx) => {
                             return (
                                 <tr key={boards.boardId}>

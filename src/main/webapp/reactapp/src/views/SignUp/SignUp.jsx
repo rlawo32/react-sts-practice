@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import './SignUp.scss';
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEnvelope as emailIcon, faEnvelopeCircleCheck as emailCheckIcon, faLock as passwordIcon, faUnlockKeyhole as passwordCheckIcon,

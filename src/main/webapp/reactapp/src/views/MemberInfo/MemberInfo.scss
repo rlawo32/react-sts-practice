@@ -1,5 +1,25 @@
 
 .member-info {
+
+  @font-face {
+    font-family: 'KCCChassam';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCChassam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  font-family: KCCChassam;
+
+  .font-custom {
+    @font-face {
+      font-family: 'LINESeedKR-Bd';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+      font-weight: auto;
+      font-style: normal;
+    }
+    font-family: LINESeedKR-Bd;
+
+  }
+
   height: 100%;
   width: 100%;
   background-color: black;
@@ -9,16 +29,21 @@
   }
 
   .info-select {
-    margin-top: 100px;
-    margin-bottom: 20px;
+    width: 700px;
+    margin: 100px auto 20px;
   }
 
   .profile-view {
     border: 4px solid #565e64;
     border-radius: 8px;
-    margin: 20px auto 200px;
+    margin: 50px auto 200px;
     width: 600px;
-    height: 700px;
+    height: 730px;
+
+    h3 {
+      width: 200px;
+      margin-top: 10px;
+    }
 
     .profile-picture {
       border: 1px solid #565e64;
@@ -43,7 +68,7 @@
       justify-content: flex-start;
       border: 1px solid #bcbebf;
       border-radius: 12px;
-      margin: 40px 40px;
+      margin: 0 50px 0 50px;
       padding: 15px 50px 15px;
 
       .profile-key {
@@ -83,22 +108,41 @@
       }
     }
 
+    .profile-update {
+      text-decoration: none;
+      padding: 0 0 0 310px;
+
+      button {
+        border: none;
+        background-color:transparent;
+        font-size: 16px;
+        color: white;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
   }
 
   .boardLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
     margin: 20px auto 200px;
-    width: 900px;
-    height: 600px;
+    padding: 15px;
+    width: 980px;
+    height: 620px;
   }
 
   .commentLog-view {
     border: 4px solid #565e64;
     border-radius: 8px;
     margin: 20px auto 200px;
-    width: 900px;
-    height: 600px;
+    padding: 15px;
+    width: 980px;
+    height: 620px;
 
   }
 
@@ -106,8 +150,9 @@
     border: 4px solid #565e64;
     border-radius: 8px;
     margin: 20px auto 200px;
-    width: 900px;
-    height: 640px;
+    padding: 15px;
+    width: 980px;
+    height: 660px;
 
     .recommendLog-select {
       display: flex;
@@ -131,8 +176,9 @@
     border: 4px solid #565e64;
     border-radius: 8px;
     margin: 20px auto 200px;
-    width: 900px;
-    height: 600px;
+    padding: 15px;
+    width: 980px;
+    height: 620px;
   }
 
   .update-view {
@@ -143,7 +189,7 @@
     height: 850px;
 
     .profile-picture {
-      margin: 30px auto 90px;
+      margin: 30px auto 70px;
       width: 250px;
       height: 250px;
 
@@ -174,7 +220,7 @@
       justify-content: flex-start;
       border: 1px solid #bcbebf;
       border-radius: 12px;
-      margin: 40px 40px;
+      margin: 0 70px 0 70px;
       padding: 15px 50px 15px;
 
       .update-key {
@@ -264,8 +310,22 @@
     }
 
     .on-update {
+      text-decoration: none;
+      padding: 0 0 0 700px;
 
+      button {
+        border: none;
+        background-color:transparent;
+        font-size: 16px;
+        color: white;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
+
   }
 
   .update-pw-view {
@@ -273,15 +333,15 @@
     border-radius: 8px;
     margin: 20px auto 200px;
     width: 900px;
-    height: 350px;
+    height: 450px;
 
     .update-password {
       display: flex;
       justify-content: flex-start;
       border: 1px solid #bcbebf;
       border-radius: 12px;
-      margin: 40px 40px;
-      padding: 15px 50px 15px;
+      margin: 40px 90px 0 90px;
+      padding: 15px 10px 30px;
 
       .update-pw-key {
         margin-left: 50px;
@@ -289,6 +349,27 @@
         font-weight: bold;
         color: #6c757d;
 
+        padding: 3px 0 0 0;
+
+        .update-pw-email {
+          margin-top: 14px;
+
+        }
+
+        .update-pw-present {
+          margin-top: 15px;
+
+        }
+
+        .update-pw-new {
+          margin-top: 18px;
+
+        }
+
+        .update-pw-check {
+          margin-top: 17px;
+
+        }
       }
 
       .update-pw-value {
@@ -296,21 +377,25 @@
         text-align: left;
         margin-left: 20px;
 
-      }
+        .update-pw-email {
+          margin-top: 15px;
 
-      .update-pw-present {
-        margin-top: 15px;
+        }
 
-      }
+        .update-pw-present {
+          margin-top: 15px;
 
-      .update-pw-new {
-        margin-top: 15px;
+        }
 
-      }
+        .update-pw-new {
+          margin-top: 15px;
 
-      .update-pw-check {
-        margin-top: 15px;
+        }
 
+        .update-pw-check {
+          margin-top: 15px;
+
+        }
       }
 
       input {
@@ -323,14 +408,29 @@
     }
 
     .on-update {
+      text-decoration: none;
+      padding: 0 0 0 620px;
 
+      button {
+        border: none;
+        background-color:transparent;
+        font-size: 16px;
+        color: white;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
+
   }
 
   .paging-design {
     margin-top: 40px;
 
     ul {
+      padding: 0 3px 0 0;
       list-style: none;
       border: none;
 

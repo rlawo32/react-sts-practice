@@ -1,4 +1,4 @@
-import AppBarNavigation from "../Navigation/AppBarNavigation";
+import AppBarNavigation from "../Navigation/HeaderNavigation";
 import './MainBoard.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useRef, useState} from "react";
@@ -671,7 +671,7 @@ const DetailBoard = (props) => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="comment-content">{comments.commentContent}</div>
+                                <div className="comment-content font-list">{comments.commentContent}</div>
                                 <div className="nested-content"></div>
                                 <div className="nested-div">
                                     <div className="nested-write">
