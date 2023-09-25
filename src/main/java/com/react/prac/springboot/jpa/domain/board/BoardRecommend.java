@@ -28,15 +28,15 @@ public class BoardRecommend extends BaseTimeEntity {
     private String recommendCategory; // B : BOARD, C : COMMENT
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id") // recommend_member_id 로 변경하기
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "board_id") // recommend_board_id 로 변경하기
+    @JoinColumn(name = "board_id")
     private MainBoard mainBoard;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "comment_id") // recommend_board_id 로 변경하기
+    @JoinColumn(name = "comment_id")
     private BoardComment boardComment;
 
     @Builder

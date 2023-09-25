@@ -5,8 +5,10 @@ import './SignUp.scss';
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEnvelope as emailIcon, faEnvelopeCircleCheck as emailCheckIcon, faLock as passwordIcon, faUnlockKeyhole as passwordCheckIcon,
-    faUserPen as nicknameIcon, faCalendarDay as birthIcon, faEye as passwordSeeIcon} from "@fortawesome/free-solid-svg-icons"
+import {faEnvelope as emailIcon, faEnvelopeCircleCheck as emailCheckIcon,
+        faLock as passwordIcon, faUnlockKeyhole as passwordCheckIcon,
+        faUserPen as nicknameIcon, faCalendarDay as birthIcon,
+        faEye as passwordSeeIcon} from "@fortawesome/free-solid-svg-icons"
 
 
 const SignUp = () => {

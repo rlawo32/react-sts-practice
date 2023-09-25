@@ -1,14 +1,14 @@
 import {Routes, Route} from "react-router-dom";
 import './App.css';
 import MainHome from "./views/Navigation/MainHome";
-import Save from "./views/Navigation/Save";
+import BoardWrite from "./views/NoticeBoard/BoardWrite";
 import About from "./views/Navigation/About";
 import SignIn from "./views/SignIn/SignIn";
 import SignUp from "./views/SignUp/SignUp";
 import FindPasswordView from "./views/SignIn/FindPasswordView";
-import MainBoard from "./views/NoticeBoard/MainBoard";
-import TableBoard from "./views/NoticeBoard/TableBoard";
-import DetailBoard from "./views/NoticeBoard/DetailBoard";
+import BoardMain from "./views/NoticeBoard/BoardMain";
+import BoardTable from "./views/NoticeBoard/BoardTable";
+import BoardDetail from "./views/NoticeBoard/BoardDetail";
 import MemberInfo from "./views/MemberInfo/MemberInfo";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
@@ -61,18 +61,18 @@ class App extends Component {
                 <header className="App-header">
                     <Routes>
                         <Route exact path="/" element={<MainHome />} />
-                        <Route path="/save" element={<Save />} />
+                        <Route path="/save" element={<BoardWrite />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/signIn" element={<SignIn />} />
                         <Route path="/signUp" element={<SignUp />} />
                         <Route path="/findPasswordView" element={<FindPasswordView />} />
-                        <Route path="/board" element={<MainBoard />} />
+                        <Route path="/board" element={<BoardMain />} />
                         <Route path="/memberInfo" element={<MemberInfo />} />
 
-                        <Route path="/tableBoard" element={<TableBoard />} />
-                        <Route path="/detailBoard" element={<DetailBoard />} />
-                        <Route path="/board/:boardId" element={<MainBoard />} />
-                        <Route path="/board/:boardId" element={<DetailBoard />} />
+                        <Route path="/tableBoard" element={<BoardTable />} />
+                        <Route path="/detailBoard" element={<BoardDetail />} />
+                        <Route path="/board/:boardId" element={<BoardMain />} />
+                        <Route path="/board/:boardId" element={<BoardDetail />} />
                     </Routes>
                 </header>
             </div>

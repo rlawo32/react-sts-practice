@@ -23,7 +23,6 @@ public class CommentResponseDto {
     private Long memberId;
     private String memberNickname;
     private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-    private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     private int commentRecommendUpCnt;
     private int commentRecommendDownCnt;
     private int commentRecommendUpCheck; // 0 = false, 1 = true
@@ -42,7 +41,6 @@ public class CommentResponseDto {
         this.memberId = boardComment.getMember().getId();
         this.memberNickname = boardComment.getCommentNickname();
         this.createdDate = boardComment.getCreatedDate();
-        this.modifiedDate = boardComment.getModifiedDate();
         this.commentRecommendUpCnt = boardComment.getCommentRecommendUpCnt();
         this.commentRecommendDownCnt = boardComment.getCommentRecommendDownCnt();
     }

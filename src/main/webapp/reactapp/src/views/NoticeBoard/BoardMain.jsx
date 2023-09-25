@@ -1,13 +1,13 @@
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
-import './MainBoard.scss';
+import './BoardMain.scss';
 import '../Layouts/MainView.scss'
-import TableBoard from "./TableBoard";
+import BoardTable from "./BoardTable";
 import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
-import DetailBoard from "./DetailBoard";
+import BoardDetail from "./BoardDetail";
 
-const MainBoard = () => {
+const BoardMain = () => {
     const props = useLocation().state?.mainReset;
     const locationParameter = window.location.pathname;
 
@@ -41,17 +41,46 @@ const MainBoard = () => {
             value: '스팀'
         }
         ];
+
+    const subTab_name = [
+        {
+            key: 'T0',
+            value: '전체'
+        },
+        {
+            key: 'T1',
+            value: '화제'
+        },
+        {
+            key: 'T2',
+            value: '정보'
+        },
+        {
+            key: 'T3',
+            value: '오류'
+        },
+        {
+            key: 'T4',
+            value: '사진/동영상'
+        },
+        {
+            key: 'T5',
+            value: '팁과 노하우'
+        }
+        ];
+
     const [currentTab, clickTab] = useState(0);
 
     const [detailBoardId, setDetailBoardId] = useState(null);
-    const changeDetailBoardId = (changeBoardId) => {
-        setDetailBoardId(changeBoardId);
-    }
+    const [detailBoardAuthorId, setDetailBoardAuthorId] = useState(null);
 
     const changeTabHandler = () => {
         let tab_data = [];
         for(let i=0; i<category_name.length; i++) {
-            tab_data.push({id: i, name: category_name[i].value, view:<TableBoard id={i} sey={category_name[i].key} value={category_name[i].value} category={category_name} changeBoardId={changeDetailBoardId}/>});
+            tab_data.push({id: i, name: category_name[i].value,
+                view:<BoardTable id={i} value={category_name[i].value} category={category_name}
+                                 subTab={subTab_name} changeBoardId={setDetailBoardId}
+                                 changeBoardAuthorId={setDetailBoardAuthorId}/>});
         }
         return tab_data;
     }
@@ -88,7 +117,11 @@ const MainBoard = () => {
             </div>
 
             {
-                detailBoardId === null ? changeTabHandler()[currentTab].view : <DetailBoard id={detailBoardId} changeBoardId={changeDetailBoardId}/>
+                detailBoardId === null ?
+                    changeTabHandler()[currentTab].view
+                    :
+                    <BoardDetail boardId={detailBoardId} authorId={detailBoardAuthorId} changeBoardId={setDetailBoardId}
+                                 category={category_name} subTab={subTab_name} />
             }
 
             <FooterNavigation />
@@ -96,4 +129,4 @@ const MainBoard = () => {
     )
 }
 
-export default MainBoard;
+export default BoardMain;

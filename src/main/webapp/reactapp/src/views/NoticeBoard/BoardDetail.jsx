@@ -1,22 +1,35 @@
 import AppBarNavigation from "../Navigation/HeaderNavigation";
-import './MainBoard.scss';
+import './BoardDetail.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useRef, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faThumbsUp as recommendUp, faThumbsDown as recommendDown, faReply as nestedArrow, faAnglesLeft as leftArrow, faAnglesRight as rightArrow, faHouse as buttonHouse} from "@fortawesome/free-solid-svg-icons";
-import {faThumbsUp as recommendUpCancel, faThumbsDown as recommendDownCancel} from "@fortawesome/free-regular-svg-icons";
+import {faThumbsUp as recommendUp,
+        faThumbsDown as recommendDown,
+        faReply as nestedArrow,
+        faAnglesLeft as leftArrow,
+        faAnglesRight as rightArrow,
+        faHouse as buttonHouse} from "@fortawesome/free-solid-svg-icons";
+import {faThumbsUp as recommendUpCancel,
+        faThumbsDown as recommendDownCancel} from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import {Viewer} from "@toast-ui/react-editor";
 import Button from "@mui/material/Button";
 import cookie from "react-cookies";
 
-const DetailBoard = (props) => {
+const BoardDetail = (props) => {
     const locationURL = window.location.href;
+    const navigate = useNavigate();
     const editorRef = useRef(null);
 
+    const category_name = props.category;
+    const subTab_name = props.subTab;
+
     const [isLoginCheck, setIsLoginCheck] = useState(0);
+    const [detailLoginMemberId, setDetailLoginMemberId] = useState(0);
+    const [commentLoginMemberId, setCommentLoginMemberId] = useState(0);
+
 
     const [boardDetail, setBoardDetail] = useState({
         boardId: '',
@@ -30,8 +43,10 @@ const DetailBoard = (props) => {
         boardRecommendDownCnt: '',
         boardViewsCnt: '',
         boardRecommendUpCheck: '',
-        boardRecommendDownCheck: ''
+        boardRecommendDownCheck: '',
+        loginMemberId: ''
     });
+
     const [prevId, setPrevId] = useState(0);
     const [nextId, setNextId] = useState(0);
     const [memberId, setMemberId] = useState(9999);
@@ -71,7 +86,7 @@ const DetailBoard = (props) => {
     }]);
 
     const paging = {
-        boardId: props.id,
+        boardId: props.boardId,
         recordPerPage: 10,
         page: pageNo
     }
@@ -82,7 +97,7 @@ const DetailBoard = (props) => {
         commentNestedId: "",
         commentNestedLevel: "",
         memberId: memberId,
-        boardId: props.id,
+        boardId: props.boardId,
         commentContent: commentText
     }
 
@@ -92,7 +107,7 @@ const DetailBoard = (props) => {
         commentNestedId: nestedId,
         commentNestedLevel: nestedLevel,
         memberId: memberId,
-        boardId: props.id,
+        boardId: props.boardId,
         commentContent: nestedText
     }
 
@@ -110,11 +125,34 @@ const DetailBoard = (props) => {
         alert('복사 성공 \n' + text);
     }
 
+    const detailUpdateHandler = () => {
+        // await axios({
+        //     method: "PUT",
+        //     url: '/board/detailUpdate',
+        //     data: JSON.stringify(commentData),
+        //     headers: {'Content-type': 'application/json'}
+        // }).then(() => {
+        //
+        // })
+    }
+
+    const detailDeleteHandler = async () => {
+        if (window.confirm("해당 게시글을 삭제하시겠습니까?") == true){
+            await axios({
+                method: "DELETE",
+                url: '/board/boardDelete/' + boardDetail.boardId
+            }).then(() => {
+                alert('게시글이 삭제되었습니다.');
+                navigate('/board');
+            })
+        }
+    }
+
     const onClickMainRecommendUp = async (e) => {
 
         if(isLoginCheck == 1) {
             const mainRecommendData = {
-                boardId: props.id,
+                boardId: props.boardId,
                 commentId: "",
                 recommendType: "U"
             }
@@ -145,7 +183,7 @@ const DetailBoard = (props) => {
 
         if(isLoginCheck == 1) {
             const mainRecommendData = {
-                boardId: props.id,
+                boardId: props.boardId,
                 commentId: "",
                 recommendType: "D"
             }
@@ -179,7 +217,7 @@ const DetailBoard = (props) => {
 
         if(isLoginCheck == 1) {
             const commentRecommendData = {
-                boardId: props.id,
+                boardId: props.boardId,
                 commentId: selectCommentId,
                 recommendType: "U"
             }
@@ -213,7 +251,7 @@ const DetailBoard = (props) => {
 
         if(isLoginCheck == 1) {
             const commentRecommendData = {
-                boardId: props.id,
+                boardId: props.boardId,
                 commentId: selectCommentId,
                 recommendType: "D"
             }
@@ -240,7 +278,6 @@ const DetailBoard = (props) => {
         }
     }
 
-
     const changeDetailBoard = async (itemID, orderID) => {
         if(itemID != null) {
             await axios({
@@ -257,100 +294,6 @@ const DetailBoard = (props) => {
             props.changeBoardId(itemID);
         }
     }
-
-    useEffect(() => {
-        if(props.id != null) {
-            const getBoards = async () => {
-
-                const selectBoard = await axios({
-                    method: "GET",
-                    url: '/board/boardPrevAndNextSelect',
-                    params: {boardId: props.id}
-                })
-
-                const boardComments = await axios({
-                    method: "GET",
-                    url: '/board/commentList',
-                    params: paging
-                })
-
-                setPrevId(selectBoard.data.boardIdPrev);
-                setNextId(selectBoard.data.boardIdNext);
-                setCommentList(boardComments.data.commentList);
-                setTotalPage(boardComments.data.totalPage);
-                setTotalComments(boardComments.data.totalComments);
-            };
-
-            getBoards();
-        } else {
-            const locationParameter = window.location.pathname;
-
-            const getBoards = async () => {
-
-                const selectBoard = await axios({
-                    method: "GET",
-                    url: '/board/boardPrevAndNextSelect',
-                    params: {boardId: locationParameter.substring(7)}
-                })
-
-                const comments = await axios({
-                    method: "GET",
-                    url: '/board/commentList',
-                    params: paging
-                })
-
-                setPrevId(selectBoard.data.boardIdPrev);
-                setNextId(selectBoard.data.boardIdNext);
-                setCommentList(comments.data.commentList);
-                setTotalPage(comments.data.totalPage);
-                setTotalComments(comments.data.totalComments);
-            };
-
-            getBoards();
-        }
-    }, [prevId, nextId, props.id, pageNo, commentState, commentRecommendCheck])
-    // prevId:이전글, nextId:다음글, props.id:게시판에서 선택한 게시글 id,
-    // pageNo:댓글 페이지 이동,
-    // 추후 다수 사용자로 인한 트래픽 확인 => commentState:댓글 작성 후 바로 추가, commentRecommendCheck:댓글 추천 체크
-
-    useEffect(() => {
-        if(props.id != null) {
-            const getBoards = async () => {
-                const detail = await axios({
-                    method: "POST",
-                    url: '/board/detailBoard/' + props.id
-                })
-
-                setBoardDetail(detail.data);
-                // setCommentList(detail.data.boardComments);
-                editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
-            };
-
-            getBoards();
-        } else {
-            const locationParameter = window.location.pathname;
-
-            const getBoards = async () => {
-                const detail = await axios({
-                    method: "POST",
-                    url: '/board/detailBoard/' + locationParameter.substring(7)
-                })
-
-                setBoardDetail(detail.data);
-                editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
-            };
-
-            getBoards();
-        }
-
-        if(cookie.load("refreshToken")) {
-            setIsLoginCheck(1);
-        } else {
-            setIsLoginCheck(0);
-        }
-    }, [props.id, mainRecommendCheck, isLoginCheck]);
-    // props.id:url 직접 입력 시를 위함 (세부적인 기능 체크 필요)
-    // 추후 다수 사용자로 인한 트래픽 확인 => mainRecommendCheck:게시글 추천 체크
 
     const changeCommentTextHandler = ({target: {value}}) => {
         setCommentText(value);
@@ -377,6 +320,15 @@ const DetailBoard = (props) => {
                 // window.location.reload();
             })
         }
+    }
+
+    const commentDeleteHandler = async (commentId) => {
+        await axios({
+            method: "DELETE",
+            url: '/board/commentDelete/' + commentId
+        }).then(() => {
+            alert('댓글이 삭제되었습니다.');
+        })
     }
 
     const nestedSaveHandler = async (e) => {
@@ -436,6 +388,105 @@ const DetailBoard = (props) => {
 
         setCommentId(selectCommentId);
     }
+
+    useEffect(() => {
+        if(props.boardId != null) {
+            const getBoards = async () => {
+
+                const selectBoard = await axios({
+                    method: "GET",
+                    url: '/board/boardPrevAndNextSelect',
+                    params: {boardId: props.boardId}
+                })
+
+                const boardComments = await axios({
+                    method: "GET",
+                    url: '/board/commentList',
+                    params: paging
+                })
+
+                setPrevId(selectBoard.data.boardIdPrev);
+                setNextId(selectBoard.data.boardIdNext);
+                setCommentList(boardComments.data.commentList);
+                setTotalPage(boardComments.data.totalPage);
+                setTotalComments(boardComments.data.totalComment);
+                setCommentLoginMemberId(boardComments.data.presentLoginMemberId);
+            };
+
+            getBoards();
+        } else {
+            const locationParameter = window.location.pathname;
+
+            const getBoards = async () => {
+
+                const selectBoard = await axios({
+                    method: "GET",
+                    url: '/board/boardPrevAndNextSelect',
+                    params: {boardId: locationParameter.substring(7)}
+                })
+
+                const comments = await axios({
+                    method: "GET",
+                    url: '/board/commentList',
+                    params: paging
+                })
+
+                setPrevId(selectBoard.data.boardIdPrev);
+                setNextId(selectBoard.data.boardIdNext);
+                setCommentList(comments.data.commentList);
+                setTotalPage(comments.data.totalPage);
+                setTotalComments(comments.data.totalComments);
+                setCommentLoginMemberId(comments.data.presentLoginMemberId);
+            };
+
+            getBoards();
+        }
+    }, [prevId, nextId, props.boardId, pageNo, commentState, commentRecommendCheck])
+    // prevId:이전글, nextId:다음글, props.id:게시판에서 선택한 게시글 id,
+    // pageNo:댓글 페이지 이동,
+    // 추후 다수 사용자로 인한 트래픽 확인 => commentState:댓글 작성 후 바로 추가, commentRecommendCheck:댓글 추천 체크
+
+    useEffect(() => {
+        if(props.boardId != null) {
+            const getBoards = async () => {
+                const detail = await axios({
+                    method: "POST",
+                    url: '/board/detailBoard/' + props.boardId
+                })
+
+                setBoardDetail(detail.data);
+                console.log(detail.data);
+                setDetailLoginMemberId(detail.data.loginMemberId);
+                // setCommentList(detail.data.boardComments);
+                editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
+            };
+
+            getBoards();
+        } else {
+            const locationParameter = window.location.pathname;
+
+            const getBoards = async () => {
+                const detail = await axios({
+                    method: "POST",
+                    url: '/board/detailBoard/' + locationParameter.substring(7)
+                })
+
+                setBoardDetail(detail.data);
+                setDetailLoginMemberId(detail.data.loginMemberId);
+                editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
+            };
+
+            getBoards();
+        }
+
+        if(cookie.load("refreshToken")) {
+            setIsLoginCheck(1);
+        } else {
+            setIsLoginCheck(0);
+        }
+    }, [props.boardId, mainRecommendCheck, isLoginCheck]);
+    // props.id:url 직접 입력 시를 위함 (세부적인 기능 체크 필요)
+    // 추후 다수 사용자로 인한 트래픽 확인 => mainRecommendCheck:게시글 추천 체크
 
     // const nestedSaveHandler = (box, e) => {
     //     const selectNestedId = e.target.value;
@@ -517,8 +568,9 @@ const DetailBoard = (props) => {
     // }
 
     return (
-        <>
+        <div>
             <AppBarNavigation />
+
             <div className="detail-main">
                 <div className="detail-header1">
                     <span className="detail-title">{boardDetail.boardTitle}</span>
@@ -548,36 +600,57 @@ const DetailBoard = (props) => {
                     </div>
                 </div>
                 <div className="detail-footer1">
-                    <span className="detail-recommendUp">
-                        {
-                            `${boardDetail.boardRecommendUpCheck}` == 1 ?
-                                <FontAwesomeIcon icon={recommendUp} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
-                                :
-                                <FontAwesomeIcon icon={recommendUpCancel} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
-                        }
-                    </span>
-                    <span className="detail-recommendDown">
-                        {
-                            `${boardDetail.boardRecommendDownCheck}` == 1 ?
-                                <FontAwesomeIcon icon={recommendDown} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
-                                :
-                                <FontAwesomeIcon icon={recommendDownCancel} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
-                        }
-                    </span>
+                    <div className="detail-mainRecommend">
+                        <span className="detail-recommendUp">
+                            {
+                                `${boardDetail.boardRecommendUpCheck}` == 1 ?
+                                    <FontAwesomeIcon icon={recommendUp} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
+                                    :
+                                    <FontAwesomeIcon icon={recommendUpCancel} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
+                            }
+                        </span>
+                        <span className="detail-recommendDown">
+                            {
+                                `${boardDetail.boardRecommendDownCheck}` == 1 ?
+                                    <FontAwesomeIcon icon={recommendDown} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
+                                    :
+                                    <FontAwesomeIcon icon={recommendDownCancel} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
+                            }
+                        </span>
+                    </div>
+                    {
+                        `${boardDetail.boardAuthorId}` == `${boardDetail.loginMemberId}` ?
+                            <div className="detail-modify">
+                                <button className="detail-update-btn">
+                                    <Link to="/save" state={{subTab_name, category_name, boardDetail}} style={{textDecoration: 'none', color: 'white'}}>
+                                        수정
+                                    </Link>
+                                </button>
+                                <button onClick={detailDeleteHandler} className="detail-delete-btn">
+                                    삭제
+                                </button>
+                            </div>
+                            :
+                            null
+                    }
+
                 </div>
                 <div className="detail-footer2">
                     <span className="detail-prev">
                         {
-                            <button style={ prevId != null ? {} : {visibility: "hidden"} }>
-                                <Link to={{ pathname: `/board/${prevId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.id, 'prev')}>
-                                    <div className="front">
-                                        이전 글
-                                    </div>
-                                    <div className="back">
-                                        <FontAwesomeIcon icon={leftArrow} style={{color: "white"}}/>
-                                    </div>
-                                </Link>
-                            </button>
+                            `${prevId}` != 'null' ?
+                                <button>
+                                    <Link to={{ pathname: `/board/${prevId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.boardId, 'prev')}>
+                                        <div className="front">
+                                            이전 글
+                                        </div>
+                                        <div className="back">
+                                            <FontAwesomeIcon icon={leftArrow} style={{color: "white"}}/>
+                                        </div>
+                                    </Link>
+                                </button>
+                                :
+                                null
                         }
                     </span>
                     <span className="detail-home">
@@ -594,16 +667,19 @@ const DetailBoard = (props) => {
                     </span>
                     <span className="detail-next">
                         {
-                            <button style={ nextId != null ? {} : {visibility: "hidden"} }>
-                                <Link to={{ pathname: `/board/${nextId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.id, 'next')}>
-                                    <div className="front">
-                                        다음 글
-                                    </div>
-                                    <div className="back">
-                                        <FontAwesomeIcon icon={rightArrow} style={{color: "white"}}/>
-                                    </div>
-                                </Link>
-                            </button>
+                            `${nextId}` != 'null' ?
+                                <button>
+                                    <Link to={{ pathname: `/board/${nextId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.boardId, 'next')}>
+                                        <div className="front">
+                                            다음 글
+                                        </div>
+                                        <div className="back">
+                                            <FontAwesomeIcon icon={rightArrow} style={{color: "white"}}/>
+                                        </div>
+                                    </Link>
+                                </button>
+                                :
+                                null
                         }
                     </span>
                 </div>
@@ -669,6 +745,16 @@ const DetailBoard = (props) => {
                                             }
                                             <span className="comment-downCount"> {comments.commentRecommendDownCnt}</span>
                                         </span>
+                                        <span className="comment-delete">
+                                            {
+                                                `${comments.memberId}` == `${commentLoginMemberId}` ?
+                                                    <button onClick={() => commentDeleteHandler(`${comments.commentId}`)} className="comment-delete-btn">
+                                                        삭제
+                                                    </button>
+                                                    :
+                                                    null
+                                            }
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="comment-content font-list">{comments.commentContent}</div>
@@ -721,8 +807,8 @@ const DetailBoard = (props) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
-export default DetailBoard;
+export default BoardDetail;

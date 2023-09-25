@@ -8,12 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoardUpdateRequestDto {
 
-    private String title;
-    private String content;
+    private String boardCategory;
+    private String boardTab;
+    private String boardTitle;
+    private String boardContent;
 
     @Builder
-    public BoardUpdateRequestDto(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public BoardUpdateRequestDto(String boardCategory, String boardTab, String boardTitle, String boardContent) {
+        this.boardCategory = boardCategory;
+        this.boardTab = boardTab;
+        this.boardTitle = boardTitle;
+        this.boardContent = boardContent;
     }
 }

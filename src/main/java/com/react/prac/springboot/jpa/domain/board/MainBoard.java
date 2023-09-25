@@ -49,6 +49,12 @@ public class MainBoard extends BaseTimeEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int boardCommentCnt;
 
+    @OneToMany(mappedBy = "mainBoard", cascade = CascadeType.REMOVE)
+    private List<BoardComment> boardComments;
+
+    @OneToMany(mappedBy = "mainBoard", cascade = CascadeType.REMOVE)
+    private List<BoardRecommend> boardRecommends;
+
 //    @OneToMany(mappedBy = "mainBoard", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 //    @OrderBy("id asc") // 댓글 정렬
 //    private List<BoardComment> boardComments;
@@ -63,7 +69,9 @@ public class MainBoard extends BaseTimeEntity {
         this.boardAuthor = boardAuthor;
     }
 
-    public void update(String boardTitle, String boardContent) {
+    public void update(String boardCategory, String boardTab, String boardTitle, String boardContent) {
+        this.boardCategory = boardCategory;
+        this.boardTab = boardTab;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
     }

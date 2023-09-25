@@ -38,12 +38,22 @@ public class BoardService {
     }
 
     @Transactional
-    public Long update(Long id, BoardUpdateRequestDto requestDto) {
-        MainBoard posts = mainBoardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        posts.update(requestDto.getTitle(), requestDto.getContent());
+    public Long boardUpdate(Long boardId, BoardUpdateRequestDto requestDto) {
+        MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
 
-        return id;
+        mainBoard.update(requestDto.getBoardCategory(), requestDto.getBoardTab(),
+                         requestDto.getBoardTitle(), requestDto.getBoardContent());
+
+        return boardId;
+    }
+
+    @Transactional
+    public void boardDelete(Long boardId) {
+        MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
+
+        mainBoardRepository.delete(mainBoard);
     }
 
     @Transactional
@@ -59,6 +69,8 @@ public class BoardService {
         if(memberId != null) {
             Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+            boardDetailResponseDto.setLoginMemberId(memberId);
 
             if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "U", member, mainBoard)) {
                 boardDetailResponseDto.setBoardRecommendUpCheck(1);
@@ -244,13 +256,6 @@ public class BoardService {
         return result;
     }
 
-    @Transactional
-    public void delete(Long id) {
-        MainBoard posts = mainBoardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        mainBoardRepository.delete(posts);
-    }
-
     // 추천 기능
     @Transactional
     public boolean recommendCheck(HttpServletRequest request) { // 제거 확인
@@ -402,6 +407,7 @@ public class BoardService {
     @Transactional
     public ResponseDto<?> viewsUp(RecommendRequestDto requestDto) {
         // 중복 방지 추가
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
         try {
             mainBoardRepository.updateByBoardViewsCount(requestDto.getBoardId());
@@ -482,7 +488,6 @@ public class BoardService {
                     .mainBoard(mainBoard)
                     .member(member)
                     .createdDate(createdDate)
-                    .modifiedDate(modifiedDate)
                     .commentIsDeleted(true)
                     .build();
 
@@ -567,8 +572,23 @@ public class BoardService {
         result.put("commentList", commentList);
         result.put("totalPage", totalPage);
         result.put("totalComments", totalComments);
+        result.put("presentLoginMemberId", memberId);
 
         return result;
+    }
+
+    @Transactional
+    public void commentDelete(Long commentId) {
+        BoardComment boardComment = boardCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다. commentId : " + commentId));
+
+        if(boardComment.getCommentChildCnt() > 0) {
+            String deleteMessage = "[삭제된 댓글입니다.]";
+            boardComment.commentUpdate(deleteMessage);
+        } else {
+            boardCommentRepository.delete(boardComment);
+        }
+
     }
 
     @Transactional

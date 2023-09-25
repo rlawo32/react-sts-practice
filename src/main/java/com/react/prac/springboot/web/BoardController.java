@@ -34,11 +34,10 @@ public class BoardController {
         return boardService.boardInsert(requestDto);
     }
 
-    @PutMapping("/api/v1/posts/{id}")
-    public Long update(@PathVariable Long id, @RequestBody BoardUpdateRequestDto requestDto) {
-//        System.out.println(">>>" + title);
-//        System.out.println(">>>" + content);
-        return boardService.update(id, requestDto);
+    @GetMapping("/tableBoardList")
+    public Map<String, Object> tableBoardList(HttpServletRequest request) {
+
+        return boardService.findAllDesc(request);
     }
 
     @PostMapping("/detailBoard/{boardId}")
@@ -47,19 +46,26 @@ public class BoardController {
         return boardService.findByBoardId(boardId);
     }
 
-    @DeleteMapping("/api/v1/posts/{id}")
-    public void delete(@PathVariable Long id) {
-        boardService.delete(id);
+    @PutMapping("/boardUpdate/{boardId}")
+    public Long boardUpdate(@PathVariable Long boardId, @RequestBody BoardUpdateRequestDto requestDto) {
+
+        return boardService.boardUpdate(boardId, requestDto);
     }
 
-    @GetMapping("/tableBoardList")
-    public Map<String, Object> tableBoardList(HttpServletRequest request) {
+    @DeleteMapping("/boardDelete/{boardId}")
+    public void boardDelete(@PathVariable Long boardId) {
 
-        return boardService.findAllDesc(request);
+        boardService.boardDelete(boardId);
     }
+
+    @DeleteMapping("/commentDelete/{commentId}")
+    public void delete(@PathVariable Long commentId) {
+
+        boardService.commentDelete(commentId);
+    }
+
 
     // 추천 기능
-
     @GetMapping("/recommendCheck")
     public boolean recommendCheck(HttpServletRequest request) {
 

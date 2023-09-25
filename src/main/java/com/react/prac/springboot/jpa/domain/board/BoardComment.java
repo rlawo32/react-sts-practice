@@ -56,13 +56,12 @@ public class BoardComment {
     @JoinColumn(name = "member_id")
     private Member member; // 댓글 작성자 id
 
+    @OneToMany(mappedBy = "boardComment", cascade = CascadeType.REMOVE)
+    private List<BoardRecommend> boardRecommends;
+
     @Column(nullable = false)
     @CreatedDate
     private String createdDate; // 댓글 생성 일자
-
-    @Column(nullable = false)
-    @LastModifiedDate
-    private String modifiedDate; // 댓글 수정 일자
 
     @ColumnDefault("FALSE")
     @Column(nullable = false)
@@ -84,7 +83,7 @@ public class BoardComment {
     @Builder
     public BoardComment(Long commentParentId, Long commentTargetId, Long commentNestedId, Long commentNestedLevel,
                         String commentContent, String commentNickname, MainBoard mainBoard, Member member,
-                        String createdDate, String modifiedDate, Boolean commentIsDeleted) {
+                        String createdDate, Boolean commentIsDeleted) {
         this.commentParentId = commentParentId;
         this.commentTargetId = commentTargetId;
         this.commentNestedId = commentNestedId;
@@ -94,7 +93,10 @@ public class BoardComment {
         this.mainBoard = mainBoard;
         this.member = member;
         this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
         this.commentIsDeleted = commentIsDeleted;
+    }
+
+    public void commentUpdate(String commentContent) {
+        this.commentContent = commentContent;
     }
 }

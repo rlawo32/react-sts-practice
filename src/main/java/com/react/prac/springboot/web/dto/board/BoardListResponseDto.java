@@ -16,6 +16,7 @@ public class BoardListResponseDto {
     private String boardTitle;
     private String boardContent;
     private String boardAuthor;
+    private Long boardAuthorId;
     private int boardRecommendUpCnt;
     private int boardRecommendDownCnt;
     private int boardViewsCnt;
@@ -29,6 +30,7 @@ public class BoardListResponseDto {
         this.boardTitle = mainBoard.getBoardTitle();
         this.boardContent = mainBoard.getBoardContent();
         this.boardAuthor = mainBoard.getBoardAuthor();
+        this.boardAuthorId = mainBoard.getBoardAuthorId();
         this.boardRecommendUpCnt = mainBoard.getBoardRecommendUpCnt();
         this.boardRecommendDownCnt = mainBoard.getBoardRecommendDownCnt();
         this.boardViewsCnt = mainBoard.getBoardViewsCnt();

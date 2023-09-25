@@ -1,0 +1,161 @@
+
+.write-body {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+
+  @font-face {
+    font-family: 'KCCChassam';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCChassam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  font-family: 'KCCChassam';
+
+  .write-view {
+    margin: 150px auto 200px;
+    height: 1020px;
+    width: 1000px;
+    border: 2px solid #51585e;
+    border-radius: 10px;
+    background: radial-gradient(
+
+                    rgba(60, 60, 60, 0.7),
+                    rgba(20, 20, 30, 0.9) 70%
+    );
+
+    h3 {
+      margin-top: 50px;
+    }
+
+    .write-header {
+      display: flex;
+      height: 90px;
+      width: 700px;
+      margin: 50px auto 0;
+
+      select {
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        height: 50px;
+        width: 345px;
+
+        background-color: #343a40;
+        font-size: 23px;
+      }
+
+      .write-category {
+        flex: 1;
+        height: 50px;
+        width: 345px;
+
+        .write-guide {
+          margin-left: 10px;
+          text-align: left;
+
+          font-size: 18px;
+        }
+      }
+
+      .write-tab {
+        flex: 1;
+        height: 50px;
+        width: 320px;
+
+        .write-guide {
+          margin-left: 10px;
+          text-align: left;
+
+          font-size: 18px;
+        }
+      }
+    }
+
+
+    .write-title {
+      margin: 0 auto 0;
+      width: 700px;
+
+      input {
+        border: none;
+        border-radius: 10px;
+        height: 50px;
+        width: 700px;
+        padding: 10px;
+
+        background-color: #343a40;
+        font-size: 23px;
+      }
+
+      .write-guide {
+        margin-left: 10px;
+        text-align: left;
+
+        font-size: 18px;
+      }
+
+    }
+
+    .write-content {
+      margin: 30px auto 0;
+      width: 700px;
+
+      .write-guide {
+        margin-left: 10px;
+        text-align: left;
+
+        font-size: 18px;
+      }
+
+      textarea {
+        border: none;
+        border-radius: 10px;
+        height: 500px;
+        width: 700px;
+        margin-top: 5px;
+        padding: 10px;
+
+        background-color: #343a40;
+        font-size: 23px;
+      }
+    }
+
+    .on-submit {
+      display: flex;
+      margin: 10px auto 0;
+      width: 700px;
+
+      button {
+        border: none;
+        border-radius: 15px;
+        height: 50px;
+        width: 120px;
+        padding: 10px;
+
+        background-color: #343a40;
+        font-size: 23px;
+      }
+
+      .on-cancel {
+        text-align: left;
+
+      }
+
+      .on-preview {
+        flex: 1;
+        text-align: left;
+        margin-left: 10px;
+
+      }
+
+      .on-write {
+        flex: 1;
+        text-align: right;
+
+      }
+
+    }
+  }
+
+}

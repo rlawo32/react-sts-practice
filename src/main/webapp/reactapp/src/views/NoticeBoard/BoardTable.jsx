@@ -2,44 +2,20 @@ import {Link, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import AppBarNavigation from "../Navigation/HeaderNavigation";
-import './MainBoard.scss';
+import './BoardMain.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
 import cookie from "react-cookies";
 
-const TableBoard = (props) => {
+const BoardTable = (props) => {
     const navigate = useNavigate();
 
     const [isLoginCheck, setIsLoginCheck] = useState(false);
 
-    const subTab_name = [
-        {
-            key: 'T0',
-            value: '전체'
-        },
-        {
-            key: 'T1',
-            value: '화제'
-        },
-        {
-            key: 'T2',
-            value: '정보'
-        },
-        {
-            key: 'T3',
-            value: '오류'
-        },
-        {
-            key: 'T4',
-            value: '사진/동영상'
-        },
-        {
-            key: 'T5',
-            value: '팁과 노하우'
-        }
-        ];
+
     const category_name = props.category;
-    const [currentCategoryTab, clickCategoryTab] = useState(props.sey);
+    const subTab_name = props.subTab;
+    const [currentCategoryTab, clickCategoryTab] = useState(category_name[props.id].key);
     const [currentSubTab, clickSubTab] = useState(subTab_name[0].key);
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
@@ -53,6 +29,7 @@ const TableBoard = (props) => {
         boardTitle: '',
         boardContent: '',
         boardAuthor: '',
+        boardAuthorId: '',
         boardRecommendUpCnt: '',
         boardRecommendDownCnt: '',
         boardViewsCnt: '',
@@ -65,7 +42,7 @@ const TableBoard = (props) => {
         recordPerPage: 10,
         page: pageNo,
         pagePerBlock: 10,
-        pageCategory: props.sey,
+        pageCategory: currentCategoryTab,
         pageSort: currentSubTab
     }
 
@@ -96,15 +73,14 @@ const TableBoard = (props) => {
             setIsLoginCheck(false);
         }
 
-    }, [props.sey, pageNo, currentSubTab, isLoginCheck]);
+    }, [pageNo, currentCategoryTab, currentSubTab, isLoginCheck]);
 
-    const changeDetailBoard = async (itemID) => {
-        const detailBoardId = itemID;
-        props.changeBoardId(detailBoardId);
+    const changeDetailBoard = async (changeBoardId, changeAuthorId) => {
+        props.changeBoardId(changeBoardId);
+        props.changeBoardAuthorId(changeAuthorId);
 
         let viewsBody =  {
-            boardId: detailBoardId,
-            memberId: 9999
+            boardId: changeBoardId
         }
 
         await axios({
@@ -208,7 +184,8 @@ const TableBoard = (props) => {
                                         { `${boards.boardTab}` === 'T4' && <td>사진/동영상</td> }
                                         { `${boards.boardTab}` === 'T5' && <td>팁과 노하우</td> }
                                         <td>
-                                            <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} onClick={() => changeDetailBoard(boards.boardId)} style={{textDecoration: 'none', color: 'white'}}>
+                                            <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }}
+                                                  onClick={() => changeDetailBoard(boards.boardId, boards.boardAuthorId)} style={{textDecoration: 'none', color: 'white'}}>
                                                 {boards.boardTitle}
                                             </Link>
                                         </td>
@@ -241,4 +218,4 @@ const TableBoard = (props) => {
     )
 }
 
-export default TableBoard;
+export default BoardTable;

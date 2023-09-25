@@ -19,6 +19,7 @@ public class BoardDetailResponseDto {
     private int boardViewsCnt;
     private int boardRecommendUpCheck; // 0 = false, 1 = true
     private int boardRecommendDownCheck; // 0 = false, 1 = true
+    private Long loginMemberId;
     // private List<CommentResponseDto> boardComments;
 
     public BoardDetailResponseDto(MainBoard mainBoard) {
