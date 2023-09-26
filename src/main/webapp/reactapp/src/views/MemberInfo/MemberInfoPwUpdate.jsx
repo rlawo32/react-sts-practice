@@ -111,8 +111,14 @@ const MemberInfoPwUpdate = (props) => {
                 url: "member/passwordUpdate",
                 params: {changePassword: memberChangePw}
             }).then((res) => {
-                window.alert("변경이 완료되었습니다람쥐");
-                navigate(-1);
+                const result = res.data.result;
+
+                if(result) {
+                    window.alert("변경이 완료되었습니다.");
+                    navigate(-1);
+                } else {
+                    window.alert("비밀번호 변경에 실패하였습니다.");
+                }
             })
         } else {
             if(!isPresentPwChkEffect) {

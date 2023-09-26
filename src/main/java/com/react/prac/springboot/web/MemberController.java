@@ -101,9 +101,11 @@ public class MemberController {
     }
 
     @PutMapping("/passwordUpdate")
-    public Long passwordUpdate(HttpServletRequest request) {
+    public ResponseDto<?> passwordUpdate(HttpServletRequest request) {
 
-        return memberService.passwordUpdate(request);
+        ResponseDto<?> result = memberService.passwordUpdate(request);
+
+        return result;
     }
 
     @PutMapping("/memberSecession")

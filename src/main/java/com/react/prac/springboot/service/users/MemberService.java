@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,11 +61,20 @@ public class MemberService {
 
     @Transactional
     public ResponseDto<?> signUp(MemberSignUpRequestDto requestDto) {
+
         String memberEmail = requestDto.getMemberEmail();
 
         try {
             if(memberRepository.existsByMemberEmail(memberEmail)) {
-                return ResponseDto.setFailed("Existed Email!");
+
+                Member member = memberRepository.findByMemberEmail(memberEmail)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. Email : " + memberEmail));
+
+                if(member.getMemberSecessionYn().equals("Y")) {
+                    return ResponseDto.setFailed("This Withdraw Member Email!");
+                } else {
+                    return ResponseDto.setFailed("Existed Email!");
+                }
             } else {
                 memberRepository.save(requestDto.toMember(passwordEncoder));
             }
@@ -261,27 +271,35 @@ public class MemberService {
     }
 
     @Transactional
-    public Long passwordUpdate(HttpServletRequest request) {
+    public ResponseDto<?> passwordUpdate(HttpServletRequest request) {
 
         String memberEmail = request.getParameter("memberEmail");
         Long memberId = 0L;
 
-        if(memberEmail != null) {
-            Member member = memberRepository.findByMemberEmail(memberEmail)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. email : " + memberEmail));
+        try {
+            if(memberEmail != null) {
+                Member member = memberRepository.findByMemberEmail(memberEmail)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. email : " + memberEmail));
 
-            memberId = member.getId();
-            member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
-        } else {
-            memberId = SecurityUtil.getCurrentMemberId();
+                if(member.getMemberSecessionYn().equals("Y")) {
+                    return ResponseDto.setFailed("This Withdraw Member!!");
+                } else {
+                    memberId = member.getId();
+                    member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
+                }
+            } else {
+                memberId = SecurityUtil.getCurrentMemberId();
 
-            Member member = memberRepository.findById(memberId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다."));
+                Member member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다."));
 
-            member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
+                member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
+            }
+        } catch(Exception e) {
+            return ResponseDto.setFailed("DataBase Error!!");
         }
 
-        return memberId;
+        return ResponseDto.setSuccess("Password Change Success!!", memberId);
     }
 
     @Transactional

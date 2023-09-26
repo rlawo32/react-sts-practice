@@ -210,13 +210,15 @@ const FindPasswordView = () => {
                 url: "member/passwordUpdate",
                 params: {memberEmail: memberEmail, changePassword: memberPassword}
             }).then((res) => {
-                alert("비밀번호 재설정에 성공하였습니다. \n" +
-                    "인증에 사용한 이메일과 변경한 비밀번호로 로그인하시길 바랍니다.");
-                navigate(-1);
-            }).catch((res) => {
-                alert("가입되어 있지 않은 이메일입니다. \n" +
-                    "회원가입을 진행해주시길 바랍니다.");
-                customAlert();
+                const result = res.data.result;
+
+                if(result) {
+                    alert("비밀번호 재설정에 성공하였습니다.\n인증에 사용한 이메일과 변경한 비밀번호로 로그인하시길 바랍니다.");
+                    navigate(-1);
+                } else {
+                    alert("가입되어 있지 않은 이메일입니다.\n회원가입을 진행해주시길 바랍니다.");
+                    customAlert();
+                }
             })
         } else {
             if(!isMemberPasswordEffect) {
