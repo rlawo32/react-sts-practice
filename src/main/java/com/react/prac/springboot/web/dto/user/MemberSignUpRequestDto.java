@@ -45,6 +45,7 @@ public class MemberSignUpRequestDto {
                 .memberPw(passwordEncoder.encode(memberPw))
                 .memberNickname(memberNickname)
                 .memberBirth(memberBirth)
+                .memberSecessionYn("N")
                 .provider("")
                 .picture("")
                 .build();

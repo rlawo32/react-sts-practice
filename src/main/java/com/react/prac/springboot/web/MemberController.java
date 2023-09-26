@@ -94,6 +94,26 @@ public class MemberController {
         return result;
     }
 
+    @PutMapping("/memberUpdate")
+    public Long memberUpdate(HttpServletRequest request) {
+
+        return memberService.memberUpdate(request);
+    }
+
+    @PutMapping("/passwordUpdate")
+    public Long passwordUpdate(HttpServletRequest request) {
+
+        return memberService.passwordUpdate(request);
+    }
+
+    @PutMapping("/memberSecession")
+    public ResponseDto<?> passwordUpdate(@RequestBody MemberSignInRequestDto requestDto) {
+
+        ResponseDto<?> result = memberService.memberSecession(requestDto);
+
+        return result;
+    }
+
     @PostMapping("/imageUpload")
     public ResponseDto<?> imageUpload(MultipartFile multipartFile) {
 
@@ -159,19 +179,6 @@ public class MemberController {
 
         return null;
     }
-
-    @PutMapping("/memberUpdate")
-    public Long memberUpdate(HttpServletRequest request) {
-
-        return memberService.memberUpdate(request);
-    }
-
-    @PutMapping("/passwordUpdate")
-    public Long passwordUpdate(HttpServletRequest request) {
-
-        return memberService.passwordUpdate(request);
-    }
-
 
     @GetMapping("/memberLog")
     public Map<String, Object> findMemberLog(HttpServletRequest request) {

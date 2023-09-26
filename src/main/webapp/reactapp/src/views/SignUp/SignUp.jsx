@@ -47,7 +47,6 @@ const SignUp = () => {
     const [isMemberBirthEffect, setIsMemberBirthEffect] = useState(true);
 
     const [isMemberEmailConfirm, setIsMemberEmailConfirm] = useState(false);
-    const [isMemberEmailDuplicationConfirm, setIsMemberEmailDuplicationConfirm] = useState(false);
     const [isMemberEmailCheckConfirm, setIsMemberEmailCheckConfirm] = useState(false);
 
     const signUpEmailHandler = (e)=> {
@@ -74,6 +73,7 @@ const SignUp = () => {
 
     // 이메일 중복 확인
     const emailDuplicationHandler = async () => {
+
         const emailDuplicationRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if(emailDuplicationRegex.test(memberEmail)) {
             await axios({
@@ -81,14 +81,12 @@ const SignUp = () => {
                 url: "/member/signUpDuplicationChk",
                 params: {memberEmail: memberEmail}
             }).then((result) => {
-                console.log(result.data);
                 if(result.data) {
                     setMemberEmailMessage("이미 사용중인 이메일 ID 입니다.");
-                    setIsMemberEmailDuplicationConfirm(false);
                     setIsMemberEmailEffect(false);
                 } else {
-                    setIsMemberEmailDuplicationConfirm(true);
                     setIsMemberEmailEffect(true);
+                    emailCheckSendHandler();
                 }
             }).catch(error => {
                 console.log("에러내용:", JSON.stringify(error));
@@ -103,7 +101,7 @@ const SignUp = () => {
 
     const emailCheckSendHandler = async () => {
 
-        if(isMemberEmailConfirm == true && isMemberEmailDuplicationConfirm == true) {
+        if(isMemberEmailConfirm == true) {
             alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
             setIsMemberEmailEffect(true);
             setIsMemberEmailHideEffect(true);
@@ -490,13 +488,13 @@ const SignUp = () => {
                         <div className="email-enter">
                             <span className="email-input">
                                 <FontAwesomeIcon icon={emailIcon} className="email-icon"/>
-                                <input type="text" value={memberEmail} onChange={signUpEmailHandler} onBlur={emailDuplicationHandler}
-                                       ref={emailRef} placeholder="이메일 주소" style={ isMemberEmailEffect ? {border: 'none'} : {border: '2px solid red'} } />
+                                <input type="text" value={memberEmail} onChange={signUpEmailHandler} ref={emailRef} placeholder="이메일 주소"
+                                       style={ isMemberEmailEffect ? {border: 'none'} : {border: '2px solid red'} } />
                             </span>
                             <span className="email-btn">
                                 {
                                     isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>전송</button>
-                                        : <button onClick={emailCheckSendHandler}>전송</button>
+                                        : <button onClick={emailDuplicationHandler}>전송</button>
                                 }
                             </span>
                         </div>

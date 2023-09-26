@@ -15,7 +15,6 @@ const BoardTable = (props) => {
 
     const category_name = props.category;
     const subTab_name = props.subTab;
-    const [currentCategoryTab, clickCategoryTab] = useState(category_name[props.id].key);
     const [currentSubTab, clickSubTab] = useState(subTab_name[0].key);
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
@@ -42,7 +41,7 @@ const BoardTable = (props) => {
         recordPerPage: 10,
         page: pageNo,
         pagePerBlock: 10,
-        pageCategory: currentCategoryTab,
+        pageCategory: props.keys,
         pageSort: currentSubTab
     }
 
@@ -73,7 +72,7 @@ const BoardTable = (props) => {
             setIsLoginCheck(false);
         }
 
-    }, [pageNo, currentCategoryTab, currentSubTab, isLoginCheck]);
+    }, [pageNo, props.keys, currentSubTab, isLoginCheck]);
 
     const changeDetailBoard = async (changeBoardId, changeAuthorId) => {
         props.changeBoardId(changeBoardId);
@@ -112,9 +111,8 @@ const BoardTable = (props) => {
 
     const selectSubTabHandler = (subTabKey) => {
         if(subTabKey == 'T0') {
-            clickSubTab("");
             setSearchText("");
-            // navigate("/board");
+            clickSubTab(subTabKey);
         } else {
             clickSubTab(subTabKey);
         }
@@ -130,13 +128,9 @@ const BoardTable = (props) => {
 
 
     return (
-        <>
+        <div>
             <AppBarNavigation />
-            {/*<ul>*/}
-            {/*    {subTab_name.map((elo) => (*/}
-            {/*        <li key={elo.id} onClick={() => selectSubTabHandler(elo.id)}>{elo.name[elo.id]}</li>*/}
-            {/*    ))}*/}
-            {/*</ul>*/}
+
             <div className="main-board">
                 <div className="sub_tab">
                     <ul>
@@ -149,6 +143,7 @@ const BoardTable = (props) => {
                     {props.value}
                 </div>
                 <div className="board-table">
+
                     <div className="board-header">
                         <div className="board-search">
                             <input className="search-box" type="text" placeholder="입력해주세요." onChange={searchTextHandler}/>
@@ -162,6 +157,7 @@ const BoardTable = (props) => {
                             </button>
                         </div>
                     </div>
+
                     <div className="table-view">
                         <table>
                             <thead className="table-header">
@@ -199,6 +195,7 @@ const BoardTable = (props) => {
                             </tbody>
                         </table>
                     </div>
+
                     <div className="board-footer">
                         <div className="board-write">
                             <Link to="/save" state={{subTab_name, category_name}} style={ isLoginCheck ? {} : {visibility: "hidden"} }>
@@ -211,9 +208,12 @@ const BoardTable = (props) => {
                             </ul>
                         </div>
                     </div>
+
                 </div>
+
             </div>
-        </>
+
+        </div>
 
     )
 }

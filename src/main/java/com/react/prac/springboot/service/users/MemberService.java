@@ -47,9 +47,11 @@ public class MemberService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberRepository memberRepository;
+    private final MemberWithdrawRepository memberWithdrawRepository;
     private final MemberLogRepository memberLogRepository;
     private final MemberImageRepository memberImageRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -118,65 +120,67 @@ public class MemberService {
         String memberPw = requestDto.getMemberPw();
         TokenDto tokenDto = new TokenDto();
 
-        MemberLog memberLog = new MemberLog();
-        Member member = new Member();
-
         try {
-            member = memberRepository.findByMemberEmail(memberEmail)
+            Member member = memberRepository.findByMemberEmail(memberEmail)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. id : " + memberEmail));
-            
-            boolean matchPassword = passwordEncoder.matches(memberPw, member.getMemberPw());
 
-            if(!matchPassword) {
-                memberLog = MemberLog.builder()
-                        .member(member)
-                        .logMemberEmail(memberEmail)
-                        .logLoginSuccess("F")
-                        .logLoginReason("비밀번호 인증 실패")
-                        .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
-                        .build();
+            MemberLog memberLog = new MemberLog();
 
-                memberLogRepository.save(memberLog);
-                
-                return ResponseDto.setFailed("Sign In Information Does Not Match");
+            if(member.getMemberSecessionYn().equals("Y")) {
+                return ResponseDto.setFailed("This User Has Withdrawn!");
             } else {
-                // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
-                UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
+                boolean matchPassword = passwordEncoder.matches(memberPw, member.getMemberPw());
 
-                // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-                //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
-                Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-                if(authentication.isAuthenticated()) {
-                    String username = authentication.getName();
-                    Long memberId = Long.valueOf(username);
-
-                    member = memberRepository.findById(memberId)
-                            .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
-
+                if(!matchPassword) {
                     memberLog = MemberLog.builder()
                             .member(member)
                             .logMemberEmail(memberEmail)
-                            .logLoginSuccess("S")
-                            .logLoginReason("JWT 인증 성공")
+                            .logLoginSuccess("F")
+                            .logLoginReason("비밀번호 인증 실패")
                             .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
                             .build();
 
                     memberLogRepository.save(memberLog);
+
+                    return ResponseDto.setFailed("Sign In Information Does Not Match");
+                } else {
+                    // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
+                    UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
+
+                    // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
+                    //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
+                    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+                    if(authentication.isAuthenticated()) {
+                        String username = authentication.getName();
+                        Long memberId = Long.valueOf(username);
+
+                        member = memberRepository.findById(memberId)
+                                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+                        memberLog = MemberLog.builder()
+                                .member(member)
+                                .logMemberEmail(memberEmail)
+                                .logLoginSuccess("S")
+                                .logLoginReason("JWT 인증 성공")
+                                .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
+                                .build();
+
+                        memberLogRepository.save(memberLog);
+                    }
+
+                    // 3. 인증 정보를 기반으로 JWT 토큰 생성
+                    tokenDto = tokenProvider.generateTokenDto(authentication);
+
+                    // 4. RefreshToken 저장
+                    RefreshToken refreshToken = RefreshToken.builder()
+                            .key(authentication.getName())
+                            .value(tokenDto.getRefreshToken())
+                            .build();
+
+                    refreshTokenRepository.save(refreshToken);
                 }
-
-                // 3. 인증 정보를 기반으로 JWT 토큰 생성
-                tokenDto = tokenProvider.generateTokenDto(authentication);
-
-                // 4. RefreshToken 저장
-                RefreshToken refreshToken = RefreshToken.builder()
-                        .key(authentication.getName())
-                        .value(tokenDto.getRefreshToken())
-                        .build();
-
-                refreshTokenRepository.save(refreshToken);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("Data Base Error!");
@@ -233,11 +237,9 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자의 로그인 로그가 없습니다. id : " + memberId));
 
         String recentLogDate = memberLog.getCreatedDate();
-
         System.out.println("최신 로그인 확인 : " + recentLogDate);
 
         MemberInfoResponseDto memberInfoResponseDto = new MemberInfoResponseDto(member);
-
         memberInfoResponseDto.setRecentLogDate(recentLogDate);
 
         return ResponseDto.setSuccess("memberInfo Success", memberInfoResponseDto);
@@ -265,15 +267,12 @@ public class MemberService {
         Long memberId = 0L;
 
         if(memberEmail != null) {
-
             Member member = memberRepository.findByMemberEmail(memberEmail)
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. email : " + memberEmail));
 
             memberId = member.getId();
             member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
-
         } else {
-
             memberId = SecurityUtil.getCurrentMemberId();
 
             Member member = memberRepository.findById(memberId)
@@ -282,8 +281,46 @@ public class MemberService {
             member.passwordUpdate(passwordEncoder.encode(request.getParameter("changePassword")));
         }
 
-
         return memberId;
+    }
+
+    @Transactional
+    public ResponseDto<?> memberSecession(MemberSignInRequestDto requestDto) {
+
+        String memberEmail = requestDto.getMemberEmail();
+        String memberPassword = requestDto.getMemberPw();
+
+        try {
+            Member member = memberRepository.findByMemberEmail(memberEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없습니다. email : " + memberEmail));
+
+            boolean matchPassword = passwordEncoder.matches(memberPassword, member.getMemberPw());
+
+            System.out.println("매칭 패스워드 : " + matchPassword);
+
+            if(matchPassword) {
+                member.memberSecession("Y");
+
+                MemberWithdraw memberWithdraw = MemberWithdraw.builder()
+                        .memberId(member.getId())
+                        .memberEmail(member.getMemberEmail())
+                        .memberNickname(member.getMemberNickname())
+                        .build();
+
+                memberWithdrawRepository.save(memberWithdraw);
+
+                RefreshToken refreshToken = refreshTokenRepository.findByKey(String.valueOf(member.getId()))
+                        .orElseThrow(() -> new RuntimeException("해당 사용자의 토큰이 존재하지 않습니다. id : " + member.getId()));
+
+                refreshTokenRepository.delete(refreshToken);
+            } else {
+                return ResponseDto.setFailed("Unmatched Password!");
+            }
+        } catch(Exception e) {
+            return ResponseDto.setFailed("Data Base Error!");
+        }
+
+        return ResponseDto.setSuccess("Secession Success!", null);
     }
 
     @Transactional
@@ -291,20 +328,17 @@ public class MemberService {
 
         //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
         UUID uuid = UUID.randomUUID();
-
         String imageFileName = uuid + "_" + multipartFile.getOriginalFilename();
 
         System.out.println("이미지 파일 이름 확인 : " + imageFileName);
 
         // 디렉토리 경로
         Path dir = Paths.get(uploadFolder);
-
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         System.out.println("이미지 파일 PATH 확인 : " + imageFilePath);
 
         try {
-
             if(!Files.exists(dir)) {
                 Files.createDirectory(dir);
             }
@@ -337,21 +371,17 @@ public class MemberService {
     public ResponseDto<?> memberImageDelete() {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
         String picture = member.getPicture();
-
         Path imageFilePath = Paths.get(uploadFolder + picture);
 
         try {
-
             Files.deleteIfExists(imageFilePath);
 
             memberImageRepository.deleteByMember(memberId);
             memberRepository.updateByMemberPicture(memberId, "");
-
         } catch(IOException i) {
             i.printStackTrace();
             return ResponseDto.setFailed("Upload Error!");
@@ -367,7 +397,6 @@ public class MemberService {
     public Map<String, Object> memberLog(HttpServletRequest request) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-
         int recordPerPage = Integer.parseInt(request.getParameter("recordPerPage")); // 한 페이지에 출력할 수
         int page = Integer.parseInt(request.getParameter("page")); // 현재 페이지
 

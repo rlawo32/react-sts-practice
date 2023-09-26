@@ -1,11 +1,15 @@
 package com.react.prac.springboot.jpa.domain.user;
 
 import com.react.prac.springboot.jpa.domain.board.BaseTimeEntity;
+import com.react.prac.springboot.jpa.domain.board.BoardRecommend;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -35,19 +39,26 @@ public class Member extends BaseTimeEntity {
     private String memberBirth;
 
     @Column(nullable = false)
-    private String provider;
+    private String memberSecessionYn;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<MemberLog> memberLogs;
 
     @Column
     private String picture;
 
+    @Column
+    private String provider;
+
     @Builder
     public Member(Role role, String memberEmail, String memberPw, String memberNickname,
-                  String memberBirth, String provider, String picture) {
+                  String memberSecessionYn, String memberBirth, String provider, String picture) {
         this.role = role;
         this.memberEmail = memberEmail;
         this.memberPw = memberPw;
         this.memberNickname = memberNickname;
         this.memberBirth = memberBirth;
+        this.memberSecessionYn = memberSecessionYn;
         this.provider = provider;
         this.picture = picture;
     }
@@ -64,6 +75,13 @@ public class Member extends BaseTimeEntity {
 
         return this;
     }
+
+    public Member memberSecession(String memberSecession) {
+        this.memberSecessionYn = memberSecession;
+
+        return this;
+    }
+
 
     public String getRoleKey() {
         return this.role.getKey();

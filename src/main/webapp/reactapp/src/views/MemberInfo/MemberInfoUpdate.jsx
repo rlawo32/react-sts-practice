@@ -37,8 +37,6 @@ const MemberInfoUpdate = (props) => {
 
     const [uploadModal, setUploadModal] = useState(false);
 
-
-
     const nickNameDuplicationChk = async (changeNickname) => {
         await axios({
             method: "GET",

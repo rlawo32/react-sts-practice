@@ -2,8 +2,11 @@ import React, {useEffect, useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import memberDefaultImg from "../../images/ProfileDefault.png";
+import SecessionModal from "./SecessionModal";
 
 const MemberInfoProfile = (props) => {
+
+    const [secessionModal, setSecessionModal] = useState(false);
 
     const profileInfo = props.info;
     const profileImg = props.img;
@@ -60,6 +63,8 @@ const MemberInfoProfile = (props) => {
                 <div className="profile-update">
                     <button onClick={() => props.setData(5)}>프로필 수정</button>
                     <button onClick={() => props.setData(6)}>비밀번호 변경</button>
+                    <button onClick={() => setSecessionModal(true)}>회원 탈퇴</button>
+                    {secessionModal ? <SecessionModal setSecessionModal={setSecessionModal} email={profileInfo.memberEmail}/> : null}
                 </div>
 
             </div>

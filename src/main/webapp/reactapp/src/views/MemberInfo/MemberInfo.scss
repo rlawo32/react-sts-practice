@@ -110,7 +110,7 @@
 
     .profile-update {
       text-decoration: none;
-      padding: 0 0 0 310px;
+      padding: 0 0 0 240px;
 
       button {
         border: none;
@@ -311,7 +311,7 @@
 
     .on-update {
       text-decoration: none;
-      padding: 0 0 0 700px;
+      padding: 0 0 0 680px;
 
       button {
         border: none;
@@ -461,7 +461,7 @@
   }
 }
 
-.modal-view {
+.uploadModal-view {
   width: 300px;
   height: 200px;
 
@@ -473,4 +473,89 @@
   background-color: gray;
   border: 1px solid black;
   border-radius: 8px;
+}
+
+.secessionModal-view {
+  width: 500px;
+  height: 450px;
+
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -75%);
+
+  background: radial-gradient(
+
+    rgba(60, 60, 60, 1),
+    rgba(20, 20, 30, 1) 70%
+  );
+  box-shadow: 1px 1px 25px 0 white;
+
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 25px;
+
+  h3 {
+    margin: 0 auto 30px;
+  }
+
+  p {
+    border: 1px solid red;
+    border-radius: 10px;
+    margin: auto;
+    padding: 15px;
+    width: 370px;
+
+    font-size: 14px;
+    color: #e2e3e5;
+  }
+
+  .secession-input {
+    text-align: right;
+    margin: 0 auto 20px;
+
+    input {
+      border: 1px solid #6c757d;
+      border-radius: 5px;
+      padding: 5px 15px 5px 15px;
+      background-color: #141619;
+      color: white;
+      width: 250px;
+
+      font-size: 20px;
+      margin-top: 5px;
+    }
+
+    .secession-email {
+      margin-top: 35px;
+      height: 60px;
+      width: 370px;
+    }
+
+    .secession-password {
+      height: 60px;
+      width: 370px;
+    }
+
+    .secession-btn {
+      height: 60px;
+      width: 370px;
+
+      button {
+        border: 1px solid #dde0e3;
+        border-radius: 7px;
+        margin: 15px 50px 0 0;
+        height: 40px;
+        width: 200px;
+      }
+    }
+
+    .secession-guide {
+      margin-right: 15px;
+
+      font-size: 18px;
+    }
+
+  }
+
 }

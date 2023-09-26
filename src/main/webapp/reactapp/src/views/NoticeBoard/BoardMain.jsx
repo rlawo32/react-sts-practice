@@ -78,9 +78,9 @@ const BoardMain = () => {
         let tab_data = [];
         for(let i=0; i<category_name.length; i++) {
             tab_data.push({id: i, name: category_name[i].value,
-                view:<BoardTable id={i} value={category_name[i].value} category={category_name}
-                                 subTab={subTab_name} changeBoardId={setDetailBoardId}
-                                 changeBoardAuthorId={setDetailBoardAuthorId}/>});
+                view:<BoardTable keys={category_name[i].key} value={category_name[i].value}
+                                 category={category_name} subTab={subTab_name}
+                                 changeBoardId={setDetailBoardId} changeBoardAuthorId={setDetailBoardAuthorId}/>});
         }
         return tab_data;
     }

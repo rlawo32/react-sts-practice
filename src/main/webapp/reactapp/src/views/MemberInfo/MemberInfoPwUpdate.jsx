@@ -146,7 +146,7 @@ const MemberInfoPwUpdate = (props) => {
             <div className="update-pw-view">
                 <p style={{ fontSize: '16px', textAlign: 'left', marginTop: '40px', marginLeft: '100px'}}>
                     - 비밀번호는 8~16자이내로 영문 대 소문자, 숫자, 특수문자를 조합하여 등록하셔야 합니다. <br/>
-                    &nbsp; 변경된 비밀번호는 바로 반영되어 사용하실 수 있습니다.
+                      &nbsp;&nbsp; 변경된 비밀번호는 바로 반영되어 사용하실 수 있습니다.
                 </p>
 
                 <div className="update-password">

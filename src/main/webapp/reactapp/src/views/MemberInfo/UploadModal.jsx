@@ -39,7 +39,7 @@ const UploadModal = (props) => {
     })
 
     return (
-        <div ref={modalRef} className="modal-view">
+        <div ref={modalRef} className="uploadModal-view">
             <button onClick={() => memberProfileImgRemoveHandler()}>
                 제거
             </button>

@@ -72,6 +72,11 @@ const MemberInfo = () => {
                 id: 6,
                 name: '비밀번호 변경',
                 view: <MemberInfoPwUpdate info={memberInfo} />
+            },
+            {
+                id: 7,
+                name: '회원 탈퇴',
+                view: <MemberInfoPwUpdate info={memberInfo} />
             }
         ];
         return result;
@@ -79,7 +84,7 @@ const MemberInfo = () => {
 
     const pagination = () => {
         let result = [];
-        for (let i=0; i<select_tab().length-2; i++) {
+        for (let i=0; i<select_tab().length-3; i++) {
             result.push(<li key={select_tab()[i].id} onClick={() => selectTabHandler(select_tab()[i].id)}>
                 <button className="list-item">{select_tab()[i].name}</button>
             </li>);

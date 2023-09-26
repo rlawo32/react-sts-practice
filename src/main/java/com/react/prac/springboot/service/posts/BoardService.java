@@ -106,6 +106,7 @@ public class BoardService {
         Long boardAuthorId = SecurityUtil.getCurrentMemberId();
 
         System.out.println("boardAuthorId 확인 : " + boardAuthorId);
+        System.out.println("searchText 확인 : " + searchText);
 
         System.out.println("pageCategory 확인 : " + pageCategory);
         System.out.println("pageSort 확인 : " + pageSort);
