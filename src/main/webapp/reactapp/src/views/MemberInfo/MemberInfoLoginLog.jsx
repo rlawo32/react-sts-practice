@@ -76,21 +76,30 @@ const MemberInfoLoginLog = () => {
                             <td style={{width: "300px"}}>날짜</td>
                         </tr>
                         </thead>
-                        <tbody id="tbody" className="font-custom">
-                        {loginLogList.map((loginLogs, idx) => {
-                            return (
-                                <tr key={loginLogs.logId}>
-                                    <td>{loginLogs.loginLogNo}</td>
-                                    { `${loginLogs.logLoginSuccess}` === 'S' && <td>성공</td> }
-                                    { `${loginLogs.logLoginSuccess}` === 'F' && <td>실패</td> }
-                                    <td>NULL</td>
-                                    <td>{loginLogs.logLoginReason}</td>
-                                    <td>{loginLogs.logLoginDate}</td>
-                                </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
+                        {
+                            loginLogList.length < 1 ?
+                                <tbody id="tbody" className="font-custom">
+                                    <tr>
+                                        <td colSpan={5}>로그인 로그가 없습니다.</td>
+                                    </tr>
+                                </tbody>
+                                :
+                                <tbody id="tbody" className="font-custom">
+                                    {loginLogList.map((loginLogs, idx) => {
+                                        return (
+                                            <tr key={loginLogs.logId}>
+                                                <td>{loginLogs.loginLogNo}</td>
+                                                { `${loginLogs.logLoginSuccess}` === 'S' && <td>성공</td> }
+                                                { `${loginLogs.logLoginSuccess}` === 'F' && <td>실패</td> }
+                                                <td>NULL</td>
+                                                <td>{loginLogs.logLoginReason}</td>
+                                                <td>{loginLogs.logLoginDate}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                        }
+                        </table>
                 </div>
                 <div className="paging-design">
                     <ul>

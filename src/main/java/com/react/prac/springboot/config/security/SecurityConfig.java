@@ -1,9 +1,8 @@
-package com.react.prac.springboot.config.auth;
+package com.react.prac.springboot.config.security;
 
-import com.react.prac.springboot.config.security.JwtAccessDeniedHandler;
-import com.react.prac.springboot.config.security.JwtAuthenticationEntryPoint;
-import com.react.prac.springboot.config.security.JwtSecurityConfig;
-import com.react.prac.springboot.config.security.TokenProvider;
+import com.react.prac.springboot.config.auth.CustomOAuth2UserService;
+import com.react.prac.springboot.config.auth.MyAuthenticationSuccessHandler;
+import com.react.prac.springboot.jpa.domain.user.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -28,6 +26,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CorsConfig corsConfig;
     private final TokenProvider tokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 //    private final TokenService tokenService;
@@ -67,7 +66,12 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new JwtSecurityConfig(tokenProvider))
+
+                .and()
+                .oauth2Login()
+                .successHandler(new MyAuthenticationSuccessHandler(tokenProvider, refreshTokenRepository))
+                .userInfoEndpoint().userService(customOAuth2UserService);
                 //.anyRequest().permitAll()
                 //.requestMatchers("/api/v1/**").hasRole(Role.USER.name())
 
@@ -75,11 +79,8 @@ public class SecurityConfig {
 //                .logout()
 //                .logoutSuccessUrl("/")
 //
-//                .and()
-//                .oauth2Login()
-//                .successHandler(new MyAuthenticationSuccessHandler())
+//
 //                //.defaultSuccessUrl("/oauth/loginInfo", true)
-//                .userInfoEndpoint().userService(customOAuth2UserService);
 
         return httpSecurity.build();
     }

@@ -1,7 +1,6 @@
 package com.react.prac.springboot.service.posts;
 
-import com.react.prac.springboot.config.auth.SecurityConfig;
-import com.react.prac.springboot.config.auth.SecurityUtil;
+import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.jpa.domain.board.*;
 import com.react.prac.springboot.jpa.domain.user.Member;
 import com.react.prac.springboot.jpa.domain.user.MemberRepository;
@@ -10,7 +9,6 @@ import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

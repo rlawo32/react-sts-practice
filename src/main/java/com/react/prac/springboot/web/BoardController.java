@@ -1,6 +1,5 @@
 package com.react.prac.springboot.web;
 
-import com.react.prac.springboot.config.auth.SecurityUtil;
 import com.react.prac.springboot.service.posts.BoardService;
 import com.react.prac.springboot.web.dto.ResponseDto;
 import com.react.prac.springboot.web.dto.board.*;

@@ -1,4 +1,4 @@
-package com.react.prac.springboot.config.auth;
+package com.react.prac.springboot.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

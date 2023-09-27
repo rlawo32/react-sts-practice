@@ -1,6 +1,8 @@
 package com.react.prac.springboot.config.security;
 
+import com.react.prac.springboot.config.auth.dto.OAuth2CustomUser;
 import com.react.prac.springboot.config.security.dto.TokenDto;
+import com.react.prac.springboot.jpa.domain.user.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,16 +15,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,6 +56,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     public TokenDto generateTokenDto(Authentication authentication) {
+
         // 권한들 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -74,20 +75,43 @@ public class TokenProvider implements InitializingBean {
         System.out.println("key 확인 3 : " + key.getFormat());
         System.out.println("key 확인 4 : " + key.toString());
 
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())       // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
-                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
-                .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
-                .compact();
+        String accessToken = "";
+        String refreshToken = "";
 
-        // Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(refreshExprTime)
-                .compact();
+        if(authorities.equals("ROLE_SOCIAL")) {
+            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
+            Object memberId = defaultOAuth2User.getAttributes().get("memberId");
+
+            accessToken = Jwts.builder()
+                    .setSubject((String) memberId)       // payload "sub": "name"
+                    .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
+                    .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                    .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
+                    .compact();
+
+            // Refresh Token 생성
+            refreshToken = Jwts.builder()
+                    .setSubject((String) memberId)
+                    .claim(AUTHORITIES_KEY, authorities)
+                    .signWith(key, SignatureAlgorithm.HS512)
+                    .setExpiration(refreshExprTime)
+                    .compact();
+        } else {
+            accessToken = Jwts.builder()
+                    .setSubject(authentication.getName())       // payload "sub": "name"
+                    .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
+                    .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                    .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
+                    .compact();
+
+            // Refresh Token 생성
+            refreshToken = Jwts.builder()
+                    .setSubject(authentication.getName())
+                    .claim(AUTHORITIES_KEY, authorities)
+                    .signWith(key, SignatureAlgorithm.HS512)
+                    .setExpiration(refreshExprTime)
+                    .compact();
+        }
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)

@@ -8,20 +8,21 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SessionUser {
-    private String name;
     private String email;
-    private String provider;
+    private String name;
     private String picture;
+    private String provider;
 
     public Member toMemeber() {
         return Member.builder()
-                .role(Role.GUEST)
+                .role(Role.SOCIAL)
+                .memberEmail(email)
                 .memberPw("")
                 .memberNickname(name)
                 .memberBirth("")
-                .memberEmail(email)
-                .provider(provider)
+                .memberSecessionYn("N")
                 .picture(picture)
+                .provider(provider)
                 .build();
     }
 }

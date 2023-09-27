@@ -1,6 +1,6 @@
 package com.react.prac.springboot.web;
 
-import com.react.prac.springboot.config.auth.SecurityUtil;
+import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.config.security.dto.TokenDto;
 import com.react.prac.springboot.jpa.domain.user.MemberImage;
 import com.react.prac.springboot.jpa.domain.user.MemberImageRepository;
@@ -12,7 +12,6 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,8 +20,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Base64;
 import java.util.Map;
 
 // @CrossOrigin(originPatterns = "http://localhost:3000")

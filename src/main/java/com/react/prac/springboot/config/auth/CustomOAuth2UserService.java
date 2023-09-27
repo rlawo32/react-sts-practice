@@ -22,49 +22,55 @@ import java.util.Map;
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final MemberRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> service = new DefaultOAuth2UserService();
+        OAuth2User oAuth2User = service.loadUser(userRequest); // OAuth2 정보를 가져옴
+
+        Map<String, Object> originAttributes = oAuth2User.getAttributes(); // OAuth2User의 attribute
+
+        // OAuth2 서비스 ID(google, kakao, naver)
+        String registrationId = userRequest.getClientRegistration().getRegistrationId(); // 소셜 정보를 가져옴
+
+        // OAuth를 지원하는 소셜 서비스들간의 약속(google=sub, naver=id ...)
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
-                .getUserInfoEndpoint().getUserNameAttributeName();
+                .getUserInfoEndpoint().getUserNameAttributeName(); // 해당 소셜 서비스에서 유니크한 id값을 전달
 
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        SessionUser sessionUser = OAuth2Attributes.extract(registrationId, attributes);
+        SessionUser sessionUser = OAuth2Attributes.extract(registrationId, originAttributes);
         sessionUser.setProvider(registrationId);
 
-        Member user = saveOrUpdate(sessionUser);
+        Member member = saveOrUpdate(sessionUser);
 
-        Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName, sessionUser, registrationId);
+        Map<String, Object> customAttribute = customAttribute(originAttributes, userNameAttributeName, sessionUser, member.getId(), registrationId);
 
         return new DefaultOAuth2User(
                 Collections.singleton(
-                        new SimpleGrantedAuthority(user.getRoleKey())),
+                        new SimpleGrantedAuthority(member.getRoleKey())),
                 customAttribute,
                 userNameAttributeName
         );
     }
 
-    private Map customAttribute(Map attributes, String userNameAttributeName, SessionUser sessionUser, String registrationId) {
+    private Map customAttribute(Map attributes, String userNameAttributeName, SessionUser sessionUser, Long memberId, String registrationId) {
         Map<String, Object> customAttribute = new LinkedHashMap<>();
         customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
-        customAttribute.put("provider", registrationId);
-        customAttribute.put("userName", sessionUser.getName());
-        customAttribute.put("userEmail", sessionUser.getEmail());
+        customAttribute.put("memberId", memberId);
+        customAttribute.put("memberNickname", sessionUser.getName());
+        customAttribute.put("memberEmail", sessionUser.getEmail());
         customAttribute.put("picture", sessionUser.getPicture());
-        return customAttribute;
+        customAttribute.put("provider", registrationId);
 
+        return customAttribute;
     }
 
     private Member saveOrUpdate(SessionUser sessionUser) {
-        Member user = userRepository.findByMemberEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider())
+        Member member = memberRepository.findByMemberEmail(sessionUser.getEmail())
                 .map(entity -> entity.infoUpdate(sessionUser.getName(), sessionUser.getPicture()))
                 .orElse(sessionUser.toMemeber());
 
-        return userRepository.save(user);
+        return memberRepository.save(member);
     }
 }

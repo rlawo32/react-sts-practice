@@ -9,6 +9,7 @@ import com.react.prac.springboot.web.dto.user.MemberSignInRequestDto;
 import com.react.prac.springboot.web.dto.user.MemberSignUpRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -55,6 +56,16 @@ public class AuthController {
         System.out.println(requestDto.getRefreshToken());
 
         ResponseDto<TokenDto> result = memberService.reissue(requestDto);
+
+        return result;
+    }
+
+    @GetMapping("/oauth2/{socialLoginType}")
+    public ResponseDto<?> googleLogin(@PathVariable("socialLoginType") String oauthType) {
+
+        System.out.println(oauthType);
+
+        ResponseDto<?> result = ResponseDto.setSuccess("Test !!", null);
 
         return result;
     }

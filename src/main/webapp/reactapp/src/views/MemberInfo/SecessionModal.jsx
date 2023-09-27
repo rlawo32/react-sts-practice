@@ -22,25 +22,30 @@ const SecessionModal = (props) => {
             memberPw: memberPassword
         }
 
-        if(window.confirm('정말 회원탈퇴를 진행하시겠습니까?') == true) {
-            await axios({
-                method: 'PUT',
-                url: 'member/memberSecession',
-                data: JSON.stringify(memberData),
-                headers: {'Content-type': 'application/json'}
-            }).then((res) => {
-                const result = res.data.result;
+        if(memberPassword.length < 1) {
+            alert('비밀번호를 입력해주시길 바랍니다.');
+        } else {
 
-                if(result) {
-                    alert('탈퇴가 완료되었습니다.\n계정에서 로그아웃이 됩니다.');
+            if(window.confirm('정말 회원탈퇴를 진행하시겠습니까?') == true) {
+                await axios({
+                    method: 'PUT',
+                    url: 'member/memberSecession',
+                    data: JSON.stringify(memberData),
+                    headers: {'Content-type': 'application/json'}
+                }).then((res) => {
+                    const result = res.data.result;
 
-                    cookie.remove('refreshToken');
-                    navigate("/");
-                    window.location.reload();
-                } else {
-                    alert('현재 비밀번호가 일치하지 않습니다.');
-                }
-            })
+                    if(result) {
+                        alert('탈퇴가 완료되었습니다.\n계정에서 로그아웃이 됩니다.');
+
+                        cookie.remove('refreshToken');
+                        navigate("/");
+                        window.location.reload();
+                    } else {
+                        alert('현재 비밀번호가 일치하지 않습니다.');
+                    }
+                })
+            }
         }
     }
 

@@ -9,9 +9,16 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faComment as kakaoIcon, faEye as passwordSeeIcon} from "@fortawesome/free-solid-svg-icons"
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
 
-const googleOauthLogin = () => {
-    window.location.href = `http://localhost:8080/oauth2/authorization/google`;
+const googleOauthLogin = async () => {
+    // window.location.href = `http://localhost:8080/oauth2/authorization/google`;
     // window.location.href = `/login/oauth2/code/google`;
+
+    await axios({
+        method: "GET",
+        url: "/auth/oauth2/" + "google"
+    }).then((response) => {
+
+    })
 }
 
 const SignIn = () => {
@@ -122,7 +129,7 @@ const SignIn = () => {
     }
 
     const onLoginSuccess = (response) => {
-        const { grantType, accessToken, refreshToken, accessTokenExpiresIn} = response.data;
+        const { grantType, accessToken, refreshToken, accessTokenExpiresIn } = response.data;
 
         const expires = new Date(accessTokenExpiresIn);
 

@@ -40,13 +40,15 @@ const UploadModal = (props) => {
 
     return (
         <div ref={modalRef} className="uploadModal-view">
-            <button onClick={() => memberProfileImgRemoveHandler()}>
-                제거
-            </button>
-            <form>
+            <div className="upload-delete">
+                <button onClick={() => memberProfileImgRemoveHandler()}>
+                    이미지 삭제
+                </button>
+            </div>
+            <form className="upload-update">
                 <input type="file" id="profileImg" accept="image/*" onChange={memberProfileImgChangeHandler} style={{display: "none"}} multiple/>
-                <label htmlFor="profileImg">
-                    업로드
+                <label htmlFor="profileImg" style={{cursor: 'pointer'}}>
+                    이미지 업로드
                 </label>
             </form>
         </div>

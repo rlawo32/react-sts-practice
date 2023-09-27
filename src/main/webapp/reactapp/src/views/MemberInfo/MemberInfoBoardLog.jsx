@@ -82,29 +82,38 @@ const MemberInfoBoardLog = () => {
                             <td style={{width: "150px"}}>날짜</td>
                         </tr>
                         </thead>
-                        <tbody id="tbody" className="font-custom">
-                        {tableBoardList.map((boards, idx) => {
-                            return (
-                                <tr key={boards.boardId}>
-                                    <td>{boards.boardLogNo}</td>
-                                    { `${boards.boardCategory}` === 'C1' && <td>리그오브레전드</td> }
-                                    { `${boards.boardCategory}` === 'C2' && <td>오버워치</td> }
-                                    { `${boards.boardCategory}` === 'C3' && <td>배틀그라운드</td> }
-                                    { `${boards.boardCategory}` === 'C4' && <td>메이플스토리</td> }
-                                    { `${boards.boardCategory}` === 'C5' && <td>마인크래프트</td> }
-                                    { `${boards.boardCategory}` === 'C6' && <td>스팀</td> }
-                                    <td>
-                                        <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
-                                            {boards.boardTitle}
-                                        </Link>
-                                    </td>
-                                    <td>{boards.boardViewsCnt}</td>
-                                    <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
-                                    <td>{boards.modifiedDate.substring(0,10)}</td>
-                                </tr>
-                            )
-                        })}
-                        </tbody>
+                        {
+                            tableBoardList.length < 1 ?
+                                <tbody id="tbody" className="font-custom">
+                                    <tr>
+                                        <td colSpan={6}>등록된 글이 없습니다.</td>
+                                    </tr>
+                                </tbody>
+                                :
+                                <tbody id="tbody" className="font-custom">
+                                    {tableBoardList.map((boards, idx) => {
+                                        return (
+                                            <tr key={boards.boardId}>
+                                                <td>{boards.boardLogNo}</td>
+                                                { `${boards.boardCategory}` === 'C1' && <td>리그오브레전드</td> }
+                                                { `${boards.boardCategory}` === 'C2' && <td>오버워치</td> }
+                                                { `${boards.boardCategory}` === 'C3' && <td>배틀그라운드</td> }
+                                                { `${boards.boardCategory}` === 'C4' && <td>메이플스토리</td> }
+                                                { `${boards.boardCategory}` === 'C5' && <td>마인크래프트</td> }
+                                                { `${boards.boardCategory}` === 'C6' && <td>스팀</td> }
+                                                <td>
+                                                    <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
+                                                        {boards.boardTitle}
+                                                    </Link>
+                                                </td>
+                                                <td>{boards.boardViewsCnt}</td>
+                                                <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
+                                                <td>{boards.modifiedDate.substring(0,10)}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                        }
                     </table>
                 </div>
                 <div className="paging-design">
