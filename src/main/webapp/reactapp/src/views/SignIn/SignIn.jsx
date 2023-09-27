@@ -10,15 +10,15 @@ import {faComment as kakaoIcon, faEye as passwordSeeIcon} from "@fortawesome/fre
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
 
 const googleOauthLogin = async () => {
-    // window.location.href = `http://localhost:8080/oauth2/authorization/google`;
+    window.location.href = `http://localhost:8080/oauth2/authorization/google`;
     // window.location.href = `/login/oauth2/code/google`;
 
-    await axios({
-        method: "GET",
-        url: "/auth/oauth2/" + "google"
-    }).then((response) => {
-
-    })
+    // await axios({
+    //     method: "GET",
+    //     url: "/auth/oauth2/" + "google"
+    // }).then((response) => {
+    //
+    // })
 }
 
 const SignIn = () => {

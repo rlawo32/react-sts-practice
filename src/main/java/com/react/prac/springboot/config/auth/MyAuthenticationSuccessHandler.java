@@ -46,8 +46,8 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
                  DriverManager.println("SuccessHandler oAuth2User: " + defaultOAuth2User);
                  response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_URI)
-                         .queryParam("accessToken", new Object[]{"accessToken"})
-                         .queryParam("refreshToken", new Object[]{"refreshToken"})
+                         .queryParam("accessToken", tokenDto.getAccessToken())
+                         .queryParam("refreshToken", tokenDto.getRefreshToken())
                          .build().encode(StandardCharsets.UTF_8)
                          .toUriString());
 
