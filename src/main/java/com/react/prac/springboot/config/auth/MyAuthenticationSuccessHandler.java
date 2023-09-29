@@ -22,7 +22,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    String REDIRECT_URI = "http://localhost:3000/";
+    String REDIRECT_URI = "http://localhost:3000/authLogin";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -38,7 +38,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
                  // 4. RefreshToken 저장
                  RefreshToken refreshToken = RefreshToken.builder()
-                         .key((String) memberId)
+                         .key(String.valueOf(memberId))
                          .value(tokenDto.getRefreshToken())
                          .build();
 
@@ -47,7 +47,6 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
                  DriverManager.println("SuccessHandler oAuth2User: " + defaultOAuth2User);
                  response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_URI)
                          .queryParam("accessToken", tokenDto.getAccessToken())
-                         .queryParam("refreshToken", tokenDto.getRefreshToken())
                          .build().encode(StandardCharsets.UTF_8)
                          .toUriString());
 

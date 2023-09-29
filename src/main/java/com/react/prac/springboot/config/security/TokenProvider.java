@@ -83,7 +83,7 @@ public class TokenProvider implements InitializingBean {
             Object memberId = defaultOAuth2User.getAttributes().get("memberId");
 
             accessToken = Jwts.builder()
-                    .setSubject((String) memberId)       // payload "sub": "name"
+                    .setSubject(String.valueOf(memberId))       // payload "sub": "name"
                     .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
                     .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                     .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
@@ -91,7 +91,7 @@ public class TokenProvider implements InitializingBean {
 
             // Refresh Token 생성
             refreshToken = Jwts.builder()
-                    .setSubject((String) memberId)
+                    .setSubject(String.valueOf(memberId))
                     .claim(AUTHORITIES_KEY, authorities)
                     .signWith(key, SignatureAlgorithm.HS512)
                     .setExpiration(refreshExprTime)

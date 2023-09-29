@@ -6,7 +6,11 @@ import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import './SignIn.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faComment as kakaoIcon, faEye as passwordSeeIcon} from "@fortawesome/free-solid-svg-icons"
+import {
+        faComment as kakaoIcon,
+        faEye as passwordSeeIcon,
+        faShieldCat as catIcon
+        } from "@fortawesome/free-solid-svg-icons"
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
 
 const googleOauthLogin = async () => {
@@ -157,6 +161,10 @@ const SignIn = () => {
     return (
         <div className="signIn-body">
             <AppBarNavigation />
+
+            <h1 style={{marginTop: '100px', fontWeight: 'bold'}}>
+                <FontAwesomeIcon icon={catIcon} /> The Rabbits
+            </h1>
 
             <div className="signIn-view">
 

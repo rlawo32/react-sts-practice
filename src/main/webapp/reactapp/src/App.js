@@ -10,6 +10,7 @@ import BoardMain from "./views/NoticeBoard/BoardMain";
 import BoardTable from "./views/NoticeBoard/BoardTable";
 import BoardDetail from "./views/NoticeBoard/BoardDetail";
 import MemberInfo from "./views/MemberInfo/MemberInfo";
+import OauthSignIn from "./views/SignIn/OauthSignIn";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
 import axios from "axios";
@@ -73,6 +74,8 @@ class App extends Component {
                         <Route path="/detailBoard" element={<BoardDetail />} />
                         <Route path="/board/:boardId" element={<BoardMain />} />
                         <Route path="/board/:boardId" element={<BoardDetail />} />
+
+                        <Route path="/authLogin" element={<OauthSignIn />} />
                     </Routes>
                 </header>
             </div>

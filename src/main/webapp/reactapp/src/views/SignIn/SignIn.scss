@@ -1,14 +1,26 @@
 
 .signIn-body {
+  @font-face {
+    font-family: 'KCCChassam';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCChassam.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  font-family: 'KCCChassam';
+
   height: 100%;
   width: 100%;
-  background-color: black;
+  background: radial-gradient(
+
+    rgba(60, 60, 60, 0.7),
+    rgba(20, 20, 30, 0.9) 100%
+  );
 
   .signIn-view {
     border: 2px solid #badbcc;
     border-radius: 15px;
     padding: 20px 10px 20px 10px;
-    margin: 130px auto 200px;
+    margin: 100px auto 200px;
     height: 800px;
     width: 600px;
     background: radial-gradient(
