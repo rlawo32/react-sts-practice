@@ -172,9 +172,16 @@ const MemberInfoPwUpdate = (props) => {
                         </div>
                     </div>
                     <div className="update-pw-value">
-                        <div className="update-pw-email font-custom">
-                            {memberInfo.memberEmail}
-                        </div>
+                        {
+                            `${memberInfo.memberEmail}` != '' ?
+                                <div className="update-pw-email font-custom">
+                                    {memberInfo.memberEmail}
+                                </div>
+                                :
+                                <div className="update-pw-email font-custom" style={{visibility: 'hidden'}}>
+                                    NONE
+                                </div>
+                        }
                         <div className="update-pw-present font-custom">
                             <input type="password" value={memberPresentPwChk} onChange={memberPresentPwCheckHandler} />
                             {(

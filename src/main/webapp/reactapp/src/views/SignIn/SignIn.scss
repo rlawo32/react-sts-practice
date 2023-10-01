@@ -20,7 +20,7 @@
     border: 2px solid #badbcc;
     border-radius: 15px;
     padding: 20px 10px 20px 10px;
-    margin: 100px auto 200px;
+    margin: 70px auto 200px;
     height: 800px;
     width: 600px;
     background: radial-gradient(
@@ -171,7 +171,7 @@
 
         .google-icon {
           position: absolute;
-          top: 15px;
+          top: 16px;
           left: 210px;
 
           color: black;
@@ -202,8 +202,9 @@
         }
 
         .naver-icon {
+          font-family: initial;
           position: absolute;
-          top: 2px;
+          top: 1px;
           left: 210px;
 
           color: white;

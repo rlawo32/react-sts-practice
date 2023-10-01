@@ -280,9 +280,16 @@ const MemberInfoUpdate = (props) => {
                         </div>
                     </div>
                     <div className="update-value">
-                        <div className="update-email">
-                            {profileInfo.memberEmail}
-                        </div>
+                        {
+                            `${profileInfo.memberEmail}` != '' ?
+                                <div className="update-email">
+                                    {profileInfo.memberEmail}
+                                </div>
+                                :
+                                <div className="update-email" style={{visibility: 'hidden'}}>
+                                    NONE
+                                </div>
+                        }
                         <div className="update-nickname">
                             <input type="text" value={memberNickname} onChange={memberNicknameChangeHandler} />
                             {(

@@ -58,8 +58,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Map<String, Object> customAttribute = new LinkedHashMap<>();
         customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
         customAttribute.put("memberId", memberId);
-        customAttribute.put("memberNickname", sessionUser.getName());
         customAttribute.put("memberEmail", sessionUser.getEmail());
+        customAttribute.put("memberNickname", sessionUser.getName());
+        customAttribute.put("memberAttributeCode", sessionUser.getAttributeCode());
         customAttribute.put("picture", sessionUser.getPicture());
         customAttribute.put("provider", registrationId);
 
@@ -67,7 +68,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member saveOrUpdate(SessionUser sessionUser) {
-        Member member = memberRepository.findByMemberEmail(sessionUser.getEmail())
+        Member member = memberRepository.findByAttributeCode(sessionUser.getAttributeCode())
                 .map(entity -> entity.infoUpdate(sessionUser.getName(), sessionUser.getProvider()))
                 .orElse(sessionUser.toMemeber());
 

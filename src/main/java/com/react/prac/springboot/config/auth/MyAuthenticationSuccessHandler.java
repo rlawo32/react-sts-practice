@@ -32,7 +32,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
          DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
          Object memberId = defaultOAuth2User.getAttributes().get("memberId");
-         Object memberEmail = defaultOAuth2User.getAttributes().get("memberEmail");
+         Object memberAttributeCode = defaultOAuth2User.getAttributes().get("memberAttributeCode");
 
          if(defaultOAuth2User == null) {
              throw new NullPointerException("null cannot be cast to non-null type org.springframework.security.oauth2.core.user.OAuth2User");
@@ -45,9 +45,11 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
                      MemberLog memberLog = MemberLog.builder()
                              .member(member)
-                             .logMemberEmail(String.valueOf(memberEmail))
+                             .logLoginEmail("")
+                             .logLoginAttributeCode(String.valueOf(memberAttributeCode))
                              .logLoginSuccess("S")
                              .logLoginReason("OAuth 인증 성공")
+                             .logLoginCategory("SOCIAL")
                              .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
                              .build();
 

@@ -221,7 +221,7 @@ const SignIn = () => {
                         <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/kakao"}>카카오 로그인</button>
                     </div>
                     <div className="signIn-naver">
-                        <span className="naver-icon" >N</span>
+                        <span className="naver-icon">N</span>
                         <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/naver"}>네이버 로그인</button>
                     </div>
                 </div>

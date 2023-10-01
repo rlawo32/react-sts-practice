@@ -47,6 +47,7 @@ public class MemberSignUpRequestDto {
                 .memberBirth(memberBirth)
                 .memberSecessionYn("N")
                 .provider("")
+                .attributeCode("")
                 .picture("")
                 .build();
     }

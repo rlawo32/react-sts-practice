@@ -42,22 +42,29 @@ const MemberInfoProfile = (props) => {
                         </div>
                     </div>
                     <div className="profile-value">
-                        <div className="profile-email font-custom">
-                            {profileInfo.memberEmail}
-                        </div>
+                        {
+                            `${profileInfo.memberEmail}` != '' ?
+                                <div className="profile-email font-custom">
+                                    {profileInfo.memberEmail}
+                                </div>
+                                :
+                                <div className="profile-email font-custom" style={{visibility: 'hidden'}}>
+                                    NONE
+                                </div>
+                        }
                         <div className="profile-nickname font-custom">
                             {profileInfo.memberNickname}
                         </div>
-                            {
-                                `${profileInfo.memberBirth}` != '' ?
-                                    <div className="profile-birth font-custom">
-                                        {profileInfo.memberBirth}
-                                    </div>
-                                    :
-                                    <div className="profile-birth font-custom" style={{visibility: 'hidden'}}>
-                                        NONE
-                                    </div>
-                            }
+                        {
+                            `${profileInfo.memberBirth}` != '' ?
+                                <div className="profile-birth font-custom">
+                                    {profileInfo.memberBirth}
+                                </div>
+                                :
+                                <div className="profile-birth font-custom" style={{visibility: 'hidden'}}>
+                                    NONE
+                                </div>
+                        }
                         <div className="profile-joinDate font-custom">
                             {props.date}
                         </div>

@@ -23,7 +23,10 @@ public class MemberLog {
     private Member member;
 
     @Column(nullable = false)
-    private String logMemberEmail; // 로그인 한 회원 email
+    private String logLoginEmail; // 로그인 한 회원 email
+
+    @Column(nullable = false)
+    private String logLoginAttributeCode; // 로그인 한 회원 attributeCode
 
     @Column(name = "log_login_date", nullable = false)
     @CreatedDate
@@ -35,13 +38,18 @@ public class MemberLog {
     @Column(nullable = false)
     private String logLoginReason; // 로그인 성공/실패 이유
 
+    @Column(nullable = false)
+    private String logLoginCategory; // 일반로그인/소셜로그인
+
     @Builder
-    public MemberLog(Member member, String logMemberEmail, String createdDate, String logLoginSuccess, String logLoginReason) {
+    public MemberLog(Member member, String logLoginEmail, String logLoginAttributeCode, String createdDate, String logLoginSuccess, String logLoginReason, String logLoginCategory) {
         this.member = member;
-        this.logMemberEmail = logMemberEmail;
+        this.logLoginEmail = logLoginEmail;
+        this.logLoginAttributeCode = logLoginAttributeCode;
         this.createdDate = createdDate;
         this.logLoginSuccess = logLoginSuccess;
         this.logLoginReason = logLoginReason;
+        this.logLoginCategory = logLoginCategory;
     }
 
 }

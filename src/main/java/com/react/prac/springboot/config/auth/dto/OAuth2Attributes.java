@@ -9,8 +9,10 @@ import java.util.function.Function;
 public enum OAuth2Attributes {
     GOOGLE("google", (attributes) -> {
         SessionUser sessionUser = new SessionUser();
-        sessionUser.setName((String) attributes.get("name"));
+
         sessionUser.setEmail((String) attributes.get("email"));
+        sessionUser.setAttributeCode((String) attributes.get("sub"));
+        sessionUser.setName((String) attributes.get("name"));
         sessionUser.setPicture("");
 
         return sessionUser;
@@ -18,23 +20,26 @@ public enum OAuth2Attributes {
 
     NAVER("naver", (attributes) -> {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        System.out.println(response);
         SessionUser sessionUser = new SessionUser();
+
+        sessionUser.setEmail("");
+        sessionUser.setAttributeCode((String) response.get("id"));
         sessionUser.setName((String) response.get("nickname"));
-        sessionUser.setEmail(((String) response.get("email")));
+        sessionUser.setPicture("");
 
         return sessionUser;
     }),
 
     KAKAO("kakao", (attributes) -> {
-        // kakao는 kakao_account에 유저정보가 있다. (email)
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        // kakao_account안에 또 profile이라는 JSON객체가 있다. (nickname, profile_image)
-        Map<String, Object> kakaoProfile = (Map<String, Object>)kakaoAccount.get("profile");
-
+        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
         SessionUser sessionUser = new SessionUser();
+
+        sessionUser.setEmail("");
+        sessionUser.setAttributeCode(String.valueOf(attributes.get("id")));
         sessionUser.setName((String) kakaoProfile.get("nickname"));
-        sessionUser.setEmail((String) kakaoAccount.get("email"));
+        sessionUser.setPicture("");
+
         return sessionUser;
     });
 

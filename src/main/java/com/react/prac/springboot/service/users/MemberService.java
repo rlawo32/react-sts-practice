@@ -134,9 +134,11 @@ public class MemberService {
                 if(!matchPassword) {
                     memberLog = MemberLog.builder()
                             .member(member)
-                            .logMemberEmail(memberEmail)
+                            .logLoginEmail(memberEmail)
+                            .logLoginAttributeCode("")
                             .logLoginSuccess("F")
                             .logLoginReason("비밀번호 인증 실패")
+                            .logLoginCategory("COMMON")
                             .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
                             .build();
 
@@ -160,9 +162,11 @@ public class MemberService {
 
                         memberLog = MemberLog.builder()
                                 .member(member)
-                                .logMemberEmail(memberEmail)
+                                .logLoginEmail(memberEmail)
+                                .logLoginAttributeCode("")
                                 .logLoginSuccess("S")
                                 .logLoginReason("JWT 인증 성공")
+                                .logLoginCategory("COMMON")
                                 .createdDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")))
                                 .build();
 

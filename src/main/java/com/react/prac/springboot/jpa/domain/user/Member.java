@@ -48,19 +48,23 @@ public class Member extends BaseTimeEntity {
     private String picture;
 
     @Column
+    private String attributeCode;
+
+    @Column
     private String provider;
 
     @Builder
     public Member(Role role, String memberEmail, String memberPw, String memberNickname,
-                  String memberSecessionYn, String memberBirth, String provider, String picture) {
+                  String memberSecessionYn, String memberBirth, String picture, String attributeCode, String provider) {
         this.role = role;
         this.memberEmail = memberEmail;
         this.memberPw = memberPw;
         this.memberNickname = memberNickname;
         this.memberBirth = memberBirth;
         this.memberSecessionYn = memberSecessionYn;
-        this.provider = provider;
         this.picture = picture;
+        this.attributeCode = attributeCode;
+        this.provider = provider;
     }
 
     public Member infoUpdate(String memberNickname, String provider) {

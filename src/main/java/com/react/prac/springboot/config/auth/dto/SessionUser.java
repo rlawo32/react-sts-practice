@@ -8,7 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SessionUser {
+
     private String email;
+    private String attributeCode;
     private String name;
     private String picture;
     private String provider;
@@ -16,12 +18,13 @@ public class SessionUser {
     public Member toMemeber() {
         return Member.builder()
                 .role(Role.SOCIAL)
-                .memberEmail(email)
+                .memberEmail("")
                 .memberPw("")
                 .memberNickname(name)
                 .memberBirth("")
                 .memberSecessionYn("N")
                 .picture(picture)
+                .attributeCode(attributeCode)
                 .provider(provider)
                 .build();
     }
