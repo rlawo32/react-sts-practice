@@ -11,7 +11,7 @@ public enum OAuth2Attributes {
         SessionUser sessionUser = new SessionUser();
         sessionUser.setName((String) attributes.get("name"));
         sessionUser.setEmail((String) attributes.get("email"));
-        sessionUser.setPicture((String) attributes.get("picture"));
+        sessionUser.setPicture("");
 
         return sessionUser;
     }),
@@ -20,8 +20,9 @@ public enum OAuth2Attributes {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         System.out.println(response);
         SessionUser sessionUser = new SessionUser();
-        sessionUser.setName((String) response.get("name"));
+        sessionUser.setName((String) response.get("nickname"));
         sessionUser.setEmail(((String) response.get("email")));
+
         return sessionUser;
     }),
 

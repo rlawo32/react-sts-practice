@@ -227,24 +227,32 @@ public class MemberService {
         return ResponseDto.setSuccess("Reissue Success", tokenDto);
     }
 
+    // 회원 정보조회
     @Transactional
     public ResponseDto<MemberInfoResponseDto> memberInfo(Long memberId) {
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+        MemberInfoResponseDto memberInfoResponseDto;
 
-        MemberLog memberLog = memberLogRepository.findByRecentLog(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자의 로그인 로그가 없습니다. id : " + memberId));
+        try {
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
 
-        String recentLogDate = memberLog.getCreatedDate();
-        System.out.println("최신 로그인 확인 : " + recentLogDate);
+            MemberLog memberLog = memberLogRepository.findByRecentLog(memberId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자의 로그인 로그가 없습니다. id : " + memberId));
 
-        MemberInfoResponseDto memberInfoResponseDto = new MemberInfoResponseDto(member);
-        memberInfoResponseDto.setRecentLogDate(recentLogDate);
+            String recentLogDate = memberLog.getCreatedDate();
+            System.out.println("최신 로그인 확인 : " + recentLogDate);
+
+            memberInfoResponseDto = new MemberInfoResponseDto(member);
+            memberInfoResponseDto.setRecentLogDate(recentLogDate);
+        } catch (Exception e) {
+            return ResponseDto.setFailed("Data Base Error!");
+        }
 
         return ResponseDto.setSuccess("memberInfo Success", memberInfoResponseDto);
     }
 
+    // 회원 수정
     @Transactional
     public Long memberUpdate(HttpServletRequest request) {
 
@@ -260,6 +268,7 @@ public class MemberService {
         return memberId;
     }
 
+    // 비밀번호 변경 & 비밀번호 찾기
     @Transactional
     public ResponseDto<?> passwordUpdate(HttpServletRequest request) {
 
@@ -292,6 +301,7 @@ public class MemberService {
         return ResponseDto.setSuccess("Password Change Success!!", memberId);
     }
 
+    // 회원 탈퇴
     @Transactional
     public ResponseDto<?> memberSecession(MemberSignInRequestDto requestDto) {
 

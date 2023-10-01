@@ -2,6 +2,8 @@ package com.react.prac.springboot.config.security;
 
 import com.react.prac.springboot.config.auth.CustomOAuth2UserService;
 import com.react.prac.springboot.config.auth.MyAuthenticationSuccessHandler;
+import com.react.prac.springboot.jpa.domain.user.MemberLogRepository;
+import com.react.prac.springboot.jpa.domain.user.MemberRepository;
 import com.react.prac.springboot.jpa.domain.user.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +28,8 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CorsConfig corsConfig;
     private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
+    private final MemberLogRepository memberLogRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -70,7 +74,7 @@ public class SecurityConfig {
 
                 .and()
                 .oauth2Login()
-                .successHandler(new MyAuthenticationSuccessHandler(tokenProvider, refreshTokenRepository))
+                .successHandler(new MyAuthenticationSuccessHandler(tokenProvider, memberRepository, memberLogRepository, refreshTokenRepository))
                 .userInfoEndpoint().userService(customOAuth2UserService);
                 //.anyRequest().permitAll()
                 //.requestMatchers("/api/v1/**").hasRole(Role.USER.name())

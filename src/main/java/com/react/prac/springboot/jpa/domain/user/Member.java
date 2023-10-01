@@ -41,7 +41,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String memberSecessionYn;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private List<MemberLog> memberLogs;
 
     @Column
@@ -63,9 +63,9 @@ public class Member extends BaseTimeEntity {
         this.picture = picture;
     }
 
-    public Member infoUpdate(String memberNickname, String picture) {
+    public Member infoUpdate(String memberNickname, String provider) {
         this.memberNickname = memberNickname;
-        this.picture = picture;
+        this.provider = provider;
 
         return this;
     }

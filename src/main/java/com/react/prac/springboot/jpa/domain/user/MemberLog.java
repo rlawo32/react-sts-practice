@@ -18,8 +18,8 @@ public class MemberLog {
     @Column(name = "log_id", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Column(nullable = false)

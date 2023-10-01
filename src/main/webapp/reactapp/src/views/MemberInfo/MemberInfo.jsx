@@ -112,6 +112,7 @@ const MemberInfo = () => {
 
             const responseData = findMemberInfo.data;
             setMemberInfo(responseData.data);
+            console.log(responseData.data);
             setMemberProfileDate(responseData.data.createdDate.substring(0, 10));
             if(responseData.data.picture) {
                 setMemberProfileImg("/upload/" + responseData.data.picture);

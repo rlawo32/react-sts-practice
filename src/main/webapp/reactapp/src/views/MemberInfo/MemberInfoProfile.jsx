@@ -48,9 +48,16 @@ const MemberInfoProfile = (props) => {
                         <div className="profile-nickname font-custom">
                             {profileInfo.memberNickname}
                         </div>
-                        <div className="profile-birth font-custom">
-                            {profileInfo.memberBirth}
-                        </div>
+                            {
+                                `${profileInfo.memberBirth}` != '' ?
+                                    <div className="profile-birth font-custom">
+                                        {profileInfo.memberBirth}
+                                    </div>
+                                    :
+                                    <div className="profile-birth font-custom" style={{visibility: 'hidden'}}>
+                                        NONE
+                                    </div>
+                            }
                         <div className="profile-joinDate font-custom">
                             {props.date}
                         </div>

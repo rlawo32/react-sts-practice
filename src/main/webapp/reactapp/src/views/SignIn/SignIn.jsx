@@ -133,9 +133,9 @@ const SignIn = () => {
     }
 
     const onLoginSuccess = (response) => {
-        const { grantType, accessToken, refreshToken, accessTokenExpiresIn } = response.data;
+        const { grantType, accessToken, refreshToken, refreshTokenExpiresIn } = response.data;
 
-        const expires = new Date(accessTokenExpiresIn);
+        const expires = new Date(refreshTokenExpiresIn);
 
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         axios.defaults.headers.common['Authorization'] = `${grantType} ${accessToken}`;
@@ -218,12 +218,11 @@ const SignIn = () => {
                     </div>
                     <div className="signIn-kakao">
                         <FontAwesomeIcon icon={kakaoIcon} className="kakao-icon" />
-                        <button onClick={googleOauthLogin}>카카오 로그인</button>
+                        <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/kakao"}>카카오 로그인</button>
                     </div>
                     <div className="signIn-naver">
                         <span className="naver-icon" >N</span>
-                        <button onClick={() => alert("비밀번호 재설정에 성공하였습니다. \n" +
-                            "인증에 사용한 이메일과 변경한 비밀번호로 로그인 하시길 바랍니다.")}>네이버 로그인</button>
+                        <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/naver"}>네이버 로그인</button>
                     </div>
                 </div>
 
