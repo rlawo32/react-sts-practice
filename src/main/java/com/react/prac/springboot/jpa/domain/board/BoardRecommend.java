@@ -1,10 +1,9 @@
 package com.react.prac.springboot.jpa.domain.board;
 
-import com.react.prac.springboot.jpa.domain.user.Member;
+import com.react.prac.springboot.jpa.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;

@@ -3,6 +3,7 @@ import './BoardDetail.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import ImageModal from "./ImageModal";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faThumbsUp as recommendUp,
         faThumbsDown as recommendDown,
@@ -13,10 +14,9 @@ import {faThumbsUp as recommendUp,
 import {faThumbsUp as recommendUpCancel,
         faThumbsDown as recommendDownCancel} from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
-import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
-import {Viewer} from "@toast-ui/react-editor";
 import Button from "@mui/material/Button";
 import cookie from "react-cookies";
+import Linkify from "linkify-react";
 
 const BoardDetail = (props) => {
     const locationURL = window.location.href;
@@ -29,7 +29,8 @@ const BoardDetail = (props) => {
     const [isLoginCheck, setIsLoginCheck] = useState(0);
     const [detailLoginMemberId, setDetailLoginMemberId] = useState(0);
     const [commentLoginMemberId, setCommentLoginMemberId] = useState(0);
-
+    const [imageModal, setImageModal] = useState(false);
+    const [imageModalUrl, setImageModalUrl] = useState(false);
 
     const [boardDetail, setBoardDetail] = useState({
         boardId: '',
@@ -405,11 +406,13 @@ const BoardDetail = (props) => {
                     params: paging
                 })
 
+                console.log(boardComments.data);
+
                 setPrevId(selectBoard.data.boardIdPrev);
                 setNextId(selectBoard.data.boardIdNext);
                 setCommentList(boardComments.data.commentList);
                 setTotalPage(boardComments.data.totalPage);
-                setTotalComments(boardComments.data.totalComment);
+                setTotalComments(boardComments.data.totalComments);
                 setCommentLoginMemberId(boardComments.data.presentLoginMemberId);
             };
 
@@ -458,7 +461,6 @@ const BoardDetail = (props) => {
                 console.log(detail.data);
                 setDetailLoginMemberId(detail.data.loginMemberId);
                 // setCommentList(detail.data.boardComments);
-                editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
             };
 
             getBoards();
@@ -473,7 +475,6 @@ const BoardDetail = (props) => {
 
                 setBoardDetail(detail.data);
                 setDetailLoginMemberId(detail.data.loginMemberId);
-                editorRef.current.getInstance().setMarkdown(detail.data.boardContent);
             };
 
             getBoards();
@@ -567,6 +568,14 @@ const BoardDetail = (props) => {
     //     setNestedId(selectNestedId);
     // }
 
+    const renderLink = ({ attributes, content }) => {
+        const { href } = attributes;
+
+        setImageModalUrl(href);
+
+        return <Link onClick={() => setImageModal(true)} style={{textDecoration: 'none'}}>{content}</Link>;
+    };
+
     return (
         <div>
             <AppBarNavigation />
@@ -582,21 +591,17 @@ const BoardDetail = (props) => {
                 </div>
                 <div className="detail-header2">
                     <span className="detail-author">{boardDetail.boardAuthor}</span>
-                    <span className="detail-comment"></span>
                     <span className="detail-views">조회 수 {boardDetail.boardViewsCnt}</span>
                     <span className="detail-recommend">추천 수 {boardDetail.boardRecommendUpCnt - boardDetail.boardRecommendDownCnt}</span>
+                    <span className="detail-comment">댓글 {totalComments}</span>
                 </div>
                 <div className="detail-body">
                     <div className="detail-url">
                         <Link to={locationURL} style={{textDecoration: 'none', color: 'gray', fontSize: '15px'}}>{locationURL}</Link>
-                        <Button onClick={() => copyClipBoardHandler(`${locationURL}`)}>복사</Button>
+                        <button onClick={() => copyClipBoardHandler(`${locationURL}`)}>복사</button>
                     </div>
                     <div className="detail-content">
-                        <Viewer
-                            ref={editorRef}
-                            theme="dark"
-                            initialValue={boardDetail.boardContent}
-                        />
+                        {boardDetail.boardContent}
                     </div>
                 </div>
                 <div className="detail-footer1">
@@ -757,7 +762,12 @@ const BoardDetail = (props) => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="comment-content font-list">{comments.commentContent}</div>
+                                <div className="comment-content font-list">
+                                    <Linkify options={{ render: renderLink }}>
+                                        {comments.commentContent}
+                                    </Linkify>
+                                    { imageModal ? <ImageModal setImageModal={setImageModal} imageUrl={imageModalUrl}/> : null }
+                                </div>
                                 <div className="nested-content"></div>
                                 <div className="nested-div">
                                     <div className="nested-write">

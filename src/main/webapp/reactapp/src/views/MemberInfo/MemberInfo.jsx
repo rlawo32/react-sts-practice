@@ -115,7 +115,12 @@ const MemberInfo = () => {
             console.log(responseData.data);
             setMemberProfileDate(responseData.data.createdDate.substring(0, 10));
             if(responseData.data.picture) {
-                setMemberProfileImg("/upload/" + responseData.data.picture);
+                const pictureUrl = responseData.data.picture.substring(0, 4);
+                if(pictureUrl == "http") {
+                    setMemberProfileImg(responseData.data.picture);
+                } else {
+                    setMemberProfileImg("/upload/" + responseData.data.picture);
+                }
             } else {
                 setMemberProfileImg("");
             }

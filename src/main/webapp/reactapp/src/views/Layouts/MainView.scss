@@ -105,12 +105,11 @@ svg text:nth-child(7) {
 
 .Sub-view {
   margin-bottom: 200px;
+  width: 100%;
 
   .image-view {
     z-index: 1;
-    position: relative;
     text-align: center;
-    width: auto;
 
     .image-1 {
       margin-top: 400px;
@@ -118,10 +117,10 @@ svg text:nth-child(7) {
       z-index: 2;
       height: 900px;
       background-image: radial-gradient(
-
+        at 40% 40%,
         rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.8) 70%
-      ), url("../../images/leagueoflegend2.jpg");
+        rgba(0, 0, 0, 0.9) 70%
+      ), url("../../images/leagueoflegend2n.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;

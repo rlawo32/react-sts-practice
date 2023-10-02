@@ -1,10 +1,10 @@
 package com.react.prac.springboot.config.security;
 
-import com.react.prac.springboot.config.auth.CustomOAuth2UserService;
-import com.react.prac.springboot.config.auth.MyAuthenticationSuccessHandler;
-import com.react.prac.springboot.jpa.domain.user.MemberLogRepository;
-import com.react.prac.springboot.jpa.domain.user.MemberRepository;
-import com.react.prac.springboot.jpa.domain.user.RefreshTokenRepository;
+import com.react.prac.springboot.config.oauth.CustomOAuth2UserService;
+import com.react.prac.springboot.config.oauth.MyAuthenticationSuccessHandler;
+import com.react.prac.springboot.jpa.domain.member.MemberLogRepository;
+import com.react.prac.springboot.jpa.domain.member.MemberRepository;
+import com.react.prac.springboot.jpa.domain.member.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -76,6 +76,12 @@ public class SecurityConfig {
                 .oauth2Login()
                 .successHandler(new MyAuthenticationSuccessHandler(tokenProvider, memberRepository, memberLogRepository, refreshTokenRepository))
                 .userInfoEndpoint().userService(customOAuth2UserService);
+
+        httpSecurity
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID", "refreshToken");
                 //.anyRequest().permitAll()
                 //.requestMatchers("/api/v1/**").hasRole(Role.USER.name())
 

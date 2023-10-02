@@ -73,7 +73,7 @@ const MainView = () => {
                 <div className="Sub-view">
                     <div className="image-view">
                         <div className="image-1" ref={divRef1}>
-                            <img src={logo_1} alt="" className="logo-1" />
+
                         </div>
                         {/*<div className="test-box">*/}
                         {/*    <div className="line-draw-1" ref={lineRef1}>*/}

@@ -1,16 +1,13 @@
 package com.react.prac.springboot.jpa.domain.board;
 
-import com.react.prac.springboot.jpa.domain.user.Member;
+import com.react.prac.springboot.jpa.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;

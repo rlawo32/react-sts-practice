@@ -10,16 +10,23 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome as homeIcon} from "@fortawesome/free-solid-svg-icons"
 import cookie from "react-cookies";
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function ButtonAppBar() {
     const navigate = useNavigate();
 
     const [isLoginCheck, setIsLoginCheck] = useState(0);;
 
-    const logout = () => {
-        cookie.remove('refreshToken');
-        navigate("/");
-        window.location.reload();
+    const logout = async () => {
+        // cookie.remove('refreshToken');
+        // navigate("/");
+        // window.location.reload();
+        await axios({
+            method: "POST",
+            url: "/logout"
+        }).then((res) => {
+            window.location.reload();
+        })
     }
 
     const memberInfo = () => {
