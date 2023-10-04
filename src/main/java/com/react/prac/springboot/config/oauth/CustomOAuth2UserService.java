@@ -35,14 +35,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2 서비스 ID(google, kakao, naver)
         String registrationId = userRequest.getClientRegistration().getRegistrationId(); // 소셜 정보를 가져옴
 
-        // OAuth를 지원하는 소셜 서비스들간의 약속(google=sub, naver=id ...)
-        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
-                .getUserInfoEndpoint().getUserNameAttributeName(); // 해당 소셜 서비스에서 유니크한 id값을 전달
-
         SessionUser sessionUser = OAuth2Attributes.extract(registrationId, originAttributes);
         sessionUser.setProvider(registrationId);
 
         Member member = saveOrUpdate(sessionUser);
+
+        // OAuth를 지원하는 소셜 서비스들간의 약속(google=sub, naver=id ...)
+        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
+                .getUserInfoEndpoint().getUserNameAttributeName(); // 해당 소셜 서비스에서 유니크한 id값을 전달
 
         Map<String, Object> customAttribute = customAttribute(originAttributes, userNameAttributeName, sessionUser, member.getId(), registrationId);
 

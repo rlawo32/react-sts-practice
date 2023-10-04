@@ -14,6 +14,8 @@ public class MemberInfoResponseDto {
     private String modifiedDate;
     private String recentLogDate;
     private String picture;
+    private String attributeCode;
+    private String provider;
 
     public MemberInfoResponseDto(Member member) {
         this.memberId = member.getId();
@@ -23,5 +25,7 @@ public class MemberInfoResponseDto {
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
         this.picture = member.getPicture();
+        this.attributeCode = member.getAttributeCode();
+        this.provider = member.getProvider();
     }
 }
