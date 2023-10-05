@@ -61,6 +61,10 @@ war {
     enabled = false
 }
 
+jar {
+    enabled = false
+}
+
 // react ---
 
 //def webappDir = "$projectDir/src/main/webapp/reactapp"
