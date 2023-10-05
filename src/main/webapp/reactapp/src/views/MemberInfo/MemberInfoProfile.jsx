@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import memberDefaultImg from "../../images/ProfileDefault.png";

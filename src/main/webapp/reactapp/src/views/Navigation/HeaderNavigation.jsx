@@ -8,17 +8,16 @@ import IconButton from '@mui/material/IconButton';
 import {Link, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome as homeIcon} from "@fortawesome/free-solid-svg-icons"
-import cookie from "react-cookies";
+import {
+    setCookie, getCookie, removeCookie
+} from './Cookie';
 import {useEffect, useState} from "react";
 import axios from "axios";
 
 export default function ButtonAppBar() {
-    const navigate = useNavigate();
-
     const [isLoginCheck, setIsLoginCheck] = useState(0);;
 
     const logout = async () => {
-        // cookie.remove('refreshToken');
         // navigate("/");
         // window.location.reload();
         await axios({
@@ -34,7 +33,7 @@ export default function ButtonAppBar() {
     }
 
     useEffect(() => {
-        if(cookie.load("refreshToken")) {
+        if(getCookie('refreshToken')) {
             setIsLoginCheck(1);
         } else {
             setIsLoginCheck(0);

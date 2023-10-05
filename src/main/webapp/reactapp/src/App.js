@@ -11,21 +11,19 @@ import BoardTable from "./views/NoticeBoard/BoardTable";
 import BoardDetail from "./views/NoticeBoard/BoardDetail";
 import MemberInfo from "./views/MemberInfo/MemberInfo";
 import OauthSignIn from "./views/SignIn/OauthSignIn";
-
 import ImageModal from "./views/NoticeBoard/ImageModal";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
 import axios from "axios";
-import cookie from "react-cookies";
+import {getCookie, setCookie} from "./views/Navigation/Cookie";
 
 class App extends Component {
 
-
     componentDidMount() {
-        if(cookie.load('refreshToken')) {
+        if(getCookie('refreshToken')) {
             let token = {
                 accessToken: "",
-                refreshToken: cookie.load('refreshToken')
+                refreshToken: getCookie('refreshToken')
             }
 
             axios({
@@ -41,8 +39,6 @@ class App extends Component {
     }
 
     onLoginSuccess(response) {
-        console.log(response);
-
         const { grantType, accessToken, refreshToken, accessTokenExpiresIn} = response.data;
 
         const expires = new Date(accessTokenExpiresIn);
@@ -51,7 +47,7 @@ class App extends Component {
         axios.defaults.headers.common['Authorization'] = `${grantType} ${accessToken}`;
 
         // refreshToken은 cookie에 담아놓기
-        cookie.save('refreshToken', refreshToken, {
+        setCookie('refreshToken', refreshToken, {
             path: '/',
             // httpOnly: true,
             expires

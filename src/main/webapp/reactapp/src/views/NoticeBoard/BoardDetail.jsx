@@ -14,9 +14,8 @@ import {faThumbsUp as recommendUp,
 import {faThumbsUp as recommendUpCancel,
         faThumbsDown as recommendDownCancel} from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
-import Button from "@mui/material/Button";
-import cookie from "react-cookies";
 import Linkify from "linkify-react";
+import {getCookie} from "../Navigation/Cookie";
 
 const BoardDetail = (props) => {
     const locationURL = window.location.href;
@@ -480,7 +479,7 @@ const BoardDetail = (props) => {
             getBoards();
         }
 
-        if(cookie.load("refreshToken")) {
+        if(getCookie('refreshToken')) {
             setIsLoginCheck(1);
         } else {
             setIsLoginCheck(0);

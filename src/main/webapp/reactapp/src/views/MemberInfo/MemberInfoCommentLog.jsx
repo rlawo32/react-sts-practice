@@ -2,16 +2,6 @@ import React, {useEffect, useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import axios from "axios";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faReply as nestedArrow,
-    faThumbsDown as recommendDown,
-    faThumbsUp as recommendUp
-} from "@fortawesome/free-solid-svg-icons";
-import {
-    faThumbsDown as recommendDownCancel,
-    faThumbsUp as recommendUpCancel
-} from "@fortawesome/free-regular-svg-icons";
 import {Link} from "react-router-dom";
 
 const MemberInfoCommentLog = () => {

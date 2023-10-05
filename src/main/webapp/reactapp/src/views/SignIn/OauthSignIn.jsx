@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
-import {Link, useLocation, useParams, useSearchParams} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import axios from "axios";
-import cookie from "react-cookies";
+import {setCookie} from "../Navigation/Cookie";
 
 const OauthSignIn = (props) => {
 
@@ -15,13 +15,11 @@ const OauthSignIn = (props) => {
         const expires = new Date(searchParams.get("expires"));
 
         // refreshToken은 cookie에 담아놓기
-        cookie.save('refreshToken', `${searchParams.get("refreshToken")}`, {
+        setCookie('refreshToken', `${searchParams.get("refreshToken")}`, {
             path: '/',
             // httpOnly: true,
             expires
         });
-
-
 
     }, [])
 

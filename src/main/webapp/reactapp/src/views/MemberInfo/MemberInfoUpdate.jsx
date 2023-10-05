@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import axios from "axios";

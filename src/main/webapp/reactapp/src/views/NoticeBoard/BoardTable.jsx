@@ -5,7 +5,7 @@ import AppBarNavigation from "../Navigation/HeaderNavigation";
 import './BoardMain.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
-import cookie from "react-cookies";
+import {getCookie} from "../Navigation/Cookie";
 
 const BoardTable = (props) => {
     const navigate = useNavigate();
@@ -66,7 +66,7 @@ const BoardTable = (props) => {
 
         getBoards();
 
-        if(cookie.load("refreshToken")) {
+        if(getCookie('refreshToken')) {
             setIsLoginCheck(true);
         } else {
             setIsLoginCheck(false);

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Cookies } from "react-cookie";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import MemberInfoProfile from "./MemberInfoProfile";
@@ -16,7 +15,6 @@ import axios from "axios";
 
 const MemberInfo = () => {
     const navigate = useNavigate();
-    const cookies = new Cookies();
 
     const [memberInfo, setMemberInfo] = useState([{
         memberId: '',

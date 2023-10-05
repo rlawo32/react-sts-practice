@@ -1,21 +1,26 @@
 {
   "files": {
-    "main.css": "/static/css/main.26e14c0d.css",
-    "main.js": "/static/js/main.47247e3b.js",
+    "main.css": "/static/css/main.f52eca46.css",
+    "main.js": "/static/js/main.98b09adb.js",
     "static/js/787.5480e000.chunk.js": "/static/js/787.5480e000.chunk.js",
-    "static/media/space5.jpg": "/static/media/space5.4faaf19468b43a61e35a.jpg",
-    "static/media/space4.jpg": "/static/media/space4.807b9c79abbb561574d1.jpg",
-    "static/media/space3.jpg": "/static/media/space3.7f94b920c3dd329bdd2a.jpg",
-    "static/media/space6.jpg": "/static/media/space6.ccb94fb05bee486e3edd.jpg",
-    "static/media/space1.jpg": "/static/media/space1.6f6bc597dc3f0cac824c.jpg",
-    "static/media/logo.svg": "/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "static/media/minecraft_logo.png": "/static/media/minecraft_logo.7533c8d42c8f0e31b366.png",
+    "static/media/lies-of-p-1.jpg": "/static/media/lies-of-p-1.ab8a946a32132c1d52e5.jpg",
+    "static/media/minecraft3.jpg": "/static/media/minecraft3.85f0a4ecda594e0c4fd7.jpg",
+    "static/media/overwatch3.jpg": "/static/media/overwatch3.42a8da72f0fb5264c653.jpg",
+    "static/media/battleground_logo.png": "/static/media/battleground_logo.32ad654e7ecc2e723421.png",
+    "static/media/battleground3.jpg": "/static/media/battleground3.636e1d301def61c4d2ef.jpg",
+    "static/media/maplestory1.jpg": "/static/media/maplestory1.1dc2850c40ebe9402f1e.jpg",
+    "static/media/leagueoflegend2n.jpg": "/static/media/leagueoflegend2n.3861c37462d8da3ff6e3.jpg",
+    "static/media/leagueoflegend_logo.png": "/static/media/leagueoflegend_logo.1f924677e50512aa7934.png",
+    "static/media/ProfileDefault.png": "/static/media/ProfileDefault.3a919acef6a287bbb5e8.png",
+    "static/media/steam_logo.png": "/static/media/steam_logo.3159ec3ee2ecd4f38b96.png",
     "index.html": "/index.html",
-    "main.26e14c0d.css.map": "/static/css/main.26e14c0d.css.map",
-    "main.47247e3b.js.map": "/static/js/main.47247e3b.js.map",
+    "main.f52eca46.css.map": "/static/css/main.f52eca46.css.map",
+    "main.98b09adb.js.map": "/static/js/main.98b09adb.js.map",
     "787.5480e000.chunk.js.map": "/static/js/787.5480e000.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.26e14c0d.css",
-    "static/js/main.47247e3b.js"
+    "static/css/main.f52eca46.css",
+    "static/js/main.98b09adb.js"
   ]
 }

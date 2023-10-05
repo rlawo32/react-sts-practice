@@ -1,6 +1,5 @@
 import React, {useRef, useState} from "react";
 import axios from "axios";
-import cookie from "react-cookies";
 import {Link, useNavigate} from "react-router-dom";
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
@@ -12,6 +11,9 @@ import {
         faShieldCat as catIcon
         } from "@fortawesome/free-solid-svg-icons"
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
+import {
+    setCookie, getCookie, removeCookie
+} from './../Navigation/Cookie';
 
 const googleOauthLogin = async () => {
     window.location.href = `http://localhost:8080/oauth2/authorization/google`;
@@ -141,11 +143,18 @@ const SignIn = () => {
         axios.defaults.headers.common['Authorization'] = `${grantType} ${accessToken}`;
 
         // refreshToken은 cookie에 담아놓기
-        cookie.save('refreshToken', refreshToken, {
+        // cookie.save('refreshToken', refreshToken, {
+        //     path: '/',
+        //     // httpOnly: true,
+        //     expires
+        // });
+
+        setCookie('refreshToken', refreshToken, {
             path: '/',
             // httpOnly: true,
             expires
         });
+
         // accessToken을 localStorage, cookie 등에 저장하지 않는다!
 
         // accessToken 만료하기 1분 전에 로그인 연장

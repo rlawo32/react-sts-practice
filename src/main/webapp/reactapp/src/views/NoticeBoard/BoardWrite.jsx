@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState} from "react";
 import '../NoticeBoard/BoardWrite.scss';
 import axios from "axios";
 import {Link, useLocation, useNavigate} from "react-router-dom";

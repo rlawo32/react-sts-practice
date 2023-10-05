@@ -2,8 +2,8 @@ import React, {useEffect, useRef, useState} from "react";
 import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import axios from "axios";
-import cookie from "react-cookies";
 import {useNavigate} from "react-router-dom";
+import {removeCookie} from "../Navigation/Cookie";
 
 const SecessionModal = (props) => {
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ const SecessionModal = (props) => {
                     if(result) {
                         alert('탈퇴가 완료되었습니다.\n계정에서 로그아웃이 됩니다.');
 
-                        cookie.remove('refreshToken');
+                        removeCookie('refreshToken');
                         navigate("/");
                         window.location.reload();
                     } else {
