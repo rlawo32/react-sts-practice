@@ -57,52 +57,56 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.3.0' // java 버전에 따른 JAXV API 제거로 인한 의존성 추가 
 }
 
+war {
+    zip64 = true
+}
+
 // react ---
 
-//def webappDir = "$projectDir/src/main/webapp/reactapp"
-//
-//sourceSets {
-//    main {
-//        resources {
-//            srcDirs = ["$projectDir/src/main/resources"]
-//        }
-//    }
-//}
-//
-//processResources {
-//    dependsOn "copyReactBuildFiles"
-//}
-//
-//task installReact(type: Exec) {
-//    workingDir "$webappDir"
-//    inputs.dir "$webappDir"
-//    group = BasePlugin.BUILD_GROUP
-//    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//        commandLine "npm.cmd", "audit", "fix"
-//        commandLine 'npm.cmd', 'install'
-//    } else {
-//        commandLine "npm", "audit", "fix"
-//        commandLine 'npm', 'install'
-//    }
-//}
-//
-//task buildReact(type: Exec) {
-//    dependsOn "installReact"
-//    workingDir "$webappDir"
-//    inputs.dir "$webappDir"
-//    group = BasePlugin.BUILD_GROUP
-//    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//        commandLine "npm.cmd", "run-script", "build"
-//    } else {
-//        commandLine "npm", "run-script", "build"
-//    }
-//}
-//
-//task copyReactBuildFiles(type: Copy) {
-//    dependsOn "buildReact"
-//    from "$webappDir/build"
-//    into "$projectDir/src/main/resources/static"
-//}
+def webappDir = "$projectDir/src/main/webapp/reactapp"
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["$projectDir/src/main/resources"]
+        }
+    }
+}
+
+processResources {
+    dependsOn "copyReactBuildFiles"
+}
+
+task installReact(type: Exec) {
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "audit", "fix"
+        commandLine 'npm.cmd', 'install'
+    } else {
+        commandLine "npm", "audit", "fix"
+        commandLine 'npm', 'install'
+    }
+}
+
+task buildReact(type: Exec) {
+    dependsOn "installReact"
+    workingDir "$webappDir"
+    inputs.dir "$webappDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "run-script", "build"
+    } else {
+        commandLine "npm", "run-script", "build"
+    }
+}
+
+task copyReactBuildFiles(type: Copy) {
+    dependsOn "buildReact"
+    from "$webappDir/build"
+    into "$projectDir/src/main/resources/static"
+}
 
 // react ---
 
@@ -110,10 +114,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-tasks.named("war") {
-    enabled = false
-}
-
-tasks.named("jar") {
-    enabled = false
-}
+//tasks.named("war") {
+//    enabled = false
+//}
+//
+//tasks.named("jar") {
+//    enabled = false
+//}
