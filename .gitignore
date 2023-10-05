@@ -1,8 +1,8 @@
 HELP.md
 .gradle
 build/
-application.properties
-application-oauth.properties
+**/application.properties
+**/application-oauth.properties
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

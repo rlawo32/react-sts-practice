@@ -57,6 +57,10 @@ dependencies {
     implementation 'javax.xml.bind:jaxb-api:2.3.0' // java 버전에 따른 JAXV API 제거로 인한 의존성 추가 
 }
 
+war {
+    enabled = false
+}
+
 // react ---
 
 //def webappDir = "$projectDir/src/main/webapp/reactapp"
