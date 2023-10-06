@@ -59,6 +59,7 @@ dependencies {
 
 war {
     zip64 = true
+    enabled = false
 }
 
 // react ---
