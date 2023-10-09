@@ -22,20 +22,13 @@ html.dark-mode {
   height: 100%;
   background-color: black;
 
-  @media (min-width: 700px) { // 1000px 이상일 경우
+  @media (min-width: 700px) { // 700px 이상일 경우
     width: 100%;
   }
 
-  @media (max-width: 700px) { // 1000px 이하일 경우
+  @media (max-width: 700px) { // 700px 이하일 경우
     width: 700px;
   }
-}
-
-.Main-view {
-  position: relative;
-  margin-top: 100px;
-  justify-content: center;
-  align-items: center;
 }
 
 svg text {
@@ -88,26 +81,55 @@ svg text:nth-child(7) {
   }
 }
 
-.First-view {
+.Main-view {
+  width: 100%;
+
+  .First-view {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 1060px;
+    background-color: black;
+    animation: fadeout 2s forwards;
+    animation-delay: 3.5s;
+    transform: translate(-50%, 0%); // (position: absolute) 값 가운데 처리하기
+  }
+
+  .Second-view {
+    z-index: 1;
+    text-align: center;
+
+    .Second-view-text {
+      position: absolute;
+      top: 400px;
+      left: 10%;
+      text-align: left;
+
+      button {
+        border-radius: 25px;
+        border: none;
+        padding: 0 15px 0 15px;
+        margin-top: 15px;
+        font-size: 22px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+
+.test-view {
   position: absolute;
-  top: 100px;
+  top: 900px;
   left: 50%;
+  width: 100%;
+  height: 700px;
+  background-color: black;
   animation: fadeout 2s forwards;
   animation-delay: 2.5s;
-  transform: translate(-50%, 0%); // (position: absolute) 값 가운데 처리하기
-}
-
-.Second-view {
-  height: 700px;
-  opacity: 0;
-  justify-content: center;
-  align-items: center;
-  animation: fadein 2s forwards;
-  animation-delay: 4s;
-}
-
-.Sub-body {
-
+  transform: translate(-50%, 0%);
 }
 
 .Sub-view {
@@ -127,7 +149,7 @@ svg text:nth-child(7) {
                       at 40% 40%,
                       rgba(0, 0, 0, 0.1),
                       rgba(0, 0, 0, 0.9) 70%
-      ), url("../../images/leagueoflegend2n.jpg");
+      ), url("../../images/leagueoflegend2.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;
@@ -135,54 +157,6 @@ svg text:nth-child(7) {
       border: 2px solid black;
       transition: 4s;
       opacity: 0;
-
-      .logo-1 {
-        width: 450px;
-        height: 250px;
-        object-fit: cover;
-
-        position: absolute;
-        top: 40px;
-        left: 300px;
-        opacity: 0.7;
-      }
-
-    }
-
-    .test-box {
-      z-index: 3;
-      position: absolute;
-      top: 250px;
-      left: 550px;
-
-      .line-draw-1 {
-        z-index: 4;
-        position: relative;
-        width: 410px;
-        height: 1300px;
-
-        span:nth-child(3) {
-          position: absolute;
-          border-bottom: 3px solid white;
-          box-shadow: 1px 1px 1px 1px black;
-          left: 0;
-          right: 100%;
-          bottom: 0;
-          transition: 2.5s;
-          transition-delay: 0s;
-        }
-
-        span:nth-child(4) {
-          position: absolute;
-          border-left: 3px solid white;
-          box-shadow: 1px 1px 1px 1px black;
-          top: 0;
-          left: 0;
-          bottom: 100%;
-          transition: 5s;
-          transition-delay: 1s;
-        }
-      }
     }
 
     .image-2 {
@@ -194,7 +168,7 @@ svg text:nth-child(7) {
 
                       rgba(0, 0, 0, 0.2),
                       rgba(0, 0, 0, 1) 85%
-      ), url("../../images/overwatch3.jpg");
+      ), url("../../images/overwatch5.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;
@@ -202,18 +176,6 @@ svg text:nth-child(7) {
       border: 2px solid black;
       transition: 4s;
       opacity: 0;
-
-      .logo-2 {
-        width: 600px;
-        height: 400px;
-        object-fit: cover;
-
-        position: absolute;
-        top: 50px;
-        left: 300px;
-        opacity: 1;
-      }
-
     }
 
     .image-3 {
@@ -224,7 +186,7 @@ svg text:nth-child(7) {
 
                       rgba(0, 0, 0, 0.2),
                       rgba(0, 0, 0, 1) 90%
-      ), url("../../images/battleground3.jpg");
+      ), url("../../images/battleground5.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;
@@ -232,17 +194,6 @@ svg text:nth-child(7) {
       border: 2px solid black;
       transition: 4s;
       opacity: 0;
-
-      .logo-3 {
-        width: 600px;
-        height: 200px;
-        object-fit: cover;
-
-        position: absolute;
-        top: 380px;
-        left: 860px;
-        opacity: 0.7;
-      }
     }
 
     .image-4 {
@@ -253,7 +204,7 @@ svg text:nth-child(7) {
 
                       rgba(0, 0, 0, 0.2),
                       rgba(0, 0, 0, 1) 90%
-      ), url("../../images/maplestory1.jpg");
+      ), url("../../images/maplestory3.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;
@@ -261,17 +212,6 @@ svg text:nth-child(7) {
       border: 2px solid black;
       transition: 4s;
       opacity: 0;
-
-      .logo-4 {
-        width: 300px;
-        height: 150px;
-        object-fit: cover;
-
-        position: absolute;
-        top: 200px;
-        left: 850px;
-        opacity: 0.9;
-      }
     }
 
     .image-5 {
@@ -282,7 +222,7 @@ svg text:nth-child(7) {
 
                       rgba(0, 0, 0, 0.2),
                       rgba(0, 0, 0, 1) 85%
-      ), url("../../images/minecraft3.jpg");
+      ), url("../../images/minecraft4.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;
@@ -290,17 +230,6 @@ svg text:nth-child(7) {
       border: 2px solid black;
       transition: 4s;
       opacity: 0;
-
-      .logo-5 {
-        width: 450px;
-        height: 250px;
-        object-fit: cover;
-
-        position: absolute;
-        top: 200px;
-        left: 770px;
-        opacity: 0.8;
-      }
     }
 
     .image-6 {
@@ -312,7 +241,7 @@ svg text:nth-child(7) {
 
                       rgba(0, 0, 0, 0.2),
                       rgba(0, 0, 0, 1) 85%
-      ), url("../../images/lies-of-p-1.jpg");
+      ), url("../../images/lies-of-p-3.jpg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 90%;
@@ -320,17 +249,6 @@ svg text:nth-child(7) {
       border: 2px solid black;
       transition: 4s;
       opacity: 0;
-
-      .logo-6 {
-        width: 600px;
-        height: 180px;
-        object-fit: cover;
-
-        position: absolute;
-        top: 200px;
-        left: 370px;
-        opacity: 1;
-      }
     }
 
 
@@ -439,11 +357,16 @@ svg text:nth-child(7) {
 
   svg {
     max-height: 45rem;
-    width: 100%;
+    width: 1000px;
     height: auto;
     fill: none;
     stroke: white;
     stroke-width: 200;
+
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translate(-50%, 0%);
 
     path {
       stroke-dasharray: 50000;

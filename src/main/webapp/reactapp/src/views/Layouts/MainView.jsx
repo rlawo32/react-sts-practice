@@ -1,11 +1,5 @@
 import React, {useEffect, useRef} from "react";
 import './MainView.scss';
-import logo_1 from '../../images/leagueoflegend_logo.png';
-import logo_2 from '../../images/overwatch_logo2.jpg';
-import logo_3 from '../../images/battleground_logo.png';
-import logo_4 from '../../images/maplestory_logo.jpg';
-import logo_5 from '../../images/minecraft_logo.png';
-import logo_6 from '../../images/steam_logo.png';
 import DrawWord from './DrawWord';
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
@@ -66,11 +60,33 @@ const MainView = () => {
                     </div>
 
                     <div className="Second-view">
-                        HELLO
+                        <video autoPlay loop muted height={"1060px"} >
+                            <source src="https://bit.ly/3kYMF9A" type="video/mp4"/>
+                            Your browser is not supported!
+                        </video>
+                        <div className="Second-view-text">
+                            <h1 style={{fontWeight: "bold", fontSize: "55px"}}>WELCOME MY WEB SITE</h1>
+                            <h4 style={{fontWeight: "bold", fontSize: "25px"}}>MORE FUN, MORE INTERSTED</h4>
+                            <p style={{marginTop: "20px", fontSize: "15px"}}>
+                                This site is for communication about games. <br />
+                                You can share various information about the game and also enjoy small games.
+                            </p>
+                            <button>
+                                JOIN
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <div className="Sub-view">
+
+                    {/*<div className="image-view">*/}
+                    {/*    <video autoPlay loop muted height={"1000px"} >*/}
+                    {/*        <source src="https://bit.ly/3kYMF9A" type="video/mp4"/>*/}
+                    {/*        Your browser is not supported!*/}
+                    {/*    </video>*/}
+                    {/*</div>*/}
+
                     <div className="image-view">
                         <div className="image-1" ref={divRef1}>
 
@@ -86,23 +102,18 @@ const MainView = () => {
                         {/*</div>*/}
 
                         <div className="image-2" ref={divRef2}>
-                            <img src={logo_2} alt="" className="logo-2" />
                         </div>
 
                         <div className="image-3" ref={divRef3}>
-                            <img src={logo_3} alt="" className="logo-3" />
                         </div>
 
                         <div className="image-4" ref={divRef4}>
-                            <img src={logo_4} alt="" className="logo-4" />
                         </div>
 
                         <div className="image-5" ref={divRef5}>
-                            <img src={logo_5} alt="" className="logo-5" />
                         </div>
 
                         <div className="image-6" ref={divRef6}>
-                            <img src={logo_6} alt="" className="logo-6" />
                         </div>
                     </div>
                 </div>

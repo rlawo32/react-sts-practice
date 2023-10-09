@@ -7,7 +7,8 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import {Link, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome as homeIcon} from "@fortawesome/free-solid-svg-icons"
+import {faHome as homeIcon,
+        faShieldCat as catIcon} from "@fortawesome/free-solid-svg-icons"
 import {
     setCookie, getCookie, removeCookie
 } from './Cookie';
@@ -41,7 +42,7 @@ export default function ButtonAppBar() {
     }, [isLoginCheck])
 
     return (
-        <AppBar sx={{height: 55, backgroundColor:'rgba(153, 153, 153, 0.1)'}}>
+        <AppBar sx={{height: 65, backgroundColor:'rgba(153, 153, 153, 0)'}}>
             <Toolbar>
                 <IconButton
                     size="large"
@@ -49,8 +50,9 @@ export default function ButtonAppBar() {
                     aria-label="menu"
                     sx={{ mr: 2, color: "white" }}
                 >
-                    <Link to="/">
-                        <FontAwesomeIcon icon={homeIcon} style={{color: 'white', fontSize: '24px'}}/>
+                    <Link to="/" style={{color: 'white', fontWeight: 'bold', marginLeft: '30px', fontSize: '24px', fontFamily: 'angular', textDecoration: 'none'}} >
+                        {/*<FontAwesomeIcon icon={homeIcon} style={{color: 'white', fontSize: '24px'}}/>*/}
+                        <FontAwesomeIcon icon={catIcon} /> The Rabbits
                     </Link>
                 </IconButton>
                 <Typography position="relative" variant="h6" component="div" sx={{ flexGrow: 1, color: "white" }}>
@@ -61,25 +63,25 @@ export default function ButtonAppBar() {
                     `${isLoginCheck}` == 1 ?
                         <span>
                             <Link to="/memberInfo">
-                                <Button sx={{color: "white"}} onClick={() => memberInfo()}>내 정보</Button>
+                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} onClick={() => memberInfo()}>My Info</Button>
                             </Link>
                             <Link to="/">
-                                <Button sx={{color: "white"}} onClick={() => logout()}>로그아웃</Button>
+                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} onClick={() => logout()}>Logout</Button>
                             </Link>
                         </span>
                         :
                         <span>
                             <Link to="/signIn">
-                                <Button sx={{color: "white"}}>로그인</Button>
+                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}}>Sign In</Button>
                             </Link>
                             <Link to="/signUp">
-                                <Button sx={{color: "white"}}>회원가입</Button>
+                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}}>Sign Up</Button>
                             </Link>
                         </span>
                 }
 
                 <Link to="/board" state={{ mainReset: null }}>
-                    <Button sx={{color: "white"}}>게시판</Button>
+                    <Button sx={{color: "white", marginRight: '30px', fontSize: '16px', fontFamily: 'SUITE-Regular'}}>Board</Button>
                 </Link>
             </Toolbar>
         </AppBar>
