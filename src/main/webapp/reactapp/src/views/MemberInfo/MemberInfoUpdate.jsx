@@ -43,7 +43,6 @@ const MemberInfoUpdate = (props) => {
             url: "/member/signUpDuplicationChk",
             params: {memberEmail: profileInfo.memberEmail, memberNickname: changeNickname}
         }).then((res) => {
-            console.log("제대로 되나..? " + res.data);
             if(res.data) {
                 setNicknameMessage('이미 사용중인 닉네임입니다.');
                 setIsNicknameEffect(false);
@@ -210,7 +209,7 @@ const MemberInfoUpdate = (props) => {
                     url: "member/memberUpdate",
                     params: updateData
                 }).then((res) => {
-                    window.alert("등록이 완료되었습니다람쥐");
+                    window.alert("수정이 완료되었습니다.");
                     props.setData(true);
                     navigate(-1);
                 })

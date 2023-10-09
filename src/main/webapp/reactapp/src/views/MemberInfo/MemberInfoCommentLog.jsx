@@ -20,7 +20,6 @@ const MemberInfoCommentLog = () => {
         memberId: '',
         memberNickname: '',
         createdDate: '',
-        modifiedDate: '',
         commentRecommendUpCnt: '',
         commentRecommendDownCnt: '',
         commentRecommendUpCheck: '',
@@ -109,7 +108,7 @@ const MemberInfoCommentLog = () => {
                                                     </Link>
                                                 </td>
                                                 <td>{comments.commentRecommendUpCnt - comments.commentRecommendDownCnt}</td>
-                                                <td>{comments.modifiedDate.substring(0,10)}</td>
+                                                <td>{comments.createdDate.substring(0,10)}</td>
                                             </tr>
                                         )
                                     })}

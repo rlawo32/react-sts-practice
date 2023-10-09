@@ -12,7 +12,6 @@ const BoardTable = (props) => {
 
     const [isLoginCheck, setIsLoginCheck] = useState(false);
 
-
     const category_name = props.category;
     const subTab_name = props.subTab;
     const [currentSubTab, clickSubTab] = useState(subTab_name[0].key);

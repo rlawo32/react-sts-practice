@@ -29,7 +29,6 @@ const MemberInfoPwUpdate = (props) => {
             url: "member/passwordDuplicationChk",
             params: {passwordCheck: memberPresentPwChk}
         }).then((res) => {
-            console.log(res.data);
             if(res.data) {
                 setPresentPwChkMessage('');
                 setIsPresentPwChkEffect(true);

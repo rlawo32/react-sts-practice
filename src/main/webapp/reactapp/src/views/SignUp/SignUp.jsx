@@ -88,8 +88,6 @@ const SignUp = () => {
                     setIsMemberEmailEffect(true);
                     emailCheckSendHandler();
                 }
-            }).catch(error => {
-                console.log("에러내용:", JSON.stringify(error));
             })
         } else {
             setMemberEmailMessage('이메일 주소를 다시 확인해주세요.');
@@ -267,8 +265,6 @@ const SignUp = () => {
                 } else {
                     setIsMemberNicknameEffect(true);
                 }
-            }).catch(error => {
-                console.log("에러내용:", JSON.stringify(error));
             })
         } else {
             setMemberEmailMessage('필수 정보입니다.');
@@ -457,8 +453,6 @@ const SignUp = () => {
             setIsMemberBirthEffect(false);
             e.preventDefault();
         } else {
-            console.log(memberData);
-
             await axios({
                 method: "POST",
                 url: "/member/signUp",

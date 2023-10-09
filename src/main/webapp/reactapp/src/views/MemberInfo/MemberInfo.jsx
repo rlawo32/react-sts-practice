@@ -110,7 +110,6 @@ const MemberInfo = () => {
 
             const responseData = findMemberInfo.data;
             setMemberInfo(responseData.data);
-            console.log(responseData.data);
             setMemberProfileDate(responseData.data.createdDate.substring(0, 10));
             if(responseData.data.picture) {
                 const pictureUrl = responseData.data.picture.substring(0, 4);
