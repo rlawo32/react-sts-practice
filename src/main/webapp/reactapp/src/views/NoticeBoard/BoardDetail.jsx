@@ -304,7 +304,7 @@ const BoardDetail = (props) => {
     }
 
     const commentSaveHandler = async () => {
-        setCommentState(false);
+        setCommentState(!commentState);
         if(commentText == "") {
             alert("내용을 입력해주세요");
         } else {
@@ -314,7 +314,7 @@ const BoardDetail = (props) => {
                 data: JSON.stringify(commentData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
-                setCommentState(true);
+                setCommentState(!commentState);
                 setCommentText("");
                 document.getElementById("comment-text").value='';
                 // window.location.reload();
@@ -323,17 +323,21 @@ const BoardDetail = (props) => {
     }
 
     const commentDeleteHandler = async (commentId) => {
-        await axios({
-            method: "DELETE",
-            url: '/board/commentDelete/' + commentId
-        }).then(() => {
-            alert('댓글이 삭제되었습니다.');
-        })
+        if(window.confirm("댓글을 삭제하시겠습니까?") == true) {
+            await axios({
+                method: "DELETE",
+                url: '/board/commentDelete/' + commentId
+            }).then(() => {
+                alert('댓글이 삭제되었습니다.');
+                setCommentState(!commentState);
+                // window.location.reload();
+            })
+        }
     }
 
     const nestedSaveHandler = async (e) => {
         const selectCommentId = e.target.value;
-        setCommentState(false);
+        setCommentState(!commentState);
         if(nestedText == "") {
             alert("내용을 입력해주세요");
         } else {
@@ -343,7 +347,7 @@ const BoardDetail = (props) => {
                 data: JSON.stringify(nestedData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
-                setCommentState(true);
+                setCommentState(!commentState);
                 const targetDiv_3 = document.getElementById(selectCommentId);
                 const nestedView_3 = targetDiv_3.lastChild;
                 if(nestedView_3) {
@@ -405,8 +409,6 @@ const BoardDetail = (props) => {
                     params: paging
                 })
 
-                console.log(boardComments.data);
-
                 setPrevId(selectBoard.data.boardIdPrev);
                 setNextId(selectBoard.data.boardIdNext);
                 setCommentList(boardComments.data.commentList);
@@ -457,7 +459,6 @@ const BoardDetail = (props) => {
                 })
 
                 setBoardDetail(detail.data);
-                console.log(detail.data);
                 setDetailLoginMemberId(detail.data.loginMemberId);
                 // setCommentList(detail.data.boardComments);
             };

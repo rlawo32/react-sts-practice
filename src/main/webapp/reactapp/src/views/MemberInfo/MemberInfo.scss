@@ -21,8 +21,15 @@
   }
 
   height: 100%;
-  width: 100%;
   background-color: black;
+
+  @media (min-width: 700px) { // 700px 이상일 경우
+    width: 100%;
+  }
+
+  @media (max-width: 700px) { // 700px 이하일 경우
+
+  }
 
   .table-view {
     height: 490px;
@@ -42,8 +49,8 @@
 
     background: radial-gradient(
 
-      rgba(60, 60, 60, 0.7),
-      rgba(10, 30, 40, 0.6) 70%
+                    rgba(60, 60, 60, 0.7),
+                    rgba(10, 30, 40, 0.6) 70%
     );
 
     h3 {
@@ -482,8 +489,8 @@
 
   background: radial-gradient(
 
-    rgba(60, 60, 60, 1),
-    rgba(20, 20, 30, 1) 70%
+                  rgba(60, 60, 60, 1),
+                  rgba(20, 20, 30, 1) 70%
   );
   border: 2px solid #343a40;
   border-radius: 10px;
@@ -535,8 +542,8 @@
 
   background: radial-gradient(
 
-    rgba(60, 60, 60, 1),
-    rgba(20, 20, 30, 1) 70%
+                  rgba(60, 60, 60, 1),
+                  rgba(20, 20, 30, 1) 70%
   );
   box-shadow: 1px 1px 25px 0 white;
 

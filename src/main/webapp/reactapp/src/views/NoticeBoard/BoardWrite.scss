@@ -1,8 +1,15 @@
 
 .write-body {
   height: 100%;
-  width: 100%;
   background-color: black;
+
+  @media (min-width: 1000px) { // 1000px 이상일 경우
+    width: 100%;
+  }
+
+  @media (max-width: 1000px) { // 1000px 이하일 경우
+
+  }
 
   @font-face {
     font-family: 'KCCChassam';

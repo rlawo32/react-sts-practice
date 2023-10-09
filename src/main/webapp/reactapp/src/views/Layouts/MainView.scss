@@ -20,8 +20,15 @@ html.dark-mode {
 .Main-body {
   position: relative;
   height: 100%;
-  width: 100%;
   background-color: black;
+
+  @media (min-width: 700px) { // 1000px 이상일 경우
+    width: 100%;
+  }
+
+  @media (max-width: 700px) { // 1000px 이하일 경우
+    width: 700px;
+  }
 }
 
 .Main-view {
@@ -117,9 +124,9 @@ svg text:nth-child(7) {
       z-index: 2;
       height: 900px;
       background-image: radial-gradient(
-        at 40% 40%,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.9) 70%
+                      at 40% 40%,
+                      rgba(0, 0, 0, 0.1),
+                      rgba(0, 0, 0, 0.9) 70%
       ), url("../../images/leagueoflegend2n.jpg");
       background-repeat: no-repeat;
       background-position: center;
@@ -185,8 +192,8 @@ svg text:nth-child(7) {
       height: 900px;
       background-image: radial-gradient(
 
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 1) 85%
+                      rgba(0, 0, 0, 0.2),
+                      rgba(0, 0, 0, 1) 85%
       ), url("../../images/overwatch3.jpg");
       background-repeat: no-repeat;
       background-position: center;
@@ -215,8 +222,8 @@ svg text:nth-child(7) {
       height: 900px;
       background-image: radial-gradient(
 
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 1) 90%
+                      rgba(0, 0, 0, 0.2),
+                      rgba(0, 0, 0, 1) 90%
       ), url("../../images/battleground3.jpg");
       background-repeat: no-repeat;
       background-position: center;
@@ -244,8 +251,8 @@ svg text:nth-child(7) {
       height: 900px;
       background-image: radial-gradient(
 
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 1) 90%
+                      rgba(0, 0, 0, 0.2),
+                      rgba(0, 0, 0, 1) 90%
       ), url("../../images/maplestory1.jpg");
       background-repeat: no-repeat;
       background-position: center;
@@ -273,8 +280,8 @@ svg text:nth-child(7) {
       height: 900px;
       background-image: radial-gradient(
 
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 1) 85%
+                      rgba(0, 0, 0, 0.2),
+                      rgba(0, 0, 0, 1) 85%
       ), url("../../images/minecraft3.jpg");
       background-repeat: no-repeat;
       background-position: center;
@@ -303,8 +310,8 @@ svg text:nth-child(7) {
       margin-bottom: 250px;
       background-image: radial-gradient(
 
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 1) 85%
+                      rgba(0, 0, 0, 0.2),
+                      rgba(0, 0, 0, 1) 85%
       ), url("../../images/lies-of-p-1.jpg");
       background-repeat: no-repeat;
       background-position: center;
@@ -431,23 +438,23 @@ svg text:nth-child(7) {
 .svg-draw {
 
   svg {
-      max-height: 45rem;
-      width: 100%;
-      height: auto;
-      fill: none;
-      stroke: white;
-      stroke-width: 200;
+    max-height: 45rem;
+    width: 100%;
+    height: auto;
+    fill: none;
+    stroke: white;
+    stroke-width: 200;
 
-      path {
-          stroke-dasharray: 50000;
-          stroke-dashoffset: -50000;
+    path {
+      stroke-dasharray: 50000;
+      stroke-dashoffset: -50000;
 
-          @for $i from 1 through 7 {
-              &:nth-of-type(#{$i}) {
-                  animation: draw 500ms #{$i * 300}ms forwards;
-              }
-          }
+      @for $i from 1 through 7 {
+        &:nth-of-type(#{$i}) {
+          animation: draw 500ms #{$i * 300}ms forwards;
+        }
       }
+    }
   }
 }
 
