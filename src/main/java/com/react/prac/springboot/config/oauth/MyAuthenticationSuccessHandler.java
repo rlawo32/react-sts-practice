@@ -23,7 +23,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     private final MemberRepository memberRepository;
     private final MemberLogRepository memberLogRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    String REDIRECT_URI = "http://localhost:3000/authLogin";
+    String REDIRECT_URI = "http://localhost:8080/authLogin";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

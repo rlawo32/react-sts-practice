@@ -2,7 +2,6 @@ import {Routes, Route} from "react-router-dom";
 import './App.css';
 import MainHome from "./views/Navigation/MainHome";
 import BoardWrite from "./views/NoticeBoard/BoardWrite";
-import About from "./views/Navigation/About";
 import SignIn from "./views/SignIn/SignIn";
 import SignUp from "./views/SignUp/SignUp";
 import FindPasswordView from "./views/SignIn/FindPasswordView";
@@ -61,7 +60,6 @@ class App extends Component {
                     <Routes>
                         <Route exact path="/" element={<MainHome />} />
                         <Route path="/save" element={<BoardWrite />} />
-                        <Route path="/about" element={<About />} />
                         <Route path="/signIn" element={<SignIn />} />
                         <Route path="/signUp" element={<SignUp />} />
                         <Route path="/findPasswordView" element={<FindPasswordView />} />
