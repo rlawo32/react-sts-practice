@@ -26,12 +26,6 @@ const MemberInfoCommentLog = () => {
         commentBoardCategory: ''
     }]);
 
-    const paging = {
-        boardId: 0,
-        recordPerPage: 10,
-        page: pageNo
-    }
-
     const pagination = () => {
         let result = [];
         for (let i=0; i<totalPage; i++) {
@@ -41,6 +35,12 @@ const MemberInfoCommentLog = () => {
     }
 
     useEffect(() => {
+
+        const paging = {
+            boardId: 0,
+            recordPerPage: 10,
+            page: pageNo
+        }
         const getBoards = async () => {
 
             const boardComments = await axios({

@@ -70,6 +70,7 @@ const BoardTable = (props) => {
             setIsLoginCheck(false);
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageNo, props.keys, currentSubTab, isLoginCheck]);
 
     const changeDetailBoard = async (changeBoardId, changeAuthorId) => {

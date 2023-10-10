@@ -5,6 +5,7 @@ import {setCookie} from "../Navigation/Cookie";
 
 const OauthSignIn = (props) => {
 
+    // eslint-disable-next-line no-unused-vars
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -21,6 +22,7 @@ const OauthSignIn = (props) => {
             expires
         });
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

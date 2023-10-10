@@ -7,7 +7,7 @@ const MemberInfoLoginLog = () => {
 
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
-    const [totalLoginLog, setTotalLoginLog] = useState(0);
+    // const [totalLoginLog, setTotalLoginLog] = useState(0);
 
     const [loginLogList, setLoginLogList] = useState([{
         loginLogNo: '',
@@ -19,12 +19,6 @@ const MemberInfoLoginLog = () => {
         logLoginReason: ''
     }]);
 
-    const paging = {
-        boardId: 0,
-        recordPerPage: 10,
-        page: pageNo
-    }
-
     const pagination = () => {
         let result = [];
         for (let i=0; i<totalPage; i++) {
@@ -34,6 +28,12 @@ const MemberInfoLoginLog = () => {
     }
 
     useEffect(() => {
+
+        const paging = {
+            boardId: 0,
+            recordPerPage: 10,
+            page: pageNo
+        }
 
         const getLogins = async () => {
 
@@ -47,7 +47,7 @@ const MemberInfoLoginLog = () => {
 
             setLoginLogList(datalist);
             setTotalPage(loginLogs.data.totalPage);
-            setTotalLoginLog(loginLogs.data.totalLoginLog);
+            // setTotalLoginLog(loginLogs.data.totalLoginLog);
 
             for(let i=0; i<datalist.length; i++) {
                 datalist[i].loginLogNo = (i  + (pageNo * 10)) + 1;

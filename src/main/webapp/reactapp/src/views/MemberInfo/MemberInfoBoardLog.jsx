@@ -23,16 +23,6 @@ const MemberInfoBoardLog = () => {
         modifiedDate: ''
     }]);
 
-    const paging = {
-        searchText: "",
-        searchSelect: "M",
-        recordPerPage: 5,
-        page: pageNo,
-        pagePerBlock: 10,
-        pageCategory: "C0",
-        pageSort: "T0"
-    }
-
     const pagination = () => {
         let result = [];
         for (let i=0; i<totalPage; i++) {
@@ -42,6 +32,16 @@ const MemberInfoBoardLog = () => {
     }
 
     useEffect(() => {
+
+        const paging = {
+            searchText: "",
+            searchSelect: "M",
+            recordPerPage: 5,
+            page: pageNo,
+            pagePerBlock: 10,
+            pageCategory: "C0",
+            pageSort: "T0"
+        }
         const getBoards = async () => {
             const tableBoardList = await axios({
                 method: "GET",
@@ -61,6 +61,7 @@ const MemberInfoBoardLog = () => {
 
         getBoards();
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

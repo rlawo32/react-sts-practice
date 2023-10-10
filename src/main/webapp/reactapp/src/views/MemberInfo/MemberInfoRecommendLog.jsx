@@ -10,9 +10,9 @@ const MemberInfoRecommendLog = () => {
 
     const [pageNo, setPageNo] = useState(0);
     const [totalPageB, setTotalPageB] = useState(0);
-    const [totalRecommendsB, setTotalRecommendsB] = useState(0);
+    // const [totalRecommendsB, setTotalRecommendsB] = useState(0);
     const [totalPageC, setTotalPageC] = useState(0);
-    const [totalRecommendsC, setTotalRecommendsC] = useState(0);
+    // const [totalRecommendsC, setTotalRecommendsC] = useState(0);
 
     const [boardRecommendList, setBoardRecommendList] = useState([{
         recommendLogNo: '',
@@ -36,11 +36,6 @@ const MemberInfoRecommendLog = () => {
         createdDate: ''
     }]);
 
-    const paging = {
-        recordPerPage: 10,
-        page: pageNo
-    }
-
     const paginationB = () => {
         let result = [];
         for (let i=0; i<totalPageB; i++) {
@@ -58,6 +53,11 @@ const MemberInfoRecommendLog = () => {
     }
 
     useEffect(() => {
+
+        const paging = {
+            recordPerPage: 10,
+            page: pageNo
+        }
         const getRecommends = async () => {
 
             const boardRecommends = await axios({
@@ -72,9 +72,9 @@ const MemberInfoRecommendLog = () => {
             setBoardRecommendList(boardDataList);
             setCommentRecommendList(commentDataList);
             setTotalPageB(boardRecommends.data.totalPageB);
-            setTotalRecommendsB(boardRecommends.data.totalRecommendsB);
+            // setTotalRecommendsB(boardRecommends.data.totalRecommendsB);
             setTotalPageC(boardRecommends.data.totalPageC);
-            setTotalRecommendsC(boardRecommends.data.totalRecommendsC);
+            // setTotalRecommendsC(boardRecommends.data.totalRecommendsC);
 
 
             for(let i=0; i<boardDataList.length; i++) {

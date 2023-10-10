@@ -21,9 +21,7 @@ const ImageModal = (props) => {
 
   return (
       <div ref={modalRef} className="imageModal-view">
-
-          <img src={props.imageUrl} />
-
+          <img src={props.imageUrl} alt="imageUrl"/>
       </div>
   )
 }
