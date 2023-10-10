@@ -5,13 +5,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome as homeIcon,
-        faShieldCat as catIcon} from "@fortawesome/free-solid-svg-icons"
-import {
-    setCookie, getCookie, removeCookie
-} from './Cookie';
+import {faShieldCat as catIcon} from "@fortawesome/free-solid-svg-icons"
+import {getCookie} from './Cookie';
 import {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -27,10 +24,6 @@ export default function ButtonAppBar() {
         }).then((res) => {
             window.location.reload();
         })
-    }
-
-    const memberInfo = () => {
-
     }
 
     useEffect(() => {
@@ -51,7 +44,6 @@ export default function ButtonAppBar() {
                     sx={{ mr: 2, color: "white" }}
                 >
                     <Link to="/" style={{color: 'white', fontWeight: 'bold', marginLeft: '30px', fontSize: '24px', fontFamily: 'angular', textDecoration: 'none'}} >
-                        {/*<FontAwesomeIcon icon={homeIcon} style={{color: 'white', fontSize: '24px'}}/>*/}
                         <FontAwesomeIcon icon={catIcon} /> The Rabbits
                     </Link>
                 </IconButton>
@@ -59,11 +51,16 @@ export default function ButtonAppBar() {
 
                 </Typography>
 
+                <Link to="/">
+                    <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}}>Home</Button>
+                </Link>
+
                 {
+                    // eslint-disable-next-line eqeqeq
                     `${isLoginCheck}` == 1 ?
                         <span>
                             <Link to="/memberInfo">
-                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} onClick={() => memberInfo()}>My Info</Button>
+                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} >My Info</Button>
                             </Link>
                             <Link to="/">
                                 <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} onClick={() => logout()}>Logout</Button>

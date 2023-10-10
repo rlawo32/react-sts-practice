@@ -1,7 +1,7 @@
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import './BoardDetail.scss';
 import '../Layouts/MainView.scss';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import ImageModal from "./ImageModal";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -20,13 +20,12 @@ import {getCookie} from "../Navigation/Cookie";
 const BoardDetail = (props) => {
     const locationURL = window.location.href;
     const navigate = useNavigate();
-    const editorRef = useRef(null);
 
     const category_name = props.category;
     const subTab_name = props.subTab;
 
     const [isLoginCheck, setIsLoginCheck] = useState(0);
-    const [detailLoginMemberId, setDetailLoginMemberId] = useState(0);
+    // const [detailLoginMemberId, setDetailLoginMemberId] = useState(0);
     const [commentLoginMemberId, setCommentLoginMemberId] = useState(0);
     const [imageModal, setImageModal] = useState(false);
     const [imageModalUrl, setImageModalUrl] = useState(false);
@@ -49,7 +48,6 @@ const BoardDetail = (props) => {
 
     const [prevId, setPrevId] = useState(0);
     const [nextId, setNextId] = useState(0);
-    const [memberId, setMemberId] = useState(9999);
 
     const [mainRecommendCheck, setMainRecommendCheck] = useState(0);
     const [commentRecommendCheck, setCommentRecommendCheck] = useState(0);
@@ -85,18 +83,11 @@ const BoardDetail = (props) => {
         commentBoardCategory: ''
     }]);
 
-    const paging = {
-        boardId: props.boardId,
-        recordPerPage: 10,
-        page: pageNo
-    }
-
     const commentData = {
         commentParentId: "",
         commentTargetId: "",
         commentNestedId: "",
         commentNestedLevel: "",
-        memberId: memberId,
         boardId: props.boardId,
         commentContent: commentText
     }
@@ -106,7 +97,6 @@ const BoardDetail = (props) => {
         commentTargetId: commentTargetId,
         commentNestedId: nestedId,
         commentNestedLevel: nestedLevel,
-        memberId: memberId,
         boardId: props.boardId,
         commentContent: nestedText
     }
@@ -125,18 +115,19 @@ const BoardDetail = (props) => {
         alert('복사 성공 \n' + text);
     }
 
-    const detailUpdateHandler = () => {
-        // await axios({
-        //     method: "PUT",
-        //     url: '/board/detailUpdate',
-        //     data: JSON.stringify(commentData),
-        //     headers: {'Content-type': 'application/json'}
-        // }).then(() => {
-        //
-        // })
-    }
+    // const detailUpdateHandler = async () => {
+    //     await axios({
+    //         method: "PUT",
+    //         url: '/board/detailUpdate',
+    //         data: JSON.stringify(commentData),
+    //         headers: {'Content-type': 'application/json'}
+    //     }).then(() => {
+    //
+    //     })
+    // }
 
     const detailDeleteHandler = async () => {
+        // eslint-disable-next-line eqeqeq
         if (window.confirm("해당 게시글을 삭제하시겠습니까?") == true){
             await axios({
                 method: "DELETE",
@@ -150,6 +141,7 @@ const BoardDetail = (props) => {
 
     const onClickMainRecommendUp = async (e) => {
 
+        // eslint-disable-next-line eqeqeq
         if(isLoginCheck == 1) {
             const mainRecommendData = {
                 boardId: props.boardId,
@@ -157,6 +149,7 @@ const BoardDetail = (props) => {
                 recommendType: "U"
             }
 
+            // eslint-disable-next-line eqeqeq
             if(e == 1) {
                 await axios({
                     method: "DELETE",
@@ -181,6 +174,7 @@ const BoardDetail = (props) => {
 
     const onClickMainRecommendDown = async (e) => {
 
+        // eslint-disable-next-line eqeqeq
         if(isLoginCheck == 1) {
             const mainRecommendData = {
                 boardId: props.boardId,
@@ -188,6 +182,7 @@ const BoardDetail = (props) => {
                 recommendType: "D"
             }
 
+            // eslint-disable-next-line eqeqeq
             if(e == 1) {
                 await axios({
                     method: "DELETE",
@@ -215,6 +210,7 @@ const BoardDetail = (props) => {
         const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendUp");
         const CommentRecommendUpChecked = comment_target[0].children[0].children[0].checked;
 
+        // eslint-disable-next-line eqeqeq
         if(isLoginCheck == 1) {
             const commentRecommendData = {
                 boardId: props.boardId,
@@ -249,6 +245,7 @@ const BoardDetail = (props) => {
         const comment_target = document.getElementById(selectCommentId).getElementsByClassName("comment-recommendDown");
         const CommentRecommendDownChecked = comment_target[0].children[0].children[0].checked;
 
+        // eslint-disable-next-line eqeqeq
         if(isLoginCheck == 1) {
             const commentRecommendData = {
                 boardId: props.boardId,
@@ -279,12 +276,14 @@ const BoardDetail = (props) => {
     }
 
     const changeDetailBoard = async (itemID, orderID) => {
+        // eslint-disable-next-line eqeqeq
         if(itemID != null) {
             await axios({
                 method: "GET",
                 url: '/board/boardPrevAndNext',
                 params: {boardId: itemID, orderId: orderID}
             })
+            // eslint-disable-next-line eqeqeq
             if(orderID == 'prev') {
                 props.changeBoardId(prevId);
             } else {
@@ -305,6 +304,7 @@ const BoardDetail = (props) => {
 
     const commentSaveHandler = async () => {
         setCommentState(!commentState);
+        // eslint-disable-next-line eqeqeq
         if(commentText == "") {
             alert("내용을 입력해주세요");
         } else {
@@ -323,6 +323,7 @@ const BoardDetail = (props) => {
     }
 
     const commentDeleteHandler = async (commentId) => {
+        // eslint-disable-next-line eqeqeq
         if(window.confirm("댓글을 삭제하시겠습니까?") == true) {
             await axios({
                 method: "DELETE",
@@ -338,6 +339,7 @@ const BoardDetail = (props) => {
     const nestedSaveHandler = async (e) => {
         const selectCommentId = e.target.value;
         setCommentState(!commentState);
+        // eslint-disable-next-line eqeqeq
         if(nestedText == "") {
             alert("내용을 입력해주세요");
         } else {
@@ -371,6 +373,7 @@ const BoardDetail = (props) => {
         const targetDiv_1 = document.getElementById(selectCommentId);
         const nestedView_1 = targetDiv_1.lastChild;
 
+        // eslint-disable-next-line eqeqeq
         if(commentId != selectCommentId) {
             box = false;
             const targetDiv_2 = document.getElementById(commentId);
@@ -394,6 +397,13 @@ const BoardDetail = (props) => {
     }
 
     useEffect(() => {
+        const paging = {
+            boardId: props.boardId,
+            recordPerPage: 10,
+            page: pageNo
+        }
+
+        // eslint-disable-next-line eqeqeq
         if(props.boardId != null) {
             const getBoards = async () => {
 
@@ -451,6 +461,7 @@ const BoardDetail = (props) => {
     // 추후 다수 사용자로 인한 트래픽 확인 => commentState:댓글 작성 후 바로 추가, commentRecommendCheck:댓글 추천 체크
 
     useEffect(() => {
+        // eslint-disable-next-line eqeqeq
         if(props.boardId != null) {
             const getBoards = async () => {
                 const detail = await axios({
@@ -459,7 +470,7 @@ const BoardDetail = (props) => {
                 })
 
                 setBoardDetail(detail.data);
-                setDetailLoginMemberId(detail.data.loginMemberId);
+                // setDetailLoginMemberId(detail.data.loginMemberId);
                 // setCommentList(detail.data.boardComments);
             };
 
@@ -474,7 +485,7 @@ const BoardDetail = (props) => {
                 })
 
                 setBoardDetail(detail.data);
-                setDetailLoginMemberId(detail.data.loginMemberId);
+                // setDetailLoginMemberId(detail.data.loginMemberId);
             };
 
             getBoards();
@@ -608,6 +619,7 @@ const BoardDetail = (props) => {
                     <div className="detail-mainRecommend">
                         <span className="detail-recommendUp">
                             {
+                                // eslint-disable-next-line eqeqeq
                                 `${boardDetail.boardRecommendUpCheck}` == 1 ?
                                     <FontAwesomeIcon icon={recommendUp} onClick={(e) => onClickMainRecommendUp(`${boardDetail.boardRecommendUpCheck}`)} className="recommendUp-btn" />
                                     :
@@ -616,6 +628,7 @@ const BoardDetail = (props) => {
                         </span>
                         <span className="detail-recommendDown">
                             {
+                                // eslint-disable-next-line eqeqeq
                                 `${boardDetail.boardRecommendDownCheck}` == 1 ?
                                     <FontAwesomeIcon icon={recommendDown} onClick={(e) => onClickMainRecommendDown(`${boardDetail.boardRecommendDownCheck}`)} className="recommendDown-btn" />
                                     :
@@ -624,6 +637,7 @@ const BoardDetail = (props) => {
                         </span>
                     </div>
                     {
+                        // eslint-disable-next-line eqeqeq
                         `${boardDetail.boardAuthorId}` == `${boardDetail.loginMemberId}` ?
                             <div className="detail-modify">
                                 <button className="detail-update-btn">
@@ -643,6 +657,7 @@ const BoardDetail = (props) => {
                 <div className="detail-footer2">
                     <span className="detail-prev">
                         {
+                            // eslint-disable-next-line eqeqeq
                             `${prevId}` != 'null' ?
                                 <button>
                                     <Link to={{ pathname: `/board/${prevId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.boardId, 'prev')}>
@@ -672,6 +687,7 @@ const BoardDetail = (props) => {
                     </span>
                     <span className="detail-next">
                         {
+                            // eslint-disable-next-line eqeqeq
                             `${nextId}` != 'null' ?
                                 <button>
                                     <Link to={{ pathname: `/board/${nextId}` }} style={{textDecoration: 'none', color: 'white'}} onClick={() => changeDetailBoard(props.boardId, 'next')}>
@@ -695,10 +711,12 @@ const BoardDetail = (props) => {
                             댓글 {totalComments} 개
                         </div>
                         {commentList.map((comments) => (
+                            // eslint-disable-next-line eqeqeq
                             <div className="comment-list" key={comments.commentId} id={comments.commentId} style={`${comments.commentNestedLevel}` == 1 ? {marginLeft: "40px"} : null }>
                                 <div className="comment-header">
                                     <div className="comment-header1">
                                         {
+                                            // eslint-disable-next-line eqeqeq
                                             `${comments.commentNestedLevel}` == 1 ? <FontAwesomeIcon icon={nestedArrow} style={{transform: "rotate(180deg)", marginRight: "8px", fontSize: "24px", color: "#6c757d"}}/> : null
                                         }
                                         <span className="comment-nickname">{comments.memberNickname}</span>
@@ -709,19 +727,22 @@ const BoardDetail = (props) => {
                                             <input type="hidden" value={comments.commentNestedId} />
                                             <input type="hidden" value={comments.commentNestedLevel} />
                                             {
+                                                // eslint-disable-next-line eqeqeq
                                                 `${isLoginCheck}` == 1 ?
-                                                `${comments.commentNestedLevel}` == 1 ? null :
-                                                    <button className="comment-nested-btn" onClick={(e) =>
-                                                        nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
-                                                            `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
-                                                        댓글
-                                                    </button>
-                                                    :
-                                                    null
+                                                    // eslint-disable-next-line eqeqeq
+                                                    `${comments.commentNestedLevel}` == 1 ? null :
+                                                        <button className="comment-nested-btn" onClick={(e) =>
+                                                            nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
+                                                                `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
+                                                            댓글
+                                                        </button>
+                                                        :
+                                                        null
                                             }
                                         </span>
                                         <span className="comment-recommendUp">
                                             {
+                                                // eslint-disable-next-line eqeqeq
                                                 `${comments.commentRecommendUpCheck}` == 1 ?
                                                     <label>
                                                         <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
@@ -737,6 +758,7 @@ const BoardDetail = (props) => {
                                         </span>
                                         <span className="comment-recommendDown">
                                             {
+                                                // eslint-disable-next-line eqeqeq
                                                 `${comments.commentRecommendDownCheck}` == 1 ?
                                                     <label>
                                                         <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
@@ -752,6 +774,7 @@ const BoardDetail = (props) => {
                                         </span>
                                         <span className="comment-delete">
                                             {
+                                                // eslint-disable-next-line eqeqeq
                                                 `${comments.memberId}` == `${commentLoginMemberId}` ?
                                                     <button onClick={() => commentDeleteHandler(`${comments.commentId}`)} className="comment-delete-btn">
                                                         삭제
@@ -800,6 +823,7 @@ const BoardDetail = (props) => {
                         <div className="comment-tag">댓글 작성</div>
                         <div className="comment-box" style={ isLoginCheck ? {} : {} }>
                             {
+                                // eslint-disable-next-line eqeqeq
                                 `${isLoginCheck}` == 1 ?
                                     <textarea id="comment-text" placeholder="댓글을 입력하세요" onChange={changeCommentTextHandler}/>
                                     :
@@ -808,6 +832,7 @@ const BoardDetail = (props) => {
                         </div>
                         <div className="comment-btn" style={ isLoginCheck ? {} : {} }>
                             {
+                                // eslint-disable-next-line eqeqeq
                                 `${isLoginCheck}` == 1 ?
                                     <button className="btn-design" onClick={commentSaveHandler}>등록</button>
                                     :

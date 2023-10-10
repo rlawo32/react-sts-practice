@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "./SignIn.scss";
 import '../Layouts/MainView.scss'
 import AppBarNavigation from "../Navigation/HeaderNavigation";
@@ -50,6 +50,7 @@ const FindPasswordView = () => {
 
 
     const findPwEmailHandler = (e)=> {
+        // eslint-disable-next-line
         const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         const emailCurrent = e.target.value;
 
@@ -74,6 +75,7 @@ const FindPasswordView = () => {
 
     const findPwEmailCheckSendHandler = async () => {
 
+        // eslint-disable-next-line eqeqeq
         if(isMemberEmailConfirm == true) {
             alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
             setIsMemberEmailEffect(true);
@@ -136,6 +138,7 @@ const FindPasswordView = () => {
             setIsMemberEmailCheckShowEffect(true);
             setIsMemberPasswordShowEffect(false);
         } else {
+            // eslint-disable-next-line eqeqeq
             if(memberEmailCheck == emailAuthCode) {
                 alert('인증되었습니다.');
                 setMemberEmailCheckMessage('인증되었습니다.');
@@ -182,6 +185,7 @@ const FindPasswordView = () => {
             setMemberPasswordCheckMessage('필수 정보입니다.');
             setIsMemberPasswordCheckEffect(false);
         } else {
+            // eslint-disable-next-line eqeqeq
             if (memberPassword != passwordCheckCurrent) {
                 setMemberPasswordCheckMessage('비밀번호가 일치하지 않습니다.');
                 setIsMemberPasswordCheckEffect(false);
@@ -195,6 +199,7 @@ const FindPasswordView = () => {
     }
 
     const customAlert = () => {
+        // eslint-disable-next-line eqeqeq
         if (window.confirm("회원가입을 진행하시겠습니까?") == true){
             navigate("/signUp");
         } else {
@@ -238,6 +243,7 @@ const FindPasswordView = () => {
     const passwordSeeHandler = () => {
         const typeCheck = passwordRef.current.type;
 
+        // eslint-disable-next-line eqeqeq
         if(typeCheck == 'password') {
             passwordRef.current.type = 'text';
         } else {
@@ -248,6 +254,7 @@ const FindPasswordView = () => {
     const passwordCheckSeeHandler = () => {
         const typeCheck = passwordCheckRef.current.type;
 
+        // eslint-disable-next-line eqeqeq
         if(typeCheck == 'password') {
             passwordCheckRef.current.type = 'text';
         } else {
@@ -256,11 +263,14 @@ const FindPasswordView = () => {
     }
 
     const enterOnKeyHandler = (e) => {
-        if(e.key === 'Enter' && isMemberEmailShowEffect == true) {
+        // eslint-disable-next-line eqeqeq
+        if(e.key == 'Enter' && isMemberEmailShowEffect == true) {
             findPwEmailCheckSendHandler();
-        } else if(e.key === 'Enter' && isMemberEmailCheckShowEffect == true) {
+            // eslint-disable-next-line eqeqeq
+        } else if(e.key == 'Enter' && isMemberEmailCheckShowEffect == true) {
             findPwEmailCheckConfirmHandler();
-        } else if(e.key === 'Enter' && isMemberPasswordShowEffect == true) {
+            // eslint-disable-next-line eqeqeq
+        } else if(e.key == 'Enter' && isMemberPasswordShowEffect == true) {
             findPwPasswordChangeHandler();
         }
     }

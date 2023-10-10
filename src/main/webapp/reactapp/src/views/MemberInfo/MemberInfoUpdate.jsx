@@ -67,6 +67,7 @@ const MemberInfoUpdate = (props) => {
     const memberNicknameChangeHandler = (e) => {
         const changeNickname = e.target.value;
         const nicknameRegex = /^.{2,20}$/;
+        // eslint-disable-next-line
         const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
         const gapRegex  = /\s/g;
 
@@ -174,17 +175,18 @@ const MemberInfoUpdate = (props) => {
     }
 
     const saveMemberInfo = async(passwordCheck) => {
+        let slash = "/";
 
         const updateData = {
             memberNickname: `${memberNickname}`,
-            memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`
+            memberBirth: `${memberBirthY}` `${slash}` `${memberBirthM}` `${slash}` `${memberBirthD}`
         }
 
         const formData = new FormData();
 
         if(passwordCheck) {
 
-            if(uploadProfileImg == "D") {
+            if(uploadProfileImg === "D") {
                 await axios({
                     method: "DELETE",
                     url: "member/imageDelete"
@@ -245,6 +247,7 @@ const MemberInfoUpdate = (props) => {
 
     useEffect(() => {
         setPreviewProfileImg(props.img);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -280,6 +283,7 @@ const MemberInfoUpdate = (props) => {
                     </div>
                     <div className="update-value">
                         {
+                            // eslint-disable-next-line eqeqeq
                             `${profileInfo.memberEmail}` != '' ?
                                 <div className="update-email">
                                     {profileInfo.memberEmail}

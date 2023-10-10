@@ -50,6 +50,7 @@ const SignUp = () => {
     const [isMemberEmailCheckConfirm, setIsMemberEmailCheckConfirm] = useState(false);
 
     const signUpEmailHandler = (e)=> {
+        // eslint-disable-next-line
         const memberEmailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         const memberEmailCurrent = e.target.value;
         setMemberEmail(memberEmailCurrent);
@@ -73,7 +74,7 @@ const SignUp = () => {
 
     // 이메일 중복 확인
     const emailDuplicationHandler = async () => {
-
+        // eslint-disable-next-line
         const emailDuplicationRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if(emailDuplicationRegex.test(memberEmail)) {
             await axios({
@@ -98,7 +99,7 @@ const SignUp = () => {
     }
 
     const emailCheckSendHandler = async () => {
-
+        // eslint-disable-next-line eqeqeq
         if(isMemberEmailConfirm == true) {
             alert('인증코드를 발송했습니다. 이메일을 확인해주세요.');
             setIsMemberEmailEffect(true);
@@ -151,6 +152,7 @@ const SignUp = () => {
             setIsMemberEmailCheckEffect(false);
             setIsMemberEmailCheckConfirm(false);
         } else {
+            // eslint-disable-next-line eqeqeq
             if(memberEmailCheck == memberEmailCode) {
                 alert('인증되었습니다.');
                 setMemberEmailCheckMessage('인증되었습니다.');
@@ -192,6 +194,7 @@ const SignUp = () => {
             setMemberPasswordCheckMessage('필수 정보입니다.');
             setIsMemberPasswordCheckEffect(false);
         } else {
+            // eslint-disable-next-line eqeqeq
             if (memberPassword == passwordCheckCurrent) {
                 setMemberPasswordCheckMessage('');
                 setIsMemberPasswordCheckEffect(true);
@@ -205,6 +208,7 @@ const SignUp = () => {
     const passwordSeeHandler = () => {
         const typeCheck = passwordRef.current.type;
 
+        // eslint-disable-next-line eqeqeq
         if(typeCheck == 'password') {
             passwordRef.current.type = 'text';
         } else {
@@ -215,6 +219,7 @@ const SignUp = () => {
     const passwordCheckSeeHandler = () => {
         const typeCheck = passwordCheckRef.current.type;
 
+        // eslint-disable-next-line eqeqeq
         if(typeCheck == 'password') {
             passwordCheckRef.current.type = 'text';
         } else {
@@ -224,6 +229,7 @@ const SignUp = () => {
 
     const signUpNicknameHandler = (e)=> {
         const memberNicknameRegex = /^.{2,20}$/;
+        // eslint-disable-next-line
         const specialRegex  = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
         const gapRegex  = /\s/g;
 
@@ -252,8 +258,8 @@ const SignUp = () => {
 
     // 닉네임 중복 확인
     const nicknameDuplicationHandler = async () => {
-        if(isMemberNicknameEffect === true) {
-
+        // eslint-disable-next-line eqeqeq
+        if(isMemberNicknameEffect == true) {
             await axios({
                 method: "GET",
                 url: "/member/signUpDuplicationChk",
@@ -387,7 +393,9 @@ const SignUp = () => {
     // }, [])
 
     const onJoinHandler = async (e) => {
+        let slash = "/";
 
+        // eslint-disable-next-line eqeqeq
         if(memberBirthD.length == 1) {
             setMemberBirthD("0" + memberBirthD);
         }
@@ -396,7 +404,7 @@ const SignUp = () => {
             memberEmail: `${memberEmail}`,
             memberPw: `${memberPassword}`,
             memberNickname: `${memberNickname}`,
-            memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`,
+            memberBirth: `${memberBirthY}` `${slash}` `${memberBirthM}` `${slash}` `${memberBirthD}`,
         }
 
         if(memberEmail.length < 1) {
@@ -404,50 +412,44 @@ const SignUp = () => {
             setMemberEmailMessage('필수 정보입니다.');
             setIsMemberEmailEffect(false);
             e.preventDefault();
-        } else
-        if(memberEmailCheck.length < 1) {
+        } else if(memberEmailCheck.length < 1) {
             alert('인증을 진행해주세요.');
             setMemberEmailCheckMessage('인증이 필요합니다.');
             setIsMemberEmailCheckEffect(false);
             e.preventDefault();
-        } else
-        if(isMemberEmailCheckConfirm == false) {
+            // eslint-disable-next-line eqeqeq
+        } else if(isMemberEmailCheckConfirm == false) {
             alert('인증번호가 틀립니다.');
             setMemberEmailCheckMessage('인증이 필요합니다.');
             setIsMemberEmailCheckEffect(false);
             e.preventDefault();
-        } else
-        if(memberPassword.length < 1) {
+        } else if(memberPassword.length < 1) {
             alert('비밀번호를 입력해주세요.');
             setMemberPasswordMessage('필수 정보입니다.');
             setIsMemberPasswordEffect(false);
             e.preventDefault();
-        } else
-        if(memberPasswordCheck.length < 1 || memberPassword != memberPasswordCheck) {
+            // eslint-disable-next-line eqeqeq
+        } else if(memberPasswordCheck.length < 1 || memberPassword != memberPasswordCheck) {
             alert('비밀번호를 확인해주세요.');
             setMemberPasswordCheckMessage('비밀번호가 일치하지 않습니다.');
             setIsMemberPasswordCheckEffect(false);
             e.preventDefault();
-        } else
-        if(memberNickname.length < 1) {
+        } else if(memberNickname.length < 1) {
             alert('닉네임을 입력해주세요.');
             setMemberNicknameMessage('필수 정보입니다.');
             setIsMemberNicknameEffect(false);
             e.preventDefault();
-        } else
-        if(memberBirthY.length < 1) {
+        } else if(memberBirthY.length < 1) {
             alert('생일 날짜를 입력해주세요.');
             setMemberBirthMessage('태어난 년도 4자리를 정확하게 입력하세요.');
             setIsMemberBirthEffect(false);
             e.preventDefault();
-        } else
-        if(memberBirthM.length < 1) {
+        } else if(memberBirthM.length < 1) {
             alert('생일 날짜를 입력해주세요.');
             setMemberBirthMessage('태어난 월을 선택하세요.');
             setIsMemberBirthEffect(false);
             e.preventDefault();
-        } else
-        if(memberBirthD.length < 1) {
+        } else if(memberBirthD.length < 1) {
             alert('생일 날짜를 입력해주세요.');
             setMemberBirthMessage('태어난 일(날짜) 2자리를 정확하게 입력하세요.');
             setIsMemberBirthEffect(false);

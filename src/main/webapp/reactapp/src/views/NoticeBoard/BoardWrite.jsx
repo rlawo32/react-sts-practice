@@ -79,6 +79,7 @@ const BoardWrite = () => {
             setBoardCategory(categoryMenu[1].key);
             setBoardTab(tabMenu[1].key);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -96,7 +97,7 @@ const BoardWrite = () => {
                             </div>
                             <div>
                                 <select value={boardCategory} onChange={boardCategoryChangeHandler}>
-                                    {categoryMenu.filter((cl) => (cl.key != "C0")).map((cl) => (
+                                    {categoryMenu.filter((cl) => (cl.key !== "C0")).map((cl) => (
                                         <option key={cl.key} value={cl.key}>{cl.value}</option>
                                     ))}
                                 </select>
@@ -107,7 +108,7 @@ const BoardWrite = () => {
                                 분류 선택
                             </div>
                             <select value={boardTab} onChange={boardTabChangeHandler}>
-                                {tabMenu.filter((tl) => (tl.key != "T0")).map((tl) => (
+                                {tabMenu.filter((tl) => (tl.key !== "T0")).map((tl) => (
                                     <option key={tl.key} value={tl.key}>{tl.value}</option>
                                 ))}
                             </select>

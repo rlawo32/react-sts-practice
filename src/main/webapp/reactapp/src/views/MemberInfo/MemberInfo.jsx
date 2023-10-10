@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
 import MemberInfoProfile from "./MemberInfoProfile";
@@ -14,7 +13,6 @@ import '../Layouts/MainView.scss'
 import axios from "axios";
 
 const MemberInfo = () => {
-    const navigate = useNavigate();
 
     const [memberInfo, setMemberInfo] = useState([{
         memberId: '',
@@ -98,7 +96,7 @@ const MemberInfo = () => {
 
         const getMemberInfo = async () => {
 
-            const axiosHeaderReissue = await axios({
+            await axios({
                 method: "GET",
                 url: '/auth/axiosHeaderReissue'
             })
@@ -113,7 +111,7 @@ const MemberInfo = () => {
             setMemberProfileDate(responseData.data.createdDate.substring(0, 10));
             if(responseData.data.picture) {
                 const pictureUrl = responseData.data.picture.substring(0, 4);
-                if(pictureUrl == "http") {
+                if(pictureUrl === "http") {
                     setMemberProfileImg(responseData.data.picture);
                 } else {
                     setMemberProfileImg("/upload/" + responseData.data.picture);

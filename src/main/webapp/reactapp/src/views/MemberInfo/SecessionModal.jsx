@@ -25,7 +25,7 @@ const SecessionModal = (props) => {
         if(memberPassword.length < 1) {
             alert('비밀번호를 입력해주시길 바랍니다.');
         } else {
-
+            // eslint-disable-next-line eqeqeq
             if(window.confirm('정말 회원탈퇴를 진행하시겠습니까?') == true) {
                 await axios({
                     method: 'PUT',

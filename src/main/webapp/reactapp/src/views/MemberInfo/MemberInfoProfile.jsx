@@ -43,6 +43,7 @@ const MemberInfoProfile = (props) => {
                     </div>
                     <div className="profile-value">
                         {
+                            // eslint-disable-next-line eqeqeq
                             `${profileInfo.memberEmail}` != '' ?
                                 <div className="profile-email font-custom">
                                     {profileInfo.memberEmail}
@@ -56,6 +57,7 @@ const MemberInfoProfile = (props) => {
                             {profileInfo.memberNickname}
                         </div>
                         {
+                            // eslint-disable-next-line eqeqeq
                             `${profileInfo.memberBirth}` != '' ?
                                 <div className="profile-birth font-custom">
                                     {profileInfo.memberBirth}

@@ -8,7 +8,6 @@ const MemberInfoCommentLog = () => {
 
     const [pageNo, setPageNo] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
-    const [totalComments, setTotalComments] = useState(0);
 
     const [commentList, setCommentList] = useState([{
         commentLogNo: '',
@@ -54,7 +53,6 @@ const MemberInfoCommentLog = () => {
 
             setCommentList(datalist);
             setTotalPage(boardComments.data.totalPage);
-            setTotalComments(boardComments.data.totalComments);
 
             for(let i=0; i<datalist.length; i++) {
                 datalist[i].commentLogNo = (i  + (pageNo * 10)) + 1;

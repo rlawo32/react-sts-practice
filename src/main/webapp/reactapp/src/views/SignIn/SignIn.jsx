@@ -11,9 +11,7 @@ import {
         faShieldCat as catIcon
         } from "@fortawesome/free-solid-svg-icons"
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
-import {
-    setCookie, getCookie, removeCookie
-} from './../Navigation/Cookie';
+import {setCookie} from './../Navigation/Cookie';
 
 const googleOauthLogin = async () => {
     window.location.href = `http://localhost:8080/oauth2/authorization/google`;
@@ -51,6 +49,7 @@ const SignIn = () => {
     const passwordSeeHandler = () => {
         const typeCheck = passwordRef.current.type;
 
+        // eslint-disable-next-line eqeqeq
         if(typeCheck == 'password') {
             passwordRef.current.type = 'text';
         } else {
@@ -65,6 +64,7 @@ const SignIn = () => {
             memberPw: loginMemberPassword
         }
 
+        // eslint-disable-next-line
         const loginEmailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         const loginPasswordRegex = /^(?=.*[a-zA-Z])(?=.*[!?@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
@@ -116,23 +116,23 @@ const SignIn = () => {
         }
     }
 
-    const onSilentRefresh = async () => {
-
-        let token = {
-            accessToken: loginMemberEmail,
-            refreshToken: loginMemberPassword
-        }
-
-        await axios({
-            method: "POST",
-            url: "/auth/reissue",
-            data: JSON.stringify(token),
-            headers: {'Content-type': 'application/json'}
-        }).then((response) => {
-            const responseData = response.data;
-            onLoginSuccess(responseData);
-        })
-    }
+    // const onSilentRefresh = async () => {
+    //
+    //     let token = {
+    //         accessToken: loginMemberEmail,
+    //         refreshToken: loginMemberPassword
+    //     }
+    //
+    //     await axios({
+    //         method: "POST",
+    //         url: "/auth/reissue",
+    //         data: JSON.stringify(token),
+    //         headers: {'Content-type': 'application/json'}
+    //     }).then((response) => {
+    //         const responseData = response.data;
+    //         onLoginSuccess(responseData);
+    //     })
+    // }
 
     const onLoginSuccess = (response) => {
         const { grantType, accessToken, refreshToken, refreshTokenExpiresIn } = response.data;
@@ -162,7 +162,8 @@ const SignIn = () => {
     }
 
     const enterOnKeyHandler = (e) => {
-        if(e.key === 'Enter') {
+        // eslint-disable-next-line eqeqeq
+        if(e.key == 'Enter') {
             onLoginHandler();
         }
     }

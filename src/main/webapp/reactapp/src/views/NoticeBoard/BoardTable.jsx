@@ -1,4 +1,4 @@
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import AppBarNavigation from "../Navigation/HeaderNavigation";
@@ -8,7 +8,6 @@ import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
 import {getCookie} from "../Navigation/Cookie";
 
 const BoardTable = (props) => {
-    const navigate = useNavigate();
 
     const [isLoginCheck, setIsLoginCheck] = useState(false);
 
@@ -109,7 +108,7 @@ const BoardTable = (props) => {
     }
 
     const selectSubTabHandler = (subTabKey) => {
-        if(subTabKey == 'T0') {
+        if(subTabKey === 'T0') {
             setSearchText("");
             clickSubTab(subTabKey);
         } else {

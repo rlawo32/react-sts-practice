@@ -32,6 +32,7 @@ const MemberInfoPwUpdate = (props) => {
             if(res.data) {
                 setPresentPwChkMessage('');
                 setIsPresentPwChkEffect(true);
+                // eslint-disable-next-line eqeqeq
                 if(memberPresentPwChk == memberChangePw) {
                     alert("이전 비밀번호와 같습니다.");
                     setChangePwMessage('이전 비밀번호와 같습니다.');
@@ -82,6 +83,7 @@ const MemberInfoPwUpdate = (props) => {
             setChangePwChkMessage('8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
             setIsChangePwChkEffect(false);
         } else {
+            // eslint-disable-next-line eqeqeq
             if(memberChangePw != changePwChk) {
                 setChangePwChkMessage('비밀번호가 다릅니다.');
                 setIsChangePwChkEffect(false);
@@ -172,6 +174,7 @@ const MemberInfoPwUpdate = (props) => {
                     </div>
                     <div className="update-pw-value">
                         {
+                            // eslint-disable-next-line eqeqeq
                             `${memberInfo.memberEmail}` != '' ?
                                 <div className="update-pw-email font-custom">
                                     {memberInfo.memberEmail}
