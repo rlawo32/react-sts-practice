@@ -9,7 +9,6 @@ import BoardMain from "./views/NoticeBoard/BoardMain";
 import BoardTable from "./views/NoticeBoard/BoardTable";
 import BoardDetail from "./views/NoticeBoard/BoardDetail";
 import MemberInfo from "./views/MemberInfo/MemberInfo";
-import OauthSignIn from "./views/SignIn/OauthSignIn";
 import ImageModal from "./views/NoticeBoard/ImageModal";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
@@ -71,8 +70,6 @@ class App extends Component {
                         <Route path="/imageModal" element={<ImageModal />} />
                         <Route path="/board/:boardId" element={<BoardMain />} />
                         <Route path="/board/:boardId" element={<BoardDetail />} />
-
-                        <Route path="/authLogin" element={<OauthSignIn />} />
                     </Routes>
                 </header>
             </div>

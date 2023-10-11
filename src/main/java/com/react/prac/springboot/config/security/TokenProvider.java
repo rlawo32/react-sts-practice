@@ -50,7 +50,7 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto generateTokenDto(Authentication authentication) {
+    public TokenDto generateTokenDto(Authentication authentication, String loginType) {
 
         // 권한들 가져오기
         String authorities = authentication.getAuthorities().stream()
@@ -73,7 +73,7 @@ public class TokenProvider implements InitializingBean {
         String accessToken = "";
         String refreshToken = "";
 
-        if(authentication.getName().length() > 10) {
+        if(loginType.equals("SOCIAL")) {
 
             DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
             Object memberId = defaultOAuth2User.getAttributes().get("memberId");

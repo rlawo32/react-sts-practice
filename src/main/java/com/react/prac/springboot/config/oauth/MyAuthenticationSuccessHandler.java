@@ -23,7 +23,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     private final MemberRepository memberRepository;
     private final MemberLogRepository memberLogRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    String REDIRECT_URI = "http://localhost:8080/authLogin";
+    String REDIRECT_URI = "http://localhost:8080";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -54,7 +54,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
                      memberLogRepository.save(memberLog);
                  }
 
-                 TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+                 TokenDto tokenDto = tokenProvider.generateTokenDto(authentication, "SOCIAL");
 
                  // 4. RefreshToken 저장
                  RefreshToken refreshToken = RefreshToken.builder()

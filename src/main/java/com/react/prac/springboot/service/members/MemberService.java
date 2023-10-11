@@ -174,7 +174,7 @@ public class MemberService {
                     }
 
                     // 3. 인증 정보를 기반으로 JWT 토큰 생성
-                    tokenDto = tokenProvider.generateTokenDto(authentication);
+                    tokenDto = tokenProvider.generateTokenDto(authentication, "COMMON");
 
                     // 4. RefreshToken 저장
                     RefreshToken refreshToken = RefreshToken.builder()
@@ -215,7 +215,7 @@ public class MemberService {
                     return CommonResponseDto.setFailed("토큰의 유저 정보가 일치하지 않습니다.");
                 } else {
                     // 5. 새로운 토큰 생성
-                    tokenDto = tokenProvider.generateTokenDto(authentication);
+                    tokenDto = tokenProvider.generateTokenDto(authentication, "REISSUE");
 
                     // 6. 저장소 정보 업데이트
                     RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());

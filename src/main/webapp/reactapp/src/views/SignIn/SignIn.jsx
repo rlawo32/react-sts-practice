@@ -13,18 +13,6 @@ import {
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
 import {setCookie} from './../Navigation/Cookie';
 
-const googleOauthLogin = async () => {
-    window.location.href = `http://localhost:8080/oauth2/authorization/google`;
-    // window.location.href = `/login/oauth2/code/google`;
-
-    // await axios({
-    //     method: "GET",
-    //     url: "/auth/oauth2/" + "google"
-    // }).then((response) => {
-    //
-    // })
-}
-
 const SignIn = () => {
     const navigate = useNavigate();
     const passwordRef = useRef(null);
@@ -93,14 +81,6 @@ const SignIn = () => {
             }).then((response) => {
                 const responseData = response.data;
                 if(responseData.data) {
-                    // localStorage.setItem("users", JSON.stringify(response.data));
-
-                    // const { token, exprTime, users } = responseData.data;
-                    // console.log("token" + token);
-                    // const expires = new Date();
-                    // expires.setMilliseconds(expires.getMilliseconds + exprTime);
-                    //
-                    // setCookies('token', token, {expires});
                     onLoginSuccess(responseData);
 
                     navigate('/');
@@ -138,16 +118,8 @@ const SignIn = () => {
         const { grantType, accessToken, refreshToken, refreshTokenExpiresIn } = response.data;
 
         const expires = new Date(refreshTokenExpiresIn);
-
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         axios.defaults.headers.common['Authorization'] = `${grantType} ${accessToken}`;
-
-        // refreshToken은 cookie에 담아놓기
-        // cookie.save('refreshToken', refreshToken, {
-        //     path: '/',
-        //     // httpOnly: true,
-        //     expires
-        // });
 
         setCookie('refreshToken', refreshToken, {
             path: '/',
@@ -224,7 +196,7 @@ const SignIn = () => {
                 <div className="easy-signIn">
                     <div className="signIn-google">
                         <FontAwesomeIcon icon={googleIcon} className="google-icon" />
-                        <button onClick={googleOauthLogin}>구글 로그인</button>
+                        <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/google"}>구글 로그인</button>
                     </div>
                     <div className="signIn-kakao">
                         <FontAwesomeIcon icon={kakaoIcon} className="kakao-icon" />
