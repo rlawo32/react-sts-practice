@@ -393,8 +393,6 @@ const SignUp = () => {
     // }, [])
 
     const onJoinHandler = async (e) => {
-        let slash = "/";
-
         // eslint-disable-next-line eqeqeq
         if(memberBirthD.length == 1) {
             setMemberBirthD("0" + memberBirthD);
@@ -404,7 +402,8 @@ const SignUp = () => {
             memberEmail: `${memberEmail}`,
             memberPw: `${memberPassword}`,
             memberNickname: `${memberNickname}`,
-            memberBirth: `${memberBirthY}` `${slash}` `${memberBirthM}` `${slash}` `${memberBirthD}`,
+            // eslint-disable-next-line no-useless-concat
+            memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`,
         }
 
         if(memberEmail.length < 1) {

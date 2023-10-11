@@ -175,11 +175,11 @@ const MemberInfoUpdate = (props) => {
     }
 
     const saveMemberInfo = async(passwordCheck) => {
-        let slash = "/";
 
         const updateData = {
             memberNickname: `${memberNickname}`,
-            memberBirth: `${memberBirthY}` `${slash}` `${memberBirthM}` `${slash}` `${memberBirthD}`
+            // eslint-disable-next-line no-useless-concat
+            memberBirth: `${memberBirthY}` + "/" + `${memberBirthM}` + "/" + `${memberBirthD}`
         }
 
         const formData = new FormData();
