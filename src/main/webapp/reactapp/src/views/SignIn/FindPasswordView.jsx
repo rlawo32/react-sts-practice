@@ -216,6 +216,7 @@ const FindPasswordView = () => {
                 params: {memberEmail: memberEmail, changePassword: memberPassword}
             }).then((res) => {
                 const result = res.data.result;
+                setIsPasswordIconShow(true);
 
                 if(result) {
                     alert("비밀번호 재설정에 성공하였습니다.\n인증에 사용한 이메일과 변경한 비밀번호로 로그인하시길 바랍니다.");
@@ -284,116 +285,119 @@ const FindPasswordView = () => {
         <div className="signIn-body">
             <AppBarNavigation />
 
-                <div className="findPassword-view">
+            <div className="findPassword-view">
 
-                    <div className="findPassword-progress">
-                        <span style={{marginRight: "100px"}}>
-                            {
-                                isEmailIconShow ? <FontAwesomeIcon icon={progressCheckIcon} className="progress-icon" style={{backgroundColor: '#0d6efd'}}/>
-                                    : <FontAwesomeIcon icon={progressIcon1} className="progress-icon"/>
-                            }
+                <div className="findPassword-progress">
+                    <span style={{marginRight: "100px"}}>
+                        {
+                            isEmailIconShow ? <FontAwesomeIcon icon={progressCheckIcon} className="progress-icon" style={{backgroundColor: '#0d6efd'}}/>
+                                : <FontAwesomeIcon icon={progressIcon1} className="progress-icon"/>
+                        }
 
-                            이메일 입력
-                        </span>
-                        <span className="line-draw1"></span>
-                        <span style={{marginRight: "100px"}}>
+                        이메일 입력
+                    </span>
+                    <span className="line-draw1"></span>
+                    <span style={{marginRight: "100px"}}>
                             {
                                 isEmailCheckIconShow ? <FontAwesomeIcon icon={progressCheckIcon} className="progress-icon" style={{backgroundColor: '#0d6efd'}}/>
                                     : <FontAwesomeIcon icon={progressIcon2} className="progress-icon"/>
                             }
 
-                            이메일 인증
-                        </span>
-                        <span className="line-draw2"></span>
-                        <span>
+                        이메일 인증
+                    </span>
+                    <span className="line-draw2"></span>
+                    <span>
                             {
-                                isPasswordIconShow ? <FontAwesomeIcon icon={progressCheckIcon} className="progress-icon" style={{backgroundColor: 'deepskyblue'}}/>
+                                isPasswordIconShow ? <FontAwesomeIcon icon={progressCheckIcon} className="progress-icon" style={{backgroundColor: '#0d6efd'}}/>
                                     : <FontAwesomeIcon icon={progressIcon3} className="progress-icon"/>
                             }
 
-                            비밀번호 재설정
-                        </span>
-                    </div>
+                        비밀번호 재설정
+                    </span>
+                </div>
 
-                    <div className="email-input">
-                        <FontAwesomeIcon icon={backIcon} className="back-icon" onClick={() => navigate(-1)} title="로그인화면으로 돌아가기"/>
-                        <div className="email-send" style={ isMemberEmailShowEffect ? {display: 'block'} : {display: 'none'}}>
-                            <p style={{ fontSize: '12px', marginBottom: '55px'}}>
-                                ※ 본인확인을 위해 가입 시 입력한 이메일을 통해 인증을 진행합니다.
-                            </p>
+                <div className="email-input">
+                    <FontAwesomeIcon icon={backIcon} className="back-icon" onClick={() => navigate(-1)} title="로그인화면으로 돌아가기"/>
+                    <h2 style={isMemberEmailShowEffect ? {display: 'block', marginTop: '15px'} : {display: 'none'}} >비밀번호 찾기</h2>
+                    <h2 style={isMemberEmailCheckShowEffect ? {display: 'block', marginTop: '15px'} : {display: 'none'}} >비밀번호 찾기</h2>
+                    <div className="email-send" style={ isMemberEmailShowEffect ? {display: 'block'} : {display: 'none'}}>
 
-                            <div>
-                                <input type="text" value={memberEmail} onChange={findPwEmailHandler} onKeyDown={enterOnKeyHandler} placeholder="이메일 주소"
-                                       style={ isMemberEmailEffect ? {border: '2px solid #adb5bd'} : {border: '2px solid red'} } />
-                            </div>
-                            <div>
-                                {
-                                    isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>전송</button>
-                                        : <button onClick={findPwEmailCheckSendHandler}>전송</button>
-                                }
-                            </div>
+                        <p style={{ fontSize: '12px', marginBottom: '35px'}}>
+                            ※ 본인확인을 위해 가입 시 입력한 이메일을 통해 인증을 진행합니다.
+                        </p>
 
-                            {(
-                                <div style={ isMemberEmailEffect ? null
-                                    : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailMessage}</div>
-                            )}
+                        <div>
+                            <input type="text" value={memberEmail} onChange={findPwEmailHandler} onKeyDown={enterOnKeyHandler} placeholder="이메일 주소"
+                                   style={ isMemberEmailEffect ? {border: '2px solid #adb5bd'} : {border: '2px solid red'} } />
+                        </div>
+                        <div>
+                            {
+                                isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>전송</button>
+                                    : <button onClick={findPwEmailCheckSendHandler}>전송</button>
+                            }
                         </div>
 
-                        <div className="email-check" style={ isMemberEmailCheckShowEffect ? {display: 'block'} : {display: 'none'}}>
-                            <p style={{ fontSize: '12px', marginBottom: '55px'}}>
-                                ※ 입력한 이메일로 전송된 인증코드를 입력바랍니다.
-                            </p>
-                            <span>
+                        {(
+                            <div style={ isMemberEmailEffect ? null
+                                : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailMessage}</div>
+                        )}
+                    </div>
+
+                    <div className="email-check" style={ isMemberEmailCheckShowEffect ? {display: 'block'} : {display: 'none'}}>
+                        <p style={{ fontSize: '12px', marginBottom: '35px'}}>
+                            ※ 입력한 이메일로 전송된 인증코드를 입력바랍니다.
+                        </p>
+                        <span>
                                 <input type="text" value={memberEmailCheck} onChange={findPwEmailCheckHandler} onKeyDown={enterOnKeyHandler} placeholder="인증번호 확인"
                                        style={ isMemberEmailCheckEffect ? {border: '2px solid #adb5bd'} : {border: '2px solid red'} } />
                             </span>
-                            <span>
+                        <span>
                                 {
                                     isMemberEmailCheckConfirm ? <button onClick={() => alert('인증이 완료되었습니다.')}>인증</button>
                                         : <button onClick={findPwEmailCheckConfirmHandler}>인증</button>
                                 }
                             </span>
 
+                        {(
+                            <div style={ isMemberEmailCheckEffect ? {color:'green', fontSize:'13px', marginTop:'15px', fontWeight:'bold'}
+                                : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailCheckMessage}</div>
+                        )}
+                    </div>
+
+                    <div className="password-input" style={ isMemberPasswordShowEffect ? {display: 'block'} : {display: 'none'}}>
+                        <p style={{ fontSize: '12px', marginBottom: '35px'}}>
+                            ※ 새로 사용할 비밀번호를 입력해주세요.
+                        </p>
+                        <div className="password-enter">
+                            <FontAwesomeIcon icon={passwordSeeIcon} onClick={() => passwordSeeHandler()} className="passwordSee-icon1"/>
+                            <input type="password" value={ memberPassword} onChange={findPwPasswordHandler} ref={passwordRef}
+                                   placeholder="비밀번호" style={ isMemberPasswordEffect ? {border: 'none'} : {border: '2px solid red'} } />
+
                             {(
-                                <div style={ isMemberEmailCheckEffect ? {color:'green', fontSize:'13px', marginTop:'15px', fontWeight:'bold'}
-                                    : {color:'red', fontSize:'13px', marginTop:'15px', fontWeight:'bold'} }>{memberEmailCheckMessage}</div>
+                                <div style={ isMemberPasswordEffect ? null
+                                    : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordMessage}</div>
                             )}
                         </div>
+                        <div className="password-check">
+                            <FontAwesomeIcon icon={passwordSeeIcon} onClick={() => passwordCheckSeeHandler()} className="passwordSee-icon2"/>
+                            <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} onKeyDown={enterOnKeyHandler} ref={passwordCheckRef}
+                                   onChange={findPwPasswordCheckHandler} style={ isMemberPasswordCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
 
-                        <div className="password-input" style={ isMemberPasswordShowEffect ? {display: 'block'} : {display: 'none'}}>
-                            <p style={{ fontSize: '12px', marginBottom: '35px'}}>
-                                ※ 새로 사용할 비밀번호를 입력해주세요.
-                            </p>
-                            <div className="password-enter">
-                                <FontAwesomeIcon icon={passwordSeeIcon} onClick={() => passwordSeeHandler()} className="passwordSee-icon1"/>
-                                <input type="password" value={ memberPassword} onChange={findPwPasswordHandler} ref={passwordRef}
-                                       placeholder="비밀번호" style={ isMemberPasswordEffect ? {border: 'none'} : {border: '2px solid red'} } />
-
-                                {(
-                                    <div style={ isMemberPasswordEffect ? null
-                                        : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordMessage}</div>
-                                )}
-                            </div>
-                            <div className="password-check">
-                                <FontAwesomeIcon icon={passwordSeeIcon} onClick={() => passwordCheckSeeHandler()} className="passwordSee-icon2"/>
-                                <input type="password" placeholder="비밀번호 확인" value={memberPasswordCheck} onKeyDown={enterOnKeyHandler} ref={passwordCheckRef}
-                                       onChange={findPwPasswordCheckHandler} style={ isMemberPasswordCheckEffect ? {border: 'none'} : {border: '2px solid red'} } />
-
-                                {(
-                                    <div style={ isMemberPasswordCheckEffect ? null
-                                        : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordCheckMessage}</div>
-                                )}
-                            </div>
-                            <div className="password-confirm">
-                                <button onClick={findPwPasswordChangeHandler}>
-                                    비밀번호 재설정 완료
-                                </button>
-                            </div>
+                            {(
+                                <div style={ isMemberPasswordCheckEffect ? null
+                                    : {color:'red', fontSize:'13px', marginTop:'10px', fontWeight:'bold'} }>{memberPasswordCheckMessage}</div>
+                            )}
                         </div>
-
+                        <div className="password-confirm">
+                            <button onClick={findPwPasswordChangeHandler}>
+                                비밀번호 재설정 완료
+                            </button>
+                        </div>
                     </div>
 
                 </div>
+
+            </div>
 
             <FooterNavigation />
         </div>

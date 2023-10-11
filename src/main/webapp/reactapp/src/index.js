@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 import {CookiesProvider} from "react-cookie";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.withCredentials = true;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
