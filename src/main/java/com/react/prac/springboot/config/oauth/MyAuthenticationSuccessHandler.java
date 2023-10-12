@@ -23,7 +23,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     private final MemberRepository memberRepository;
     private final MemberLogRepository memberLogRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    String REDIRECT_URI = "http://localhost:8080";
+    String REDIRECT_URI = "http://ec2-52-78-218-238.ap-northeast-2.compute.amazonaws.com:8080";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

@@ -14,6 +14,8 @@ import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
 import {setCookie} from './../Navigation/Cookie';
 
 const SignIn = () => {
+    const baseUrl = "http://ec2-52-78-218-238.ap-northeast-2.compute.amazonaws.com:8080";
+
     const navigate = useNavigate();
     const passwordRef = useRef(null);
 
@@ -196,15 +198,15 @@ const SignIn = () => {
                 <div className="easy-signIn">
                     <div className="signIn-google">
                         <FontAwesomeIcon icon={googleIcon} className="google-icon" />
-                        <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/google"}>구글 로그인</button>
+                        <button onClick={() => window.location.href=baseUrl + "/oauth2/authorization/google"}>구글 로그인</button>
                     </div>
                     <div className="signIn-kakao">
                         <FontAwesomeIcon icon={kakaoIcon} className="kakao-icon" />
-                        <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/kakao"}>카카오 로그인</button>
+                        <button onClick={() => window.location.href=baseUrl + "/oauth2/authorization/kakao"}>카카오 로그인</button>
                     </div>
                     <div className="signIn-naver">
                         <span className="naver-icon">N</span>
-                        <button onClick={() => window.location.href="http://localhost:8080/oauth2/authorization/naver"}>네이버 로그인</button>
+                        <button onClick={() => window.location.href=baseUrl + "/oauth2/authorization/naver"}>네이버 로그인</button>
                     </div>
                 </div>
 
