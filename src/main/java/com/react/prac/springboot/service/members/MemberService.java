@@ -1,5 +1,7 @@
 package com.react.prac.springboot.service.members;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.config.security.TokenProvider;
 import com.react.prac.springboot.config.security.dto.TokenDto;
@@ -9,9 +11,11 @@ import com.react.prac.springboot.web.dto.CommonResponseDto;
 import com.react.prac.springboot.web.dto.member.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -20,7 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +52,11 @@ public class MemberService {
 
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+
+    private AmazonS3 s3Client;
+
+    @Value("${application.bucket.name}")
+    private String bucketName;
 
     @Value("${file.path}")
     private String uploadFolder;
@@ -345,6 +357,7 @@ public class MemberService {
         return CommonResponseDto.setSuccess("Secession Success!", null);
     }
 
+    // 로컬 이미지 업로드
     @Transactional
     public CommonResponseDto<?> memberImageUpload(MultipartFile multipartFile) {
 
@@ -387,6 +400,63 @@ public class MemberService {
         }
 
         return CommonResponseDto.setSuccess("Image Upload Success", null);
+    }
+
+    // S3 이미지 업로드
+    @Transactional
+    public CommonResponseDto<?> memberImageUploadS3(MultipartFile multipartFile) {
+
+        try {
+            //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
+            UUID uuid = UUID.randomUUID();
+            String imageFileName = uuid + "_" + multipartFile.getOriginalFilename();
+
+            System.out.println("이미지 파일 이름 확인 : " + imageFileName);
+
+            File file = convertMultiPartFileToFile(multipartFile);
+
+            s3Client.putObject(new PutObjectRequest(bucketName, imageFileName, file));
+            file.delete();
+
+            Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
+
+            MemberImage memberImage = MemberImage.builder()
+                    .member(member)
+                    .caption("프로필 이미지")
+                    .memberImageName(imageFileName)
+                    .build();
+
+            memberImageRepository.save(memberImage);
+            memberRepository.updateByMemberPicture(SecurityUtil.getCurrentMemberId(), imageFileName);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return CommonResponseDto.setFailed("Database Error!");
+        }
+
+        return CommonResponseDto.setSuccess("Image Upload Success", null);
+    }
+
+    private File convertMultiPartFileToFile(MultipartFile multipartFile) {
+        File convertedFile = new File(multipartFile.getOriginalFilename());
+
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+            fos.write(multipartFile.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return convertedFile;
+    }
+
+    public String memberImageLoad(String imageFileName) {
+
+        URL url = s3Client.getUrl(bucketName, imageFileName);
+
+        String urlText = "" + url;
+
+        return urlText;
     }
 
     @Transactional

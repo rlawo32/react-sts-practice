@@ -2,27 +2,19 @@ package com.react.prac.springboot.web.controller;
 
 import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.config.security.dto.TokenDto;
-import com.react.prac.springboot.jpa.domain.member.MemberImage;
 import com.react.prac.springboot.jpa.domain.member.MemberImageRepository;
 import com.react.prac.springboot.service.members.MemberService;
 import com.react.prac.springboot.util.MemberUtil;
 import com.react.prac.springboot.web.dto.*;
 import com.react.prac.springboot.web.dto.member.*;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Map;
 
-// @CrossOrigin(originPatterns = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/member")
@@ -116,9 +108,15 @@ public class MemberController {
     @PostMapping("/imageUpload")
     public CommonResponseDto<?> imageUpload(MultipartFile multipartFile) {
 
-        CommonResponseDto<?> result = memberService.memberImageUpload(multipartFile);
+        CommonResponseDto<?> result = memberService.memberImageUploadS3(multipartFile);
 
         return result;
+    }
+
+    @GetMapping("/imageLoad")
+    public String imageLoad(HttpServletRequest request) {
+
+        return memberService.memberImageLoad(request.getParameter("imageFileName"));
     }
 
     @DeleteMapping("/imageDelete")
@@ -127,56 +125,6 @@ public class MemberController {
         CommonResponseDto<?> result = memberService.memberImageDelete();
 
         return result;
-    }
-
-    @GetMapping("/imageView")
-    public String imageView(HttpServletResponse response) throws IOException {
-
-        MemberImage memberImage = memberImageRepository.findByMember(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
-
-        FileInputStream fis = null;
-        BufferedInputStream bis = null;
-        ServletOutputStream sos = null;
-
-        response.setContentType("image/gif");
-
-        String imageName = memberImage.getMemberImageName();
-        String imagePath = uploadFolder + File.separator + imageName;
-
-        System.out.println("이미지 경로 확인 1 : " + imagePath);
-
-        File file = new File(imagePath);
-
-        System.out.println("이미지 경로 확인 2 : " + file);
-
-        fis = new FileInputStream(file);
-
-        System.out.println("이미지 경로 확인 3 : " + fis.read());
-
-        bis = new BufferedInputStream(fis);
-
-        System.out.println("이미지 경로 확인 4 : " + bis.read());
-
-        sos = response.getOutputStream();
-
-        byte[] buf = new byte[(int)file.length()];
-        int length = 0;
-
-        fis.read(buf);
-
-        while( (length = fis.read(buf)) != -1){
-            sos.write(buf, 0, length);
-        }
-
-        if(bis != null) {
-            bis.close();
-        }
-        if(sos != null) {
-            sos.close();
-        }
-
-        return null;
     }
 
     @GetMapping("/memberLog")

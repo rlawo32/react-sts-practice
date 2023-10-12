@@ -1,4 +1,4 @@
-package com.react.prac.springboot.util;
+package com.react.prac.springboot.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

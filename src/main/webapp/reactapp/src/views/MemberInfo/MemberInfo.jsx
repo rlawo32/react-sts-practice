@@ -107,15 +107,29 @@ const MemberInfo = () => {
             })
 
             const responseData = findMemberInfo.data;
+            const responsePicture = responseData.data.picture
             setMemberInfo(responseData.data);
             setMemberProfileDate(responseData.data.createdDate.substring(0, 10));
-            if(responseData.data.picture) {
-                const pictureUrl = responseData.data.picture.substring(0, 4);
-                if(pictureUrl === "http") {
-                    setMemberProfileImg(responseData.data.picture);
+            if(responsePicture) {
+                const presentUrl = window.location.href.substring(7, 12);
+
+                if(presentUrl === "local") {
+                    const pictureUrl = responseData.data.picture.substring(0, 4);
+                    if(pictureUrl === "http") {
+                        setMemberProfileImg(responseData.data.picture);
+                    } else {
+                        setMemberProfileImg("/upload/" + responseData.data.picture);
+                    }
                 } else {
-                    setMemberProfileImg("/upload/" + responseData.data.picture);
+                    await axios({
+                        method: "GET",
+                        url: 'member/imageLoad',
+                        params: {imageFileName: responsePicture}
+                    }).then((res) => {
+                        setMemberProfileImg(res.data);
+                    })
                 }
+
             } else {
                 setMemberProfileImg("");
             }

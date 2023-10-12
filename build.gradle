@@ -45,6 +45,9 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools' // 소스 변경시 자동 빌드
     // email-auth dependency
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // s3 dependency
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     /*
         spring-boot-devtools 사용을 위해 아래와 같이 추가 세팅하기
         Build, Exeution, Deployment > Compiler > Build project autiomaically 체크
