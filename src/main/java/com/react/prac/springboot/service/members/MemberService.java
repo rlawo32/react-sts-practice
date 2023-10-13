@@ -53,7 +53,7 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
 
-    private AmazonS3 s3Client;
+    private final AmazonS3 s3Client;
 
     @Value("${application.bucket.name}")
     private String bucketName;
