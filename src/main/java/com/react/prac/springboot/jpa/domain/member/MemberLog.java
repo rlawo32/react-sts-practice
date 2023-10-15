@@ -27,6 +27,9 @@ public class MemberLog {
     @Column(nullable = false)
     private String logLoginAttributeCode; // 로그인 한 회원 attributeCode
 
+    @Column(nullable = false)
+    private String logLoginIpAddress;
+
     @Column(name = "log_login_date", nullable = false)
     @CreatedDate
     private String createdDate; // 로그인 시도 일시
@@ -41,10 +44,12 @@ public class MemberLog {
     private String logLoginCategory; // 일반로그인/소셜로그인
 
     @Builder
-    public MemberLog(Member member, String logLoginEmail, String logLoginAttributeCode, String createdDate, String logLoginSuccess, String logLoginReason, String logLoginCategory) {
+    public MemberLog(Member member, String logLoginEmail, String logLoginAttributeCode, String logLoginIpAddress,
+                     String createdDate, String logLoginSuccess, String logLoginReason, String logLoginCategory) {
         this.member = member;
         this.logLoginEmail = logLoginEmail;
         this.logLoginAttributeCode = logLoginAttributeCode;
+        this.logLoginIpAddress = logLoginIpAddress;
         this.createdDate = createdDate;
         this.logLoginSuccess = logLoginSuccess;
         this.logLoginReason = logLoginReason;

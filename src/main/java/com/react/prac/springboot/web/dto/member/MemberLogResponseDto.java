@@ -10,6 +10,7 @@ public class MemberLogResponseDto {
     private Long logMemberId;
     private String logLoginEmail;
     private String logLoginAttributeCode;
+    private String logLoginIpAddress;
     private String logLoginDate;
     private String logLoginSuccess;
     private String logLoginReason;
@@ -20,6 +21,7 @@ public class MemberLogResponseDto {
         this.logId = memberLog.getId();
         this.logMemberId = memberLog.getMember().getId();
         this.logLoginEmail = memberLog.getLogLoginEmail();
+        this.logLoginIpAddress = memberLog.getLogLoginIpAddress();
         this.logLoginAttributeCode = memberLog.getLogLoginAttributeCode();
         this.logLoginDate = memberLog.getCreatedDate();
         this.logLoginSuccess = memberLog.getLogLoginSuccess();

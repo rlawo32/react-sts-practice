@@ -14,9 +14,12 @@ const MemberInfoLoginLog = () => {
         logId: '',
         logMemberId: '',
         logMemberEmail: '',
+        logMemberAttributeCode: '',
+        logLoginIpAddress: '',
         logLoginDate: '',
         logLoginSuccess: '',
-        logLoginReason: ''
+        logLoginReason: '',
+        logLoginCategory: ''
     }]);
 
     const pagination = () => {
@@ -91,7 +94,7 @@ const MemberInfoLoginLog = () => {
                                                 <td>{loginLogs.loginLogNo}</td>
                                                 { `${loginLogs.logLoginSuccess}` === 'S' && <td>성공</td> }
                                                 { `${loginLogs.logLoginSuccess}` === 'F' && <td>실패</td> }
-                                                <td>NULL</td>
+                                                <td>{loginLogs.logLoginIpAddress}</td>
                                                 <td>{loginLogs.logLoginReason}</td>
                                                 <td>{loginLogs.logLoginDate}</td>
                                             </tr>
