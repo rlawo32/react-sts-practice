@@ -45,6 +45,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
                              .member(member)
                              .logLoginEmail("")
                              .logLoginAttributeCode(String.valueOf(memberAttributeCode))
+                             .logLoginIpAddress("")
                              .logLoginSuccess("S")
                              .logLoginReason("OAuth 인증 성공")
                              .logLoginCategory("SOCIAL")
