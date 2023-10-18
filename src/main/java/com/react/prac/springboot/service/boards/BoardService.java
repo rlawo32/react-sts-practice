@@ -115,8 +115,6 @@ public class BoardService {
             return CommonResponseDto.setFailed("Database Error!");
         }
 
-        System.out.println(result);
-
         return CommonResponseDto.setSuccess("Image Upload Success", result);
     }
 

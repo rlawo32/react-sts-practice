@@ -25,7 +25,7 @@ const BoardWrite = () => {
     const [boardContent, setBoardContent] = useState("");
     // const [boardContentImage, setBoardContentImage] = useState([]);
 
-    const [previewWriteImgArr, setPreviewWriteImgArr] = useState([]);
+    const [previewWriteImgUrlArr, setPreviewWriteImgUrlArr] = useState([]);
     const [previewWriteImgNameArr, setPreviewWriteImgNameArr] = useState([]);
     const [previewWriteImgSize, setPreviewWriteImgSize] = useState(0);
     const [previewWriteImgSizeArr, setPreviewWriteImgSizeArr] = useState([]);
@@ -75,22 +75,22 @@ const BoardWrite = () => {
     }
 
     const attachImageDelete = async (e) => { debugger
-        setPreviewWriteImgArr(previewWriteImgArr.filter((value,index) => index !== e));
+        setPreviewWriteImgUrlArr(previewWriteImgUrlArr.filter((value,index) => index !== e));
         setPreviewWriteImgSize(previewWriteImgSize - previewWriteImgSizeArr[e]);
         setPreviewWriteImgSizeArr(previewWriteImgSizeArr.filter((value,index) => index !== e));
 
-        const removeImg = document.querySelector('img[src="'+ previewWriteImgArr[e] + '"]');
+        const removeImg = document.querySelector('img[src="'+ previewWriteImgUrlArr[e] + '"]');
 
         removeImg.remove();
 
         // const removeIndex = previewWriteImgArr[e].lastIndexOf("/");
         // const removeUrl = previewWriteImgArr[e].substring(removeIndex+1);
-        const removeUrl = previewWriteImgNameArr[e];
+        const removeImgName = previewWriteImgNameArr[e];
 
         await axios({
             method: "DELETE",
             url: '/board/boardImageDelete',
-            params: {imageFileName: removeUrl}
+            params: {imageFileName: removeImgName}
         })
 
         setPreviewWriteImgNameArr(previewWriteImgNameArr.filter((value,index) => index !== e));
@@ -98,10 +98,10 @@ const BoardWrite = () => {
 
     const attachImageArray = () => {
         let result = [];
-        for (let i=0; i<previewWriteImgArr.length; i++) {
+        for (let i=0; i<previewWriteImgUrlArr.length; i++) {
             result.push(
                 <span key={i} className="write-attach">
-                    <img key={i} src={previewWriteImgArr[i]} alt="업로드 이미지" className="write-attach-upload" />
+                    <img key={i} src={previewWriteImgUrlArr[i]} alt="업로드 이미지" className="write-attach-upload" />
                     <FontAwesomeIcon icon={attachDelete} onClick={() => attachImageDelete(i)} className="write-attach-delete"/>
                 </span>);
         }
@@ -142,7 +142,6 @@ const BoardWrite = () => {
             for(let i=0; i<file.length; i++) {
                 fileSize += file[i].size;
 
-                const reader = new FileReader();
                 const formData = new FormData();
 
                 formData.append('files', file[i]);
@@ -156,23 +155,14 @@ const BoardWrite = () => {
                     enctype: "multipart/form-data"
                 }).then((res) => {
                     // const result = "/upload/" + res.data.data;
-                    console.log(res);
-                    console.log(res.data);
-                    console.log(res.data.data);
                     const imgFileName = res.data.data.imgName;
                     const imgFileUrl = res.data.data.imgUrl;
-                    setPreviewWriteImgArr(prevList => [...prevList, imgFileUrl]);
+                    setPreviewWriteImgUrlArr(prevList => [...prevList, imgFileUrl]);
                     setPreviewWriteImgNameArr(prevList => [...prevList, imgFileName]);
+                    setPreviewWriteImgSizeArr(prevList => [...prevList, file[i].size]);
                     editor.insertEmbed(range.index, 'image', imgFileUrl);
                     editor.setSelection(range.index + 1);
                 })
-
-                reader.onloadend = () => {
-                    // setBoardContentImage(prevList => [...prevList, file[i]]);
-
-                    // setPreviewWriteImgArr(prevList => [...prevList, fileArr[i]]);
-                    setPreviewWriteImgSizeArr(prevList => [...prevList, file[i].size]);
-                }
             }
             setPreviewWriteImgSize(prevList => prevList + fileSize);
         }

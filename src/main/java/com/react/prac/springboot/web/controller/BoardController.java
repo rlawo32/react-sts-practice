@@ -53,8 +53,6 @@ public class BoardController {
 
         CommonResponseDto<?> result = boardService.boardImageInsertS3(files);
 
-        System.out.println(result);
-
         return result;
     }
 
