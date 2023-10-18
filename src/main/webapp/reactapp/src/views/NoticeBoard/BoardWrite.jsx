@@ -156,6 +156,8 @@ const BoardWrite = () => {
                     enctype: "multipart/form-data"
                 }).then((res) => {
                     // const result = "/upload/" + res.data.data;
+                    console.log(res);
+                    console.log(res.data);
                     console.log(res.data.data);
                     const imgFileName = res.data.data.imgName;
                     const imgFileUrl = res.data.data.imgUrl;
