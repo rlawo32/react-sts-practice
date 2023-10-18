@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -28,12 +30,6 @@ public class BoardController {
         return attributes.toString();
     }
 
-    @PostMapping("/boardSave")
-    public Long boardSave(@RequestBody BoardSaveRequestDto requestDto) {
-
-        return boardService.boardInsert(requestDto);
-    }
-
     @GetMapping("/tableBoardList")
     public Map<String, Object> tableBoardList(HttpServletRequest request) {
 
@@ -46,10 +42,38 @@ public class BoardController {
         return boardService.findByBoardId(boardId);
     }
 
+    @PostMapping("/boardSave")
+    public Long boardSave(@RequestBody BoardSaveRequestDto requestDto) {
+
+        return boardService.boardInsert(requestDto);
+    }
+
+    @PostMapping("/boardImageSave")
+    public CommonResponseDto<?> boardImageSave(@RequestPart("files") MultipartFile files) {
+
+        CommonResponseDto<?> result = boardService.boardImageInsertS3(files);
+
+        return result;
+    }
+
+    @DeleteMapping("/boardImageDelete")
+    public CommonResponseDto<?> boardImageDelete(HttpServletRequest request) {
+
+        CommonResponseDto<?> result = boardService.boardImageDeleteS3(request);
+
+        return result;
+    }
+
     @PutMapping("/boardUpdate/{boardId}")
     public Long boardUpdate(@PathVariable Long boardId, @RequestBody BoardUpdateRequestDto requestDto) {
 
         return boardService.boardUpdate(boardId, requestDto);
+    }
+
+    @PutMapping("/boardImageUpdate/{boardId}")
+    public Long boardImageUpdate(@PathVariable Long boardId, @RequestPart("files") List<MultipartFile> files) {
+
+        return null;
     }
 
     @DeleteMapping("/boardDelete/{boardId}")
@@ -59,7 +83,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/commentDelete/{commentId}")
-    public void delete(@PathVariable Long commentId) {
+    public void commentDelete(@PathVariable Long commentId) {
 
         boardService.commentDelete(commentId);
     }

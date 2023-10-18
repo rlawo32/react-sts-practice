@@ -1,17 +1,29 @@
 package com.react.prac.springboot.service.boards;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.jpa.domain.board.*;
 import com.react.prac.springboot.jpa.domain.member.Member;
 import com.react.prac.springboot.jpa.domain.member.MemberRepository;
+import com.react.prac.springboot.service.members.MemberService;
 import com.react.prac.springboot.web.dto.CommonResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +36,15 @@ public class BoardService {
     private final BoardRecommendRepository boardRecommendRepository;
     private final BoardCommentRepository boardCommentRepository;
 
+    private final MemberService memberService;
+    private final AmazonS3 s3Client;
+
+    @Value("${application.bucket.name}")
+    private String bucketName;
+
+    @Value("${file.path}")
+    private String uploadFolder;
+
     @Transactional
     public Long boardInsert(BoardSaveRequestDto requestDto) {
 
@@ -33,6 +54,95 @@ public class BoardService {
         requestDto.setBoardAuthor(memberRepository.findByMemberNickname(memberId));
 
         return mainBoardRepository.save(requestDto.toEntity()).getId();
+    }
+
+    @Transactional
+    public CommonResponseDto<?> boardImageInsert(MultipartFile files) {
+        //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
+        UUID uuid = UUID.randomUUID();
+        String imageFileName = uuid + "_" + files.getOriginalFilename();
+        // 디렉토리 경로
+        Path dir = Paths.get(uploadFolder);
+
+        try {
+            if(!Files.exists(dir)) {
+                Files.createDirectory(dir);
+            }
+
+//            for(int i=0; i<files.length; i++) {
+//                String imageFileName = "";
+//                imageFileName = uuid + "_" + files[i].getOriginalFilename();
+//
+//                Files.write(Paths.get(uploadFolder + imageFileName), files[i].getBytes());
+//            }
+
+            Files.write(Paths.get(uploadFolder + imageFileName), files.getBytes());
+
+        } catch(IOException i) {
+            i.printStackTrace();
+            return CommonResponseDto.setFailed("Upload Error!");
+        } catch(Exception e) {
+            e.printStackTrace();
+            return CommonResponseDto.setFailed("Database Error!");
+        }
+
+        return CommonResponseDto.setSuccess("Image Upload Success", imageFileName);
+    }
+
+    @Transactional
+    public CommonResponseDto<?> boardImageInsertS3(MultipartFile files) {
+
+        String urlText = "";
+
+        try {
+            //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
+            UUID uuid = UUID.randomUUID();
+            String imageFileName = uuid + "_" + files.getOriginalFilename();
+
+            File file = memberService.convertMultiPartFileToFile(files);
+
+            s3Client.putObject(new PutObjectRequest(bucketName, imageFileName, file));
+            file.delete();
+
+            Files.write(Paths.get(uploadFolder + imageFileName), files.getBytes());
+
+            URL url = s3Client.getUrl(bucketName, imageFileName);
+            urlText = "" + url;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return CommonResponseDto.setFailed("Database Error!");
+        }
+
+        return CommonResponseDto.setSuccess("Image Upload Success", urlText);
+    }
+
+    @Transactional
+    public CommonResponseDto<?> boardImageDelete(HttpServletRequest request) {
+
+        try {
+            Files.delete(Paths.get(uploadFolder + request.getParameter("imageFileName")));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return CommonResponseDto.setFailed("Error!");
+        }
+
+        return CommonResponseDto.setSuccess("Image Delete Success", null);
+    }
+
+    @Transactional
+    public CommonResponseDto<?> boardImageDeleteS3(HttpServletRequest request) {
+
+        try {
+            s3Client.deleteObject(new DeleteObjectRequest(bucketName, request.getParameter("imageFileName")));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return CommonResponseDto.setFailed("Error!");
+        }
+
+        return CommonResponseDto.setSuccess("Image Delete Success", null);
     }
 
     @Transactional

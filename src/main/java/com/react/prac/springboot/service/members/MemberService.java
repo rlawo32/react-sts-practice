@@ -440,7 +440,7 @@ public class MemberService {
         return CommonResponseDto.setSuccess("Image Upload Success", null);
     }
 
-    private File convertMultiPartFileToFile(MultipartFile multipartFile) {
+    public File convertMultiPartFileToFile(MultipartFile multipartFile) {
         File convertedFile = new File(multipartFile.getOriginalFilename());
 
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {

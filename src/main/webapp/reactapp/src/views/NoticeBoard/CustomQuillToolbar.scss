@@ -1,0 +1,39 @@
+#toolbar {
+  position: relative;
+  text-align: left;
+  background-color: #adb5bd;
+  color: white;
+
+  height: 40px;
+
+  .ql-formats {
+    position: relative;
+    top: -10px;
+  }
+
+  .ql-align {
+    position: absolute;
+    top: -15px;
+    left: 45px;
+  }
+
+  .ql-bold {
+    margin-left: 10px;
+  }
+
+  .ql-color {
+    position: absolute;
+    top: -13px;
+    left: 10px;
+  }
+
+  .ql-background {
+    position: absolute;
+    top: -15px;
+    left: 35px;
+  }
+
+  .ql-image {
+  }
+
+}
