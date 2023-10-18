@@ -109,8 +109,8 @@ public class BoardService {
             URL url = s3Client.getUrl(bucketName, imageFileName);
             String urlText = "" + url;
 
-            result.put("imageFileName", imageFileName);
-            result.put("imageFileUrl", urlText);
+            result.put("imgName", imageFileName);
+            result.put("imgUrl", urlText);
 
         } catch(Exception e) {
             e.printStackTrace();

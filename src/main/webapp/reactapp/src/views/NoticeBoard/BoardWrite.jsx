@@ -156,11 +156,11 @@ const BoardWrite = () => {
                     enctype: "multipart/form-data"
                 }).then((res) => {
                     // const result = "/upload/" + res.data.data;
-                    const imgFileName = res.data.data.imageFileName;
-                    const imageFileUrl = res.data.data.imageFileUrl;
-                    setPreviewWriteImgArr(prevList => [...prevList, imageFileUrl]);
+                    const imgFileName = res.data.data.imgName;
+                    const imgFileUrl = res.data.data.imgUrl;
+                    setPreviewWriteImgArr(prevList => [...prevList, imgFileUrl]);
                     setPreviewWriteImgNameArr(prevList => [...prevList, imgFileName]);
-                    editor.insertEmbed(range.index, 'image', imageFileUrl);
+                    editor.insertEmbed(range.index, 'image', imgFileUrl);
                     editor.setSelection(range.index + 1);
                 })
 
