@@ -104,8 +104,6 @@ public class BoardService {
             s3Client.putObject(new PutObjectRequest(bucketName, imageFileName, file));
             file.delete();
 
-            Files.write(Paths.get(uploadFolder + imageFileName), files.getBytes());
-
             URL url = s3Client.getUrl(bucketName, imageFileName);
             String urlText = "" + url;
 
