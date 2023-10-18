@@ -92,7 +92,7 @@ public class BoardService {
     @Transactional
     public CommonResponseDto<?> boardImageInsertS3(MultipartFile files) {
 
-        String urlText = "";
+        Map<String, Object> result = new HashMap<>();
 
         try {
             //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
@@ -107,14 +107,17 @@ public class BoardService {
             Files.write(Paths.get(uploadFolder + imageFileName), files.getBytes());
 
             URL url = s3Client.getUrl(bucketName, imageFileName);
-            urlText = "" + url;
+            String urlText = "" + url;
+
+            result.put("imageFileName", imageFileName);
+            result.put("imageFileUrl", urlText);
 
         } catch(Exception e) {
             e.printStackTrace();
             return CommonResponseDto.setFailed("Database Error!");
         }
 
-        return CommonResponseDto.setSuccess("Image Upload Success", urlText);
+        return CommonResponseDto.setSuccess("Image Upload Success", result);
     }
 
     @Transactional
@@ -133,6 +136,7 @@ public class BoardService {
 
     @Transactional
     public CommonResponseDto<?> boardImageDeleteS3(HttpServletRequest request) {
+        System.out.println(request.getParameter("imageFileName"));
 
         try {
             s3Client.deleteObject(new DeleteObjectRequest(bucketName, request.getParameter("imageFileName")));

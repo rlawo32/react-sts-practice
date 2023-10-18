@@ -26,6 +26,7 @@ const BoardWrite = () => {
     // const [boardContentImage, setBoardContentImage] = useState([]);
 
     const [previewWriteImgArr, setPreviewWriteImgArr] = useState([]);
+    const [previewWriteImgNameArr, setPreviewWriteImgNameArr] = useState([]);
     const [previewWriteImgSize, setPreviewWriteImgSize] = useState(0);
     const [previewWriteImgSizeArr, setPreviewWriteImgSizeArr] = useState([]);
 
@@ -73,7 +74,7 @@ const BoardWrite = () => {
         }
     }
 
-    const attachImageDelete = async (e) => {
+    const attachImageDelete = async (e) => { debugger
         setPreviewWriteImgArr(previewWriteImgArr.filter((value,index) => index !== e));
         setPreviewWriteImgSize(previewWriteImgSize - previewWriteImgSizeArr[e]);
         setPreviewWriteImgSizeArr(previewWriteImgSizeArr.filter((value,index) => index !== e));
@@ -82,15 +83,17 @@ const BoardWrite = () => {
 
         removeImg.remove();
 
-        // const removeUrl = previewWriteImgArr[e].substring(8);
-        const removeIndex = previewWriteImgArr[e].lastIndexOf("/");
-        const removeUrl = previewWriteImgArr[e].subString(removeIndex+1);
+        // const removeIndex = previewWriteImgArr[e].lastIndexOf("/");
+        // const removeUrl = previewWriteImgArr[e].substring(removeIndex+1);
+        const removeUrl = previewWriteImgNameArr[e];
 
         await axios({
             method: "DELETE",
-            url: '/board/boardImageRemove',
+            url: '/board/boardImageDelete',
             params: {imageFileName: removeUrl}
         })
+
+        setPreviewWriteImgNameArr(previewWriteImgNameArr.filter((value,index) => index !== e));
     }
 
     const attachImageArray = () => {
@@ -153,9 +156,11 @@ const BoardWrite = () => {
                     enctype: "multipart/form-data"
                 }).then((res) => {
                     // const result = "/upload/" + res.data.data;
-                    const result = res.data.data;
-                    setPreviewWriteImgArr(prevList => [...prevList, result]);
-                    editor.insertEmbed(range.index, 'image', result);
+                    const imgFileName = res.data.data.imageFileName;
+                    const imageFileUrl = res.data.data.imageFileUrl;
+                    setPreviewWriteImgArr(prevList => [...prevList, imageFileUrl]);
+                    setPreviewWriteImgNameArr(prevList => [...prevList, imgFileName]);
+                    editor.insertEmbed(range.index, 'image', imageFileUrl);
                     editor.setSelection(range.index + 1);
                 })
 
