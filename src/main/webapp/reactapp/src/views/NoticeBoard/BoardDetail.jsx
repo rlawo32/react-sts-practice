@@ -16,10 +16,15 @@ import {faThumbsUp as recommendUpCancel,
 import axios from "axios";
 import Linkify from "linkify-react";
 import {getCookie} from "../Navigation/Cookie";
+import dompurify from "dompurify";
 
 const BoardDetail = (props) => {
     const locationURL = window.location.href;
     const navigate = useNavigate();
+
+    const sanitizer = dompurify.sanitize;
+    // 스크립트를 활용한 토큰 탈취 처럼 취약점을 노려서 javascript와 HTML로 악의적 코드를 웹 브라우저에 심어,
+    // 사용자 접속시 그 악성코드가 실행되는 것을 크로스 사이드 스크립트, 보안을 위해 추가
 
     const category_name = props.category;
     const subTab_name = props.subTab;
@@ -611,9 +616,14 @@ const BoardDetail = (props) => {
                         <Link to={locationURL} style={{textDecoration: 'none', color: 'gray', fontSize: '15px'}}>{locationURL}</Link>
                         <button onClick={() => copyClipBoardHandler(`${locationURL}`)}>복사</button>
                     </div>
-                    <div className="detail-content">
-                        {boardDetail.boardContent}
-                    </div>
+
+                    {/*{*/}
+                    {/*    process.browser ?*/}
+                    {/*    (<div className="detail-content" dangerouslySetInnerHTML={{ __html : sanitizer(`${boardDetail.boardContent}`), }} />)*/}
+                    {/*    : (<div />)*/}
+                    {/*}*/}
+                    <div className="detail-content" dangerouslySetInnerHTML={{ __html : sanitizer(`${boardDetail.boardContent}`) }} />
+
                 </div>
                 <div className="detail-footer1">
                     <div className="detail-mainRecommend">

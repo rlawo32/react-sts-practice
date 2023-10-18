@@ -3,8 +3,11 @@ import "./MemberInfo.scss";
 import '../Layouts/MainView.scss'
 import memberDefaultImg from "../../images/ProfileDefault.png";
 import SecessionModal from "./SecessionModal";
+import jwt_decode from "jwt-decode";
+import {getCookie} from "../Navigation/Cookie";
 
 const MemberInfoProfile = (props) => {
+    const jwtDecode = jwt_decode(getCookie("refreshToken"));
 
     const [secessionModal, setSecessionModal] = useState(false);
 
@@ -76,12 +79,19 @@ const MemberInfoProfile = (props) => {
                     </div>
                 </div>
 
-                <div className="profile-update">
-                    <button onClick={() => props.setData(5)}>프로필 수정</button>
-                    <button onClick={() => props.setData(6)}>비밀번호 변경</button>
-                    <button onClick={() => setSecessionModal(true)}>회원 탈퇴</button>
-                    {secessionModal ? <SecessionModal setSecessionModal={setSecessionModal} email={profileInfo.memberEmail}/> : null}
-                </div>
+                {
+                    jwtDecode.auth === 'ROLE_SOCIAL' ?
+                        <div className="profile-update">
+                            {secessionModal ? <SecessionModal setSecessionModal={setSecessionModal} email={profileInfo.memberEmail}/> : null}
+                        </div>
+                        :
+                        <div className="profile-update">
+                            <button onClick={() => props.setData(5)}>프로필 수정</button>
+                            <button onClick={() => props.setData(6)}>비밀번호 변경</button>
+                            <button onClick={() => setSecessionModal(true)}>회원 탈퇴</button>
+                            {secessionModal ? <SecessionModal setSecessionModal={setSecessionModal} email={profileInfo.memberEmail}/> : null}
+                        </div>
+                }
 
             </div>
 

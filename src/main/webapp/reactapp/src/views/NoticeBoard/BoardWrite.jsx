@@ -227,7 +227,7 @@ const BoardWrite = () => {
         <div className="write-body">
             <AppBarNavigation />
 
-            <div className="write-view">
+            <div className="write-view" style={ previewWriteImgUrlArr.length > 0 ? {height: '1120px'} : {height: '980px'} }>
                 <h3>게시글 {componentTitle}</h3>
 
                 <div className="write-header">
@@ -282,7 +282,7 @@ const BoardWrite = () => {
                     </div>
                 </div>
 
-                <div className="write-image-attach">
+                <div className="write-image-attach" style={ previewWriteImgUrlArr.length > 0 ? {display: 'block'} : {display: 'none'} }>
                     <div className="write-image-attach-header">
                         <span>이미지 첨부</span>
                         <span style={{marginLeft: '10px'}}>{attachImageArray().length} 개</span>

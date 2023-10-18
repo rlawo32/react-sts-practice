@@ -77,10 +77,12 @@ public class TokenProvider implements InitializingBean {
 
             DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
             Object memberId = defaultOAuth2User.getAttributes().get("memberId");
+            Object provider = defaultOAuth2User.getAttributes().get("provider");
 
             accessToken = Jwts.builder()
                     .setSubject(String.valueOf(memberId))       // payload "sub": "name"
-                    .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
+                    .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_SOCIAL"
+                    .claim("provider", String.valueOf(provider))
                     .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                     .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
                     .compact();
@@ -89,10 +91,11 @@ public class TokenProvider implements InitializingBean {
             refreshToken = Jwts.builder()
                     .setSubject(String.valueOf(memberId))
                     .claim(AUTHORITIES_KEY, authorities)
+                    .claim("provider", String.valueOf(provider))
                     .signWith(key, SignatureAlgorithm.HS512)
                     .setExpiration(refreshExprTime)
                     .compact();
-        } else {
+        } else if(loginType.equals("COMMON")) {
             accessToken = Jwts.builder()
                     .setSubject(authentication.getName())       // payload "sub": "name"
                     .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
@@ -104,6 +107,23 @@ public class TokenProvider implements InitializingBean {
             refreshToken = Jwts.builder()
                     .setSubject(authentication.getName())
                     .claim(AUTHORITIES_KEY, authorities)
+                    .signWith(key, SignatureAlgorithm.HS512)
+                    .setExpiration(refreshExprTime)
+                    .compact();
+        } else {
+            accessToken = Jwts.builder()
+                    .setSubject(authentication.getName())       // payload "sub": "name"
+                    .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_SOCIAL"
+                    .claim("provider", loginType)
+                    .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                    .setExpiration(accessExprTime)              // payload "exp": 1516239022 (예시)
+                    .compact();
+
+            // Refresh Token 생성
+            refreshToken = Jwts.builder()
+                    .setSubject(authentication.getName())
+                    .claim(AUTHORITIES_KEY, authorities)
+                    .claim("provider", loginType)
                     .signWith(key, SignatureAlgorithm.HS512)
                     .setExpiration(refreshExprTime)
                     .compact();
