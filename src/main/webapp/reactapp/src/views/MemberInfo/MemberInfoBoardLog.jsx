@@ -36,7 +36,7 @@ const MemberInfoBoardLog = () => {
         const paging = {
             searchText: "",
             searchSelect: "M",
-            recordPerPage: 5,
+            recordPerPage: 10,
             page: pageNo,
             pagePerBlock: 10,
             pageCategory: "C0",
@@ -62,7 +62,7 @@ const MemberInfoBoardLog = () => {
         getBoards();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [pageNo])
 
     return (
         <div className="member-info">

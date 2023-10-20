@@ -43,6 +43,7 @@ const BoardDetail = (props) => {
         boardContent: '',
         boardAuthorId: '',
         boardAuthor: '',
+        modifiedDate: '',
         boardRecommendUpCnt: '',
         boardRecommendDownCnt: '',
         boardViewsCnt: '',
@@ -600,11 +601,12 @@ const BoardDetail = (props) => {
             <div className="detail-main">
                 <div className="detail-header1">
                     <span className="detail-title">{boardDetail.boardTitle}</span>
-                    { `${boardDetail.boardTab}` === 'T1' && <span className="detail-date">화제</span> }
-                    { `${boardDetail.boardTab}` === 'T2' && <span className="detail-date">정보</span> }
-                    { `${boardDetail.boardTab}` === 'T3' && <span className="detail-date">오류</span> }
-                    { `${boardDetail.boardTab}` === 'T4' && <span className="detail-date">사진/동영상</span> }
-                    { `${boardDetail.boardTab}` === 'T5' && <span className="detail-date">팁과 노하우</span> }
+                    {/*{ `${boardDetail.boardTab}` === 'T1' && <span className="detail-date">화제</span> }*/}
+                    {/*{ `${boardDetail.boardTab}` === 'T2' && <span className="detail-date">정보</span> }*/}
+                    {/*{ `${boardDetail.boardTab}` === 'T3' && <span className="detail-date">오류</span> }*/}
+                    {/*{ `${boardDetail.boardTab}` === 'T4' && <span className="detail-date">사진/동영상</span> }*/}
+                    {/*{ `${boardDetail.boardTab}` === 'T5' && <span className="detail-date">팁과 노하우</span> }*/}
+                    <span className="detail-date">{boardDetail.modifiedDate}</span>
                 </div>
                 <div className="detail-header2">
                     <span className="detail-author">{boardDetail.boardAuthor}</span>
@@ -731,7 +733,17 @@ const BoardDetail = (props) => {
                                             `${comments.commentNestedLevel}` == 1 ? <FontAwesomeIcon icon={nestedArrow} style={{transform: "rotate(180deg)", marginRight: "8px", fontSize: "24px", color: "#6c757d"}}/> : null
                                         }
                                         <span className="comment-nickname">{comments.memberNickname}</span>
-                                        <span className="comment-date">{comments.createdDate}</span>
+                                        <span className="comment-date">
+                                            {
+                                                ((new Date() - new Date(comments.createdDate)) / 1000 / 60 / 60).toFixed(0) > 24 ?
+                                                    comments.createdDate
+                                                    :
+                                                    ((new Date() - new Date(comments.createdDate)) / 1000 / 60).toFixed(0) > 60 ?
+                                                        ((new Date() - new Date(comments.createdDate)) / 1000 / 60 / 60).toFixed(0) + "시간 전"
+                                                        :
+                                                        ((new Date() - new Date(comments.createdDate)) / 1000 / 60).toFixed(0) + "분 전"
+                                            }
+                                        </span>
                                     </div>
                                     <div className="comment-header2">
                                         <span className="comment-nested">

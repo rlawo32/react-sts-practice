@@ -27,10 +27,11 @@ const BoardTable = (props) => {
         boardContent: '',
         boardAuthor: '',
         boardAuthorId: '',
+        modifiedDate: '',
+        boardCommentCnt: '',
         boardRecommendUpCnt: '',
         boardRecommendDownCnt: '',
-        boardViewsCnt: '',
-        modifiedDate: ''
+        boardViewsCnt: ''
     }]);
 
     const paging = {
@@ -161,12 +162,12 @@ const BoardTable = (props) => {
                         <table>
                             <thead className="table-header">
                             <tr>
-                                <td style={{width: "130px"}}>탭</td>
-                                <td style={{width: "450px"}}>제목</td>
-                                <td style={{width: "150px"}}>작성자</td>
-                                <td style={{width: "170px"}}>날짜</td>
-                                <td style={{width: "80px"}}>조회수</td>
-                                <td style={{width: "80px"}}>추천수</td>
+                                <td style={{width: "110px"}}>탭</td>
+                                <td style={{width: "250px"}}>제목</td>
+                                <td style={{width: "70px"}}>작성자</td>
+                                <td style={{width: "100px"}}>날짜</td>
+                                <td style={{width: "50px"}}>조회수</td>
+                                <td style={{width: "50px"}}>추천수</td>
                             </tr>
                             </thead>
                             <tbody id="tbody" className="font-list">
@@ -183,9 +184,22 @@ const BoardTable = (props) => {
                                                   onClick={() => changeDetailBoard(boards.boardId, boards.boardAuthorId)} style={{textDecoration: 'none', color: 'white'}}>
                                                 {boards.boardTitle}
                                             </Link>
+                                            {
+                                                boards.boardCommentCnt < 1 ?
+                                                    <span className="board-comment-cnt"></span>
+                                                    :
+                                                    <span className="board-comment-cnt">{boards.boardCommentCnt}</span>
+                                            }
                                         </td>
                                         <td>{boards.boardAuthor}</td>
-                                        <td>{boards.modifiedDate.substring(0, 10)}</td>
+                                        <td>
+                                            {
+                                                ((new Date() - new Date(boards.modifiedDate)) / 1000 / 60 / 60).toFixed(0) > 24 ?
+                                                    boards.modifiedDate.substring(0, 10)
+                                                    :
+                                                    boards.modifiedDate.substring(11)
+                                            }
+                                        </td>
                                         <td>{boards.boardViewsCnt}</td>
                                         <td>{boards.boardRecommendUpCnt - boards.boardRecommendDownCnt}</td>
                                     </tr>

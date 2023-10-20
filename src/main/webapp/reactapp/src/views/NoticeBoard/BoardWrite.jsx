@@ -46,59 +46,67 @@ const BoardWrite = () => {
 
     const boardWrite = async() => {
 
-        const attachArr = [];
-        for(let i=0; i<attachImageArr.length; i++) {
-            attachArr[i] = attachImageArr[i];
-        }
-
-        if (props.boardDetail) {
-            const removeArr = [];
-            const selectRemoveArr = [];
-
-            for(let i=0; i<removeImageArr.length; i++) {
-                removeArr[i] = removeImageArr[i];
+        if(boardContent === "" || boardTitle === "") {
+            if(boardTitle === "") {
+                alert('제목을 입력해주세요.');
+            } else if(boardContent === "") {
+                alert('내용을 입력해주세요.');
             }
-            for(let i=0; i<selectRemoveImageArr.length; i++) {
-                selectRemoveArr[i] = selectRemoveImageArr[i];
-            }
-
-            const BoardData = {
-                boardCategory: `${boardCategory}`,
-                boardTab: `${boardTab}`,
-                boardTitle: `${boardTitle}`,
-                boardContent: `${boardContent}`,
-                boardImage: attachArr,
-                deleteImage: removeArr,
-                selectDeleteImage: selectRemoveArr
-            }
-
-            await axios({
-                method: "PUT",
-                url: "board/boardUpdate/" + props.boardDetail.boardId,
-                data: JSON.stringify(BoardData),
-                headers: {'Content-type': 'application/json'}
-            }).then((result) => {
-                window.alert("수정이 완료되었습니다.");
-                navigate(-1);
-            })
         } else {
-            const BoardData = {
-                boardCategory: `${boardCategory}`,
-                boardTab: `${boardTab}`,
-                boardTitle: `${boardTitle}`,
-                boardContent: `${boardContent}`,
-                boardImage: attachArr
+            const attachArr = [];
+            for(let i=0; i<attachImageArr.length; i++) {
+                attachArr[i] = attachImageArr[i];
             }
 
-            await axios({
-                method: "POST",
-                url: "board/boardSave",
-                data: JSON.stringify(BoardData),
-                headers: {'Content-type': 'application/json'}
-            }).then((result) => {
-                window.alert("등록이 완료되었습니다.");
-                navigate('/board');
-            })
+            if (props.boardDetail) {
+                const removeArr = [];
+                const selectRemoveArr = [];
+
+                for(let i=0; i<removeImageArr.length; i++) {
+                    removeArr[i] = removeImageArr[i];
+                }
+                for(let i=0; i<selectRemoveImageArr.length; i++) {
+                    selectRemoveArr[i] = selectRemoveImageArr[i];
+                }
+
+                const BoardData = {
+                    boardCategory: `${boardCategory}`,
+                    boardTab: `${boardTab}`,
+                    boardTitle: `${boardTitle}`,
+                    boardContent: `${boardContent}`,
+                    boardImage: attachArr,
+                    deleteImage: removeArr,
+                    selectDeleteImage: selectRemoveArr
+                }
+
+                await axios({
+                    method: "PUT",
+                    url: "board/boardUpdate/" + props.boardDetail.boardId,
+                    data: JSON.stringify(BoardData),
+                    headers: {'Content-type': 'application/json'}
+                }).then((result) => {
+                    window.alert("수정이 완료되었습니다.");
+                    navigate(-1);
+                })
+            } else {
+                const BoardData = {
+                    boardCategory: `${boardCategory}`,
+                    boardTab: `${boardTab}`,
+                    boardTitle: `${boardTitle}`,
+                    boardContent: `${boardContent}`,
+                    boardImage: attachArr
+                }
+
+                await axios({
+                    method: "POST",
+                    url: "board/boardSave",
+                    data: JSON.stringify(BoardData),
+                    headers: {'Content-type': 'application/json'}
+                }).then((result) => {
+                    window.alert("등록이 완료되었습니다.");
+                    navigate('/board');
+                })
+            }
         }
     }
 

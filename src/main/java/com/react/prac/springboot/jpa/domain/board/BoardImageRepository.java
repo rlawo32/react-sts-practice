@@ -15,4 +15,6 @@ public interface BoardImageRepository extends JpaRepository<BoardImage, Long> {
     @Modifying
     @Query("DELETE FROM BoardImage i WHERE i.mainBoard.id = :boardId AND i.boardImageOriginName = :boardImageOriginName")
     void deleteByBoardImageOriginName(@Param("boardId") Long boardId, @Param("boardImageOriginName") String boardImageOriginName);
+
+    boolean existsByMainBoard(MainBoard mainBoard);
 }

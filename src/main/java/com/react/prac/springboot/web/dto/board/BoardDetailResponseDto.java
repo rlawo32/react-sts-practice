@@ -15,6 +15,7 @@ public class BoardDetailResponseDto {
     private String boardContent;
     private Long boardAuthorId;
     private String boardAuthor;
+    private String modifiedDate;
     private int boardRecommendUpCnt;
     private int boardRecommendDownCnt;
     private int boardViewsCnt;
@@ -32,6 +33,7 @@ public class BoardDetailResponseDto {
         this.boardContent = mainBoard.getBoardContent();
         this.boardAuthorId = mainBoard.getBoardAuthorId();
         this.boardAuthor = mainBoard.getBoardAuthor();
+        this.modifiedDate = mainBoard.getModifiedDate();
         this.boardRecommendUpCnt = mainBoard.getBoardRecommendUpCnt();
         this.boardRecommendDownCnt = mainBoard.getBoardRecommendDownCnt();
         this.boardViewsCnt = mainBoard.getBoardViewsCnt();

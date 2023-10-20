@@ -13,11 +13,12 @@ public class BoardListResponseDto {
     private String boardContent;
     private String boardAuthor;
     private Long boardAuthorId;
+    private String modifiedDate;
+    private int boardCommentCnt;
     private int boardRecommendUpCnt;
     private int boardRecommendDownCnt;
     private int boardViewsCnt;
     private int boardLogNo;
-    private String modifiedDate;
 
     public BoardListResponseDto(MainBoard mainBoard) {
         this.boardId = mainBoard.getId();
@@ -27,9 +28,10 @@ public class BoardListResponseDto {
         this.boardContent = mainBoard.getBoardContent();
         this.boardAuthor = mainBoard.getBoardAuthor();
         this.boardAuthorId = mainBoard.getBoardAuthorId();
+        this.modifiedDate = mainBoard.getModifiedDate();
+        this.boardCommentCnt = mainBoard.getBoardCommentCnt();
         this.boardRecommendUpCnt = mainBoard.getBoardRecommendUpCnt();
         this.boardRecommendDownCnt = mainBoard.getBoardRecommendDownCnt();
         this.boardViewsCnt = mainBoard.getBoardViewsCnt();
-        this.modifiedDate = mainBoard.getModifiedDate();
     }
 }

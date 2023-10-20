@@ -14,6 +14,7 @@
   .detail-header1 {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
     border-top: 2px solid #4d5154 ;
 
@@ -23,12 +24,14 @@
 
     .detail-date {
       margin-right: 40px;
+      font-size: 15px;
     }
   }
 
   .detail-header2 {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
     border-top: 2px solid #4d5154 ;
 
@@ -38,18 +41,18 @@
     }
 
     .detail-views {
-      margin-right: -630px;
-      font-size: 22px;
+      margin-right: -690px;
+      font-size: 15px;
     }
 
     .detail-recommend {
-      margin-right: -630px;
-      font-size: 22px;
+      margin-right: -690px;
+      font-size: 15px;
     }
 
     .detail-comment {
       margin-right: 40px;
-      font-size: 22px;
+      font-size: 15px;
     }
   }
 
@@ -322,7 +325,7 @@
 
             .comment-date {
               font-weight: lighter;
-              font-size: 12px;
+              font-size: 14px;
               color: #6c757d;
             }
           }

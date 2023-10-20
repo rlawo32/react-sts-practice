@@ -194,10 +194,26 @@ public class BoardService {
 
     @Transactional
     public void boardDelete(Long boardId) {
-        MainBoard mainBoard = mainBoardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
 
-        mainBoardRepository.delete(mainBoard);
+        try {
+            MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
+
+            if(boardImageRepository.existsByMainBoard(mainBoard)) {
+
+                List<BoardImageResponseDto> boardImageList = boardImageRepository.findBoardImageByBoardId(boardId).stream()
+                        .map(BoardImageResponseDto::new)
+                        .collect(Collectors.toList());
+
+                for(int i=0; i<boardImageList.size(); i++) {
+                    s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/previewImage", boardImageList.get(i).getBoardImageCustomName()));
+                }
+            }
+
+            mainBoardRepository.delete(mainBoard);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional
@@ -269,7 +285,9 @@ public class BoardService {
 
 
         if(searchSelect.equals("M")) { // 개인이 작성한 글 조회
-            Page<MainBoard> pageable = mainBoardRepository.findAllByBoardAuthorId(boardAuthorId, PageRequest.of(page, recordPerPage));
+            Page<MainBoard> pageable = mainBoardRepository.
+                    findAllByBoardAuthorId(boardAuthorId,
+                            PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
             pagingList = pageable.stream()
                     .map(BoardListResponseDto::new)
                     .collect(Collectors.toList());
@@ -278,7 +296,8 @@ public class BoardService {
         } else {
             if(searchText.equals("")) {
                 if(pageCategory.equals("C0") && pageSort.equals("T0")) {
-                    Page<MainBoard> pageable = mainBoardRepository.findAll(PageRequest.of(page, recordPerPage));
+                    Page<MainBoard> pageable = mainBoardRepository.
+                            findAll(PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
@@ -286,7 +305,9 @@ public class BoardService {
                     totalPage = pageable.getTotalPages();
                 } else if(pageCategory.equals("C0")) {
                     // Sort sort = Sort.by(pageSort).descending();
-                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTab(pageSort ,PageRequest.of(page, recordPerPage));
+                    Page<MainBoard> pageable = mainBoardRepository.
+                            findAllByBoardTab(pageSort,
+                                    PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
@@ -294,14 +315,18 @@ public class BoardService {
                     totalPage = pageable.getTotalPages();
                 } else if(pageSort.equals("T0")) {
                     // Sort sort = Sort.by(pageSort).descending();
-                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategory(pageCategory ,PageRequest.of(page, recordPerPage));
+                    Page<MainBoard> pageable = mainBoardRepository.
+                            findAllByBoardCategory(pageCategory,
+                                    PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
 
                     totalPage = pageable.getTotalPages();
                 } else {
-                    Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTab(pageCategory, pageSort ,PageRequest.of(page, recordPerPage));
+                    Page<MainBoard> pageable = mainBoardRepository.
+                            findAllByBoardCategoryAndBoardTab(pageCategory, pageSort,
+                                    PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                     pagingList = pageable.stream()
                             .map(BoardListResponseDto::new)
                             .collect(Collectors.toList());
@@ -311,7 +336,9 @@ public class BoardService {
             } else {
                 if(searchSelect.equals("title")) {
                     if(pageSort.equals("T0") && pageSort.equals("T0")) {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTitleContaining(searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardTitleContaining(searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
@@ -319,21 +346,27 @@ public class BoardService {
                         totalPage = pageable.getTotalPages();
                     } else if(pageCategory.equals("C0")) {
                         // Sort sort = Sort.by(pageSort).descending();
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardTitleContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardTabAndBoardTitleContaining(pageSort, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
 
                         totalPage = pageable.getTotalPages();
                     } else if(pageSort.equals("T0")) {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTitleContaining(pageCategory, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardCategoryAndBoardTitleContaining(pageCategory, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
 
                         totalPage = pageable.getTotalPages();
                     } else {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTabAndBoardTitleContaining(pageCategory, pageSort, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardCategoryAndBoardTabAndBoardTitleContaining(pageCategory, pageSort, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
@@ -342,7 +375,9 @@ public class BoardService {
                     }
                 } else if(searchSelect.equals("content")) {
                     if(pageSort.equals("T0") && pageSort.equals("T0")) {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardContentContaining(searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardContentContaining(searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
@@ -350,21 +385,27 @@ public class BoardService {
                         totalPage = pageable.getTotalPages();
                     } else if(pageCategory.equals("C0"))  {
                         // Sort sort = Sort.by(pageSort).descending();
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardContentContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardTabAndBoardContentContaining(pageSort, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
 
                         totalPage = pageable.getTotalPages();
                     } else if(pageSort.equals("T0")) {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardContentContaining(pageCategory, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardCategoryAndBoardContentContaining(pageCategory, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
 
                         totalPage = pageable.getTotalPages();
                     } else {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTabAndBoardContentContaining(pageCategory, pageSort, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardCategoryAndBoardTabAndBoardContentContaining(pageCategory, pageSort, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
@@ -373,7 +414,9 @@ public class BoardService {
                     }
                 } else if(searchSelect.equals("nickname")) {
                     if(pageSort.equals("T0") && pageSort.equals("T0")) {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardAuthorContaining(searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardAuthorContaining(searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
@@ -381,21 +424,27 @@ public class BoardService {
                         totalPage = pageable.getTotalPages();
                     } else if(pageCategory.equals("C0")) {
                         // Sort sort = Sort.by(pageSort).descending();
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardTabAndBoardAuthorContaining(pageSort, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardTabAndBoardAuthorContaining(pageSort, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
 
                         totalPage = pageable.getTotalPages();
                     } else if(pageSort.equals("T0")) {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardAuthorContaining(pageCategory, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardCategoryAndBoardAuthorContaining(pageCategory, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());
 
                         totalPage = pageable.getTotalPages();
                     } else {
-                        Page<MainBoard> pageable = mainBoardRepository.findAllByBoardCategoryAndBoardTabAndBoardAuthorContaining(pageCategory, pageSort, searchText, PageRequest.of(page, recordPerPage));
+                        Page<MainBoard> pageable = mainBoardRepository.
+                                findAllByBoardCategoryAndBoardTabAndBoardAuthorContaining(pageCategory, pageSort, searchText,
+                                        PageRequest.of(page, recordPerPage, Sort.by("id").descending()));
                         pagingList = pageable.stream()
                                 .map(BoardListResponseDto::new)
                                 .collect(Collectors.toList());

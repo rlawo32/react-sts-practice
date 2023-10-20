@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 public class BaseTimeEntity {
 
     private String createdDate;
-
     private String modifiedDate;
 
     @PrePersist
