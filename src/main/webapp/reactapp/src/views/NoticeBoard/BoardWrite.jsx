@@ -23,12 +23,14 @@ const BoardWrite = () => {
     const [boardTab, setBoardTab] = useState("");
     const [boardTitle, setBoardTitle] = useState("");
     const [boardContent, setBoardContent] = useState("");
-    // const [boardContentImage, setBoardContentImage] = useState([]);
+    const [boardContentImage, setBoardContentImage] = useState([]);
 
     const [previewWriteImgUrlArr, setPreviewWriteImgUrlArr] = useState([]);
-    const [previewWriteImgNameArr, setPreviewWriteImgNameArr] = useState([]);
+    const [previewWriteImgNameArr, setPreviewWriteImgNameArr] = useState([]);  // imgName 성공시 삭제
     const [previewWriteImgSize, setPreviewWriteImgSize] = useState(0);
-    const [previewWriteImgSizeArr, setPreviewWriteImgSizeArr] = useState([]);
+    const [attachImageArr, setAttachImageArr] = useState([]);
+    const [removeImageArr, setRemoveImageArr] = useState([]); // db image 삭제
+    const [selectRemoveImageArr, setSelectRemoveImageArr] = useState([]); // local image 삭제
 
     const boardCategoryChangeHandler = ({target: {value}}) => {
         setBoardCategory(value);
@@ -44,14 +46,32 @@ const BoardWrite = () => {
 
     const boardWrite = async() => {
 
-        const BoardData = {
-            boardCategory: `${boardCategory}`,
-            boardTab: `${boardTab}`,
-            boardTitle: `${boardTitle}`,
-            boardContent: `${boardContent}`
+        const attachArr = [];
+        for(let i=0; i<attachImageArr.length; i++) {
+            attachArr[i] = attachImageArr[i];
         }
 
-        if(props.boardDetail) {
+        if (props.boardDetail) {
+            const removeArr = [];
+            const selectRemoveArr = [];
+
+            for(let i=0; i<removeImageArr.length; i++) {
+                removeArr[i] = removeImageArr[i];
+            }
+            for(let i=0; i<selectRemoveImageArr.length; i++) {
+                selectRemoveArr[i] = selectRemoveImageArr[i];
+            }
+
+            const BoardData = {
+                boardCategory: `${boardCategory}`,
+                boardTab: `${boardTab}`,
+                boardTitle: `${boardTitle}`,
+                boardContent: `${boardContent}`,
+                boardImage: attachArr,
+                deleteImage: removeArr,
+                selectDeleteImage: selectRemoveArr
+            }
+
             await axios({
                 method: "PUT",
                 url: "board/boardUpdate/" + props.boardDetail.boardId,
@@ -62,6 +82,14 @@ const BoardWrite = () => {
                 navigate(-1);
             })
         } else {
+            const BoardData = {
+                boardCategory: `${boardCategory}`,
+                boardTab: `${boardTab}`,
+                boardTitle: `${boardTitle}`,
+                boardContent: `${boardContent}`,
+                boardImage: attachArr
+            }
+
             await axios({
                 method: "POST",
                 url: "board/boardSave",
@@ -74,26 +102,40 @@ const BoardWrite = () => {
         }
     }
 
-    const attachImageDelete = async (e) => { debugger
-        setPreviewWriteImgUrlArr(previewWriteImgUrlArr.filter((value,index) => index !== e));
-        setPreviewWriteImgSize(previewWriteImgSize - previewWriteImgSizeArr[e]);
-        setPreviewWriteImgSizeArr(previewWriteImgSizeArr.filter((value,index) => index !== e));
+    const attachImageDelete = async (url, idx) => {
+        let removeImgSize = 0;
+        let removeImgName = "";
+        for(let i=0; i<attachImageArr.length; i++) {
+            if(attachImageArr[i].imgUrl == url) {
+                removeImgSize = attachImageArr[i].imgSize;
+                removeImgName = attachImageArr[i].imgName;
+            }
+        }
+        setPreviewWriteImgUrlArr(previewWriteImgUrlArr.filter((value,index) => value !== url));
+        setPreviewWriteImgSize(previewWriteImgSize - removeImgSize);
+        setAttachImageArr(attachImageArr.filter((value,index) => value.imgUrl !== url))
 
-        const removeImg = document.querySelector('img[src="'+ previewWriteImgUrlArr[e] + '"]');
+        const removeImg = document.querySelector('img[src="'+ url + '"]');
 
         removeImg.remove();
 
+        if(props.boardDetail) {
+            setSelectRemoveImageArr(prevList => [...prevList, removeImgName]);
+        } else {
+            await axios({
+                method: "DELETE",
+                url: '/board/boardImageDelete',
+                params: {imageFileName: removeImgName}
+            })
+        }
+
         // const removeIndex = previewWriteImgArr[e].lastIndexOf("/");
         // const removeUrl = previewWriteImgArr[e].substring(removeIndex+1);
-        const removeImgName = previewWriteImgNameArr[e];
 
-        await axios({
-            method: "DELETE",
-            url: '/board/boardImageDelete',
-            params: {imageFileName: removeImgName}
-        })
+        // const removeImgName = previewWriteImgNameArr[idx]; // imgName 성공시 삭제
 
-        setPreviewWriteImgNameArr(previewWriteImgNameArr.filter((value,index) => index !== e));
+
+        // setPreviewWriteImgNameArr(previewWriteImgNameArr.filter((value,index) => index !== e)); // imgName 성공시 삭제
     }
 
     const attachImageArray = () => {
@@ -102,7 +144,8 @@ const BoardWrite = () => {
             result.push(
                 <span key={i} className="write-attach">
                     <img key={i} src={previewWriteImgUrlArr[i]} alt="업로드 이미지" className="write-attach-upload" />
-                    <FontAwesomeIcon icon={attachDelete} onClick={() => attachImageDelete(i)} className="write-attach-delete"/>
+                    <FontAwesomeIcon icon={attachDelete} onClick={(e) =>
+                        attachImageDelete(previewWriteImgUrlArr[i], i)} className="write-attach-delete"/>
                 </span>);
         }
         return result;
@@ -158,11 +201,12 @@ const BoardWrite = () => {
                     const imgFileName = res.data.data.imgName;
                     const imgFileUrl = res.data.data.imgUrl;
                     setPreviewWriteImgUrlArr(prevList => [...prevList, imgFileUrl]);
-                    setPreviewWriteImgNameArr(prevList => [...prevList, imgFileName]);
-                    setPreviewWriteImgSizeArr(prevList => [...prevList, file[i].size]);
+                    setPreviewWriteImgNameArr(prevList => [...prevList, imgFileName]); // imgName 성공시 삭제
+                    setAttachImageArr(prevList => [...prevList, { imgName:imgFileName, imgUrl:imgFileUrl, imgSize:file[i].size }]);
                     editor.insertEmbed(range.index, 'image', imgFileUrl);
                     editor.setSelection(range.index + 1);
                 })
+
             }
             setPreviewWriteImgSize(prevList => prevList + fileSize);
         }
@@ -214,6 +258,18 @@ const BoardWrite = () => {
             setBoardTab(props.boardDetail.boardTab);
             setBoardTitle(props.boardDetail.boardTitle);
             setBoardContent(props.boardDetail.boardContent);
+            const boardImgList = props.boardDetail.boardImageList;
+
+            let boardImgSize = 0;
+
+            for(let i=0; i<boardImgList.length; i++) {
+                setPreviewWriteImgUrlArr(prevList => [...prevList, boardImgList[i].boardImageUrlName]);
+                setAttachImageArr(prevList => [...prevList, { imgName:boardImgList[i].boardImageCustomName, imgUrl:boardImgList[i].boardImageUrlName, imgSize:boardImgList[i].boardImageSize }]);
+                setRemoveImageArr(prevList => [...prevList, boardImgList[i].boardImageCustomName]);
+                boardImgSize += boardImgList[i].boardImageSize;
+            }
+
+            setPreviewWriteImgSize(boardImgSize);
         } else {
             setComponentTitle("등록");
             setBoardCategory(categoryMenu[1].key);
@@ -278,6 +334,7 @@ const BoardWrite = () => {
                             modules={modules}
                             formats={formats}
                             onChange={setBoardContent}
+                            value={boardContent}
                         />
                     </div>
                 </div>

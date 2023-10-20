@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-// @CrossOrigin(originPatterns = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")

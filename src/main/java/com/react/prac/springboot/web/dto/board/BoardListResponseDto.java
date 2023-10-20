@@ -3,10 +3,6 @@ package com.react.prac.springboot.web.dto.board;
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Getter
 public class BoardListResponseDto {
 

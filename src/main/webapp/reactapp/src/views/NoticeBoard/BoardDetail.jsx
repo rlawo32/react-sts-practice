@@ -48,6 +48,7 @@ const BoardDetail = (props) => {
         boardViewsCnt: '',
         boardRecommendUpCheck: '',
         boardRecommendDownCheck: '',
+        boardImageList: [],
         loginMemberId: ''
     });
 

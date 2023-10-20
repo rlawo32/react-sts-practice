@@ -1,6 +1,5 @@
 package com.react.prac.springboot.web.dto.board;
 
-import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

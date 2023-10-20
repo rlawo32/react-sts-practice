@@ -7,13 +7,16 @@ import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.jpa.domain.board.*;
 import com.react.prac.springboot.jpa.domain.member.Member;
 import com.react.prac.springboot.jpa.domain.member.MemberRepository;
-import com.react.prac.springboot.service.members.MemberService;
+import com.react.prac.springboot.util.BoardUtil;
+import com.react.prac.springboot.util.UploadUtil;
 import com.react.prac.springboot.web.dto.CommonResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,9 +40,11 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final BoardRecommendRepository boardRecommendRepository;
     private final BoardCommentRepository boardCommentRepository;
+    private final BoardImageRepository boardImageRepository;
 
-    private final MemberService memberService;
     private final AmazonS3 s3Client;
+    private final UploadUtil uploadUtil;
+    private final BoardUtil boardUtil;
 
     @Value("${application.bucket.name}")
     private String bucketName;
@@ -46,14 +53,24 @@ public class BoardService {
     private String uploadFolder;
 
     @Transactional
-    public Long boardInsert(BoardSaveRequestDto requestDto) {
+    public CommonResponseDto<?> boardInsert(BoardSaveRequestDto requestDto) {
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
+        try {
+            Long memberId = SecurityUtil.getCurrentMemberId();
 
-        requestDto.setBoardAuthorId(memberId);
-        requestDto.setBoardAuthor(memberRepository.findByMemberNickname(memberId));
+            requestDto.setBoardAuthorId(memberId);
+            requestDto.setBoardAuthor(memberRepository.findByMemberNickname(memberId));
 
-        return mainBoardRepository.save(requestDto.toEntity()).getId();
+            Long boardId = mainBoardRepository.save(requestDto.toEntity()).getId();
+
+            boardUtil.boardImageInsert(boardId, requestDto.getBoardImage());
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return CommonResponseDto.setFailed("Database Error!");
+        }
+
+        return CommonResponseDto.setSuccess("Board Insert Success", null);
     }
 
     @Transactional
@@ -99,12 +116,12 @@ public class BoardService {
             UUID uuid = UUID.randomUUID();
             String imageFileName = uuid + "_" + files.getOriginalFilename();
 
-            File file = memberService.convertMultiPartFileToFile(files);
+            File file = uploadUtil.convertMultiPartFileToFile(files);
 
-            s3Client.putObject(new PutObjectRequest(bucketName, imageFileName, file));
+            s3Client.putObject(new PutObjectRequest(bucketName + "/previewImage", imageFileName, file));
             file.delete();
 
-            URL url = s3Client.getUrl(bucketName, imageFileName);
+            URL url = s3Client.getUrl(bucketName + "/previewImage", imageFileName);
             String urlText = "" + url;
 
             result.put("imgName", imageFileName);
@@ -137,7 +154,7 @@ public class BoardService {
         System.out.println(request.getParameter("imageFileName"));
 
         try {
-            s3Client.deleteObject(new DeleteObjectRequest(bucketName, request.getParameter("imageFileName")));
+            s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/previewImage", request.getParameter("imageFileName")));
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -149,11 +166,28 @@ public class BoardService {
 
     @Transactional
     public Long boardUpdate(Long boardId, BoardUpdateRequestDto requestDto) {
-        MainBoard mainBoard = mainBoardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
 
-        mainBoard.update(requestDto.getBoardCategory(), requestDto.getBoardTab(),
-                         requestDto.getBoardTitle(), requestDto.getBoardContent());
+        try {
+            MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
+
+            mainBoard.update(requestDto.getBoardCategory(), requestDto.getBoardTab(),
+                    requestDto.getBoardTitle(), requestDto.getBoardContent());
+
+            for(int i=0; i<requestDto.getDeleteImage().size(); i++) {
+                String boardImage = requestDto.getDeleteImage().get(i);
+                String deleteImage = boardImage.substring(boardImage.lastIndexOf("_")+1);
+                boardImageRepository.deleteByBoardImageOriginName(boardId, deleteImage);
+            }
+
+            for(int j=0; j<requestDto.getSelectDeleteImage().size(); j++) {
+                s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/previewImage", requestDto.getSelectDeleteImage().get(j)));
+            }
+
+            boardUtil.boardImageInsert(boardId, requestDto.getBoardImage());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         return boardId;
     }
@@ -167,32 +201,44 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardDetailResponseDto findByBoardId(Long boardId) {
+    public BoardDetailResponseDto findByDetailBoard(Long boardId) {
 
-        MainBoard mainBoard = mainBoardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId=" + boardId));
+        BoardDetailResponseDto boardDetailResponseDto = null;
 
-        Long memberId = SecurityUtil.getCurrentMemberId();
+        try {
+            MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId=" + boardId));
 
-        BoardDetailResponseDto boardDetailResponseDto = new BoardDetailResponseDto(mainBoard);
+            Long memberId = SecurityUtil.getCurrentMemberId();
 
-        if(memberId != null) {
-            Member member = memberRepository.findById(memberId)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+            boardDetailResponseDto = new BoardDetailResponseDto(mainBoard);
 
-            boardDetailResponseDto.setLoginMemberId(memberId);
+            if(memberId != null) {
+                List<BoardImageResponseDto> boardImageList = boardImageRepository.findBoardImageByBoardId(boardId).stream()
+                        .map(BoardImageResponseDto::new)
+                        .collect(Collectors.toList());
 
-            if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "U", member, mainBoard)) {
-                boardDetailResponseDto.setBoardRecommendUpCheck(1);
-            } else {
-                boardDetailResponseDto.setBoardRecommendUpCheck(0);
+                boardDetailResponseDto.setBoardImageList(boardImageList);
+
+                Member member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + memberId));
+
+                boardDetailResponseDto.setLoginMemberId(memberId);
+
+                if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "U", member, mainBoard)) {
+                    boardDetailResponseDto.setBoardRecommendUpCheck(1);
+                } else {
+                    boardDetailResponseDto.setBoardRecommendUpCheck(0);
+                }
+
+                if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "D", member, mainBoard)) {
+                    boardDetailResponseDto.setBoardRecommendDownCheck(1);
+                } else {
+                    boardDetailResponseDto.setBoardRecommendDownCheck(0);
+                }
             }
-
-            if(boardRecommendRepository.existsByRecommendCategoryAndRecommendTypeAndMemberAndMainBoard("B", "D", member, mainBoard)) {
-                boardDetailResponseDto.setBoardRecommendDownCheck(1);
-            } else {
-                boardDetailResponseDto.setBoardRecommendDownCheck(0);
-            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
         return boardDetailResponseDto;

@@ -19,7 +19,7 @@ public class MainBoard extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String boardCategory; // 게시물 탭
+    private String boardCategory; // 게시물 카테고리
 
     @Column(nullable = false)
     private String boardTab; // 게시물 탭
@@ -54,6 +54,9 @@ public class MainBoard extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "mainBoard", cascade = CascadeType.REMOVE)
     private List<BoardRecommend> boardRecommends;
+
+    @OneToMany(mappedBy = "mainBoard", cascade = CascadeType.REMOVE)
+    private List<BoardImage> boardImages;
 
 //    @OneToMany(mappedBy = "mainBoard", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 //    @OrderBy("id asc") // 댓글 정렬

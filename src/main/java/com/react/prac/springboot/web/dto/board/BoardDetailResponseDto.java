@@ -2,7 +2,8 @@ package com.react.prac.springboot.web.dto.board;
 
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import lombok.Data;
-import lombok.Getter;
+
+import java.util.List;
 
 @Data
 public class BoardDetailResponseDto {
@@ -19,6 +20,7 @@ public class BoardDetailResponseDto {
     private int boardViewsCnt;
     private int boardRecommendUpCheck; // 0 = false, 1 = true
     private int boardRecommendDownCheck; // 0 = false, 1 = true
+    private List<BoardImageResponseDto> boardImageList;
     private Long loginMemberId;
     // private List<CommentResponseDto> boardComments;
 

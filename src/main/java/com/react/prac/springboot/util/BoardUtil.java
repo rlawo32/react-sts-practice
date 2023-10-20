@@ -1,16 +1,25 @@
 package com.react.prac.springboot.util;
 
-import jakarta.annotation.Nullable;
+import com.react.prac.springboot.jpa.domain.board.BoardImage;
+import com.react.prac.springboot.jpa.domain.board.BoardImageRepository;
+import com.react.prac.springboot.jpa.domain.board.MainBoard;
+import com.react.prac.springboot.jpa.domain.board.MainBoardRepository;
+import com.react.prac.springboot.web.dto.board.BoardImageRequestDto;
 import lombok.Data;
-import org.springframework.core.MethodParameter;
-import org.springframework.web.method.support.ModelAndViewContainer;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
+@Service
 @Data
 public class BoardUtil {
+
+    private final BoardImageRepository boardImageRepository;
+    private final MainBoardRepository mainBoardRepository;
 
     // totalRecord : DB에서 구해온 해당 게시글의 전체 리스트
     // recordPerPage : 한 페이지에 보여질 리스트 수
@@ -55,5 +64,33 @@ public class BoardUtil {
         paging.put("endPage", endPage);
 
         return paging;
+    }
+
+    public void boardImageInsert(Long boardId, List<BoardImageRequestDto> requestDto) {
+
+        MainBoard mainBoard = mainBoardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. boardId : " + boardId));
+
+        for(int i=0; i<requestDto.size(); i++) {
+
+            String boardImageName = requestDto.get(i).getImgName();
+            String boardImageUrl = requestDto.get(i).getImgUrl();
+            Long boardImageSize = requestDto.get(i).getImgSize();
+            String originName = boardImageName.substring(boardImageName.lastIndexOf("_")+1);
+            String customName = boardImageName.substring(boardImageName.lastIndexOf("/")+1);
+            String urlName = boardImageUrl;
+            String extension = boardImageName.substring(boardImageName.lastIndexOf(".")+1);
+
+            BoardImage boardImage = BoardImage.builder()
+                    .mainBoard(mainBoard)
+                    .boardImageOriginName(originName)
+                    .boardImageCustomName(customName)
+                    .boardImageUrlName(urlName)
+                    .boardImageSize(boardImageSize)
+                    .boardImageExtension(extension)
+                    .build();
+
+            boardImageRepository.save(boardImage);
+        }
     }
 }

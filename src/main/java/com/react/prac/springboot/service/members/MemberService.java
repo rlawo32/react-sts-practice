@@ -7,15 +7,17 @@ import com.react.prac.springboot.config.security.TokenProvider;
 import com.react.prac.springboot.config.security.dto.TokenDto;
 import com.react.prac.springboot.config.security.dto.TokenRequestDto;
 import com.react.prac.springboot.jpa.domain.member.*;
+import com.react.prac.springboot.util.UploadUtil;
 import com.react.prac.springboot.web.dto.CommonResponseDto;
-import com.react.prac.springboot.web.dto.member.*;
+import com.react.prac.springboot.web.dto.member.MemberInfoResponseDto;
+import com.react.prac.springboot.web.dto.member.MemberLogResponseDto;
+import com.react.prac.springboot.web.dto.member.MemberSignInRequestDto;
+import com.react.prac.springboot.web.dto.member.MemberSignUpRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -26,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -55,6 +56,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final AmazonS3 s3Client;
+    private final UploadUtil uploadUtil;
 
     @Value("${application.bucket.name}")
     private String bucketName;
@@ -426,7 +428,7 @@ public class MemberService {
 
             System.out.println("이미지 파일 이름 확인 : " + imageFileName);
 
-            File file = convertMultiPartFileToFile(multipartFile);
+            File file = uploadUtil.convertMultiPartFileToFile(multipartFile);
 
             s3Client.putObject(new PutObjectRequest(bucketName, imageFileName, file));
             file.delete();
@@ -451,17 +453,6 @@ public class MemberService {
         return CommonResponseDto.setSuccess("Image Upload Success", null);
     }
 
-    public File convertMultiPartFileToFile(MultipartFile multipartFile) {
-        File convertedFile = new File(multipartFile.getOriginalFilename());
-
-        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
-            fos.write(multipartFile.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return convertedFile;
-    }
 
     public String memberImageLoad(String imageFileName) {
 

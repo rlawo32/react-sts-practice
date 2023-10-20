@@ -2,8 +2,8 @@ package com.react.prac.springboot.config.oauth;
 
 import com.react.prac.springboot.config.oauth.dto.OAuth2Attributes;
 import com.react.prac.springboot.config.oauth.dto.SessionUser;
-import com.react.prac.springboot.jpa.domain.member.MemberRepository;
 import com.react.prac.springboot.jpa.domain.member.Member;
+import com.react.prac.springboot.jpa.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

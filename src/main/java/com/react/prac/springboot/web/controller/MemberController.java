@@ -21,10 +21,6 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberImageRepository memberImageRepository;
-
-    @Value("${file.path}")
-    private String uploadFolder;
 
     @GetMapping("/sendAuthCode")
     public Map<String, Object> sendAuthCode(HttpServletRequest request) {

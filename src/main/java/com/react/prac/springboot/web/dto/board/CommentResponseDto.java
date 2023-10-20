@@ -1,14 +1,10 @@
 package com.react.prac.springboot.web.dto.board;
 
 import com.react.prac.springboot.jpa.domain.board.BoardComment;
-import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import lombok.Data;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class CommentResponseDto {

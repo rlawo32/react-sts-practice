@@ -1,7 +1,5 @@
 package com.react.prac.springboot.web.dto.board;
 
-import com.react.prac.springboot.jpa.domain.board.BoardComment;
-import com.react.prac.springboot.jpa.domain.board.MainBoard;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +21,8 @@ public class CommentRequestDto {
     private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
     @Builder
-    public CommentRequestDto(Long commentParentId, Long commentTargetId, Long commentNestedId,
-                             Long commentNestedLevel, Long boardId, String commentContent,
-                             String createdDate, String modifiedDate) {
+    public CommentRequestDto(Long commentParentId, Long commentTargetId, Long commentNestedId, Long commentNestedLevel,
+                             Long boardId, String commentContent, String createdDate, String modifiedDate) {
         this.commentParentId = commentParentId;
         this.commentTargetId = commentTargetId;
         this.commentNestedId = commentNestedId;

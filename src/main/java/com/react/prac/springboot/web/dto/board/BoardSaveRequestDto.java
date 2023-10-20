@@ -1,10 +1,10 @@
 package com.react.prac.springboot.web.dto.board;
 
 import com.react.prac.springboot.jpa.domain.board.MainBoard;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +20,7 @@ public class BoardSaveRequestDto {
     private String boardContent;
     private Long boardAuthorId;
     private String boardAuthor;
+    private List<BoardImageRequestDto> boardImage;
 
     public MainBoard toEntity() {
         return MainBoard.builder()

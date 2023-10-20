@@ -6,7 +6,6 @@ import com.react.prac.springboot.jpa.domain.member.MemberLogRepository;
 import com.react.prac.springboot.jpa.domain.member.MemberRepository;
 import com.react.prac.springboot.jpa.domain.member.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class BoardUpdateRequestDto {
@@ -12,6 +14,9 @@ public class BoardUpdateRequestDto {
     private String boardTab;
     private String boardTitle;
     private String boardContent;
+    private List<BoardImageRequestDto> boardImage;
+    private List<String> deleteImage;
+    private List<String> selectDeleteImage;
 
     @Builder
     public BoardUpdateRequestDto(String boardCategory, String boardTab, String boardTitle, String boardContent) {

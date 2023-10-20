@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -21,14 +20,6 @@ import java.util.Map;
 public class BoardController {
 
     private final BoardService boardService;
-    private final HttpSession httpSession;
-
-    @GetMapping("/oauth/loginInfo")
-    public String oauthLoginInfo(Authentication authentication) {
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        return attributes.toString();
-    }
 
     @GetMapping("/tableBoardList")
     public Map<String, Object> tableBoardList(HttpServletRequest request) {
@@ -39,13 +30,15 @@ public class BoardController {
     @PostMapping("/detailBoard/{boardId}")
     public BoardDetailResponseDto detailBoard(@PathVariable Long boardId) {
 
-        return boardService.findByBoardId(boardId);
+        return boardService.findByDetailBoard(boardId);
     }
 
     @PostMapping("/boardSave")
-    public Long boardSave(@RequestBody BoardSaveRequestDto requestDto) {
+    public CommonResponseDto<?> boardSave(@RequestBody BoardSaveRequestDto requestDto) {
 
-        return boardService.boardInsert(requestDto);
+        CommonResponseDto<?> result = boardService.boardInsert(requestDto);
+
+        return result;
     }
 
     @PostMapping("/boardImageSave")
