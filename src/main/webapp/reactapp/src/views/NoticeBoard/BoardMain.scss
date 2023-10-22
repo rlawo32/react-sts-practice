@@ -144,7 +144,46 @@
     }
 
     .board-header {
-      text-align: right;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .board-write {
+        margin-left: 10px;
+        font-size: 20px;
+
+        .write-box {
+          font-weight: 400;
+          background-color: #e2e3e5;
+          border-radius: 30px;
+          color: #000000;
+          position: relative;
+          overflow: hidden;
+          z-index: 1;
+          transition: color 150ms ease-in-out;
+
+          &:after {
+            content: '';
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 100%;
+            background: #5c636a;
+            z-index: -1;
+            transition: width 150ms ease-in-out;
+          }
+
+          &:hover {
+            color: #fff;
+            &:after {
+              width: 110%;
+            }
+          }
+        }
+      }
 
       .board-search {
         float: right;
@@ -223,6 +262,9 @@
     .board-footer {
 
       .board-paging {
+        margin-top: 5px;
+        border-top: 1px solid #dde0e3;
+
         ul {
           margin-top: 10px;
           list-style: none;
@@ -250,45 +292,6 @@
               }
             }
 
-          }
-        }
-      }
-
-      .board-write {
-        text-align: right;
-        margin-top: 15px;
-
-        font-size: 20px;
-
-        .write-box {
-          font-weight: 400;
-          background-color: #e2e3e5;
-          border-radius: 30px;
-          color: #000000;
-          position: relative;
-          overflow: hidden;
-          z-index: 1;
-          transition: color 150ms ease-in-out;
-
-          &:after {
-            content: '';
-            position: absolute;
-            display: block;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 100%;
-            background: #5c636a;
-            z-index: -1;
-            transition: width 150ms ease-in-out;
-          }
-
-          &:hover {
-            color: #fff;
-            &:after {
-              width: 110%;
-            }
           }
         }
       }

@@ -145,7 +145,12 @@ const BoardTable = (props) => {
                 <div className="board-table">
 
                     <div className="board-header">
-                        <div className="board-search">
+                        <span className="board-write">
+                            <Link to="/save" state={{subTab_name, category_name}} style={ isLoginCheck ? {} : {visibility: "hidden"} }>
+                                <button className="write-box"><FontAwesomeIcon icon={faPen} /> 글 쓰기</button>
+                            </Link>
+                        </span>
+                        <span className="board-search">
                             <input className="search-box" type="text" placeholder="입력해주세요." onChange={searchTextHandler}/>
                             <select className="search-select" onChange={searchSelectHandler}>
                                 <option value="title">제목</option>
@@ -155,7 +160,7 @@ const BoardTable = (props) => {
                             <button className="search-btn" onClick={changeSearchBoard}>
                                 <FontAwesomeIcon icon={faSearch} />
                             </button>
-                        </div>
+                        </span>
                     </div>
 
                     <div className="table-view">
@@ -210,11 +215,6 @@ const BoardTable = (props) => {
                     </div>
 
                     <div className="board-footer">
-                        <div className="board-write">
-                            <Link to="/save" state={{subTab_name, category_name}} style={ isLoginCheck ? {} : {visibility: "hidden"} }>
-                                <button className="write-box"><FontAwesomeIcon icon={faPen} /> 글 쓰기</button>
-                            </Link>
-                        </div>
                         <div className="board-paging">
                             <ul>
                                 {pagination()}
@@ -223,11 +223,8 @@ const BoardTable = (props) => {
                     </div>
 
                 </div>
-
             </div>
-
         </div>
-
     )
 }
 
