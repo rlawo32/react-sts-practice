@@ -48,6 +48,9 @@ dependencies {
 
     // s3 dependency
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // web socket dependency
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     /*
         spring-boot-devtools 사용을 위해 아래와 같이 추가 세팅하기
         Build, Exeution, Deployment > Compiler > Build project autiomaically 체크
