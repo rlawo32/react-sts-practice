@@ -59,6 +59,9 @@ export default function ButtonAppBar() {
                     // eslint-disable-next-line eqeqeq
                     `${isLoginCheck}` == 1 ?
                         <span>
+                            <Link to="/chatMain">
+                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} >Chat</Button>
+                            </Link>
                             <Link to="/memberInfo">
                                 <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} >My Info</Button>
                             </Link>

@@ -1,0 +1,131 @@
+
+.chat-main {
+
+
+
+  .chat-chatting {
+    width: 800px;
+    height: 600px;
+
+    .chat-chatting-list {
+      overflow:auto;
+      width: 650px;
+      height: 500px;
+      margin: auto;
+      padding: 20px;
+
+      .chat-chatting-myself {
+        position: relative;
+        text-align: right;
+
+        .chat-chatting-header {
+
+          .chat-member-image {
+
+            img {
+              width: 30px;
+              height: 30px;
+            }
+          }
+
+          .chat-member-name {
+            margin-right: 5px;
+            font-weight: bold;
+          }
+
+          .chat-chatting-date {
+            margin-right: 10px;
+            font-size: 15px;
+          }
+        }
+
+        .chat-chatting-content {
+          word-break: break-all;
+          margin: 5px 0 5px 0;
+          padding: 0 0 0 220px;
+          font-size: 23px;
+        }
+      }
+
+      .chat-chatting-opponent {
+        text-align: left;
+
+        .chat-chatting-header {
+
+          .chat-member-image {
+
+            img {
+              width: 30px;
+              height: 30px;
+            }
+          }
+
+          .chat-member-name {
+            margin-left: 5px;
+            font-weight: bold;
+          }
+
+          .chat-chatting-date {
+            margin-left: 10px;
+            font-size: 15px;
+          }
+        }
+
+        .chat-chatting-content {
+          word-break: break-all;
+          margin: 5px 0 5px 0;
+          padding: 0 220px 0 0;
+          font-size: 23px;
+        }
+      }
+    }
+
+    .chat-chatting-action {
+      margin-top: 50px;
+
+      .chat-chatting-input {
+        position: relative;
+        margin: auto;
+        width: 450px;
+
+        input {
+          border: 2px solid #495057;
+          border-radius: 15px;
+          padding: 5px 90px 5px 15px;
+          width: 435px;
+          color: white;
+          background: rgba(0,0,0,0);
+        }
+
+        button {
+          border: none;
+          font-size: 20px;
+          font-weight: bold;
+          color: white;
+          background: rgba(255,255,255,0);
+
+          position: absolute;
+          top: 12px;
+          left: 360px;
+
+          &:hover {
+            opacity: 0.2;
+          }
+        }
+      }
+
+      .chat-chatting-button {
+
+        button {
+          border: none;
+          border-radius: 15px;
+          font-size: 20px;
+          font-weight: bold;
+          padding: 2px 10px 2px 10px;
+
+        }
+      }
+    }
+
+  }
+}

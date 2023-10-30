@@ -10,6 +10,9 @@ import BoardTable from "./views/NoticeBoard/BoardTable";
 import BoardDetail from "./views/NoticeBoard/BoardDetail";
 import MemberInfo from "./views/MemberInfo/MemberInfo";
 import ImageModal from "./views/NoticeBoard/ImageModal";
+import ChatMain from "./views/Layouts/ChatMain";
+import ChatView from "./views/Layouts/ChatView";
+import ChatRoom from "./views/Layouts/ChatRoom";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
 import axios from "axios";
@@ -70,6 +73,10 @@ class App extends Component {
                         <Route path="/imageModal" element={<ImageModal />} />
                         <Route path="/board/:boardId" element={<BoardMain />} />
                         <Route path="/board/:boardId" element={<BoardDetail />} />
+
+                        <Route path="/chatMain" element={<ChatMain />} />
+                        <Route path="/chatView" element={<ChatView />} />
+                        <Route path="/chatRoom" element={<ChatRoom />} />
                     </Routes>
                 </header>
             </div>
