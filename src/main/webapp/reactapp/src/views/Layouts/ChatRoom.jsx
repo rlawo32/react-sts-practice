@@ -89,14 +89,15 @@ const ChatRoom = (props) => {
     };
 
     const quitChatRoomHandler = (e) => {
-        // eslint-disable-next-line eqeqeq
-        if(e == 'back') {
-            props.setChatRoomId("");
-        }
         axios({
             method: "POST",
             url: '/chat/quitChatRoom/' + props.chatRoomId
         });
+
+        // eslint-disable-next-line eqeqeq
+        if(e == 'back') {
+            setTimeout(()=>{props.setChatRoomId("");}, 3000);
+        }
 
         console.log("Disconnect ...");
         client.current.disconnect();

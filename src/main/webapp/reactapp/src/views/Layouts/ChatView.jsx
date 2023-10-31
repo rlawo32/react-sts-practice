@@ -98,7 +98,7 @@ const ChatView = (props) => {
                 datalist[i].chatRoomNo = (i  + (pageNo * 8)) + 1;
             }
         });
-    }, [chatRoomState, pageNo, props.setChatViewClose]);
+    }, [chatRoomState, pageNo]);
 
     useEffect(() => {
         axios({
@@ -106,6 +106,7 @@ const ChatView = (props) => {
             url: '/member/memberInfo'
         }).then((res) => {
             setMemberId(res.data.data.memberId);
+            setChatRoomState(!chatRoomState);
         });
         props.setChatViewClose(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
