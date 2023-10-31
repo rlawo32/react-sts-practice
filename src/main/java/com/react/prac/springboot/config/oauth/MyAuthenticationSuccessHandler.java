@@ -3,6 +3,7 @@ package com.react.prac.springboot.config.oauth;
 import com.react.prac.springboot.config.security.TokenProvider;
 import com.react.prac.springboot.config.security.dto.TokenDto;
 import com.react.prac.springboot.jpa.domain.member.*;
+import com.react.prac.springboot.util.ChatUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,6 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     private final MemberRepository memberRepository;
     private final MemberLogRepository memberLogRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    String REDIRECT_URI = "http://ec2-52-78-218-238.ap-northeast-2.compute.amazonaws.com:8080";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -66,7 +66,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
                  refreshTokenRepository.save(refreshToken);
 
                  DriverManager.println("SuccessHandler oAuth2User: " + defaultOAuth2User);
-                 response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_URI)
+                 response.sendRedirect(UriComponentsBuilder.fromUriString(ChatUtil.redirectUrl)
                          .queryParam("bearer", tokenDto.getGrantType())
                          .queryParam("accessToken", tokenDto.getAccessToken())
                          .queryParam("refreshToken", tokenDto.getRefreshToken())

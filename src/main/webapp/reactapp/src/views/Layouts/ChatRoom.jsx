@@ -1,12 +1,12 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import './ChatView.scss';
 import axios from "axios";
 import {Stomp} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import memberDefaultImg from "../../images/ProfileDefault.png";
 
 const ChatRoom = (props) => {
     const client = useRef({});
+    const focus = useRef();
     const token = axios.defaults.headers.common["Authorization"]?.toString();
 
     const [chattingContent, setChattingContent] = useState("");
@@ -21,7 +21,6 @@ const ChatRoom = (props) => {
         sendDate : ''
     }]);
 
-    const [memberProfileImg, setMemberProfileImg] = useState("");
     const [memberInfo, setMemberInfo] = useState([{
         memberId: '',
         memberEmail: '',
@@ -33,51 +32,35 @@ const ChatRoom = (props) => {
         picture: ''
     }]);
 
-    const quitChatRoomHandler = () => {
-        props.setChatRoomId("");
-    }
-
     const stompConnect = () => {
         client.current = Stomp.over(() => {
             const sock = new SockJS("http://localhost:8080/ws-stomp");
             return sock;
         })
 
-        client.current.connect({Authorization: token}, () => {
+        client.current.connect({Authorization: token}, async () => {
             console.log("Connect ...");
-            axios({
+
+            await axios({
                 method: "GET",
                 url: '/chat/chattingList/' + props.chatRoomId
             }).then((res) => {
                 setChattingList(res.data);
             });
-            client.current.subscribe("/sub/" + props.chatRoomId , (message) => {
+
+            await axios({
+                method: "POST",
+                url: '/chat/enterChatRoom/' + props.chatRoomId
+            });
+            setTimeout(()=>{ focus.current.scrollTop = focus.current.scrollHeight }, 500);
+
+            await client.current.subscribe("/sub/" + props.chatRoomId , (message) => {
                     // console.log(JSON.parse(message.body));
-                    axios({
-                        method: "GET",
-                        url: '/chat/chattingList/' + props.chatRoomId
-                    }).then((res) => {
-                        setChattingList(res.data);
-                    });
+                    setChattingList(prevList => [...prevList, JSON.parse(message.body)]);
+                    setTimeout(()=>{ focus.current.scrollTop = focus.current.scrollHeight }, 100);
                 }
             );
         })
-
-        // const stomp = Stomp.over(sockJs);
-        // const stomp = Stomp.over(() => {
-        //     const sockJs = new SockJS("/ws-stomp");
-        //     return sockJs;
-        // });
-
-        // stomp.connect({Authorization: "${grantType} ${accessToken}`}, () => {
-        //     console.log("STOMP Connection");
-        //
-        //     // stomp.subscribe("/sub/chat/room/" + props.chatRoomId, function (chat) {
-        //     //     loadChatMessages();
-        //     // });
-        //
-        //     // stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, loginId: loginId}));
-        // });
     }
 
     const sendChattingHandler = () => {
@@ -101,12 +84,42 @@ const ChatRoom = (props) => {
             headers: {'Content-type': 'application/json'}
         }).then((res) => {
             setChattingState(!chattingState);
+            setChattingContent("");
         });
     };
 
-    useEffect(() => {
+    const quitChatRoomHandler = (e) => {
+        // eslint-disable-next-line eqeqeq
+        if(e == 'back') {
+            props.setChatRoomId("");
+        }
+        axios({
+            method: "POST",
+            url: '/chat/quitChatRoom/' + props.chatRoomId
+        });
 
-    }, [chattingState]);
+        console.log("Disconnect ...");
+        client.current.disconnect();
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    const memberImageLoadHandler = useCallback((senderId) => {
+        setTimeout(async ()=>{
+            const memberImage = await axios({
+                method: "GET",
+                url: 'chat/imageLoad',
+                params: {memberId: senderId}
+            }); console.log(memberImage.data);}, 3000);
+
+        // return memberImage.data;
+    }, [])
+
+    useEffect(() => {
+        if(props.chatViewClose) {
+            quitChatRoomHandler('back');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.chatViewClose])
 
     useEffect(() => {
         axios({
@@ -114,64 +127,67 @@ const ChatRoom = (props) => {
             url: '/member/memberInfo'
         }).then((res) => {
             setMemberInfo(res.data.data);
-            if(res.data.data.picture) {
-                setMemberProfileImg(res.data.data.picture);
-                const presentUrl = window.location.href.substring(7, 12);
-
-                if(presentUrl === "local") {
-                    const pictureUrl = res.data.data.picture.substring(0, 4);
-                    if(pictureUrl === "http") {
-                        setMemberProfileImg(res.data.data.picture);
-                    } else {
-                        setMemberProfileImg("/upload/" + res.data.data.picture);
-                    }
-                } else {
-                    axios({
-                        method: "GET",
-                        url: 'member/imageLoad',
-                        params: {imageFileName: res.data.data.picture}
-                    }).then((res) => {
-                        console.log(res.data);
-                        // setMemberProfileImg(res.data);
-                    })
-                }
-            } else {
-                setMemberProfileImg("");
-            }
+            stompConnect();
         });
+
+        (() => {
+            window.addEventListener('beforeunload', preventClose);
+        })();
+
+        return () => {
+            window.removeEventListener('beforeunload', preventClose);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const preventClose =(e) => {
+        e.preventDefault();
+        e.returnValue = '';
+        quitChatRoomHandler('quit');
+    }
+
+    const enterOnKeyHandler = (e) => {
+        // eslint-disable-next-line eqeqeq
+        if(e.key == 'Enter') {
+            if(chattingContent.length < 1) {
+
+            } else {
+                sendChattingHandler();
+            }
+        }
+    }
 
     return (
         <div className="chat-main">
-            <div className="chat-chatting">
-                <div className="chat-chatting-list">
+            <div className="chat-chatting-view">
+                <div ref={focus} className="chat-chatting-list">
                     {chattingList.map((chatting, idx) => (
-                        <div key={chatting.chattingId} className={memberInfo.memberId === chatting.senderId
-                                 ? "chat-chatting-myself" : "chat-chatting-opponent"}>
+                        <div key={idx} className={memberInfo.memberId === chatting.senderId
+                            ? "chat-chatting-myself" : "chat-chatting-opponent"}>
                             {
-                                `${memberInfo.memberId}`=== `${chatting.senderId}` ?
+                                `${memberInfo.memberId}`===`${chatting.senderId}` ?
                                     <div>
                                         <div className="chat-chatting-header">
                                             <span className="chat-chatting-date">
                                                 {chatting.sendDate}
                                             </span>
                                             <span className="chat-member-name">
-                                                 {chatting.senderName}
+                                                {chatting.senderName}
                                             </span>
-                                            <span className="chat-member-image">
-                                                <img src={memberProfileImg ? memberProfileImg : memberDefaultImg} alt="프로필 이미지" />
-                                             </span>
+                                            {/*<span className="chat-member-image">*/}
+                                            {/*    <img src={memberProfileImg ? memberProfileImg : memberDefaultImg} alt="프로필 이미지" />*/}
+                                            {/* </span>*/}
                                         </div>
                                         <div className="chat-chatting-content">{chatting.content}</div>
                                     </div>
-                                :
+                                    :
                                     <div>
                                         <div className="chat-chatting-header">
-                                            <span className="chat-member-image">
-                                                <img src={memberProfileImg ? memberProfileImg : memberDefaultImg} alt="프로필 이미지" />
-                                             </span>
+                                            {/*<span className="chat-member-image">*/}
+                                            {/*    <img src={memberProfileImg ? memberProfileImg : memberDefaultImg} alt="프로필 이미지" />*/}
+                                            {/* </span>*/}
                                             <span className="chat-member-name">
-                                                 {chatting.senderName}
+                                                {chatting.senderName}
                                             </span>
                                             <span className="chat-chatting-date">
                                                 {chatting.sendDate}
@@ -182,16 +198,17 @@ const ChatRoom = (props) => {
                             }
                         </div>
                     ))}
+                    <div ref={focus}></div>
                 </div>
                 <div className="chat-chatting-action">
+                    <div className="chat-chatting-button">
+                        <button onClick={() => quitChatRoomHandler('back')}>나가기</button>
+                    </div>
                     <div className="chat-chatting-input">
-                        <input type="text" value={chattingContent} onChange={(e) => setChattingContent(e.target.value)} />
+                        <input type="text" value={chattingContent} onKeyDown={enterOnKeyHandler}
+                               onChange={(e) => setChattingContent(e.target.value)} />
                         <button onClick={() => sendChattingHandler()}>보내기</button>
                     </div>
-                    <div className="chat-chatting-button">
-                        <button onClick={() => quitChatRoomHandler()}>나가기</button>
-                    </div>
-                    <button onClick={() => stompConnect()}>연결</button>
                 </div>
             </div>
         </div>

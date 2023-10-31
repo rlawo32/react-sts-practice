@@ -67,6 +67,7 @@ public class SecurityConfig {
                 .requestMatchers("/board/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/upload/**").permitAll()
+                .requestMatchers("/ws-stomp/**").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
                 .anyRequest().authenticated()
 

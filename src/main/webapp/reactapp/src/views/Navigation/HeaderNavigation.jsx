@@ -11,9 +11,11 @@ import {faShieldCat as catIcon} from "@fortawesome/free-solid-svg-icons"
 import {getCookie} from './Cookie';
 import {useEffect, useState} from "react";
 import axios from "axios";
+import ChatModal from "../Layouts/ChatModal";
 
 export default function ButtonAppBar() {
-    const [isLoginCheck, setIsLoginCheck] = useState(0);;
+    const [isLoginCheck, setIsLoginCheck] = useState(0);
+    const [chatModal, setChatModal] = useState(false);
 
     const logout = async () => {
         // navigate("/");
@@ -59,9 +61,7 @@ export default function ButtonAppBar() {
                     // eslint-disable-next-line eqeqeq
                     `${isLoginCheck}` == 1 ?
                         <span>
-                            <Link to="/chatMain">
-                                <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} >Chat</Button>
-                            </Link>
+                            <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} onClick={() => setChatModal(!chatModal)}>Chat</Button>
                             <Link to="/memberInfo">
                                 <Button sx={{color: "white", marginRight: '10px', fontSize: '16px', fontFamily: 'SUITE-Regular'}} >My Info</Button>
                             </Link>
@@ -84,6 +84,13 @@ export default function ButtonAppBar() {
                     <Button sx={{color: "white", marginRight: '30px', fontSize: '16px', fontFamily: 'SUITE-Regular'}}>Board</Button>
                 </Link>
             </Toolbar>
+            <div style={{
+                position:"relative",
+                top: 30,
+                left: 300
+            }}>
+                {chatModal ? <ChatModal setChatModal={setChatModal}/> : null}
+            </div>
         </AppBar>
     );
 }

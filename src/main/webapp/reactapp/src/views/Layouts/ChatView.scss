@@ -1,16 +1,136 @@
 
 .chat-main {
+  border-radius: 10px;
+  height: 600px;
+  width: 452px;
+  background-color: #141619;
+  opacity: 0.9;
+
+  .chat-drag-design {
+    border: none;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    height: 35px;
+    cursor: move;
+    background: linear-gradient(
+      rgba(130, 130, 130, 1),
+      rgba(30, 30, 30, 1)
+    );
+  }
+
+  .chat-room-view {
+    position: relative;
+
+    .paging-design {
+      margin: 55px auto 15px;
+      height: 55px;
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border: none;
+
+        li {
+          display: inline-block;
+          text-align: center;
+
+          .list-item {
+            background-color: transparent;
+            border: 2px solid #5c636a;
+            border-radius: 0.6em;
+            color: #e2e3e5;
+            cursor: pointer;
+            font-size: 19px;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin: 2px;
+            padding: 0.3em 0.8em;
+
+            &:hover {
+              box-shadow: 0 0 40px 40px #4d5154 inset;
+            }
+          }
+
+        }
+      }
+    }
+
+    .chat-room-list {
+      margin: 5px auto 0;
+      height: 400px;
+
+      table {
+        margin: auto;
+        border-collapse: separate;
+        border-spacing: 8px;
+
+        tr {
+          border-collapse: collapse;
+          border-radius: 10px;
+          border-style: hidden;
+          box-shadow: 0 0 0 1px white;
+        }
+
+        thead tr {
+          font-size: 20px;
+        }
+
+        tbody tr {
+          font-size: 25px;
+          &:hover {
+            box-shadow: 0 0 0 3px white;
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .chat-room-input {
+      position: relative;
+      margin: auto;
+      width: 370px;
+      color: #adb5bd;
+
+      input {
+        border: 2px solid #495057;
+        border-radius: 15px;
+        padding: 5px 90px 5px 15px;
+        width: 365px;
+        color: white;
+        background: rgba(0,0,0,0);
+      }
+
+      button {
+        border: none;
+        font-size: 20px;
+        font-weight: bold;
+        width: 100px;
+        color: white;
+        background: rgba(255,255,255,0);
+
+        position: absolute;
+        top: 12px;
+        left: 260px;
+
+        &:hover {
+          opacity: 0.2;
+        }
+      }
+    }
+  }
 
 
 
-  .chat-chatting {
-    width: 800px;
-    height: 600px;
+  .chat-chatting-view {
+    position: relative;
+    width: 300px;
+    height: 500px;
 
     .chat-chatting-list {
       overflow:auto;
-      width: 650px;
-      height: 500px;
+      width: 450px;
+      height: 470px;
       margin: auto;
       padding: 20px;
 
@@ -29,7 +149,7 @@
           }
 
           .chat-member-name {
-            margin-right: 5px;
+            //margin-right: 5px;
             font-weight: bold;
           }
 
@@ -42,7 +162,7 @@
         .chat-chatting-content {
           word-break: break-all;
           margin: 5px 0 5px 0;
-          padding: 0 0 0 220px;
+          padding: 0 0 0 120px;
           font-size: 23px;
         }
       }
@@ -61,7 +181,7 @@
           }
 
           .chat-member-name {
-            margin-left: 5px;
+            //margin-left: 5px;
             font-weight: bold;
           }
 
@@ -74,25 +194,26 @@
         .chat-chatting-content {
           word-break: break-all;
           margin: 5px 0 5px 0;
-          padding: 0 220px 0 0;
+          padding: 0 120px 0 0;
           font-size: 23px;
         }
       }
     }
 
     .chat-chatting-action {
-      margin-top: 50px;
+      margin-top: 10px;
 
       .chat-chatting-input {
         position: relative;
-        margin: auto;
+        margin: 10px auto 0;
         width: 450px;
 
         input {
           border: 2px solid #495057;
           border-radius: 15px;
-          padding: 5px 90px 5px 15px;
+          padding: 10px 90px 10px 15px;
           width: 435px;
+          font-size: 20px;
           color: white;
           background: rgba(0,0,0,0);
         }
@@ -115,14 +236,15 @@
       }
 
       .chat-chatting-button {
+        text-align: right;
+        width: 440px;
 
         button {
           border: none;
           border-radius: 15px;
-          font-size: 20px;
+          font-size: 18px;
           font-weight: bold;
           padding: 2px 10px 2px 10px;
-
         }
       }
     }
