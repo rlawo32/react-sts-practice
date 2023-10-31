@@ -372,51 +372,6 @@ public class MemberService {
         return CommonResponseDto.setSuccess("Secession Success!", null);
     }
 
-    // 로컬 이미지 업로드
-    @Transactional
-    public CommonResponseDto<?> memberImageUpload(MultipartFile multipartFile) {
-
-        //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
-        UUID uuid = UUID.randomUUID();
-        String imageFileName = uuid + "_" + multipartFile.getOriginalFilename();
-
-        System.out.println("이미지 파일 이름 확인 : " + imageFileName);
-
-        // 디렉토리 경로
-        Path dir = Paths.get(uploadFolder);
-        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
-
-        System.out.println("이미지 파일 PATH 확인 : " + imageFilePath);
-
-        try {
-            if(!Files.exists(dir)) {
-                Files.createDirectory(dir);
-            }
-            Files.write(imageFilePath, multipartFile.getBytes());
-
-            Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
-
-            MemberImage memberImage = MemberImage.builder()
-                    .member(member)
-                    .caption("프로필 이미지")
-                    .memberImageName(imageFileName)
-                    .build();
-
-            memberImageRepository.save(memberImage);
-            memberRepository.updateByMemberPicture(SecurityUtil.getCurrentMemberId(), imageFileName);
-
-        } catch(IOException i) {
-            i.printStackTrace();
-            return CommonResponseDto.setFailed("Upload Error!");
-        } catch(Exception e) {
-            e.printStackTrace();
-            return CommonResponseDto.setFailed("Database Error!");
-        }
-
-        return CommonResponseDto.setSuccess("Image Upload Success", null);
-    }
-
     // S3 이미지 업로드
     @Transactional
     public CommonResponseDto<?> memberImageUploadS3(MultipartFile multipartFile) {
@@ -430,21 +385,26 @@ public class MemberService {
 
             File file = uploadUtil.convertMultiPartFileToFile(multipartFile);
 
-            s3Client.putObject(new PutObjectRequest(bucketName, imageFileName, file));
+            s3Client.putObject(new PutObjectRequest(bucketName + "/profileImage", imageFileName, file));
             file.delete();
+
+            URL url = s3Client.getUrl(bucketName + "/profileImage", imageFileName);
+            String urlImage = "" + url;
 
             Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
 
             MemberImage memberImage = MemberImage.builder()
                     .member(member)
-                    .caption("프로필 이미지")
-                    .memberImageName(imageFileName)
+                    .memberImageOriginName(multipartFile.getOriginalFilename())
+                    .memberImageCustomName(imageFileName)
+                    .memberImageUrlName(urlImage)
+                    .memberImageSize(multipartFile.getSize())
+                    .memberImageExtension(imageFileName.substring(imageFileName.lastIndexOf(".")+1))
                     .build();
 
             memberImageRepository.save(memberImage);
-            memberRepository.updateByMemberPicture(SecurityUtil.getCurrentMemberId(), imageFileName);
-
+            memberRepository.updateByMemberPicture(SecurityUtil.getCurrentMemberId(), urlImage);
         } catch(Exception e) {
             e.printStackTrace();
             return CommonResponseDto.setFailed("Database Error!");

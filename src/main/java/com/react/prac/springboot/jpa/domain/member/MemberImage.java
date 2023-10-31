@@ -19,14 +19,24 @@ public class MemberImage {
     @Column(name = "member_image_id", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
-
-    private String caption;
+    @JoinColumn(name = "member_id")
+    private Member member; // 회원 id
 
     @Column(nullable = false)
-    private String memberImageName;    //사진을 전달받아서 서버의 특정 폴더에 저장할 것이므로 사진이 저장된 경로를 저장
+    private String memberImageOriginName; // member image originName
+
+    @Column(nullable = false)
+    private String memberImageCustomName; // member image customName
+
+    @Column(nullable = false)
+    private String memberImageUrlName; // member image urlName
+
+    @Column(nullable = false)
+    private Long memberImageSize; // member image size
+
+    @Column(nullable = false)
+    private String memberImageExtension; // member image extension
 
     @Column(name = "image_upload_date", nullable = false)
     private String createDate;
@@ -37,10 +47,14 @@ public class MemberImage {
     }
 
     @Builder
-    public MemberImage(Member member, String caption, String memberImageName, String createDate) {
+    public MemberImage(Member member, String memberImageOriginName, String memberImageCustomName,
+                       String memberImageUrlName, Long memberImageSize, String memberImageExtension, String createDate) {
         this.member = member;
-        this.caption = caption;
-        this.memberImageName = memberImageName;
+        this.memberImageOriginName = memberImageOriginName;
+        this.memberImageCustomName = memberImageCustomName;
+        this.memberImageUrlName = memberImageUrlName;
+        this.memberImageSize = memberImageSize;
+        this.memberImageExtension = memberImageExtension;
         this.createDate = createDate;
     }
 }
