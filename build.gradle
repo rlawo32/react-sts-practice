@@ -53,8 +53,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     // mongo dependency
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+//    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     /*
         spring-boot-devtools 사용을 위해 아래와 같이 추가 세팅하기

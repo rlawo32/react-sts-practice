@@ -35,7 +35,7 @@ public class Chatting {
 
     @Column(nullable = false)
     @CreatedDate
-    private String sendDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+    private String sendDate;
 
     @Builder
     public Chatting(String senderName, Long senderId, Long chatRoomId, String content, String sendDate) {

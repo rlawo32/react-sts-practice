@@ -98,7 +98,7 @@ const ChatView = (props) => {
                 datalist[i].chatRoomNo = (i  + (pageNo * 8)) + 1;
             }
         });
-    }, [chatRoomState, pageNo]);
+    }, [chatRoomState, pageNo, props.setChatViewClose]);
 
     useEffect(() => {
         axios({

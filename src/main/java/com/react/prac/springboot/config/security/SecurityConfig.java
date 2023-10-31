@@ -45,6 +45,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .headers()
+                .frameOptions().sameOrigin()
+
+                .and()
                 .formLogin().disable()
                 .csrf().disable() // rest api 사용시 disable / token을 사용하는 방식일 경우 disable
 

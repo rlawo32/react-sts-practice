@@ -44,7 +44,12 @@ const ChatModal = (props) => {
                     chatRoomId == "" ?
                         <ChatView setChatRoomId={setChatRoomId} setChatViewClose={setChatViewClose}/>
                         :
-                        <ChatRoom chatRoomId={chatRoomId} setChatRoomId={setChatRoomId} chatViewClose={chatViewClose}/>
+                        <http auto-config='true' use-expressions="true">
+                            <header>
+                                <frame-options policy="SAMEORIGIN"/>
+                                <ChatRoom chatRoomId={chatRoomId} setChatRoomId={setChatRoomId} chatViewClose={chatViewClose}/>
+                            </header>
+                        </http>
                 }
             </div>
         </div>
