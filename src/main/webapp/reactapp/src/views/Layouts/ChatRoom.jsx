@@ -34,7 +34,7 @@ const ChatRoom = (props) => {
 
     const stompConnect = () => {
         client.current = Stomp.over(() => {
-            const sock = new SockJS("http://localhost:8080/ws-stomp");
+            const sock = new SockJS("http://ec2-52-78-218-238.ap-northeast-2.compute.amazonaws.com:8080/ws-stomp");
             return sock;
         })
 
