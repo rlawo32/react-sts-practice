@@ -416,8 +416,7 @@ public class MemberService {
 
     public String memberImageLoad(String imageFileName) {
 
-        URL url = s3Client.getUrl(bucketName, imageFileName);
-
+        URL url = s3Client.getUrl(bucketName + "/profileImage", imageFileName);
         String urlText = "" + url;
 
         return urlText;
