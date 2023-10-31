@@ -1,6 +1,8 @@
 import {useRef, useState} from "react";
 import ChatRoom from "./ChatRoom";
 import ChatView from "./ChatView";
+import './ChatView.scss';
+import './Loading.scss';
 import {useDrag} from 'react-use-gesture';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRectangleXmark as chatClose} from "@fortawesome/free-solid-svg-icons";

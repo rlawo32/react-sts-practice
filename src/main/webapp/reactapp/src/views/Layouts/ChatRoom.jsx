@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import './ChatView.scss';
 import axios from "axios";
 import {Stomp} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -11,6 +10,7 @@ const ChatRoom = (props) => {
 
     const [chattingContent, setChattingContent] = useState("");
     const [chattingState, setChattingState] = useState(false);
+    const [isChattingLoading, setIsChattingLoading] = useState(false);
 
     const [chattingList, setChattingList] = useState([{
         chattingId : '',
@@ -93,12 +93,12 @@ const ChatRoom = (props) => {
             method: "POST",
             url: '/chat/quitChatRoom/' + props.chatRoomId
         });
+        setIsChattingLoading(true);
 
         // eslint-disable-next-line eqeqeq
         if(e == 'back') {
-            setTimeout(()=>{props.setChatRoomId("");}, 3000);
+            setTimeout(()=>{props.setChatRoomId("");}, 700);
         }
-
         console.log("Disconnect ...");
         client.current.disconnect();
     }
@@ -161,6 +161,7 @@ const ChatRoom = (props) => {
     return (
         <div className="chat-main">
             <div className="chat-chatting-view">
+                <div className="loading-circle" style={isChattingLoading?{display: 'block'}:{display: 'none'}}/>
                 <div ref={focus} className="chat-chatting-list">
                     {chattingList.map((chatting, idx) => (
                         <div key={idx} className={memberInfo.memberId === chatting.senderId
