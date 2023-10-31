@@ -114,6 +114,7 @@ const BoardWrite = () => {
         let removeImgSize = 0;
         let removeImgName = "";
         for(let i=0; i<attachImageArr.length; i++) {
+            // eslint-disable-next-line eqeqeq
             if(attachImageArr[i].imgUrl == url) {
                 removeImgSize = attachImageArr[i].imgSize;
                 removeImgName = attachImageArr[i].imgName;

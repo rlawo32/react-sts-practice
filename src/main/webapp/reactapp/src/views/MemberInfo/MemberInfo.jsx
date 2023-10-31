@@ -93,7 +93,7 @@ const MemberInfo = () => {
     }
 
     useEffect( () => {
-
+        // const userAgent = window.navigator.userAgent; // 기기 정보
         const getMemberInfo = async () => {
 
             await axios({
