@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faShieldCat as catIcon} from "@fortawesome/free-solid-svg-icons"
+import {faChartSimple as locoIcon} from "@fortawesome/free-solid-svg-icons"
 import {getCookie} from './Cookie';
 import {useEffect, useState} from "react";
 import axios from "axios";
@@ -45,8 +45,8 @@ export default function ButtonAppBar() {
                     aria-label="menu"
                     sx={{ mr: 2, color: "white" }}
                 >
-                    <Link to="/" style={{color: 'white', fontWeight: 'bold', marginLeft: '30px', fontSize: '24px', fontFamily: 'angular', textDecoration: 'none'}} >
-                        <FontAwesomeIcon icon={catIcon} /> The Rabbits
+                    <Link to="/" style={{color: 'white', fontWeight: 'bold', marginLeft: '15px', fontSize: '24px', fontFamily: 'YEONGJUPunggiGinsengTTF', textDecoration: 'none'}} >
+                        <FontAwesomeIcon icon={locoIcon} style={{position: 'relative', top: '2px', fontSize: '35px'}}/>&nbsp; ReP
                     </Link>
                 </IconButton>
                 <Typography position="relative" variant="h6" component="div" sx={{ flexGrow: 1, color: "white" }}>

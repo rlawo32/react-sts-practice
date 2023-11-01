@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
         faComment as kakaoIcon,
         faEye as passwordSeeIcon,
-        faShieldCat as catIcon
+        faChartSimple as logoIcon
         } from "@fortawesome/free-solid-svg-icons"
 import {faGoogle as googleIcon} from "@fortawesome/free-brands-svg-icons"
 import {setCookie} from './../Navigation/Cookie';
@@ -147,7 +147,9 @@ const SignIn = () => {
             <AppBarNavigation />
 
             <h1 style={{marginTop: '100px', fontWeight: 'bold'}}>
-                <FontAwesomeIcon icon={catIcon} /> The Rabbits
+                <Link to="/" style={{textDecoration: 'none', color: 'white', fontFamily: 'YEONGJUPunggiGinsengTTF'}}>
+                    <FontAwesomeIcon icon={logoIcon} style={{position: 'relative', top: '2px', fontSize: '60px'}}/>&nbsp; ReP
+                </Link>
             </h1>
 
             <div className="signIn-view">

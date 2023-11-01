@@ -5,12 +5,13 @@ import SockJS from "sockjs-client";
 
 const ChatRoom = (props) => {
     const client = useRef({});
-    const focus = useRef();
+    const lowerScroll = useRef();
     const token = axios.defaults.headers.common["Authorization"]?.toString();
 
     const [chattingContent, setChattingContent] = useState("");
     const [chattingState, setChattingState] = useState(false);
     const [isChattingLoading, setIsChattingLoading] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState("");
 
     const [chattingList, setChattingList] = useState([{
         chattingId : '',
@@ -32,7 +33,7 @@ const ChatRoom = (props) => {
         picture: ''
     }]);
 
-    const stompConnect = () => {
+    const stompConnect = (enter) => {
         client.current = Stomp.over(() => {
             const sock = new SockJS("http://ec2-52-78-218-238.ap-northeast-2.compute.amazonaws.com:8080/ws-stomp");
             return sock;
@@ -52,14 +53,30 @@ const ChatRoom = (props) => {
                 method: "POST",
                 url: '/chat/enterChatRoom/' + props.chatRoomId
             });
-            setTimeout(()=>{ focus.current.scrollTop = focus.current.scrollHeight }, 500);
 
-            await client.current.subscribe("/sub/" + props.chatRoomId , (message) => {
+            setTimeout(()=>{
+                client.current.send("/topic/" + props.chatRoomId,
+                    {Authorization: token, type: "enter"},
+                    JSON.stringify({
+                        senderName: enter + " 님이 입장하셨습니다."
+                    })); }, 200);
+            setTimeout(()=>{ lowerScroll.current.scrollTop = lowerScroll.current.scrollHeight }, 500);
+
+            await client.current.subscribe("/topic/" + props.chatRoomId , (message) => {
+                    const body = JSON.parse(message.body);
                     // console.log(JSON.parse(message.body));
-                    setChattingList(prevList => [...prevList, JSON.parse(message.body)]);
-                    setTimeout(()=>{ focus.current.scrollTop = focus.current.scrollHeight }, 100);
-                }
-            );
+
+                    if(message.headers.type === "enter") {
+                        setNotificationMessage(body.senderName);
+                    } else if(message.headers.type === "quit") {
+                        setNotificationMessage(body.senderName);
+                    } else if(message.headers.type === "message") {
+                        setChattingList(prevList => [...prevList, body]);
+                        setTimeout(()=>{ lowerScroll.current.scrollTop = lowerScroll.current.scrollHeight }, 100);
+                    }
+
+                    setTimeout(()=>{ setNotificationMessage("") }, 3000);
+                });
         })
     }
 
@@ -75,7 +92,9 @@ const ChatRoom = (props) => {
             sendDate: sendDate
         };
 
-        client.current.send("/sub/" + props.chatRoomId, {Authorization: token}, JSON.stringify(sendData));
+        client.current.send("/topic/" + props.chatRoomId,
+            {Authorization: token, type: "message"},
+            JSON.stringify(sendData));
 
         axios({
             method: "POST",
@@ -89,6 +108,17 @@ const ChatRoom = (props) => {
     };
 
     const quitChatRoomHandler = (e) => {
+        let sendMessage = memberInfo.memberNickname + " 님이 퇴장하셨습니다.";
+        if(e === 'quit') {
+            sendMessage = "상대방이 퇴장했습니다.";
+        }
+
+        client.current.send("/topic/" + props.chatRoomId,
+            {Authorization: token, type: "quit"},
+            JSON.stringify({
+                senderName: sendMessage
+            }));
+
         axios({
             method: "POST",
             url: '/chat/quitChatRoom/' + props.chatRoomId
@@ -128,7 +158,7 @@ const ChatRoom = (props) => {
             url: '/member/memberInfo'
         }).then((res) => {
             setMemberInfo(res.data.data);
-            stompConnect();
+            stompConnect(res.data.data.memberNickname);
         });
 
         (() => {
@@ -142,9 +172,9 @@ const ChatRoom = (props) => {
     }, []);
 
     const preventClose =(e) => {
+        quitChatRoomHandler('quit');
         e.preventDefault();
         e.returnValue = '';
-        quitChatRoomHandler('quit');
     }
 
     const enterOnKeyHandler = (e) => {
@@ -162,7 +192,8 @@ const ChatRoom = (props) => {
         <div className="chat-main">
             <div className="chat-chatting-view">
                 <div className="loading-circle" style={isChattingLoading?{display: 'block'}:{display: 'none'}}/>
-                <div ref={focus} className="chat-chatting-list">
+                <div ref={lowerScroll} className="chat-chatting-list">
+                    <div className="notification-message">{notificationMessage}</div>
                     {chattingList.map((chatting, idx) => (
                         <div key={idx} className={memberInfo.memberId === chatting.senderId
                             ? "chat-chatting-myself" : "chat-chatting-opponent"}>
@@ -200,7 +231,6 @@ const ChatRoom = (props) => {
                             }
                         </div>
                     ))}
-                    <div ref={focus}></div>
                 </div>
                 <div className="chat-chatting-action">
                     <div className="chat-chatting-button">
