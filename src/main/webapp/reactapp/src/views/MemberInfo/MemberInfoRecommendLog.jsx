@@ -92,7 +92,7 @@ const MemberInfoRecommendLog = () => {
     }, [pageNo])
 
     return (
-        <div className="member-info">
+        <div>
 
             <h3>내 추천 확인</h3>
 

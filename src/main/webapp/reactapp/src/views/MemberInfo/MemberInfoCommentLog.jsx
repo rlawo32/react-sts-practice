@@ -64,7 +64,7 @@ const MemberInfoCommentLog = () => {
     }, [pageNo])
 
     return (
-        <div className="member-info">
+        <div>
 
             <h3>내 댓글 확인</h3>
 

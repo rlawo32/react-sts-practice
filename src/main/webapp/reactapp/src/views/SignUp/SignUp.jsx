@@ -8,7 +8,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEnvelope as emailIcon, faEnvelopeCircleCheck as emailCheckIcon,
         faLock as passwordIcon, faUnlockKeyhole as passwordCheckIcon,
         faUserPen as nicknameIcon, faCalendarDay as birthIcon,
-        faEye as passwordSeeIcon} from "@fortawesome/free-solid-svg-icons"
+        faEye as passwordSeeIcon, faChartSimple as logoIcon
+} from "@fortawesome/free-solid-svg-icons"
 
 
 const SignUp = () => {
@@ -477,7 +478,11 @@ const SignUp = () => {
             <div className="signUp-view">
 
                 <div className="common-signUp">
-                    <h1>회원가입</h1>
+                    <h1 style={{marginTop: '100px', fontWeight: 'bold'}}>
+                        <Link to="/" style={{textDecoration: 'none', color: 'white', fontFamily: 'YEONGJUPunggiGinsengTTF'}}>
+                            <FontAwesomeIcon icon={logoIcon} style={{position: 'relative', top: '2px', fontSize: '60px'}}/>&nbsp; ReP
+                        </Link>
+                    </h1>
 
                     <div className="signUp-email">
                         <div className="email-enter">

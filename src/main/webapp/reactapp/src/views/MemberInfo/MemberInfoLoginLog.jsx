@@ -62,7 +62,7 @@ const MemberInfoLoginLog = () => {
     }, [pageNo])
 
     return (
-        <div className="member-info">
+        <div>
 
             <h3>로그인 기록</h3>
 

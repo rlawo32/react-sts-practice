@@ -1,7 +1,6 @@
 import {Link} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import AppBarNavigation from "../Navigation/HeaderNavigation";
 import './BoardMain.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +20,7 @@ const BoardTable = (props) => {
     const [searchSelect, setSearchSelect] = useState("title");
 
     const [tableBoardList, setTableBoardList] = useState([{
+        boardNo: '',
         boardId: '',
         boardTab: '',
         boardTitle: '',
@@ -59,8 +59,13 @@ const BoardTable = (props) => {
                 url: '/board/tableBoardList',
                 params: paging
             });
-            setTableBoardList(tableBoardList.data.boardList);
+            const datalist = tableBoardList.data.boardList;
+            setTableBoardList(datalist);
             setTotalPage(tableBoardList.data.totalPage);
+
+            for(let i=0; i<datalist.length; i++) {
+                datalist[i].boardNo = (i  + (pageNo * 10)) + 1;
+            }
         };
 
         getBoards();
@@ -129,18 +134,22 @@ const BoardTable = (props) => {
 
     return (
         <div>
-            <AppBarNavigation />
-
             <div className="main-board">
+                <div className="board-tableName">
+                    {props.value}
+                </div>
                 <div className="sub_tab">
                     <ul>
                         {changeSubTabHandler().map((rl) => (
-                            <li key={rl.id} onClick={() => selectSubTabHandler(rl.key)}>{rl.value}</li>
+                            <li key={rl.id} onClick={() => selectSubTabHandler(rl.key)}
+                                style={rl.key == currentSubTab ?
+                                    {color: '#61dafb', fontWeight:' bold', borderBottom: '2px solid #61dafb'}
+                                    :
+                                    {color: '#dde0e3'}}>
+                                {rl.value}
+                            </li>
                         ))}
                     </ul>
-                </div>
-                <div className="board-tableName">
-                    {props.value}
                 </div>
                 <div className="board-table">
 
@@ -166,19 +175,21 @@ const BoardTable = (props) => {
                     <div className="table-view">
                         <table>
                             <thead className="table-header">
-                            <tr>
-                                <td style={{width: "110px"}}>탭</td>
-                                <td style={{width: "250px"}}>제목</td>
-                                <td style={{width: "70px"}}>작성자</td>
-                                <td style={{width: "100px"}}>날짜</td>
-                                <td style={{width: "50px"}}>조회수</td>
-                                <td style={{width: "50px"}}>추천수</td>
-                            </tr>
+                                <tr style={{height: "35px"}}>
+                                    <td style={{width: "50px"}}>NO.</td>
+                                    <td style={{width: "80px"}}>탭</td>
+                                    <td style={{width: "250px"}}>제목</td>
+                                    <td style={{width: "70px"}}>작성자</td>
+                                    <td style={{width: "100px"}}>날짜</td>
+                                    <td style={{width: "50px"}}>조회수</td>
+                                    <td style={{width: "50px"}}>추천수</td>
+                                </tr>
                             </thead>
                             <tbody id="tbody" className="font-list">
                             {tableBoardList.map((boards, idx) => {
                                 return (
-                                    <tr key={boards.boardId}>
+                                    <tr key={boards.boardId} style={{height: "45px"}}>
+                                        <td>{boards.boardNo}</td>
                                         { `${boards.boardTab}` === 'T1' && <td>화제</td> }
                                         { `${boards.boardTab}` === 'T2' && <td>정보</td> }
                                         { `${boards.boardTab}` === 'T3' && <td>오류</td> }
@@ -191,9 +202,17 @@ const BoardTable = (props) => {
                                             </Link>
                                             {
                                                 boards.boardCommentCnt < 1 ?
-                                                    <span className="board-comment-cnt"></span>
+                                                    null
                                                     :
                                                     <span className="board-comment-cnt">{boards.boardCommentCnt}</span>
+                                            }
+                                            {
+                                                ((new Date() - new Date(boards.modifiedDate)) / 1000 / 60).toFixed(0) > 5 ?
+                                                    null
+                                                    :
+                                                    <span className="board-write-new">
+                                                        N
+                                                    </span>
                                             }
                                         </td>
                                         <td>{boards.boardAuthor}</td>

@@ -5,7 +5,12 @@
     min-height: 100%;
     height: 100%;
     width: 100%;
-    background-color: black;
+    background: linear-gradient(
+                    135deg,
+                    rgba(30, 30, 30, 0.7) 20%,
+                    rgba(130, 130, 230, 0.5) 50%,
+                    rgba(30, 30, 30, 0.7) 90%
+    );
   }
 
   @media (max-width: 1200px) { // 1000px 이하일 경우
@@ -13,7 +18,12 @@
     min-height: 100%;
     height: 100%;
     width: 1100px;
-    background-color: black;
+    background: linear-gradient(
+                    135deg,
+                    rgba(30, 30, 30, 0.7) 20%,
+                    rgba(130, 130, 230, 0.5) 50%,
+                    rgba(30, 30, 30, 0.7) 80%
+    );
   }
 
 
@@ -37,32 +47,68 @@
   }
 }
 
-.main_tab {
-  @media (min-width: 1000px) { // 1000px 이상일 경우
+.block {
+  position: relative;
+  border-radius: 15px;
+  margin: 100px auto 50px;
+  width: 700px;
+  height: 55px;
+  background: linear-gradient(0deg, #000, #272727);
 
+  &::before, &::after {
+    border-radius: 15px;
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: -1.5px;
+    background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094,
+            #0000ff, #00ff00,#ffff00, #ff0000);
+    background-size: 400%;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    z-index: 0;
+    animation: steam 60s linear infinite;
   }
 
-  @media (max-width: 1000px) { // 1000px 이하일 경우
-
+  &::after {
+    filter: blur(150px);
   }
 
-  margin-top: 100px;
-  margin-bottom: 100px;
-  font-size: 17px;
-  ul {
-    margin: 0 auto;
-    border: none ;
-    list-style: none;
+  .main_tab {
+    z-index: 1;
+    position: relative;
+    border-radius: 15px;
+    background: linear-gradient(
+                    135deg,
+                    rgba(30, 30, 30, 1),
+                    rgba(80, 80, 80, 1) 50%,
+                    rgba(30, 30, 30, 1) 70%,
+                    rgba(130, 130, 230, 1) 98%
+    );
+    margin: 100px auto 50px;
 
-    li {
-      display: inline-block;
-      cursor: pointer;
-      text-align: center;
+    height: 55px;
+    width: 700px;
+    font-size: 17px;
+    color: #badbcc;
 
-      margin: 15px;
+    ul {
+      margin: 0 auto;
+      padding: 0;
+      border: none ;
+      list-style: none;
+
+      li {
+        display: inline-block;
+        cursor: pointer;
+        text-align: center;
+
+        margin: 15px;
+      }
     }
   }
 }
+
 
 .sub_tab {
   width: 100%;
@@ -71,6 +117,7 @@
 
   ul {
     margin: 0 auto;
+    padding: 0;
     border: none ;
     list-style: none;
 
@@ -80,6 +127,10 @@
       text-align: center;
 
       margin: 10px;
+
+      &:active {
+        animation: jelly 0.5s;
+      }
     }
   }
 }
@@ -88,10 +139,10 @@
 .main-board {
 
   .board-tableName {
-    margin-top: 40px;
+    margin: 10px auto 20px;
     font-size: 60px;
     font-style: oblique;
-    color: #0a53be;
+    color: #d1e7dd;
   }
 
   .board-table {
@@ -116,24 +167,43 @@
         font-weight: bold;
       }
 
+      .board-write-new {
+        position: relative;
+        top: -2px;
+
+        border: 1px solid red;
+        border-radius: 15px;
+        padding: 1px 4px 1px 3px;
+
+        height: 50px;
+        width: 50px;
+
+        margin-left: 10px;
+        font-size: 10px;
+        font-weight: bold;
+        background-color: red;
+      }
+
       table {
         width: 100%;
-        margin: auto;
+        margin: 20px auto 0;
         color: white;
 
         thead tr {
           border-bottom: 1px solid gray;
+          font-size: 20px;
           font-weight: bold;
         }
 
         tbody tr {
           border-bottom: 1px solid gray;
-          font-size: 22px;
+          font-size: 18px;
         }
 
-        //tbody td:nth-child(2) {
-        //  text-align: left;
-        //}
+        tbody td:nth-child(3) {
+          text-align: left;
+          padding-left: 20px;
+        }
 
         tbody tr:hover {
           background-color: rgba(80, 80, 80, 0.8);
@@ -191,7 +261,7 @@
 
         font-size: 20px;
 
-        border: 1px solid #4d5154;
+        border: 1px solid #141619;
         border-radius: 30px;
 
         .search-box {
@@ -243,7 +313,8 @@
       }
 
       .board-search:hover > .search-btn {
-        background-color: #fff;
+        color: #141619;
+        background-color: rgba(0,0,0,0);
       }
 
       .board-search:hover > .search-box {
@@ -256,6 +327,10 @@
         border-radius: 30px;
         justify-content: center;
         align-items: center;
+        margin-right: 10px;
+        border: none;
+        color: #141619;
+        background-color: rgba(0,0,0,0);
       }
     }
 
@@ -267,6 +342,7 @@
 
         ul {
           margin-top: 10px;
+          padding: 0;
           list-style: none;
           border: none;
 
@@ -298,6 +374,32 @@
 
     }
 
+  }
+}
+
+@keyframes jelly {
+  25% {
+    transform: scale(0.6, 1.4);
+  }
+
+  50% {
+    transform: scale(1.4, 0.6);
+  }
+
+  75% {
+    transform: scale(0.9, 1.0);
+  }
+}
+
+@keyframes steam {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }
 

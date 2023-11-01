@@ -65,7 +65,7 @@ const MemberInfoBoardLog = () => {
     }, [pageNo])
 
     return (
-        <div className="member-info">
+        <div>
 
             <h3>내 글 확인</h3>
 

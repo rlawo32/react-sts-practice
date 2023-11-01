@@ -251,7 +251,7 @@ const MemberInfoUpdate = (props) => {
     }, [])
 
     return (
-        <div className="member-info">
+        <div>
 
             <h3>내 정보 수정</h3>
 

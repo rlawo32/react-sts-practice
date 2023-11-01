@@ -1,7 +1,16 @@
 
 .signUp-body {
+    @font-face {
+        font-family: 'YEONGJUPunggiGinsengTTF';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/YEONGJUPunggiGinsengTTF.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
     height: 100%;
-    background-color: black;
+    background: radial-gradient(
+                    rgba(60, 60, 60, 0.7),
+                    rgba(20, 20, 30, 0.9) 100%
+    );
 
     @media (min-width: 700px) { // 700px 이상일 경우
         width: 100%;
@@ -28,7 +37,7 @@
             margin-top: 100px;
 
             .signUp-email {
-                border: 2px solid #495057;
+                border: 2px solid #e3e3e3;
                 border-radius: 15px;
                 padding: 20px 10px 20px 10px;
                 margin: 30px auto 0;
@@ -101,7 +110,7 @@
 
             .signUp-password {
                 position: relative;
-                border: 2px solid #495057;
+                border: 2px solid #e3e3e3;
                 border-radius: 15px;
                 padding: 30px 10px 30px 10px;
                 margin: 20px auto 20px;
@@ -179,7 +188,7 @@
 
             .signUp-etc {
                 position: relative;
-                border: 2px solid #495057;
+                border: 2px solid #e3e3e3;
                 border-radius: 15px;
                 padding: 30px 10px 30px 10px;
                 margin: 20px auto 20px;

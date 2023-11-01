@@ -146,7 +146,7 @@ const MemberInfoPwUpdate = (props) => {
     }, [])
 
     return (
-        <div className="member-info">
+        <div>
 
             <h3>비밀번호 변경</h3>
 

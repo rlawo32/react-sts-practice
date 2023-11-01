@@ -15,7 +15,7 @@ const MemberInfoProfile = (props) => {
     const profileImg = props.img;
 
     return (
-        <div className="member-info">
+        <div>
 
             <div className="profile-view">
 

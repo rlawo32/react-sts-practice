@@ -18,6 +18,7 @@ public class BoardListResponseDto {
     private int boardRecommendUpCnt;
     private int boardRecommendDownCnt;
     private int boardViewsCnt;
+    private int boardNo;
     private int boardLogNo;
 
     public BoardListResponseDto(MainBoard mainBoard) {

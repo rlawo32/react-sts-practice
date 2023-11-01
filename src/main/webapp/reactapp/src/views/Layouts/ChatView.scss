@@ -22,8 +22,8 @@
     position: relative;
 
     .paging-design {
-      margin: 75px auto 0;
-      height: 55px;
+      margin: 80px auto 0;
+      height: 50px;
 
       ul {
         margin: 0;
@@ -73,11 +73,11 @@
         }
 
         thead tr {
-          font-size: 18px;
+          font-size: 14px;
         }
 
         tbody tr {
-          font-size: 22px;
+          font-size: 20px;
           &:hover {
             box-shadow: 0 0 0 3px white;
             color: #fff;

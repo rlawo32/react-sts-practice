@@ -104,16 +104,18 @@ const BoardMain = () => {
 
     return (
         <div className="main_board">
-
             <AppBarNavigation />
-            <div className="main_tab">
-                <ul>
-                    {changeTabHandler().map((el) => (
-                        <li key={el.id} onClick={() => selectTabHandler(el.id)}>
-                            <Link to="/board" style={{ color: "white", textDecoration: "none"}}>{el.name}</Link>
-                        </li>
-                    ))}
-                </ul>
+
+            <div className="block">
+                <div className="main_tab">
+                    <ul>
+                        {changeTabHandler().map((el) => (
+                            <li key={el.id} onClick={() => selectTabHandler(el.id)}>
+                                <Link to="/board" style={{ color: "#badbcc", textDecoration: "none"}}>{el.name}</Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
 
             {
