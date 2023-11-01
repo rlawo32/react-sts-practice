@@ -12,10 +12,10 @@ const BoardMain = () => {
     const locationParameter = window.location.pathname;
 
     const category_name = [
-        {
-            key: "C0",
-            value: '전체'
-        },
+        // {
+        //     key: "C0",
+        //     value: '전체'
+        // },
         {
             key: "C1",
             value: '리그오브레전드'

@@ -152,7 +152,6 @@ const BoardTable = (props) => {
                     </ul>
                 </div>
                 <div className="board-table">
-
                     <div className="board-header">
                         <span className="board-write">
                             <Link to="/save" state={{subTab_name, category_name}} style={ isLoginCheck ? {} : {visibility: "hidden"} }>
@@ -189,7 +188,7 @@ const BoardTable = (props) => {
                             {tableBoardList.map((boards, idx) => {
                                 return (
                                     <tr key={boards.boardId} style={{height: "45px"}}>
-                                        <td>{boards.boardNo}</td>
+                                        <td>{boards.boardId}</td>
                                         { `${boards.boardTab}` === 'T1' && <td>화제</td> }
                                         { `${boards.boardTab}` === 'T2' && <td>정보</td> }
                                         { `${boards.boardTab}` === 'T3' && <td>오류</td> }
