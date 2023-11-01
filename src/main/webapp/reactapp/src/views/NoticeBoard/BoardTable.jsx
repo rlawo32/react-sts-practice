@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import './BoardMain.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSearch, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faSearch, faPen, faComment} from "@fortawesome/free-solid-svg-icons";
 import {getCookie} from "../Navigation/Cookie";
 
 const BoardTable = (props) => {
@@ -142,7 +142,7 @@ const BoardTable = (props) => {
                     <ul>
                         {changeSubTabHandler().map((rl) => (
                             <li key={rl.id} onClick={() => selectSubTabHandler(rl.key)}
-                                style={rl.key == currentSubTab ?
+                                style={rl.key === currentSubTab ?
                                     {color: '#61dafb', fontWeight:' bold', borderBottom: '2px solid #61dafb'}
                                     :
                                     {color: '#dde0e3'}}>
@@ -204,7 +204,10 @@ const BoardTable = (props) => {
                                                 boards.boardCommentCnt < 1 ?
                                                     null
                                                     :
-                                                    <span className="board-comment-cnt">{boards.boardCommentCnt}</span>
+                                                    <span className="board-comment-cnt">
+                                                        <FontAwesomeIcon icon={faComment} style={{fontSize: '13px'}}/>&nbsp;
+                                                        {boards.boardCommentCnt}
+                                                    </span>
                                             }
                                             {
                                                 ((new Date() - new Date(boards.modifiedDate)) / 1000 / 60).toFixed(0) > 5 ?

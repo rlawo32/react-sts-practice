@@ -1,4 +1,3 @@
-import AppBarNavigation from "../Navigation/HeaderNavigation";
 import './BoardDetail.scss';
 import '../Layouts/MainView.scss';
 import React, {useEffect, useState} from "react";
@@ -595,9 +594,7 @@ const BoardDetail = (props) => {
     };
 
     return (
-        <div>
-            <AppBarNavigation />
-
+        <div className="detail-view">
             <div className="detail-main">
                 <div className="detail-header1">
                     <span className="detail-title">{boardDetail.boardTitle}</span>
@@ -619,12 +616,6 @@ const BoardDetail = (props) => {
                         <Link to={locationURL} style={{textDecoration: 'none', color: 'gray', fontSize: '15px'}}>{locationURL}</Link>
                         <button onClick={() => copyClipBoardHandler(`${locationURL}`)}>복사</button>
                     </div>
-
-                    {/*{*/}
-                    {/*    process.browser ?*/}
-                    {/*    (<div className="detail-content" dangerouslySetInnerHTML={{ __html : sanitizer(`${boardDetail.boardContent}`), }} />)*/}
-                    {/*    : (<div />)*/}
-                    {/*}*/}
                     <div className="detail-content" dangerouslySetInnerHTML={{ __html : sanitizer(`${boardDetail.boardContent}`) }} />
 
                 </div>
@@ -717,131 +708,133 @@ const BoardDetail = (props) => {
                         }
                     </span>
                 </div>
+            </div>
 
-                <div className="detail-sub">
-                    <div className="comment-view">
-                        <div className="comment-count">
-                            댓글 {totalComments} 개
-                        </div>
-                        {commentList.map((comments) => (
-                            // eslint-disable-next-line eqeqeq
-                            <div className="comment-list" key={comments.commentId} id={comments.commentId} style={`${comments.commentNestedLevel}` == 1 ? {marginLeft: "40px"} : null }>
-                                <div className="comment-header">
-                                    <div className="comment-header1">
+            <div className="detail-sub">
+                <div className="comment-view">
+                    <div className="comment-count">
+                        댓글 {totalComments} 개
+                    </div>
+                    {commentList.map((comments) => (
+                        // eslint-disable-next-line eqeqeq
+                        <div className="comment-list" key={comments.commentId} id={comments.commentId} style={`${comments.commentNestedLevel}` == 1 ? {marginLeft: "40px"} : null }>
+                            <div className="comment-header">
+                                <div className="comment-header1">
+                                    {
+                                        // eslint-disable-next-line eqeqeq
+                                        `${comments.commentNestedLevel}` == 1 ? <FontAwesomeIcon icon={nestedArrow} style={{transform: "rotate(180deg)", marginRight: "8px", fontSize: "24px", color: "#6c757d"}}/> : null
+                                    }
+                                    <span className="comment-nickname">{comments.memberNickname}</span>
+                                    <span className="comment-date">
+                                        {
+                                            ((new Date() - new Date(comments.createdDate)) / 1000 / 60 / 60).toFixed(0) > 24 ?
+                                                comments.createdDate
+                                                :
+                                                ((new Date() - new Date(comments.createdDate)) / 1000 / 60).toFixed(0) > 60 ?
+                                                    ((new Date() - new Date(comments.createdDate)) / 1000 / 60 / 60).toFixed(0) + "시간 전"
+                                                    :
+                                                    ((new Date() - new Date(comments.createdDate)) / 1000 / 60).toFixed(0) + "분 전"
+                                        }
+                                    </span>
+                                </div>
+                                <div className="comment-header2">
+                                    <span className="comment-nested">
+                                        <input type="hidden" value={comments.commentNestedId} />
+                                        <input type="hidden" value={comments.commentNestedLevel} />
                                         {
                                             // eslint-disable-next-line eqeqeq
-                                            `${comments.commentNestedLevel}` == 1 ? <FontAwesomeIcon icon={nestedArrow} style={{transform: "rotate(180deg)", marginRight: "8px", fontSize: "24px", color: "#6c757d"}}/> : null
-                                        }
-                                        <span className="comment-nickname">{comments.memberNickname}</span>
-                                        <span className="comment-date">
-                                            {
-                                                ((new Date() - new Date(comments.createdDate)) / 1000 / 60 / 60).toFixed(0) > 24 ?
-                                                    comments.createdDate
-                                                    :
-                                                    ((new Date() - new Date(comments.createdDate)) / 1000 / 60).toFixed(0) > 60 ?
-                                                        ((new Date() - new Date(comments.createdDate)) / 1000 / 60 / 60).toFixed(0) + "시간 전"
-                                                        :
-                                                        ((new Date() - new Date(comments.createdDate)) / 1000 / 60).toFixed(0) + "분 전"
-                                            }
-                                        </span>
-                                    </div>
-                                    <div className="comment-header2">
-                                        <span className="comment-nested">
-                                            <input type="hidden" value={comments.commentNestedId} />
-                                            <input type="hidden" value={comments.commentNestedLevel} />
-                                            {
+                                            `${isLoginCheck}` == 1 ?
                                                 // eslint-disable-next-line eqeqeq
-                                                `${isLoginCheck}` == 1 ?
-                                                    // eslint-disable-next-line eqeqeq
-                                                    `${comments.commentNestedLevel}` == 1 ? null :
-                                                        <button className="comment-nested-btn" onClick={(e) =>
-                                                            nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
-                                                                `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
-                                                            댓글
-                                                        </button>
-                                                        :
-                                                        null
-                                            }
-                                        </span>
-                                        <span className="comment-recommendUp">
-                                            {
-                                                // eslint-disable-next-line eqeqeq
-                                                `${comments.commentRecommendUpCheck}` == 1 ?
-                                                    <label>
-                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
-                                                        <FontAwesomeIcon icon={recommendUp} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
-                                                    </label>
-                                                    :
-                                                    <label>
-                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={false} />
-                                                        <FontAwesomeIcon icon={recommendUpCancel} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
-                                                    </label>
-                                            }
-                                            <span className="comment-upCount"> {comments.commentRecommendUpCnt}</span>
-                                        </span>
-                                        <span className="comment-recommendDown">
-                                            {
-                                                // eslint-disable-next-line eqeqeq
-                                                `${comments.commentRecommendDownCheck}` == 1 ?
-                                                    <label>
-                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
-                                                        <FontAwesomeIcon icon={recommendDown} className="recommendDown-btn" onClick={(e) => onClickCommentRecommendDown(`${comments.commentId}`)}/>
-                                                    </label>
-                                                    :
-                                                    <label>
-                                                        <input type="checkbox" style={{display: "none"}} defaultChecked={false} />
-                                                        <FontAwesomeIcon icon={recommendDownCancel} className="recommendDown-btn" onClick={(e) => onClickCommentRecommendDown(`${comments.commentId}`)}/>
-                                                    </label>
-                                            }
-                                            <span className="comment-downCount"> {comments.commentRecommendDownCnt}</span>
-                                        </span>
-                                        <span className="comment-delete">
-                                            {
-                                                // eslint-disable-next-line eqeqeq
-                                                `${comments.memberId}` == `${commentLoginMemberId}` ?
-                                                    <button onClick={() => commentDeleteHandler(`${comments.commentId}`)} className="comment-delete-btn">
-                                                        삭제
+                                                `${comments.commentNestedLevel}` == 1 ? null :
+                                                    <button className="comment-nested-btn" onClick={(e) =>
+                                                        nestedActionHandler(nestedBox, e, `${comments.commentParentId}`,
+                                                            `${comments.commentNestedId}`, `${comments.commentNestedLevel}`)} value={comments.commentId}>
+                                                        댓글
                                                     </button>
                                                     :
                                                     null
-                                            }
-                                        </span>
+                                        }
+                                    </span>
+                                    <span className="comment-recommendUp">
+                                        {
+                                            // eslint-disable-next-line eqeqeq
+                                            `${comments.commentRecommendUpCheck}` == 1 ?
+                                                <label>
+                                                    <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
+                                                    <FontAwesomeIcon icon={recommendUp} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
+                                                </label>
+                                                :
+                                                <label>
+                                                    <input type="checkbox" style={{display: "none"}} defaultChecked={false} />
+                                                    <FontAwesomeIcon icon={recommendUpCancel} className="recommendUp-btn" onClick={(e) => onClickCommentRecommendUp(`${comments.commentId}`)}/>
+                                                </label>
+                                        }
+                                        <span className="comment-upCount"> {comments.commentRecommendUpCnt}</span>
+                                    </span>
+                                    <span className="comment-recommendDown">
+                                        {
+                                            // eslint-disable-next-line eqeqeq
+                                            `${comments.commentRecommendDownCheck}` == 1 ?
+                                                <label>
+                                                    <input type="checkbox" style={{display: "none"}} defaultChecked={true} />
+                                                    <FontAwesomeIcon icon={recommendDown} className="recommendDown-btn" onClick={(e) => onClickCommentRecommendDown(`${comments.commentId}`)}/>
+                                                </label>
+                                                :
+                                                <label>
+                                                    <input type="checkbox" style={{display: "none"}} defaultChecked={false} />
+                                                    <FontAwesomeIcon icon={recommendDownCancel} className="recommendDown-btn" onClick={(e) => onClickCommentRecommendDown(`${comments.commentId}`)}/>
+                                                </label>
+                                        }
+                                        <span className="comment-downCount"> {comments.commentRecommendDownCnt}</span>
+                                    </span>
+                                    <span className="comment-delete">
+                                        {
+                                            // eslint-disable-next-line eqeqeq
+                                            `${comments.memberId}` == `${commentLoginMemberId}` ?
+                                                <button onClick={() => commentDeleteHandler(`${comments.commentId}`)} className="comment-delete-btn">
+                                                    삭제
+                                                </button>
+                                                :
+                                                null
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="comment-content font-list">
+                                <Linkify options={{ render: renderLink }}>
+                                    {comments.commentContent}
+                                </Linkify>
+                                { imageModal ? <ImageModal setImageModal={setImageModal} imageUrl={imageModalUrl}/> : null }
+                            </div>
+                            <div className="nested-content"></div>
+                            <div className="nested-div">
+                                <div className="nested-write">
+                                    <div className="nested-tag">
+                                        <div className="nested-header1">
+                                            <FontAwesomeIcon icon={nestedArrow} style={{transform:"rotate(180deg)"}}/>
+                                            <span style={{marginLeft: "4px"}}>댓글 달기</span>
+                                        </div>
+                                        <div className="nested-header2">
+                                            <button className="nested-close" onClick={(e) => nestedActionHandler(true, e)} value={comments.commentId}>닫기</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="comment-content font-list">
-                                    <Linkify options={{ render: renderLink }}>
-                                        {comments.commentContent}
-                                    </Linkify>
-                                    { imageModal ? <ImageModal setImageModal={setImageModal} imageUrl={imageModalUrl}/> : null }
-                                </div>
-                                <div className="nested-content"></div>
-                                <div className="nested-div">
-                                    <div className="nested-write">
-                                        <div className="nested-tag">
-                                            <div className="nested-header1">
-                                                <FontAwesomeIcon icon={nestedArrow} style={{transform:"rotate(180deg)"}}/>
-                                                <span style={{marginLeft: "4px"}}>댓글 달기</span>
-                                            </div>
-                                            <div className="nested-header2">
-                                                <button className="nested-close" onClick={(e) => nestedActionHandler(true, e)} value={comments.commentId}>닫기</button>
-                                            </div>
-                                        </div>
-                                        <div className="nested-box">
-                                            <textarea id="nested-text" placeholder="댓글을 입력하세요" onChange={changeNestedTextHandler}/>
-                                        </div>
-                                        <div className="nested-btn">
-                                            <button className="btn-design" onClick={(e) => nestedSaveHandler(e)} value={comments.commentId}>등록</button>
-                                        </div>
+                                    <div className="nested-box">
+                                        <textarea id="nested-text" placeholder="댓글을 입력하세요" onChange={changeNestedTextHandler}/>
+                                    </div>
+                                    <div className="nested-btn">
+                                        <button className="btn-design" onClick={(e) => nestedSaveHandler(e)} value={comments.commentId}>등록</button>
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                        <div className="comment-paging">
-                            <ul>
-                                {pagination()}
-                            </ul>
                         </div>
+                    ))}
+                    <div className="comment-paging">
+                        <ul>
+                            {pagination()}
+                        </ul>
                     </div>
+                </div>
+                <div className="neon-design">
                     <div className="comment-write">
                         <div className="comment-tag">댓글 작성</div>
                         <div className="comment-box" style={ isLoginCheck ? {} : {} }>
