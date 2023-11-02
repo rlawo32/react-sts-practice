@@ -6,10 +6,13 @@ import BoardTable from "./BoardTable";
 import React, {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import BoardDetail from "./BoardDetail";
+import DrawLoader from "../Layouts/DrawLoader";
 
 const BoardMain = () => {
     const props = useLocation().state?.mainReset;
     const locationParameter = window.location.pathname;
+
+    const [isViewLoading, setIsViewLoading] = useState(false);
 
     const category_name = [
         // {
@@ -79,15 +82,17 @@ const BoardMain = () => {
         for(let i=0; i<category_name.length; i++) {
             tab_data.push({id: i, name: category_name[i].value,
                 view:<BoardTable keys={category_name[i].key} value={category_name[i].value}
-                                 category={category_name} subTab={subTab_name}
+                                 category={category_name} subTab={subTab_name} setIsViewLoading={setIsViewLoading}
                                  changeBoardId={setDetailBoardId} changeBoardAuthorId={setDetailBoardAuthorId}/>});
         }
+        setTimeout(()=>{setIsViewLoading(false);}, 650);
         return tab_data;
     }
 
     const selectTabHandler = (idx) => {
         clickTab(idx);
         setDetailBoardId(null);
+        setIsViewLoading(false);
     }
 
     useEffect(() => {
@@ -100,6 +105,8 @@ const BoardMain = () => {
         if(props === null) {
             setDetailBoardId(props)
         }
+        setIsViewLoading(true);
+        setTimeout(()=>{setIsViewLoading(false);}, 650);
     }, [props, locationParameter]);
 
     return (
@@ -118,6 +125,9 @@ const BoardMain = () => {
                 </div>
             </div>
 
+            <div className="view-loading" style={isViewLoading?{display:'block'}:{display:'none'}}>
+                <DrawLoader className="detail-view-loading" />
+            </div>
             {
                 detailBoardId === null ?
                     changeTabHandler()[currentTab].view

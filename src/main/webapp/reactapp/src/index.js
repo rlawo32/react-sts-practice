@@ -6,6 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {CookiesProvider} from "react-cookie";
 import axios from "axios";
+import ScrollToTop from "./ScrollToTop";
 
 axios.defaults.withCredentials = true;
 
@@ -16,6 +17,7 @@ root.render(
   // </React.StrictMode>
     <CookiesProvider>
         <BrowserRouter>
+            <ScrollToTop />
             <App />
         </BrowserRouter>
     </CookiesProvider>

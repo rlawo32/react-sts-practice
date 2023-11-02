@@ -82,6 +82,7 @@ const BoardTable = (props) => {
     const changeDetailBoard = async (changeBoardId, changeAuthorId) => {
         props.changeBoardId(changeBoardId);
         props.changeBoardAuthorId(changeAuthorId);
+        props.setIsViewLoading(true);
 
         let viewsBody =  {
             boardId: changeBoardId
@@ -93,7 +94,6 @@ const BoardTable = (props) => {
             data: JSON.stringify(viewsBody),
             headers: {'Content-type': 'application/json'}
         })
-
     }
 
     const changeSearchBoard = async () => {

@@ -281,7 +281,7 @@ const BoardWrite = () => {
             setPreviewWriteImgSize(boardImgSize);
         } else {
             setComponentTitle("등록");
-            setBoardCategory(categoryMenu[1].key);
+            setBoardCategory(categoryMenu[0].key);
             setBoardTab(tabMenu[1].key);
         }
 

@@ -19,6 +19,17 @@
 
   }
 
+  .view-loading {
+
+  }
+
+  .detail-remote-control {
+    position: fixed;
+    top: 700px;
+    left: 1630px;
+    z-index: 2;
+  }
+
   .detail-main {
     border: 2px solid black;
     border-radius: 20px;
