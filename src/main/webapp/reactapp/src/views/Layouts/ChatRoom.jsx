@@ -10,8 +10,10 @@ const ChatRoom = (props) => {
 
     const [chattingContent, setChattingContent] = useState("");
     const [chattingState, setChattingState] = useState(false);
-    const [isChattingLoading, setIsChattingLoading] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
+
+    const [isEnterLoading, setIsEnterLoading] = useState(false);
+    const [isQuitLoading, setIsQuitLoading] = useState(false);
 
     const [chattingList, setChattingList] = useState([{
         chattingId : '',
@@ -54,6 +56,7 @@ const ChatRoom = (props) => {
                 url: '/chat/enterChatRoom/' + props.chatRoomId
             });
 
+            setTimeout(()=>{setIsEnterLoading(true)}, 100);
             setTimeout(()=>{
                 client.current.send("/topic/" + props.chatRoomId,
                     {Authorization: token, type: "enter"},
@@ -123,7 +126,7 @@ const ChatRoom = (props) => {
             method: "POST",
             url: '/chat/quitChatRoom/' + props.chatRoomId
         });
-        setIsChattingLoading(true);
+        setIsQuitLoading(true);
 
         // eslint-disable-next-line eqeqeq
         if(e == 'back') {
@@ -191,7 +194,10 @@ const ChatRoom = (props) => {
     return (
         <div className="chat-main">
             <div className="chat-chatting-view">
-                <div className="loading-circle" style={isChattingLoading?{display: 'block'}:{display: 'none'}}/>
+                <div className="enter-loading" style={isEnterLoading?{display: 'none'}:{display: 'block'}}>
+                    <div className="chat-enter-loading" />
+                </div>
+                <div className="chat-quit-loading" style={isQuitLoading?{display: 'block'}:{display: 'none'}}/>
                 <div ref={lowerScroll} className="chat-chatting-list">
                     <div className="notification-message">{notificationMessage}</div>
                     {chattingList.map((chatting, idx) => (
@@ -211,7 +217,11 @@ const ChatRoom = (props) => {
                                             {/*    <img src={memberProfileImg ? memberProfileImg : memberDefaultImg} alt="프로필 이미지" />*/}
                                             {/* </span>*/}
                                         </div>
-                                        <div className="chat-chatting-content">{chatting.content}</div>
+                                        <div className="chat-chatting-content">
+                                            <div className="chat-chatting-balloon">
+                                                {chatting.content}
+                                            </div>
+                                        </div>
                                     </div>
                                     :
                                     <div>
@@ -226,7 +236,11 @@ const ChatRoom = (props) => {
                                                 {chatting.sendDate}
                                             </span>
                                         </div>
-                                        <div className="chat-chatting-content">{chatting.content}</div>
+                                        <div className="chat-chatting-content">
+                                            <div className="chat-chatting-balloon">
+                                                {chatting.content}
+                                            </div>
+                                        </div>
                                     </div>
                             }
                         </div>

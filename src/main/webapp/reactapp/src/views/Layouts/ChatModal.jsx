@@ -36,7 +36,7 @@ const ChatModal = (props) => {
             top: logoPos.y,
             left: logoPos.x
         }}>
-            <div>
+            <div className="neon-design">
                 <div {...bindLogoPos()} className="chat-drag-design">
                     <FontAwesomeIcon icon={chatClose} onClick={() => chatViewCloseHandler()}
                                      style={{float: 'right', marginTop: '7px', marginRight: '15px', cursor: 'pointer'}}/>

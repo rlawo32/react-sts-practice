@@ -355,7 +355,7 @@ const BoardDetail = (props) => {
                 data: JSON.stringify(nestedData),
                 headers: {'Content-type': 'application/json'}
             }).then(() => {
-                setCommentState(!commentState);
+                // setCommentState(!commentState);
                 const targetDiv_3 = document.getElementById(selectCommentId);
                 const nestedView_3 = targetDiv_3.lastChild;
                 if(nestedView_3) {

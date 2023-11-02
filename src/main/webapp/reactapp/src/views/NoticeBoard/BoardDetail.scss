@@ -561,7 +561,7 @@
       }
 
       &::after {
-        filter: blur(170px);
+        filter: blur(150px);
       }
 
       .comment-write {
@@ -574,11 +574,11 @@
 
         border-radius: 15px;
         background: linear-gradient(
-                        135deg,
-                        rgba(30, 30, 30, 1),
-                        rgba(80, 80, 80, 1) 50%,
-                        rgba(30, 30, 30, 1) 70%,
-                        rgba(130, 130, 230, 1) 98%
+          135deg,
+          rgba(30, 30, 30, 1),
+          rgba(80, 80, 80, 1) 50%,
+          rgba(30, 30, 30, 1) 70%,
+          rgba(130, 130, 230, 1) 98%
         );
 
         .comment-tag {

@@ -13,6 +13,8 @@ const ChatView = (props) => {
     const [chatRoomState, setChatRoomState] = useState(false);
     const [isChatRoomEffect, setIsChatRoomEffect] = useState(false);
 
+    const [isViewLoading, setIsViewLoading] = useState(false);
+
     const [chatRoomList, setChatRoomList] = useState([{
         chatRoomNo: '',
         chatRoomId: '',
@@ -107,6 +109,7 @@ const ChatView = (props) => {
         }).then((res) => {
             setMemberId(res.data.data.memberId);
             setChatRoomState(!chatRoomState);
+            setTimeout(()=>{setIsViewLoading(true)}, 250);
         });
         props.setChatViewClose(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,6 +118,9 @@ const ChatView = (props) => {
     return (
         <div className="chat-main">
             <div className="chat-room-view">
+                <div className="view-loading" style={isViewLoading?{display:'none'}:{display:'block'}}>
+                    <div className="chat-view-loading" />
+                </div>
                 <div className="chat-room-list">
                     <table>
                         <thead>
