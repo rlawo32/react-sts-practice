@@ -11,7 +11,7 @@
   border-bottom: 4px solid #000000;
   border-radius: 50%;
 
-  animation: load 1.5s linear infinite;
+  animation: loading 1.5s linear infinite;
 }
 
 .chat-enter-loading {
@@ -27,7 +27,7 @@
   border-bottom: 4px solid #000000;
   border-radius: 50%;
 
-  animation: load 1.5s linear infinite;
+  animation: loading 1.5s linear infinite;
 }
 
 .chat-view-loading {
@@ -43,10 +43,10 @@
   border-bottom: 4px solid #000000;
   border-radius: 50%;
 
-  animation: load 1.5s linear infinite;
+  animation: loading 1.5s linear infinite;
 }
 
-@keyframes load {
+@keyframes loading {
   0% {
     transform: rotate(0deg);
   }

@@ -62,8 +62,8 @@
       stroke-dasharray: 193.904983521;
       fill: none;
       animation:
-              load 4s linear infinite,
-              color 3s linear infinite;
+              boardLoad 4s linear infinite,
+              boardColor 3s linear infinite;
     }
 
     position: absolute;
@@ -435,11 +435,11 @@
   }
 }
 
-@keyframes load {
+@keyframes boardLoad {
   from { stroke-dashoffset: 775.6199340820312; }
 }
 
-@keyframes color {
+@keyframes boardColor {
   33% { stroke: yellow; }
   66% { stroke: magenta; }
 }
