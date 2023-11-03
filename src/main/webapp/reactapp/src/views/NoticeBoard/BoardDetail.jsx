@@ -16,6 +16,7 @@ import axios from "axios";
 import Linkify from "linkify-react";
 import {getCookie} from "../Navigation/Cookie";
 import dompurify from "dompurify";
+import BoardDetailRemote from "./BoardDetailRemote";
 
 const BoardDetail = (props) => {
     const locationURL = window.location.href;
@@ -595,6 +596,9 @@ const BoardDetail = (props) => {
 
     return (
         <div className="detail-view">
+            <div className="detail-remote-control">
+                <BoardDetailRemote />
+            </div>
             <div className="detail-main">
                 <div className="detail-header1">
                     <span className="detail-title">{boardDetail.boardTitle}</span>

@@ -1,0 +1,234 @@
+
+.inside-rectangle {
+  position: absolute;
+  display: block;
+  height: 40px;
+  width: 40px;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgba(130, 130, 230, 0.7);
+  border-radius: 3px;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  background: linear-gradient(
+      135deg,
+      rgba(130, 130, 230, 0.9) 20%,
+      rgba(30, 30, 30, 0.9) 50%,
+      rgba(130, 130, 230, 0.9) 90%
+  );
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(230, 230, 50, 0.9) 20%,
+      rgba(30, 30, 30, 0.9) 50%,
+      rgba(230, 230, 50, 0.9) 90%
+    );
+  }
+  cursor: pointer;
+  z-index: 1;
+}
+
+.inside-diagonal-1 {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+      180deg,
+      rgba(130, 130, 230, 0.7) 20%,
+      rgba(30, 30, 30, 0.5) 50%,
+      rgba(130, 130, 230, 0.7) 90%
+  );
+
+}
+
+.inside-diagonal-2 {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  background: linear-gradient(
+      180deg,
+      rgba(130, 130, 230, 0.7) 20%,
+      rgba(30, 30, 30, 0.5) 50%,
+      rgba(130, 130, 230, 0.7) 90%
+  );
+}
+
+.center-button {
+  position: absolute;
+  display: block;
+  height: 44%;
+  width: 44%;
+  top: 27%;
+  left: 27%;
+  background: rgba(0,0,0,0);
+  border: none;
+  border-radius: 5px;
+  transform: rotate(-45deg);
+  z-index: 1;
+
+  &:hover {
+    background: linear-gradient(
+                    135deg,
+                    rgba(230, 230, 50, 0.9) 20%,
+                    rgba(30, 30, 30, 0.9) 50%,
+                    rgba(230, 230, 50, 0.9) 90%
+    );
+  }
+}
+
+.top-button {
+  position: absolute;
+  display: block;
+  height: 50%;
+  width: 50%;
+  top: 0%;
+  left: 0%;
+  background: rgba(0,0,0,0);
+  border-top-left-radius: 36px;
+  border-bottom-right-radius: 150%;
+
+  &:hover {
+    background: linear-gradient(
+                    90deg,
+                    rgba(230, 230, 50, 0.9) 20%,
+                    rgba(30, 30, 30, 0.9) 50%,
+                    rgba(230, 230, 50, 0.9) 90%
+    );
+  }
+}
+
+.bottom-button {
+  position: absolute;
+  display: block;
+  height: 50%;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  background: rgba(0,0,0,0);
+  border-bottom-right-radius: 36px;
+  border-top-left-radius: 150%;
+
+  &:hover {
+    background: linear-gradient(
+                    90deg,
+                    rgba(230, 230, 50, 0.9) 20%,
+                    rgba(30, 30, 30, 0.9) 50%,
+                    rgba(230, 230, 50, 0.9) 90%
+    );
+  }
+}
+
+.left-button {
+  position: absolute;
+  display: block;
+  height: 50%;
+  width: 50%;
+  top: 50%;
+  left: 0%;
+  background: rgba(0,0,0,0);
+  border-bottom-left-radius: 36px;
+  border-top-right-radius: 150%;
+
+  &:hover {
+    background: linear-gradient(
+                    135deg,
+                    rgba(230, 230, 50, 0.9) 20%,
+                    rgba(30, 30, 30, 0.9) 50%,
+                    rgba(230, 230, 50, 0.9) 90%
+    );
+  }
+}
+
+.right-button {
+  position: absolute;
+  display: block;
+  height: 50%;
+  width: 50%;
+  top: 0%;
+  left: 50%;
+  background: rgba(0,0,0,0);
+  border-top-right-radius: 36px;
+  border-bottom-left-radius: 150%;
+
+  &:hover {
+    background: linear-gradient(
+                    135deg,
+                    rgba(230, 230, 50, 0.9) 20%,
+                    rgba(30, 30, 30, 0.9) 50%,
+                    rgba(230, 230, 50, 0.9) 90%
+    );
+  }
+}
+
+.center-design {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+
+  font-size: 18px;
+  background: rgba(0,0,0,0);
+  cursor: pointer;
+
+}
+
+.top-design {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border: none;
+
+  font-size: 17px;
+  background: rgba(0,0,0,0);
+  cursor: pointer;
+
+}
+
+.bottom-design {
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border: none;
+
+  font-size: 17px;
+  background: rgba(0,0,0,0);
+  cursor: pointer;
+
+}
+
+.left-design {
+  position: absolute;
+  top: 59.5%;
+  left: 41.5%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border: none;
+
+  font-size: 17px;
+  background: rgba(0,0,0,0);
+  cursor: pointer;
+
+}
+
+.right-design {
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border: none;
+
+  font-size: 17px;
+  background: rgba(0,0,0,0);
+  cursor: pointer;
+
+}
