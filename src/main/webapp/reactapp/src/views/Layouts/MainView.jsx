@@ -1,10 +1,13 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import './MainView.scss';
 import DrawWord from './DrawWord';
+import MainBackground from "../Navigation/MainBackground";
 import AppBarNavigation from "../Navigation/HeaderNavigation";
 import FooterNavigation from "../Navigation/FooterNavigation";
+import {useNavigate} from "react-router-dom";
 
 const MainView = () => {
+    const navigate = useNavigate();
 
     const divRef1 = useRef();
     const divRef2 = useRef();
@@ -12,6 +15,8 @@ const MainView = () => {
     const divRef4 = useRef();
     const divRef5 = useRef();
     const divRef6 = useRef();
+
+    const [isEvaluationView, setIsEvaluationView] = useState(false);
 
     // const lineRef1 = useRef();
 
@@ -47,6 +52,8 @@ const MainView = () => {
         //     }
         // })
 
+        setTimeout(() => {setIsEvaluationView(true);}, 6000);
+
         // lineObserver1.observe(lineRef1.current);
     }, [])
 
@@ -60,10 +67,15 @@ const MainView = () => {
                     </div>
 
                     <div className="Second-view">
-                        <video autoPlay loop muted height={"1060px"} >
-                            <source src="https://bit.ly/3kYMF9A" type="video/mp4"/>
-                            Your browser is not supported!
-                        </video>
+                        <div className={isEvaluationView?"evaluation-view slide-design":"evaluation-view"} >
+                            <span>이 웹사이트를 평가해주세요!</span>
+                            <button onClick={() => navigate("/evaluationMain")}>평가하러 가기</button>
+                        </div>
+                        {/*<video autoPlay loop muted height={"1060px"} >*/}
+                        {/*    <source src="https://bit.ly/3kYMF9A" type="video/mp4"/>*/}
+                        {/*    Your browser is not supported!*/}
+                        {/*</video>*/}
+                        <MainBackground />
                         <div className="Second-view-text">
                             <h1 style={{fontWeight: "bold", fontSize: "55px"}}>WELCOME MY WEB SITE</h1>
                             <h4 style={{fontWeight: "bold", fontSize: "25px"}}>MORE FUN, MORE INTERSTED</h4>
