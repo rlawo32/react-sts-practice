@@ -47,36 +47,6 @@
 
   }
 
-  .view-loading {
-
-    svg {
-      display: inline-block;
-      margin-top: 350px;
-    }
-
-    path {
-      stroke: cyan;
-      stroke-width: 6;
-      stroke-linejoin: round;
-      stroke-linecap: round;
-      stroke-dasharray: 193.904983521;
-      fill: none;
-      animation:
-              boardLoad 4s linear infinite,
-              boardColor 3s linear infinite;
-    }
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    background: rgb(0,0,0,1);
-    z-index: 3;
-  }
 }
 
 .block {
@@ -434,16 +404,6 @@
     background-position: 0 0;
   }
 }
-
-@keyframes boardLoad {
-  from { stroke-dashoffset: 775.6199340820312; }
-}
-
-@keyframes boardColor {
-  33% { stroke: yellow; }
-  66% { stroke: magenta; }
-}
-
 
 .MuiPagination-ul {
   li {

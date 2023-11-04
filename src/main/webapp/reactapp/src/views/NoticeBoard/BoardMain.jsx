@@ -125,7 +125,7 @@ const BoardMain = () => {
                 </div>
             </div>
 
-            <div className="view-loading" style={isViewLoading?{display:'block'}:{display:'none'}}>
+            <div className="component-loading" style={isViewLoading?{display:'block'}:{display:'none'}}>
                 <DrawLoader className="detail-view-loading" />
             </div>
             {
