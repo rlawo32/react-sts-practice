@@ -87,6 +87,16 @@ const MainView = () => {
                                 JOIN
                             </button>
                         </div>
+                        <div className="bounce-design">
+                            <div className="bounce-design__item">개</div>
+                            <div className="bounce-design__item">발</div>
+                            <div className="bounce-design__item">I</div>
+                            <div className="bounce-design__item">N</div>
+                            <div className="bounce-design__item">G</div>
+                            <div className="bounce-design__item">.</div>
+                            <div className="bounce-design__item">.</div>
+                            <div className="bounce-design__item">.</div>
+                        </div>
                     </div>
                 </div>
 
