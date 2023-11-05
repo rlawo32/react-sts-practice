@@ -13,6 +13,7 @@ import ImageModal from "./views/NoticeBoard/ImageModal";
 import ChatModal from "./views/Layouts/ChatModal";
 import ChatView from "./views/Layouts/ChatView";
 import ChatRoom from "./views/Layouts/ChatRoom";
+import EvaluationMain from "./views/Navigation/EvaluationMain";
 import 'bootstrap/dist/css/bootstrap.css';
 import {Component} from "react";
 import axios from "axios";
@@ -77,6 +78,7 @@ class App extends Component {
                         <Route path="/chatModal" element={<ChatModal />} />
                         <Route path="/chatView" element={<ChatView />} />
                         <Route path="/chatRoom" element={<ChatRoom />} />
+                        <Route path="/evaluationMain" element={<EvaluationMain />} />
                     </Routes>
                 </header>
             </div>
