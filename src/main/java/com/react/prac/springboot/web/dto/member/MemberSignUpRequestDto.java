@@ -19,18 +19,6 @@ public class MemberSignUpRequestDto {
     private String memberNickname;
 //    private String userPhone;
 
-//    @Builder
-//    public UsersSignUpDto(String userId, String userPw, String userName, String userBirth,
-//                          String userGender, String userEmail, String userPhone) {
-//        this.userId = userId;
-//        this.userPw = userPw;
-//        this.userName = userName;
-//        this.userBirth = userBirth;
-//        this.userGender = userGender;
-//        this.userEmail = userEmail;
-//        this.userPhone = userPhone;
-//    }gg
-
     public Member toMember(PasswordEncoder passwordEncoder) {
 
         return Member.builder()

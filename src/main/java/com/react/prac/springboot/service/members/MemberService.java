@@ -115,6 +115,7 @@ public class MemberService {
         return result;
     }
 
+    // 비밀번호 찾기 / 비밀번호 변경
     @Transactional
     public boolean passwordDuplicationChk(String passwordCheck) {
 
