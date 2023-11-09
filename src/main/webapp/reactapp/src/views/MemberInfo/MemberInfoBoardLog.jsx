@@ -102,7 +102,7 @@ const MemberInfoBoardLog = () => {
                                                 { `${boards.boardCategory}` === 'C4' && <td>메이플스토리</td> }
                                                 { `${boards.boardCategory}` === 'C5' && <td>마인크래프트</td> }
                                                 { `${boards.boardCategory}` === 'C6' && <td>스팀</td> }
-                                                <td>
+                                                <td className="tbody-content">
                                                     <Link to={{ pathname: `/board/${boards.boardId}` }} state={{ boardId: `${boards.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
                                                         {boards.boardTitle}
                                                     </Link>

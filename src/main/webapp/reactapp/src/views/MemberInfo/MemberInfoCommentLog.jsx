@@ -100,7 +100,7 @@ const MemberInfoCommentLog = () => {
                                                 { `${comments.commentBoardCategory}` === 'C4' && <td>메이플스토리</td> }
                                                 { `${comments.commentBoardCategory}` === 'C5' && <td>마인크래프트</td> }
                                                 { `${comments.commentBoardCategory}` === 'C6' && <td>스팀</td> }
-                                                <td>
+                                                <td className="tbody-content">
                                                     <Link to={{ pathname: `/board/${comments.boardId}` }} state={{ boardId: `${comments.boardId}` }} style={{textDecoration: 'none', color: 'white'}}>
                                                         {comments.commentContent}
                                                     </Link>

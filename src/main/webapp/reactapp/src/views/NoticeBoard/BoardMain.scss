@@ -198,6 +198,10 @@
         }
 
         tbody tr {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
           border-bottom: 1px solid gray;
           font-size: 18px;
         }

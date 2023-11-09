@@ -31,6 +31,15 @@
 
   .table-view {
     height: 490px;
+
+    tbody tr {
+
+      .tbody-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 
   .info-select {
