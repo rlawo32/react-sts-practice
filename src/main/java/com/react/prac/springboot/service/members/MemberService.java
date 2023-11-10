@@ -81,7 +81,11 @@ public class MemberService {
                     return CommonResponseDto.setFailed("Existed Email!");
                 }
             } else {
-                memberRepository.save(requestDto.toMember(passwordEncoder));
+                if(memberEmail.equals("admin")) {
+                    memberRepository.save(requestDto.toAdmin(passwordEncoder));
+                } else {
+                    memberRepository.save(requestDto.toMember(passwordEncoder));
+                }
             }
         } catch (Exception e) {
             return CommonResponseDto.setFailed("Data Base Error!");

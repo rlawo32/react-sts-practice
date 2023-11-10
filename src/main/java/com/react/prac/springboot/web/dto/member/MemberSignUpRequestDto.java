@@ -34,6 +34,21 @@ public class MemberSignUpRequestDto {
                 .build();
     }
 
+    public Member toAdmin(PasswordEncoder passwordEncoder) {
+
+        return Member.builder()
+                .role(Role.ADMIN)
+                .memberEmail(memberEmail)
+                .memberPw(passwordEncoder.encode(memberPw))
+                .memberNickname("관리자")
+                .memberBirth("9999/99/99")
+                .memberSecessionYn("N")
+                .provider("")
+                .attributeCode("")
+                .picture("")
+                .build();
+    }
+
 //    public Member toMember() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 //        String sha256 = "" ;
 //
