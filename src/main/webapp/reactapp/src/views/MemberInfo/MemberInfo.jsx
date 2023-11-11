@@ -22,7 +22,8 @@ const MemberInfo = () => {
         createdDate: '',
         modifiedDate: '',
         recentLogDate: '',
-        picture: ''
+        picture: '',
+        role: ''
     }]);
 
     const [memberProfileImg, setMemberProfileImg] = useState("");

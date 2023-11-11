@@ -1,6 +1,7 @@
 package com.react.prac.springboot.web.dto.member;
 
 import com.react.prac.springboot.jpa.domain.member.Member;
+import com.react.prac.springboot.jpa.domain.member.Role;
 import lombok.Data;
 
 @Data
@@ -16,6 +17,7 @@ public class MemberInfoResponseDto {
     private String picture;
     private String attributeCode;
     private String provider;
+    private Role role;
 
     public MemberInfoResponseDto(Member member) {
         this.memberId = member.getId();
@@ -27,5 +29,6 @@ public class MemberInfoResponseDto {
         this.picture = member.getPicture();
         this.attributeCode = member.getAttributeCode();
         this.provider = member.getProvider();
+        this.role = member.getRole();
     }
 }
