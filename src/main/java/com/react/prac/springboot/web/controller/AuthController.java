@@ -14,16 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final MemberService memberService;
-
 
     @GetMapping("/axiosHeaderReissue")
     public void axiosHeaderReissue() {
 
         System.out.println("새로고침 오류 보완 !!");
-
     }
 
     @PostMapping("/signUp")
@@ -51,16 +48,6 @@ public class AuthController {
         System.out.println(requestDto.getRefreshToken());
 
         CommonResponseDto<TokenDto> result = memberService.reissue(requestDto);
-
-        return result;
-    }
-
-    @GetMapping("/oauth2/{socialLoginType}")
-    public CommonResponseDto<?> googleLogin(@PathVariable("socialLoginType") String oauthType) {
-
-        System.out.println(oauthType);
-
-        CommonResponseDto<?> result = CommonResponseDto.setSuccess("Test !!", null);
 
         return result;
     }
