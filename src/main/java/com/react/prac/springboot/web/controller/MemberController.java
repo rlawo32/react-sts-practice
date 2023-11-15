@@ -3,6 +3,7 @@ package com.react.prac.springboot.web.controller;
 import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.config.security.dto.TokenDto;
 import com.react.prac.springboot.jpa.domain.member.MemberImageRepository;
+import com.react.prac.springboot.jpa.domain.member.Role;
 import com.react.prac.springboot.service.members.MemberService;
 import com.react.prac.springboot.util.MemberUtil;
 import com.react.prac.springboot.web.dto.*;
@@ -127,5 +128,11 @@ public class MemberController {
     public Map<String, Object> findMemberLog(HttpServletRequest request) {
 
         return memberService.memberLog(request);
+    }
+
+    @GetMapping("/memberRole")
+    public String findMemberRole() {
+
+        return memberService.memberRole();
     }
 }

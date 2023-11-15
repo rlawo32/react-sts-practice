@@ -479,4 +479,22 @@ public class MemberService {
 
         return result;
     }
+
+    @Transactional
+    public String memberRole() {
+
+        String role = "";
+
+        try {
+            Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자 ID가 없습니다. id : " + SecurityUtil.getCurrentMemberId()));
+
+            role = member.getRoleKey();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return role;
+    }
 }
