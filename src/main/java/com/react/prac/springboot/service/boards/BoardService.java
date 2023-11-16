@@ -7,7 +7,6 @@ import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.jpa.domain.board.*;
 import com.react.prac.springboot.jpa.domain.member.Member;
 import com.react.prac.springboot.jpa.domain.member.MemberRepository;
-import com.react.prac.springboot.util.BoardUtil;
 import com.react.prac.springboot.util.UploadUtil;
 import com.react.prac.springboot.web.dto.CommonResponseDto;
 import com.react.prac.springboot.web.dto.board.*;
@@ -44,7 +43,6 @@ public class BoardService {
 
     private final AmazonS3 s3Client;
     private final UploadUtil uploadUtil;
-    private final BoardUtil boardUtil;
 
     @Value("${application.bucket.name}")
     private String bucketName;
@@ -63,7 +61,7 @@ public class BoardService {
 
             Long boardId = mainBoardRepository.save(requestDto.toEntity()).getId();
 
-            boardUtil.boardImageInsert(boardId, requestDto.getBoardImage());
+            uploadUtil.boardImageInsert(boardId, requestDto.getBoardImage());
 
         } catch(Exception e) {
             e.printStackTrace();
@@ -184,7 +182,7 @@ public class BoardService {
                 s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/previewImage", requestDto.getSelectDeleteImage().get(j)));
             }
 
-            boardUtil.boardImageInsert(boardId, requestDto.getBoardImage());
+            uploadUtil.boardImageInsert(boardId, requestDto.getBoardImage());
         } catch(Exception e) {
             e.printStackTrace();
         }
