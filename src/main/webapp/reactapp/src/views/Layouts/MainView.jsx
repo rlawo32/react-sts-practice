@@ -38,20 +38,6 @@ const MainView = () => {
         scrollObserver.observe(divRef5.current);
         scrollObserver.observe(divRef6.current);
 
-        // const lineObserver1 = new IntersectionObserver((e) => {
-        //     if(e[0].isIntersecting) {
-        //         e[0].target.children[2].style.right = "0%";
-        //         e[0].target.children[2].style.transitionDelay = "4.5s";
-        //         e[0].target.children[3].style.bottom = "0%";
-        //         e[0].target.children[3].style.transitionDelay = "0s";
-        //     } else {
-        //         e[0].target.children[2].style.right = "100%";
-        //         e[0].target.children[2].style.transitionDelay = "0s";
-        //         e[0].target.children[3].style.bottom = "100%";
-        //         e[0].target.children[3].style.transitionDelay = "0s";
-        //     }
-        // })
-
         setTimeout(() => {setIsEvaluationView(true);}, 6000);
 
         // lineObserver1.observe(lineRef1.current);
@@ -71,10 +57,6 @@ const MainView = () => {
                             <span>이 웹사이트를 평가해주세요!</span>
                             <button onClick={() => navigate("/evaluationMain")}>평가하러 가기</button>
                         </div>
-                        {/*<video autoPlay loop muted height={"1060px"} >*/}
-                        {/*    <source src="https://bit.ly/3kYMF9A" type="video/mp4"/>*/}
-                        {/*    Your browser is not supported!*/}
-                        {/*</video>*/}
                         <MainBackground />
                         <div className="Second-view-text">
                             <h1 style={{fontWeight: "bold", fontSize: "55px"}}>WELCOME MY WEB SITE</h1>
@@ -102,26 +84,10 @@ const MainView = () => {
 
                 <div className="Sub-view">
 
-                    {/*<div className="image-view">*/}
-                    {/*    <video autoPlay loop muted height={"1000px"} >*/}
-                    {/*        <source src="https://bit.ly/3kYMF9A" type="video/mp4"/>*/}
-                    {/*        Your browser is not supported!*/}
-                    {/*    </video>*/}
-                    {/*</div>*/}
-
                     <div className="image-view">
                         <div className="image-1" ref={divRef1}>
 
                         </div>
-                        {/*<div className="test-box">*/}
-                        {/*    <div className="line-draw-1" ref={lineRef1}>*/}
-                        {/*        check*/}
-                        {/*        <span></span>*/}
-                        {/*        <span></span>*/}
-                        {/*        <span></span>*/}
-                        {/*        <span></span>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
 
                         <div className="image-2" ref={divRef2}>
                         </div>
