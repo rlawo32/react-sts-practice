@@ -174,7 +174,7 @@ const ChatRoom = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const preventClose =(e) => {
+    const preventClose = (e) => {
         quitChatRoomHandler('quit');
         e.preventDefault();
         e.returnValue = '';

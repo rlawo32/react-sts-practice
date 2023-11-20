@@ -9,34 +9,34 @@ import {useNavigate} from "react-router-dom";
 const MainView = () => {
     const navigate = useNavigate();
 
-    const divRef1 = useRef();
-    const divRef2 = useRef();
-    const divRef3 = useRef();
-    const divRef4 = useRef();
-    const divRef5 = useRef();
-    const divRef6 = useRef();
+    // const divRef1 = useRef();
+    // const divRef2 = useRef();
+    // const divRef3 = useRef();
+    // const divRef4 = useRef();
+    // const divRef5 = useRef();
+    // const divRef6 = useRef();
 
     const [isEvaluationView, setIsEvaluationView] = useState(false);
 
     // const lineRef1 = useRef();
 
     useEffect(() => {
-        const scrollObserver = new IntersectionObserver((e) => {
-            e.forEach((div) => {
-                if(div.isIntersecting) {
-                    div.target.style.opacity = 1;
-                } else {
-                    div.target.style.opacity = 0;
-                }
-            })
-        })
-
-        scrollObserver.observe(divRef1.current);
-        scrollObserver.observe(divRef2.current);
-        scrollObserver.observe(divRef3.current);
-        scrollObserver.observe(divRef4.current);
-        scrollObserver.observe(divRef5.current);
-        scrollObserver.observe(divRef6.current);
+        // const scrollObserver = new IntersectionObserver((e) => {
+        //     e.forEach((div) => {
+        //         if(div.isIntersecting) {
+        //             div.target.style.opacity = 1;
+        //         } else {
+        //             div.target.style.opacity = 0;
+        //         }
+        //     })
+        // })
+        //
+        // scrollObserver.observe(divRef1.current);
+        // scrollObserver.observe(divRef2.current);
+        // scrollObserver.observe(divRef3.current);
+        // scrollObserver.observe(divRef4.current);
+        // scrollObserver.observe(divRef5.current);
+        // scrollObserver.observe(divRef6.current);
 
         setTimeout(() => {setIsEvaluationView(true);}, 6000);
 
@@ -65,7 +65,7 @@ const MainView = () => {
                                 This site is for communication about games. <br />
                                 You can share various information about the game and also enjoy small games.
                             </p>
-                            <button>
+                            <button onClick={() => alert('개발 중...')}>
                                 JOIN
                             </button>
                         </div>
@@ -82,32 +82,32 @@ const MainView = () => {
                     </div>
                 </div>
 
-                <div className="Sub-view">
+                {/*<div className="Sub-view">*/}
 
-                    <div className="image-view">
-                        <div className="image-1" ref={divRef1}>
+                {/*    <div className="image-view">*/}
+                {/*        <div className="image-1" ref={divRef1}>*/}
 
-                        </div>
+                {/*        </div>*/}
 
-                        <div className="image-2" ref={divRef2}>
-                        </div>
+                {/*        <div className="image-2" ref={divRef2}>*/}
+                {/*        </div>*/}
 
-                        <div className="image-3" ref={divRef3}>
-                        </div>
+                {/*        <div className="image-3" ref={divRef3}>*/}
+                {/*        </div>*/}
 
-                        <div className="image-4" ref={divRef4}>
-                        </div>
+                {/*        <div className="image-4" ref={divRef4}>*/}
+                {/*        </div>*/}
 
-                        <div className="image-5" ref={divRef5}>
-                        </div>
+                {/*        <div className="image-5" ref={divRef5}>*/}
+                {/*        </div>*/}
 
-                        <div className="image-6" ref={divRef6}>
-                        </div>
-                    </div>
-                </div>
+                {/*        <div className="image-6" ref={divRef6}>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
+                <FooterNavigation />
             </div>
-            <FooterNavigation />
         </>
     )
 

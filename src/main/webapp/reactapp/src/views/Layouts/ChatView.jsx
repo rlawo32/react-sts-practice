@@ -83,7 +83,7 @@ const ChatView = (props) => {
 
     useEffect(() => {
         const paging = {
-            recordPerPage: 8,
+            recordPerPage: 10,
             page: pageNo
         }
 
