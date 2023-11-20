@@ -72,39 +72,6 @@ public class BoardService {
     }
 
     @Transactional
-    public CommonResponseDto<?> boardImageInsert(MultipartFile files) {
-        //동일한 사진을 업로드 하였을 때 사진이 덮어씌워지는 것을 방지하기 위함
-        UUID uuid = UUID.randomUUID();
-        String imageFileName = uuid + "_" + files.getOriginalFilename();
-        // 디렉토리 경로
-        Path dir = Paths.get(uploadFolder);
-
-        try {
-            if(!Files.exists(dir)) {
-                Files.createDirectory(dir);
-            }
-
-//            for(int i=0; i<files.length; i++) {
-//                String imageFileName = "";
-//                imageFileName = uuid + "_" + files[i].getOriginalFilename();
-//
-//                Files.write(Paths.get(uploadFolder + imageFileName), files[i].getBytes());
-//            }
-
-            Files.write(Paths.get(uploadFolder + imageFileName), files.getBytes());
-
-        } catch(IOException i) {
-            i.printStackTrace();
-            return CommonResponseDto.setFailed("Upload Error!");
-        } catch(Exception e) {
-            e.printStackTrace();
-            return CommonResponseDto.setFailed("Database Error!");
-        }
-
-        return CommonResponseDto.setSuccess("Image Upload Success", imageFileName);
-    }
-
-    @Transactional
     public CommonResponseDto<?> boardImageInsertS3(MultipartFile files) {
 
         Map<String, Object> result = new HashMap<>();
@@ -131,20 +98,6 @@ public class BoardService {
         }
 
         return CommonResponseDto.setSuccess("Image Upload Success", result);
-    }
-
-    @Transactional
-    public CommonResponseDto<?> boardImageDelete(HttpServletRequest request) {
-
-        try {
-            Files.delete(Paths.get(uploadFolder + request.getParameter("imageFileName")));
-
-        } catch(Exception e) {
-            e.printStackTrace();
-            return CommonResponseDto.setFailed("Error!");
-        }
-
-        return CommonResponseDto.setSuccess("Image Delete Success", null);
     }
 
     @Transactional
