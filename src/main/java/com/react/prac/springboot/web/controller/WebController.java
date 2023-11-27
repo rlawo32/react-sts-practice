@@ -1,4 +1,5 @@
 package com.react.prac.springboot.web.controller;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

@@ -2,15 +2,12 @@ package com.react.prac.springboot.web.controller;
 
 import com.react.prac.springboot.config.security.SecurityUtil;
 import com.react.prac.springboot.config.security.dto.TokenDto;
-import com.react.prac.springboot.jpa.domain.member.MemberImageRepository;
-import com.react.prac.springboot.jpa.domain.member.Role;
 import com.react.prac.springboot.service.members.MemberService;
 import com.react.prac.springboot.util.MemberUtil;
 import com.react.prac.springboot.web.dto.*;
 import com.react.prac.springboot.web.dto.member.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
