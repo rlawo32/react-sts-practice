@@ -26,10 +26,10 @@ const MainView = () => {
                     </div>
 
                     <div className="Second-view">
-                        <div className={isEvaluationView?"evaluation-view slide-design":"evaluation-view"} >
-                            <span>이 웹사이트를 평가해주세요!</span>
-                            <button onClick={() => navigate("/evaluationMain")}>평가하러 가기</button>
-                        </div>
+                        {/*<div className={isEvaluationView?"evaluation-view slide-design":"evaluation-view"} >*/}
+                        {/*    <span>이 웹사이트를 평가해주세요!</span>*/}
+                        {/*    <button onClick={() => navigate("/evaluationMain")}>평가하러 가기</button>*/}
+                        {/*</div>*/}
                         <MainBackground />
                         <div className="Second-view-text">
                             <h1 style={{fontWeight: "bold", fontSize: "55px"}}>WELCOME MY WEB SITE</h1>
